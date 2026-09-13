@@ -1,0 +1,298 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Auth & Members ───────────────────────────────────────────────────────────
+
+model Member {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  password       String?
+  login          String?   @unique
+  displayName    String?   @map("display_name")
+  internalNote   String?   @map("internal_note")
+  joinDate       DateTime? @map("join_date")
+  emailValidated Boolean   @map("email_validated") @default(false)
+  updatedAt      DateTime? @updatedAt @map("updated_at")
+  createdAt      DateTime? @default(now()) @map("created_at")
+
+  adhesions              Adhesion[]
+  memberRoles            MemberRole[]
+  reportedBy             Shift[]                  @relation("ShiftReporter")
+  shiftsManaged          Shift[]                  @relation("ShiftManager")
+  shiftMembers           ShiftMember[]
+  shiftAssignments       ShiftAssignment[]
+  vehicles               Vehicle[]
+  expenseTrips           ExpenseTrip[]
+  memberBattlepassRewards MemberBattlepassReward[]
+  sessions               Session[]
+  tokens                 Token[]
+
+  @@map("members")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  memberId  Int      @map("member_id")
+  jti       String   @map("refresh_token")
+  userAgent String?  @map("user_agent")
+  ipAddress String?  @map("ip_address")
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
+
+  member Member @relation(fields: [memberId], references: [id])
+
+  @@unique([memberId, jti])
+  @@map("sessions")
+}
+
+enum TokenPurpose {
+  EMAIL_VERIFICATION
+  EMAIL_RESET
+  PASSWORD_RESET
+  STATE_42AUTH
+  STATE_42LINK
+}
+
+model Token {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  purpose   TokenPurpose
+  memberId  Int?      @map("member_id")
+  data      Json?
+  expiresAt DateTime  @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  member    Member?   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@map("tokens")
+}
+
+model Adhesion {
+  id        Int       @id @default(autoincrement())
+  year      Int
+  memberId  Int       @map("member_id")
+  createdAt DateTime? @default(now()) @map("created_at")
+
+  member Member @relation(fields: [memberId], references: [id])
+
+  @@map("adhesion")
+}
+
+// ─── Roles & Permissions ──────────────────────────────────────────────────────
+
+model Role {
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  superRole    Boolean @default(false) @map("super_role")
+  defaultRole  Boolean @default(false) @map("default_role")
+  displayColor String? @map("display_color")
+
+  rolePermissions RolePermission[]
+  memberRoles     MemberRole[]
+
+  @@map("roles")
+}
+
+model RolePermission {
+  id         Int    @id @default(autoincrement())
+  roleId     Int    @map("role_id")
+  permission String
+
+  roleRef Role @relation(fields: [roleId], references: [id])
+
+	@@unique([roleId, permission])
+  @@map("role_permissions")
+}
+
+model MemberRole {
+  id       Int  @id @default(autoincrement())
+  memberId Int  @map("member_id")
+  roleId   Int  @map("role_id")
+
+  memberRef Member @relation(fields: [memberId], references: [id])
+  roleRef   Role   @relation(fields: [roleId], references: [id])
+
+	@@unique([memberId, roleId])
+  @@map("member_roles")
+}
+
+// ─── Shifts ───────────────────────────────────────────────────────────────────
+
+model Shift {
+  id               Int      @id @default(autoincrement())
+  date             DateTime
+  typeId           Int      @map("type_id")
+  reporterId       Int      @map("reporter_id")
+  managerId        Int
+  discordMessageId String?  @map("discord_message_id") @unique
+  validated        Boolean  @default(false)
+
+  type         ShiftType     @relation(fields: [typeId], references: [id])
+  reporter     Member        @relation("ShiftReporter", fields: [reporterId], references: [id])
+  manager      Member        @relation("ShiftManager", fields: [managerId], references: [id])
+  shiftMembers ShiftMember[]
+
+  @@unique([date, typeId])
+  @@map("shifts")
+}
+
+model ShiftMember {
+  id         Int  @id @default(autoincrement())
+  shiftId    Int  @map("shift_id")
+  memberId   Int  @map("member_id")
+  positionId Int? @map("position_id")
+
+  shift    Shift          @relation(fields: [shiftId], references: [id])
+  member   Member         @relation(fields: [memberId], references: [id])
+  position ShiftPosition? @relation(fields: [positionId], references: [id])
+
+  @@unique([shiftId, memberId])
+  @@map("shift_members")
+}
+
+model ShiftPosition {
+  id       Int    @id @default(autoincrement())
+  position String @unique
+  xpMult   Float? @default(1) @map("xp_mult")
+
+  shiftMembers ShiftMember[]
+
+  @@map("shift_positions")
+}
+
+model ShiftType {
+  id      Int    @id @default(autoincrement())
+  type    String @unique
+  xpMult  Float? @default(1) @map("xp_mult")
+
+  shiftTypes Shift[]
+
+  @@map("shift_type")
+}
+
+model ShiftAssignment {
+  id       Int       @id @default(autoincrement())
+  date     DateTime?
+  memberId Int?      @map("member_id")
+
+  member Member? @relation(fields: [memberId], references: [id])
+
+  @@map("shift_assignment")
+}
+
+// ─── Stock ────────────────────────────────────────────────────────────────────
+
+model StockCategory {
+  id         Int     @id @default(autoincrement())
+  name       String?
+  orderIndex Int?    @map("order_index")
+
+  stockItems StockItem[]
+
+  @@map("stock_category")
+}
+
+model StockItem {
+  id               Int      @id @default(autoincrement())
+  name             String?
+  categoryId       Int?     @map("category_id")
+  expectedQuantity Int?     @map("expected_quantity")
+  missingQuantity  Int?     @map("missing_quantity")
+  unit             String?
+  isActive         Boolean? @map("is_active")
+
+  category StockCategory? @relation(fields: [categoryId], references: [id])
+
+  @@map("stock_item")
+}
+
+// ─── Vehicles & Mileage Expenses ─────────────────────────────────────────────
+
+model Vehicle {
+  id                 Int       @id @default(autoincrement())
+  memberId           Int       @map("member_id")
+  registrationDocUrl String?   @map("registration_doc_url")
+  fiscalPower        Int       @map("fiscal_power")
+  isActive           Boolean   @default(true) @map("is_active")
+  createdAt          DateTime? @map("created_at")
+
+  member       Member        @relation(fields: [memberId], references: [id])
+  expenseTrips ExpenseTrip[]
+
+  @@map("vehicle")
+}
+
+model ExpenseTrip {
+  id         Int       @id @default(autoincrement())
+  memberId   Int       @map("member_id")
+  vehicleId  Int       @map("vehicle_id")
+  tripDate   DateTime  @map("trip_date")
+  distanceKm Int       @map("distance_km")
+  purpose    String?
+  isPaid     Boolean   @default(false) @map("is_paid")
+  paidAt     DateTime? @map("paid_at")
+  createdAt  DateTime? @map("created_at")
+
+  member  Member  @relation(fields: [memberId], references: [id])
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+
+  @@map("expense_trip")
+}
+
+// ─── Battlepass ───────────────────────────────────────────────────────────────
+
+model BattlepassSeason {
+  id      Int      @id @default(autoincrement())
+  name    String
+  startAt DateTime @map("start_at")
+  endAt   DateTime @map("end_at")
+
+  tiers   BattlepassTier[]
+  rewards MemberBattlepassReward[]
+
+  @@map("battlepass_seasons")
+}
+
+model BattlepassTier {
+  id         Int    @id @default(autoincrement())
+  seasonId   Int    @map("season_id")
+  tierNumber Int    @map("tier_number")
+  requirement Int
+  reward     String
+
+  season  BattlepassSeason         @relation(fields: [seasonId], references: [id])
+  rewards MemberBattlepassReward[]
+
+  @@map("battlepass_tiers")
+}
+
+model MemberBattlepassReward {
+  id        Int      @id @default(autoincrement())
+  memberId  Int      @map("member_id")
+  seasonId  Int      @map("season_id")
+  tierId    Int      @map("tier_id")
+  claimedAt DateTime @map("claimed_at")
+
+  member Member           @relation(fields: [memberId], references: [id])
+  season BattlepassSeason @relation(fields: [seasonId], references: [id])
+  tier   BattlepassTier   @relation(fields: [tierId], references: [id])
+
+  @@map("member_battlepass_rewards")
+}
+
+// ─── Settings ─────────────────────────────────────────────────────────────────
+
+model AppConfig {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("app_config")
+}

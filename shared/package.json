@@ -1,0 +1,30 @@
+{
+  "name": "@42eat-web/shared",
+  "private": true,
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./eslint-plugin": "./src/local-eslint-plugin/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "check": "tsc --noEmit && eslint \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@ts-rest/core": "^3.52.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.1.0",
+    "globals": "^16.5.0",
+    "typescript-eslint": "^8.57.2"
+  }
+}
