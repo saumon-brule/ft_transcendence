@@ -55,11 +55,6 @@ export type Session = Prisma.SessionModel
  */
 export type Token = Prisma.TokenModel
 /**
- * Model Adhesion
- * 
- */
-export type Adhesion = Prisma.AdhesionModel
-/**
  * Model Role
  * 
  */
@@ -74,66 +69,6 @@ export type RolePermission = Prisma.RolePermissionModel
  * 
  */
 export type MemberRole = Prisma.MemberRoleModel
-/**
- * Model Shift
- * 
- */
-export type Shift = Prisma.ShiftModel
-/**
- * Model ShiftMember
- * 
- */
-export type ShiftMember = Prisma.ShiftMemberModel
-/**
- * Model ShiftPosition
- * 
- */
-export type ShiftPosition = Prisma.ShiftPositionModel
-/**
- * Model ShiftType
- * 
- */
-export type ShiftType = Prisma.ShiftTypeModel
-/**
- * Model ShiftAssignment
- * 
- */
-export type ShiftAssignment = Prisma.ShiftAssignmentModel
-/**
- * Model StockCategory
- * 
- */
-export type StockCategory = Prisma.StockCategoryModel
-/**
- * Model StockItem
- * 
- */
-export type StockItem = Prisma.StockItemModel
-/**
- * Model Vehicle
- * 
- */
-export type Vehicle = Prisma.VehicleModel
-/**
- * Model ExpenseTrip
- * 
- */
-export type ExpenseTrip = Prisma.ExpenseTripModel
-/**
- * Model BattlepassSeason
- * 
- */
-export type BattlepassSeason = Prisma.BattlepassSeasonModel
-/**
- * Model BattlepassTier
- * 
- */
-export type BattlepassTier = Prisma.BattlepassTierModel
-/**
- * Model MemberBattlepassReward
- * 
- */
-export type MemberBattlepassReward = Prisma.MemberBattlepassRewardModel
 /**
  * Model AppConfig
  * 
