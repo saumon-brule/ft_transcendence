@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { PrismaService } from "./prisma.service";
-import { PERMISSIONS } from "@42eat-web/shared";
+import { PERMISSIONS } from "@flex/shared";
 import * as bcrypt from "bcrypt";
 import { env } from "../env";
 

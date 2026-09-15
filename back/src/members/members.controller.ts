@@ -9,10 +9,10 @@ import {
 	membersContract,
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
-} from "@42eat-web/shared";
+} from "@flex/shared";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { RequirePermission } from "../core/decorators/require-permission.decorator";
-import { PERMISSIONS } from "@42eat-web/shared";
+import { PERMISSIONS } from "@flex/shared";
 import { JwtAuthGuardWithoutEmailVerif } from "../core/guards/jwt-auth.guard";
 
 @Controller()

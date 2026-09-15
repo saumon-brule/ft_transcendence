@@ -20,7 +20,7 @@ importers:
 
   back:
     dependencies:
-      '@42eat-web/shared':
+      '@flex/shared':
         specifier: workspace:*
         version: link:../shared
       '@nestjs-modules/mailer':
@@ -201,7 +201,7 @@ importers:
 
   front:
     dependencies:
-      '@42eat-web/shared':
+      '@flex/shared':
         specifier: workspace:*
         version: link:../shared
       '@fontsource-variable/inter':

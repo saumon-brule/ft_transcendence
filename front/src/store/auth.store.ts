@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { createSignal } from "solid-js";
 import { doRefresh } from "~/api/doRefresh";
-import { JwtPayload } from "@42eat-web/shared";
+import { JwtPayload } from "@flex/shared";
 import { queryClient } from "~/App";
 import { client, queryKeys } from "~/api/client";
 import { createStore } from "solid-js/store";

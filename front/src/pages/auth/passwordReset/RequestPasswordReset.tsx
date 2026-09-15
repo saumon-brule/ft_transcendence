@@ -1,7 +1,7 @@
 
 import { useTranslation } from "~/i18n/context";
 import TextInput from "~/components/ui/TextInput";
-import { authContract } from "@42eat-web/shared";
+import { authContract } from "@flex/shared";
 import { validateFromZod } from "~/utils/validateFromZod";
 import Button from "~/components/ui/Button";
 import Form from "~/components/ui/Form/Form";

@@ -5,7 +5,7 @@ import Button from "~/components/ui/Button";
 import TextInput from "~/components/ui/TextInput";
 import { createSignal, JSXElement, Show } from "solid-js";
 import { client } from "~/api/client";
-import { registerSchema } from "@42eat-web/shared";
+import { registerSchema } from "@flex/shared";
 import { authActions } from "~/store/auth.store";
 import Form from "~/components/ui/Form/Form";
 import { validateFromZod } from "~/utils/validateFromZod";
