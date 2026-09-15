@@ -1,5 +1,5 @@
 {
-	"name": "@42eat-web/back",
+	"name": "@flex/back",
 	"version": "0.0.2",
 	"description": "",
 	"author": "",
@@ -20,7 +20,7 @@
 		"test:e2e": "jest --config ./test/jest-e2e.json"
 	},
 	"dependencies": {
-		"@42eat-web/shared": "workspace:*",
+		"@flex/shared": "workspace:*",
 		"@nestjs-modules/mailer": "^2.3.0",
 		"@nestjs/common": "^11.0.1",
 		"@nestjs/core": "^11.0.1",
