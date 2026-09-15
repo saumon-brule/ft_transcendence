@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { Permission } from "@42eat-web/shared";
+import { Permission } from "@flex/shared";
 import { AppForbiddenException } from "../core/error/forbidden";
 
 @Injectable()

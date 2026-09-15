@@ -227,7 +227,7 @@ export type MemberGroupByOutputType = {
   _max: MemberMaxAggregateOutputType | null
 }
 
-export type GetMemberGroupByPayload<T extends MemberGroupByArgs> = Prisma.PrismaPromise<
+type GetMemberGroupByPayload<T extends MemberGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<MemberGroupByOutputType, T['by']> &
       {
@@ -256,15 +256,7 @@ export type MemberWhereInput = {
   emailValidated?: Prisma.BoolFilter<"Member"> | boolean
   updatedAt?: Prisma.DateTimeNullableFilter<"Member"> | Date | string | null
   createdAt?: Prisma.DateTimeNullableFilter<"Member"> | Date | string | null
-  adhesions?: Prisma.AdhesionListRelationFilter
   memberRoles?: Prisma.MemberRoleListRelationFilter
-  reportedBy?: Prisma.ShiftListRelationFilter
-  shiftsManaged?: Prisma.ShiftListRelationFilter
-  shiftMembers?: Prisma.ShiftMemberListRelationFilter
-  shiftAssignments?: Prisma.ShiftAssignmentListRelationFilter
-  vehicles?: Prisma.VehicleListRelationFilter
-  expenseTrips?: Prisma.ExpenseTripListRelationFilter
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   tokens?: Prisma.TokenListRelationFilter
 }
@@ -280,15 +272,7 @@ export type MemberOrderByWithRelationInput = {
   emailValidated?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  adhesions?: Prisma.AdhesionOrderByRelationAggregateInput
   memberRoles?: Prisma.MemberRoleOrderByRelationAggregateInput
-  reportedBy?: Prisma.ShiftOrderByRelationAggregateInput
-  shiftsManaged?: Prisma.ShiftOrderByRelationAggregateInput
-  shiftMembers?: Prisma.ShiftMemberOrderByRelationAggregateInput
-  shiftAssignments?: Prisma.ShiftAssignmentOrderByRelationAggregateInput
-  vehicles?: Prisma.VehicleOrderByRelationAggregateInput
-  expenseTrips?: Prisma.ExpenseTripOrderByRelationAggregateInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   tokens?: Prisma.TokenOrderByRelationAggregateInput
 }
@@ -307,15 +291,7 @@ export type MemberWhereUniqueInput = Prisma.AtLeast<{
   emailValidated?: Prisma.BoolFilter<"Member"> | boolean
   updatedAt?: Prisma.DateTimeNullableFilter<"Member"> | Date | string | null
   createdAt?: Prisma.DateTimeNullableFilter<"Member"> | Date | string | null
-  adhesions?: Prisma.AdhesionListRelationFilter
   memberRoles?: Prisma.MemberRoleListRelationFilter
-  reportedBy?: Prisma.ShiftListRelationFilter
-  shiftsManaged?: Prisma.ShiftListRelationFilter
-  shiftMembers?: Prisma.ShiftMemberListRelationFilter
-  shiftAssignments?: Prisma.ShiftAssignmentListRelationFilter
-  vehicles?: Prisma.VehicleListRelationFilter
-  expenseTrips?: Prisma.ExpenseTripListRelationFilter
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   tokens?: Prisma.TokenListRelationFilter
 }, "id" | "email" | "login">
@@ -364,15 +340,7 @@ export type MemberCreateInput = {
   emailValidated?: boolean
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
   memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
   sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
   tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
 }
@@ -388,15 +356,7 @@ export type MemberUncheckedCreateInput = {
   emailValidated?: boolean
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
   memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
   tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
 }
@@ -411,15 +371,7 @@ export type MemberUpdateInput = {
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
   memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
   tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
 }
@@ -435,15 +387,7 @@ export type MemberUncheckedUpdateInput = {
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
   memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
   tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
 }
@@ -597,20 +541,6 @@ export type MemberUpdateOneWithoutTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutTokensInput, Prisma.MemberUpdateWithoutTokensInput>, Prisma.MemberUncheckedUpdateWithoutTokensInput>
 }
 
-export type MemberCreateNestedOneWithoutAdhesionsInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutAdhesionsInput, Prisma.MemberUncheckedCreateWithoutAdhesionsInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutAdhesionsInput
-  connect?: Prisma.MemberWhereUniqueInput
-}
-
-export type MemberUpdateOneRequiredWithoutAdhesionsNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutAdhesionsInput, Prisma.MemberUncheckedCreateWithoutAdhesionsInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutAdhesionsInput
-  upsert?: Prisma.MemberUpsertWithoutAdhesionsInput
-  connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutAdhesionsInput, Prisma.MemberUpdateWithoutAdhesionsInput>, Prisma.MemberUncheckedUpdateWithoutAdhesionsInput>
-}
-
 export type MemberCreateNestedOneWithoutMemberRolesInput = {
   create?: Prisma.XOR<Prisma.MemberCreateWithoutMemberRolesInput, Prisma.MemberUncheckedCreateWithoutMemberRolesInput>
   connectOrCreate?: Prisma.MemberCreateOrConnectWithoutMemberRolesInput
@@ -625,106 +555,6 @@ export type MemberUpdateOneRequiredWithoutMemberRolesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutMemberRolesInput, Prisma.MemberUpdateWithoutMemberRolesInput>, Prisma.MemberUncheckedUpdateWithoutMemberRolesInput>
 }
 
-export type MemberCreateNestedOneWithoutReportedByInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutReportedByInput, Prisma.MemberUncheckedCreateWithoutReportedByInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutReportedByInput
-  connect?: Prisma.MemberWhereUniqueInput
-}
-
-export type MemberCreateNestedOneWithoutShiftsManagedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutShiftsManagedInput, Prisma.MemberUncheckedCreateWithoutShiftsManagedInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutShiftsManagedInput
-  connect?: Prisma.MemberWhereUniqueInput
-}
-
-export type MemberUpdateOneRequiredWithoutReportedByNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutReportedByInput, Prisma.MemberUncheckedCreateWithoutReportedByInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutReportedByInput
-  upsert?: Prisma.MemberUpsertWithoutReportedByInput
-  connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutReportedByInput, Prisma.MemberUpdateWithoutReportedByInput>, Prisma.MemberUncheckedUpdateWithoutReportedByInput>
-}
-
-export type MemberUpdateOneRequiredWithoutShiftsManagedNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutShiftsManagedInput, Prisma.MemberUncheckedCreateWithoutShiftsManagedInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutShiftsManagedInput
-  upsert?: Prisma.MemberUpsertWithoutShiftsManagedInput
-  connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutShiftsManagedInput, Prisma.MemberUpdateWithoutShiftsManagedInput>, Prisma.MemberUncheckedUpdateWithoutShiftsManagedInput>
-}
-
-export type MemberCreateNestedOneWithoutShiftMembersInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutShiftMembersInput, Prisma.MemberUncheckedCreateWithoutShiftMembersInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutShiftMembersInput
-  connect?: Prisma.MemberWhereUniqueInput
-}
-
-export type MemberUpdateOneRequiredWithoutShiftMembersNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutShiftMembersInput, Prisma.MemberUncheckedCreateWithoutShiftMembersInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutShiftMembersInput
-  upsert?: Prisma.MemberUpsertWithoutShiftMembersInput
-  connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutShiftMembersInput, Prisma.MemberUpdateWithoutShiftMembersInput>, Prisma.MemberUncheckedUpdateWithoutShiftMembersInput>
-}
-
-export type MemberCreateNestedOneWithoutShiftAssignmentsInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutShiftAssignmentsInput, Prisma.MemberUncheckedCreateWithoutShiftAssignmentsInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutShiftAssignmentsInput
-  connect?: Prisma.MemberWhereUniqueInput
-}
-
-export type MemberUpdateOneWithoutShiftAssignmentsNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutShiftAssignmentsInput, Prisma.MemberUncheckedCreateWithoutShiftAssignmentsInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutShiftAssignmentsInput
-  upsert?: Prisma.MemberUpsertWithoutShiftAssignmentsInput
-  disconnect?: Prisma.MemberWhereInput | boolean
-  delete?: Prisma.MemberWhereInput | boolean
-  connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutShiftAssignmentsInput, Prisma.MemberUpdateWithoutShiftAssignmentsInput>, Prisma.MemberUncheckedUpdateWithoutShiftAssignmentsInput>
-}
-
-export type MemberCreateNestedOneWithoutVehiclesInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutVehiclesInput, Prisma.MemberUncheckedCreateWithoutVehiclesInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutVehiclesInput
-  connect?: Prisma.MemberWhereUniqueInput
-}
-
-export type MemberUpdateOneRequiredWithoutVehiclesNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutVehiclesInput, Prisma.MemberUncheckedCreateWithoutVehiclesInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutVehiclesInput
-  upsert?: Prisma.MemberUpsertWithoutVehiclesInput
-  connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutVehiclesInput, Prisma.MemberUpdateWithoutVehiclesInput>, Prisma.MemberUncheckedUpdateWithoutVehiclesInput>
-}
-
-export type MemberCreateNestedOneWithoutExpenseTripsInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutExpenseTripsInput, Prisma.MemberUncheckedCreateWithoutExpenseTripsInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutExpenseTripsInput
-  connect?: Prisma.MemberWhereUniqueInput
-}
-
-export type MemberUpdateOneRequiredWithoutExpenseTripsNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutExpenseTripsInput, Prisma.MemberUncheckedCreateWithoutExpenseTripsInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutExpenseTripsInput
-  upsert?: Prisma.MemberUpsertWithoutExpenseTripsInput
-  connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutExpenseTripsInput, Prisma.MemberUpdateWithoutExpenseTripsInput>, Prisma.MemberUncheckedUpdateWithoutExpenseTripsInput>
-}
-
-export type MemberCreateNestedOneWithoutMemberBattlepassRewardsInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutMemberBattlepassRewardsInput, Prisma.MemberUncheckedCreateWithoutMemberBattlepassRewardsInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutMemberBattlepassRewardsInput
-  connect?: Prisma.MemberWhereUniqueInput
-}
-
-export type MemberUpdateOneRequiredWithoutMemberBattlepassRewardsNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutMemberBattlepassRewardsInput, Prisma.MemberUncheckedCreateWithoutMemberBattlepassRewardsInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutMemberBattlepassRewardsInput
-  upsert?: Prisma.MemberUpsertWithoutMemberBattlepassRewardsInput
-  connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutMemberBattlepassRewardsInput, Prisma.MemberUpdateWithoutMemberBattlepassRewardsInput>, Prisma.MemberUncheckedUpdateWithoutMemberBattlepassRewardsInput>
-}
-
 export type MemberCreateWithoutSessionsInput = {
   email: string
   password?: string | null
@@ -735,15 +565,7 @@ export type MemberCreateWithoutSessionsInput = {
   emailValidated?: boolean
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
   memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
   tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
 }
 
@@ -758,15 +580,7 @@ export type MemberUncheckedCreateWithoutSessionsInput = {
   emailValidated?: boolean
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
   memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
   tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
 }
 
@@ -796,15 +610,7 @@ export type MemberUpdateWithoutSessionsInput = {
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
   memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
   tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
 }
 
@@ -819,15 +625,7 @@ export type MemberUncheckedUpdateWithoutSessionsInput = {
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
   memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
   tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
 }
 
@@ -841,15 +639,7 @@ export type MemberCreateWithoutTokensInput = {
   emailValidated?: boolean
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
   memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
   sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
 }
 
@@ -864,15 +654,7 @@ export type MemberUncheckedCreateWithoutTokensInput = {
   emailValidated?: boolean
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
   memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
 }
 
@@ -902,15 +684,7 @@ export type MemberUpdateWithoutTokensInput = {
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
   memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
 }
 
@@ -925,122 +699,8 @@ export type MemberUncheckedUpdateWithoutTokensInput = {
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
   memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberCreateWithoutAdhesionsInput = {
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
-}
-
-export type MemberUncheckedCreateWithoutAdhesionsInput = {
-  id?: number
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
-}
-
-export type MemberCreateOrConnectWithoutAdhesionsInput = {
-  where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutAdhesionsInput, Prisma.MemberUncheckedCreateWithoutAdhesionsInput>
-}
-
-export type MemberUpsertWithoutAdhesionsInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutAdhesionsInput, Prisma.MemberUncheckedUpdateWithoutAdhesionsInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutAdhesionsInput, Prisma.MemberUncheckedCreateWithoutAdhesionsInput>
-  where?: Prisma.MemberWhereInput
-}
-
-export type MemberUpdateToOneWithWhereWithoutAdhesionsInput = {
-  where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutAdhesionsInput, Prisma.MemberUncheckedUpdateWithoutAdhesionsInput>
-}
-
-export type MemberUpdateWithoutAdhesionsInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberUncheckedUpdateWithoutAdhesionsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
 }
 
 export type MemberCreateWithoutMemberRolesInput = {
@@ -1053,14 +713,6 @@ export type MemberCreateWithoutMemberRolesInput = {
   emailValidated?: boolean
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
   sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
   tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
 }
@@ -1076,14 +728,6 @@ export type MemberUncheckedCreateWithoutMemberRolesInput = {
   emailValidated?: boolean
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
   tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
 }
@@ -1114,14 +758,6 @@ export type MemberUpdateWithoutMemberRolesInput = {
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
   tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
 }
@@ -1137,756 +773,6 @@ export type MemberUncheckedUpdateWithoutMemberRolesInput = {
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberCreateWithoutReportedByInput = {
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
-}
-
-export type MemberUncheckedCreateWithoutReportedByInput = {
-  id?: number
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
-}
-
-export type MemberCreateOrConnectWithoutReportedByInput = {
-  where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutReportedByInput, Prisma.MemberUncheckedCreateWithoutReportedByInput>
-}
-
-export type MemberCreateWithoutShiftsManagedInput = {
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
-}
-
-export type MemberUncheckedCreateWithoutShiftsManagedInput = {
-  id?: number
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
-}
-
-export type MemberCreateOrConnectWithoutShiftsManagedInput = {
-  where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutShiftsManagedInput, Prisma.MemberUncheckedCreateWithoutShiftsManagedInput>
-}
-
-export type MemberUpsertWithoutReportedByInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutReportedByInput, Prisma.MemberUncheckedUpdateWithoutReportedByInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutReportedByInput, Prisma.MemberUncheckedCreateWithoutReportedByInput>
-  where?: Prisma.MemberWhereInput
-}
-
-export type MemberUpdateToOneWithWhereWithoutReportedByInput = {
-  where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutReportedByInput, Prisma.MemberUncheckedUpdateWithoutReportedByInput>
-}
-
-export type MemberUpdateWithoutReportedByInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberUncheckedUpdateWithoutReportedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberUpsertWithoutShiftsManagedInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutShiftsManagedInput, Prisma.MemberUncheckedUpdateWithoutShiftsManagedInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutShiftsManagedInput, Prisma.MemberUncheckedCreateWithoutShiftsManagedInput>
-  where?: Prisma.MemberWhereInput
-}
-
-export type MemberUpdateToOneWithWhereWithoutShiftsManagedInput = {
-  where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutShiftsManagedInput, Prisma.MemberUncheckedUpdateWithoutShiftsManagedInput>
-}
-
-export type MemberUpdateWithoutShiftsManagedInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberUncheckedUpdateWithoutShiftsManagedInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberCreateWithoutShiftMembersInput = {
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
-}
-
-export type MemberUncheckedCreateWithoutShiftMembersInput = {
-  id?: number
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
-}
-
-export type MemberCreateOrConnectWithoutShiftMembersInput = {
-  where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutShiftMembersInput, Prisma.MemberUncheckedCreateWithoutShiftMembersInput>
-}
-
-export type MemberUpsertWithoutShiftMembersInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutShiftMembersInput, Prisma.MemberUncheckedUpdateWithoutShiftMembersInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutShiftMembersInput, Prisma.MemberUncheckedCreateWithoutShiftMembersInput>
-  where?: Prisma.MemberWhereInput
-}
-
-export type MemberUpdateToOneWithWhereWithoutShiftMembersInput = {
-  where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutShiftMembersInput, Prisma.MemberUncheckedUpdateWithoutShiftMembersInput>
-}
-
-export type MemberUpdateWithoutShiftMembersInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberUncheckedUpdateWithoutShiftMembersInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberCreateWithoutShiftAssignmentsInput = {
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
-}
-
-export type MemberUncheckedCreateWithoutShiftAssignmentsInput = {
-  id?: number
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
-}
-
-export type MemberCreateOrConnectWithoutShiftAssignmentsInput = {
-  where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutShiftAssignmentsInput, Prisma.MemberUncheckedCreateWithoutShiftAssignmentsInput>
-}
-
-export type MemberUpsertWithoutShiftAssignmentsInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutShiftAssignmentsInput, Prisma.MemberUncheckedUpdateWithoutShiftAssignmentsInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutShiftAssignmentsInput, Prisma.MemberUncheckedCreateWithoutShiftAssignmentsInput>
-  where?: Prisma.MemberWhereInput
-}
-
-export type MemberUpdateToOneWithWhereWithoutShiftAssignmentsInput = {
-  where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutShiftAssignmentsInput, Prisma.MemberUncheckedUpdateWithoutShiftAssignmentsInput>
-}
-
-export type MemberUpdateWithoutShiftAssignmentsInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberUncheckedUpdateWithoutShiftAssignmentsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberCreateWithoutVehiclesInput = {
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
-}
-
-export type MemberUncheckedCreateWithoutVehiclesInput = {
-  id?: number
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
-}
-
-export type MemberCreateOrConnectWithoutVehiclesInput = {
-  where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutVehiclesInput, Prisma.MemberUncheckedCreateWithoutVehiclesInput>
-}
-
-export type MemberUpsertWithoutVehiclesInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutVehiclesInput, Prisma.MemberUncheckedUpdateWithoutVehiclesInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutVehiclesInput, Prisma.MemberUncheckedCreateWithoutVehiclesInput>
-  where?: Prisma.MemberWhereInput
-}
-
-export type MemberUpdateToOneWithWhereWithoutVehiclesInput = {
-  where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutVehiclesInput, Prisma.MemberUncheckedUpdateWithoutVehiclesInput>
-}
-
-export type MemberUpdateWithoutVehiclesInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberUncheckedUpdateWithoutVehiclesInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberCreateWithoutExpenseTripsInput = {
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
-}
-
-export type MemberUncheckedCreateWithoutExpenseTripsInput = {
-  id?: number
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
-}
-
-export type MemberCreateOrConnectWithoutExpenseTripsInput = {
-  where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutExpenseTripsInput, Prisma.MemberUncheckedCreateWithoutExpenseTripsInput>
-}
-
-export type MemberUpsertWithoutExpenseTripsInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutExpenseTripsInput, Prisma.MemberUncheckedUpdateWithoutExpenseTripsInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutExpenseTripsInput, Prisma.MemberUncheckedCreateWithoutExpenseTripsInput>
-  where?: Prisma.MemberWhereInput
-}
-
-export type MemberUpdateToOneWithWhereWithoutExpenseTripsInput = {
-  where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutExpenseTripsInput, Prisma.MemberUncheckedUpdateWithoutExpenseTripsInput>
-}
-
-export type MemberUpdateWithoutExpenseTripsInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberUncheckedUpdateWithoutExpenseTripsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  memberBattlepassRewards?: Prisma.MemberBattlepassRewardUncheckedUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberCreateWithoutMemberBattlepassRewardsInput = {
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenCreateNestedManyWithoutMemberInput
-}
-
-export type MemberUncheckedCreateWithoutMemberBattlepassRewardsInput = {
-  id?: number
-  email: string
-  password?: string | null
-  login?: string | null
-  displayName?: string | null
-  internalNote?: string | null
-  joinDate?: Date | string | null
-  emailValidated?: boolean
-  updatedAt?: Date | string | null
-  createdAt?: Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedCreateNestedManyWithoutMemberInput
-  memberRoles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberRefInput
-  reportedBy?: Prisma.ShiftUncheckedCreateNestedManyWithoutReporterInput
-  shiftsManaged?: Prisma.ShiftUncheckedCreateNestedManyWithoutManagerInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedCreateNestedManyWithoutMemberInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedCreateNestedManyWithoutMemberInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutMemberInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedCreateNestedManyWithoutMemberInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutMemberInput
-  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutMemberInput
-}
-
-export type MemberCreateOrConnectWithoutMemberBattlepassRewardsInput = {
-  where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutMemberBattlepassRewardsInput, Prisma.MemberUncheckedCreateWithoutMemberBattlepassRewardsInput>
-}
-
-export type MemberUpsertWithoutMemberBattlepassRewardsInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutMemberBattlepassRewardsInput, Prisma.MemberUncheckedUpdateWithoutMemberBattlepassRewardsInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutMemberBattlepassRewardsInput, Prisma.MemberUncheckedCreateWithoutMemberBattlepassRewardsInput>
-  where?: Prisma.MemberWhereInput
-}
-
-export type MemberUpdateToOneWithWhereWithoutMemberBattlepassRewardsInput = {
-  where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutMemberBattlepassRewardsInput, Prisma.MemberUncheckedUpdateWithoutMemberBattlepassRewardsInput>
-}
-
-export type MemberUpdateWithoutMemberBattlepassRewardsInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUpdateManyWithoutMemberNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutMemberNestedInput
-  tokens?: Prisma.TokenUpdateManyWithoutMemberNestedInput
-}
-
-export type MemberUncheckedUpdateWithoutMemberBattlepassRewardsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  adhesions?: Prisma.AdhesionUncheckedUpdateManyWithoutMemberNestedInput
-  memberRoles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberRefNestedInput
-  reportedBy?: Prisma.ShiftUncheckedUpdateManyWithoutReporterNestedInput
-  shiftsManaged?: Prisma.ShiftUncheckedUpdateManyWithoutManagerNestedInput
-  shiftMembers?: Prisma.ShiftMemberUncheckedUpdateManyWithoutMemberNestedInput
-  shiftAssignments?: Prisma.ShiftAssignmentUncheckedUpdateManyWithoutMemberNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutMemberNestedInput
-  expenseTrips?: Prisma.ExpenseTripUncheckedUpdateManyWithoutMemberNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutMemberNestedInput
   tokens?: Prisma.TokenUncheckedUpdateManyWithoutMemberNestedInput
 }
@@ -1897,29 +783,13 @@ export type MemberUncheckedUpdateWithoutMemberBattlepassRewardsInput = {
  */
 
 export type MemberCountOutputType = {
-  adhesions: number
   memberRoles: number
-  reportedBy: number
-  shiftsManaged: number
-  shiftMembers: number
-  shiftAssignments: number
-  vehicles: number
-  expenseTrips: number
-  memberBattlepassRewards: number
   sessions: number
   tokens: number
 }
 
 export type MemberCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  adhesions?: boolean | MemberCountOutputTypeCountAdhesionsArgs
   memberRoles?: boolean | MemberCountOutputTypeCountMemberRolesArgs
-  reportedBy?: boolean | MemberCountOutputTypeCountReportedByArgs
-  shiftsManaged?: boolean | MemberCountOutputTypeCountShiftsManagedArgs
-  shiftMembers?: boolean | MemberCountOutputTypeCountShiftMembersArgs
-  shiftAssignments?: boolean | MemberCountOutputTypeCountShiftAssignmentsArgs
-  vehicles?: boolean | MemberCountOutputTypeCountVehiclesArgs
-  expenseTrips?: boolean | MemberCountOutputTypeCountExpenseTripsArgs
-  memberBattlepassRewards?: boolean | MemberCountOutputTypeCountMemberBattlepassRewardsArgs
   sessions?: boolean | MemberCountOutputTypeCountSessionsArgs
   tokens?: boolean | MemberCountOutputTypeCountTokensArgs
 }
@@ -1937,64 +807,8 @@ export type MemberCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
 /**
  * MemberCountOutputType without action
  */
-export type MemberCountOutputTypeCountAdhesionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AdhesionWhereInput
-}
-
-/**
- * MemberCountOutputType without action
- */
 export type MemberCountOutputTypeCountMemberRolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.MemberRoleWhereInput
-}
-
-/**
- * MemberCountOutputType without action
- */
-export type MemberCountOutputTypeCountReportedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ShiftWhereInput
-}
-
-/**
- * MemberCountOutputType without action
- */
-export type MemberCountOutputTypeCountShiftsManagedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ShiftWhereInput
-}
-
-/**
- * MemberCountOutputType without action
- */
-export type MemberCountOutputTypeCountShiftMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ShiftMemberWhereInput
-}
-
-/**
- * MemberCountOutputType without action
- */
-export type MemberCountOutputTypeCountShiftAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ShiftAssignmentWhereInput
-}
-
-/**
- * MemberCountOutputType without action
- */
-export type MemberCountOutputTypeCountVehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.VehicleWhereInput
-}
-
-/**
- * MemberCountOutputType without action
- */
-export type MemberCountOutputTypeCountExpenseTripsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ExpenseTripWhereInput
-}
-
-/**
- * MemberCountOutputType without action
- */
-export type MemberCountOutputTypeCountMemberBattlepassRewardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MemberBattlepassRewardWhereInput
 }
 
 /**
@@ -2023,15 +837,7 @@ export type MemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   emailValidated?: boolean
   updatedAt?: boolean
   createdAt?: boolean
-  adhesions?: boolean | Prisma.Member$adhesionsArgs<ExtArgs>
   memberRoles?: boolean | Prisma.Member$memberRolesArgs<ExtArgs>
-  reportedBy?: boolean | Prisma.Member$reportedByArgs<ExtArgs>
-  shiftsManaged?: boolean | Prisma.Member$shiftsManagedArgs<ExtArgs>
-  shiftMembers?: boolean | Prisma.Member$shiftMembersArgs<ExtArgs>
-  shiftAssignments?: boolean | Prisma.Member$shiftAssignmentsArgs<ExtArgs>
-  vehicles?: boolean | Prisma.Member$vehiclesArgs<ExtArgs>
-  expenseTrips?: boolean | Prisma.Member$expenseTripsArgs<ExtArgs>
-  memberBattlepassRewards?: boolean | Prisma.Member$memberBattlepassRewardsArgs<ExtArgs>
   sessions?: boolean | Prisma.Member$sessionsArgs<ExtArgs>
   tokens?: boolean | Prisma.Member$tokensArgs<ExtArgs>
   _count?: boolean | Prisma.MemberCountOutputTypeDefaultArgs<ExtArgs>
@@ -2078,15 +884,7 @@ export type MemberSelectScalar = {
 
 export type MemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "login" | "displayName" | "internalNote" | "joinDate" | "emailValidated" | "updatedAt" | "createdAt", ExtArgs["result"]["member"]>
 export type MemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  adhesions?: boolean | Prisma.Member$adhesionsArgs<ExtArgs>
   memberRoles?: boolean | Prisma.Member$memberRolesArgs<ExtArgs>
-  reportedBy?: boolean | Prisma.Member$reportedByArgs<ExtArgs>
-  shiftsManaged?: boolean | Prisma.Member$shiftsManagedArgs<ExtArgs>
-  shiftMembers?: boolean | Prisma.Member$shiftMembersArgs<ExtArgs>
-  shiftAssignments?: boolean | Prisma.Member$shiftAssignmentsArgs<ExtArgs>
-  vehicles?: boolean | Prisma.Member$vehiclesArgs<ExtArgs>
-  expenseTrips?: boolean | Prisma.Member$expenseTripsArgs<ExtArgs>
-  memberBattlepassRewards?: boolean | Prisma.Member$memberBattlepassRewardsArgs<ExtArgs>
   sessions?: boolean | Prisma.Member$sessionsArgs<ExtArgs>
   tokens?: boolean | Prisma.Member$tokensArgs<ExtArgs>
   _count?: boolean | Prisma.MemberCountOutputTypeDefaultArgs<ExtArgs>
@@ -2097,15 +895,7 @@ export type MemberIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type $MemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Member"
   objects: {
-    adhesions: Prisma.$AdhesionPayload<ExtArgs>[]
     memberRoles: Prisma.$MemberRolePayload<ExtArgs>[]
-    reportedBy: Prisma.$ShiftPayload<ExtArgs>[]
-    shiftsManaged: Prisma.$ShiftPayload<ExtArgs>[]
-    shiftMembers: Prisma.$ShiftMemberPayload<ExtArgs>[]
-    shiftAssignments: Prisma.$ShiftAssignmentPayload<ExtArgs>[]
-    vehicles: Prisma.$VehiclePayload<ExtArgs>[]
-    expenseTrips: Prisma.$ExpenseTripPayload<ExtArgs>[]
-    memberBattlepassRewards: Prisma.$MemberBattlepassRewardPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     tokens: Prisma.$TokenPayload<ExtArgs>[]
   }
@@ -2514,15 +1304,7 @@ readonly fields: MemberFieldRefs;
  */
 export interface Prisma__MemberClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  adhesions<T extends Prisma.Member$adhesionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$adhesionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdhesionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   memberRoles<T extends Prisma.Member$memberRolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$memberRolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reportedBy<T extends Prisma.Member$reportedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$reportedByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  shiftsManaged<T extends Prisma.Member$shiftsManagedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$shiftsManagedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  shiftMembers<T extends Prisma.Member$shiftMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$shiftMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShiftMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  shiftAssignments<T extends Prisma.Member$shiftAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$shiftAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShiftAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  vehicles<T extends Prisma.Member$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  expenseTrips<T extends Prisma.Member$expenseTripsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$expenseTripsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpenseTripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  memberBattlepassRewards<T extends Prisma.Member$memberBattlepassRewardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$memberBattlepassRewardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberBattlepassRewardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.Member$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tokens<T extends Prisma.Member$tokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$tokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2760,11 +1542,6 @@ export type MemberFindManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Skip the first `n` Members.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of Members.
-   */
   distinct?: Prisma.MemberScalarFieldEnum | Prisma.MemberScalarFieldEnum[]
 }
 
@@ -2957,30 +1734,6 @@ export type MemberDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Member.adhesions
- */
-export type Member$adhesionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Adhesion
-   */
-  select?: Prisma.AdhesionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Adhesion
-   */
-  omit?: Prisma.AdhesionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AdhesionInclude<ExtArgs> | null
-  where?: Prisma.AdhesionWhereInput
-  orderBy?: Prisma.AdhesionOrderByWithRelationInput | Prisma.AdhesionOrderByWithRelationInput[]
-  cursor?: Prisma.AdhesionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AdhesionScalarFieldEnum | Prisma.AdhesionScalarFieldEnum[]
-}
-
-/**
  * Member.memberRoles
  */
 export type Member$memberRolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3002,174 +1755,6 @@ export type Member$memberRolesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.MemberRoleScalarFieldEnum | Prisma.MemberRoleScalarFieldEnum[]
-}
-
-/**
- * Member.reportedBy
- */
-export type Member$reportedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Shift
-   */
-  select?: Prisma.ShiftSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Shift
-   */
-  omit?: Prisma.ShiftOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ShiftInclude<ExtArgs> | null
-  where?: Prisma.ShiftWhereInput
-  orderBy?: Prisma.ShiftOrderByWithRelationInput | Prisma.ShiftOrderByWithRelationInput[]
-  cursor?: Prisma.ShiftWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ShiftScalarFieldEnum | Prisma.ShiftScalarFieldEnum[]
-}
-
-/**
- * Member.shiftsManaged
- */
-export type Member$shiftsManagedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Shift
-   */
-  select?: Prisma.ShiftSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Shift
-   */
-  omit?: Prisma.ShiftOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ShiftInclude<ExtArgs> | null
-  where?: Prisma.ShiftWhereInput
-  orderBy?: Prisma.ShiftOrderByWithRelationInput | Prisma.ShiftOrderByWithRelationInput[]
-  cursor?: Prisma.ShiftWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ShiftScalarFieldEnum | Prisma.ShiftScalarFieldEnum[]
-}
-
-/**
- * Member.shiftMembers
- */
-export type Member$shiftMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ShiftMember
-   */
-  select?: Prisma.ShiftMemberSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ShiftMember
-   */
-  omit?: Prisma.ShiftMemberOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ShiftMemberInclude<ExtArgs> | null
-  where?: Prisma.ShiftMemberWhereInput
-  orderBy?: Prisma.ShiftMemberOrderByWithRelationInput | Prisma.ShiftMemberOrderByWithRelationInput[]
-  cursor?: Prisma.ShiftMemberWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ShiftMemberScalarFieldEnum | Prisma.ShiftMemberScalarFieldEnum[]
-}
-
-/**
- * Member.shiftAssignments
- */
-export type Member$shiftAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ShiftAssignment
-   */
-  select?: Prisma.ShiftAssignmentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ShiftAssignment
-   */
-  omit?: Prisma.ShiftAssignmentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ShiftAssignmentInclude<ExtArgs> | null
-  where?: Prisma.ShiftAssignmentWhereInput
-  orderBy?: Prisma.ShiftAssignmentOrderByWithRelationInput | Prisma.ShiftAssignmentOrderByWithRelationInput[]
-  cursor?: Prisma.ShiftAssignmentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ShiftAssignmentScalarFieldEnum | Prisma.ShiftAssignmentScalarFieldEnum[]
-}
-
-/**
- * Member.vehicles
- */
-export type Member$vehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Vehicle
-   */
-  select?: Prisma.VehicleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Vehicle
-   */
-  omit?: Prisma.VehicleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VehicleInclude<ExtArgs> | null
-  where?: Prisma.VehicleWhereInput
-  orderBy?: Prisma.VehicleOrderByWithRelationInput | Prisma.VehicleOrderByWithRelationInput[]
-  cursor?: Prisma.VehicleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.VehicleScalarFieldEnum | Prisma.VehicleScalarFieldEnum[]
-}
-
-/**
- * Member.expenseTrips
- */
-export type Member$expenseTripsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ExpenseTrip
-   */
-  select?: Prisma.ExpenseTripSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ExpenseTrip
-   */
-  omit?: Prisma.ExpenseTripOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ExpenseTripInclude<ExtArgs> | null
-  where?: Prisma.ExpenseTripWhereInput
-  orderBy?: Prisma.ExpenseTripOrderByWithRelationInput | Prisma.ExpenseTripOrderByWithRelationInput[]
-  cursor?: Prisma.ExpenseTripWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ExpenseTripScalarFieldEnum | Prisma.ExpenseTripScalarFieldEnum[]
-}
-
-/**
- * Member.memberBattlepassRewards
- */
-export type Member$memberBattlepassRewardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MemberBattlepassReward
-   */
-  select?: Prisma.MemberBattlepassRewardSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the MemberBattlepassReward
-   */
-  omit?: Prisma.MemberBattlepassRewardOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MemberBattlepassRewardInclude<ExtArgs> | null
-  where?: Prisma.MemberBattlepassRewardWhereInput
-  orderBy?: Prisma.MemberBattlepassRewardOrderByWithRelationInput | Prisma.MemberBattlepassRewardOrderByWithRelationInput[]
-  cursor?: Prisma.MemberBattlepassRewardWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.MemberBattlepassRewardScalarFieldEnum | Prisma.MemberBattlepassRewardScalarFieldEnum[]
 }
 
 /**

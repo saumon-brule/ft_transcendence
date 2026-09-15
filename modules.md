@@ -114,7 +114,7 @@ encore une fois ca se fait
 
 ## Major: Advanced analytics dashboard with data visualization
 
-on fait des stats de shift
+on fait des stats
 
 2pts
 
@@ -141,16 +141,6 @@ profile/info on aura de base, avatar/friend/online c'est faisable mais useless p
 2pt
 
 
-## Minor: Game statistics and match history (requires a game module).
-
-◦ Track user game statistics (wins, losses, ranking, level, etc.).
-◦ Display match history (1v1 games, dates, results, opponents).
-◦ Show achievements and progression.
-◦ Leaderboard integration.
-
-A voir si les shifts peuvent etre considéré comme des game, si oui le module sera validé
-
-1pt
 
 ## Minor: User activity analytics and insights dashboard.
 

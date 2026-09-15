@@ -1,6 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { appContract } from "@42eat-web/shared";
+import { appContract } from "@flex/shared";
 import { SwaggerModule } from "@nestjs/swagger";
 import { generateOpenApi } from "@ts-rest/open-api";
 import cookieParser from "cookie-parser";

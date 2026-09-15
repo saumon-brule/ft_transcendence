@@ -1,4 +1,4 @@
-import { Code403 } from "@42eat-web/shared";
+import { Code403 } from "@flex/shared";
 import { ForbiddenException } from "@nestjs/common";
 
 export class AppForbiddenException extends ForbiddenException {

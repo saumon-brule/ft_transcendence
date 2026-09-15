@@ -1,7 +1,7 @@
 import { Controller } from "@nestjs/common";
 import { AppConfigService } from "./config.service";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
-import { appConfigContract, getAppVariables, PERMISSIONS } from "@42eat-web/shared";
+import { appConfigContract, getAppVariables, PERMISSIONS } from "@flex/shared";
 import { RequirePermission } from "../core/decorators/require-permission.decorator";
 
 @Controller()

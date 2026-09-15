@@ -1,11 +1,11 @@
 import { initQueryClient } from "@ts-rest/solid-query";
-import { appContract } from "@42eat-web/shared";
+import { appContract } from "@flex/shared";
 import { auth, authActions } from "../store/auth.store";
 import { ApiFetcher, tsRestFetchApi } from "@ts-rest/core";
 import { env } from "~/env";
 import { doRefresh } from "./doRefresh";
 import z from "zod";
-import { error401Schema } from "@42eat-web/shared";
+import { error401Schema } from "@flex/shared";
 import { summonWarningToast } from "~/components/ui/Toaster";
 import { t } from "~/i18n/context";
 import { queryKeyFromContract } from "./utils/queryKeys";

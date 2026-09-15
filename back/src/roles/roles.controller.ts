@@ -1,7 +1,7 @@
 import { Controller } from "@nestjs/common";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { RequirePermission } from "../core/decorators/require-permission.decorator";
-import { PERMISSIONS } from "@42eat-web/shared";
+import { PERMISSIONS } from "@flex/shared";
 import { RolesService } from "./roles.service";
 import {
 	rolesContract,
@@ -9,7 +9,7 @@ import {
 	roleResponseSchema,
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
-} from "@42eat-web/shared";
+} from "@flex/shared";
 
 @Controller()
 export class RolesController {

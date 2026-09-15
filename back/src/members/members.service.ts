@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Member } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { Permission } from "@42eat-web/shared";
+import { Permission } from "@flex/shared";
 import { RolesService } from "../roles/roles.service";
 import * as bcrypt from "bcrypt";
 import { Cron } from "@nestjs/schedule";
