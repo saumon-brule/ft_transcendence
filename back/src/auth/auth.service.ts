@@ -3,7 +3,7 @@ import {
 	Injectable,
 	InternalServerErrorException,
 } from "@nestjs/common";
-import { MembersService } from "../members/members.service";
+import { UsersService } from "../users/users.service";
 import { emailConfirmationPath, ftIntraAuthCallbackPath, ftIntraLinkCallbackPath, RegisterDto } from "@flex/shared";
 import * as bcrypt from "bcrypt";
 import { LoginDto } from "@flex/shared";
@@ -12,7 +12,7 @@ import { SessionsService } from "../sessions/sessions.service";
 import { createJwtPayload } from "@flex/shared";
 import { AppUnauthorizedException } from "../core/error/unauthorized";
 import { MailService } from "../core/mail/mail.service";
-import { Member } from "../generated/prisma/client";
+import { User } from "../generated/prisma/client";
 import { AppForbiddenException } from "../core/error/forbidden";
 import { TokensService } from "../tokens/tokens.service";
 import { AppConfigService } from "../config/config.service";
@@ -34,7 +34,7 @@ const Me42ResponseSchema = z.object({
 @Injectable()
 export class AuthService {
 	constructor(
-		private readonly members: MembersService,
+		private readonly users: UsersService,
 		private readonly sessions: SessionsService,
 		private readonly jwtService: JwtService,
 		private readonly mailService: MailService,
@@ -48,14 +48,14 @@ export class AuthService {
 		userAgent: string | undefined,
 		ipAddress: string | undefined,
 	) {
-		const existing = await this.members.getByEmail(dto.email);
+		const existing = await this.users.getByEmail(dto.email);
 
 		if (existing) {
 			this.logger.warn(LogBuilder.auth.registrationFailed(dto.email, "Email already exists"));
 			throw new ConflictException("Email already used");
 		}
 
-		const insertedUser = await this.members.createFromRegister(
+		const insertedUser = await this.users.createFromRegister(
 			dto.email,
 			dto.password,
 			dto.displayName,
@@ -85,7 +85,7 @@ export class AuthService {
 		userAgent: string | undefined,
 		ipAddress: string | undefined,
 	) {
-		const existing = await this.members.getByEmail(dto.email);
+		const existing = await this.users.getByEmail(dto.email);
 
 		if (!existing) {
 			throw new AppUnauthorizedException(
@@ -122,22 +122,22 @@ export class AuthService {
 	}
 
 	public async refresh(
-		memberId: number,
+		userId: number,
 		jti: UUID | undefined,
 		userAgent: string | undefined,
 		ipAddress: string | undefined,
 	) {
 		if (!jti) throw new AppUnauthorizedException("INVALID_REFRESH_TOKEN", "Invalid refresh token");
 
-		const validSession = await this.sessions.isValidSession(memberId, jti);
+		const validSession = await this.sessions.isValidSession(userId, jti);
 
 		if (validSession) {
 			await this.sessions.removeSession(validSession.id);
 
 			return {
-				accessToken: await this.generateAccessToken(memberId),
+				accessToken: await this.generateAccessToken(userId),
 				refreshToken: await this.generateRefreshToken(
-					memberId,
+					userId,
 					userAgent,
 					ipAddress,
 				),
@@ -147,10 +147,10 @@ export class AuthService {
 		throw new AppUnauthorizedException("INVALID_REFRESH_TOKEN", "Invalid refresh token");
 	}
 
-	private async generateAccessToken(memberId: number) {
-		const user = await this.members.getById(memberId);
+	private async generateAccessToken(userId: number) {
+		const user = await this.users.getById(userId);
 		return this.jwtService.signAsync(
-			createJwtPayload(memberId, user.emailValidated),
+			createJwtPayload(userId, user.emailValidated),
 			{
 				secret: env.JWT_SECRET,
 				expiresIn: "15m",
@@ -159,20 +159,20 @@ export class AuthService {
 	}
 
 	private async generateRefreshToken(
-		memberId: number,
+		userId: number,
 		userAgent: string | undefined,
 		ipAddress: string | undefined,
 	) {
 		const jti = randomUUID();
 		const token = await this.jwtService.signAsync(
-			{ sub: memberId, jti },
+			{ sub: userId, jti },
 			{ secret: env.JWT_REFRESH_SECRET, expiresIn: "7d" },
 		);
 		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
 		if (
 			!(await this.sessions.create(
-				memberId,
+				userId,
 				jti,
 				expiresAt,
 				userAgent ?? "",
@@ -185,14 +185,14 @@ export class AuthService {
 		return token;
 	}
 
-	private async sendEmailValidation(member: Member) {
-		if (member.emailValidated) {
+	private async sendEmailValidation(user: User) {
+		if (user.emailValidated) {
 			throw new AppForbiddenException("FORBIDDEN", "your email is already validated");
 		}
 
-		await this.mailService.sendEmail([member.email], "Confirm your email - 42's Foyer", "confirm-email", {
-			username: member.displayName,
-			token: await this.tokensService.createConfirmEmailToken(member.id),
+		await this.mailService.sendEmail([user.email], "Confirm your email - 42's Foyer", "confirm-email", {
+			username: user.displayName,
+			token: await this.tokensService.createConfirmEmailToken(user.id),
 			baseFrontUrl: env.BASE_FRONT_URL,
 			emailConfirmationPath,
 			year: new Date().getFullYear(),
@@ -205,21 +205,21 @@ export class AuthService {
 			"EMAIL_VERIFICATION",
 		);
 
-		await this.members.verifyEmail(payload.memberId);
+		await this.users.verifyEmail(payload.userId);
 	}
 
-	public async askNewConfirmationEmail(memberId: number) {
-		const member = await this.members.getById(memberId);
-		await this.sendEmailValidation(member);
+	public async askNewConfirmationEmail(userId: number) {
+		const user = await this.users.getById(userId);
+		await this.sendEmailValidation(user);
 	}
 
-	private async sendResetPasswordEmail(member: Member) {
+	private async sendResetPasswordEmail(user: User) {
 		await this.mailService.sendEmail(
-			[member.email],
+			[user.email],
 			"Reset your password - 42's Foyer",
 			"reset-password",
 			{
-				token: await this.tokensService.createResetPasswordToken(member.id),
+				token: await this.tokensService.createResetPasswordToken(user.id),
 				baseFrontUrl: env.BASE_FRONT_URL,
 				year: new Date().getFullYear(),
 			},
@@ -227,11 +227,11 @@ export class AuthService {
 	}
 
 	public async requestPasswordReset(email: string) {
-		const member = await this.members.getByEmail(email);
+		const user = await this.users.getByEmail(email);
 
 		// Pas d'erreur pour eviter que quelqu'un puisse sonder les email en db
-		if (member) {
-			await this.sendResetPasswordEmail(member);
+		if (user) {
+			await this.sendResetPasswordEmail(user);
 		}
 		this.logger.log(LogBuilder.auth.passwordResetRequested(email));
 	}
@@ -242,16 +242,16 @@ export class AuthService {
 			"PASSWORD_RESET",
 		);
 
-		await this.members.setPassword(payload.memberId, password);
-		this.logger.log(LogBuilder.auth.passwordChanged(payload.memberId));
+		await this.users.setPassword(payload.userId, password);
+		this.logger.log(LogBuilder.auth.passwordChanged(payload.userId));
 	}
 
 	public async changePassword(
-		memberId: number,
+		userId: number,
 		oldPassword: string,
 		newPassword: string,
 	) {
-		const existing = await this.members.getById(memberId);
+		const existing = await this.users.getById(userId);
 		if (!existing) {
 			throw new AppForbiddenException(
 				"FORBIDDEN",
@@ -271,29 +271,29 @@ export class AuthService {
 			throw new AppForbiddenException("FORBIDDEN", "Invalid password");
 		}
 
-		await this.members.setPassword(memberId, newPassword);
-		this.logger.log(LogBuilder.auth.passwordChanged(memberId));
+		await this.users.setPassword(userId, newPassword);
+		this.logger.log(LogBuilder.auth.passwordChanged(userId));
 	}
 
-	public async logout(memberId: number, jti: UUID | undefined) {
+	public async logout(userId: number, jti: UUID | undefined) {
 		if (!jti) return;
 
-		const validSession = await this.sessions.isValidSession(memberId, jti);
+		const validSession = await this.sessions.isValidSession(userId, jti);
 
 		if (validSession) {
 			await this.sessions.removeSession(validSession.id);
-			this.logger.log(LogBuilder.auth.logout(memberId));
+			this.logger.log(LogBuilder.auth.logout(userId));
 		}
 	}
 
-	private async sendChangeEmail(member: Member, newEmail: string) {
+	private async sendChangeEmail(user: User, newEmail: string) {
 		await this.mailService.sendEmail(
-			[member.email],
+			[user.email],
 			"Change your email - 42's Foyer",
 			"reset-email",
 			{
 				token: await this.tokensService.createResetEmailToken(
-					member.id,
+					user.id,
 					newEmail,
 				),
 				baseFrontUrl: env.BASE_FRONT_URL,
@@ -303,26 +303,26 @@ export class AuthService {
 	}
 
 	public async requestEmailReset(
-		memberId: number,
+		userId: number,
 		password: string,
 		newEmail: string,
 	) {
-		const member = await this.members.getById(memberId);
+		const user = await this.users.getById(userId);
 
-		if (!member) {
+		if (!user) {
 			throw new AppForbiddenException("FORBIDDEN", "This shouldn't happen");
 		}
 
-		if (!member.password || !(await bcrypt.compare(password, member.password))) {
+		if (!user.password || !(await bcrypt.compare(password, user.password))) {
 			throw new AppForbiddenException("FORBIDDEN", "Invalid password");
 		}
 
-		await this.sendChangeEmail(member, newEmail);
+		await this.sendChangeEmail(user, newEmail);
 	}
 
 	public async resetEmail(token: string) {
 		const payload = await this.tokensService.isValidToken(token, "EMAIL_RESET");
-		await this.members.setEmail(payload.memberId, payload.data.newEmail);
+		await this.users.setEmail(payload.userId, payload.data.newEmail);
 	}
 
 	public async get42LoginUrl() {
@@ -338,10 +338,10 @@ export class AuthService {
 		return url;
 	}
 
-	public async get42LinkUrl(memberId: number) {
-		const member = await this.members.getById(memberId);
+	public async get42LinkUrl(userId: number) {
+		const user = await this.users.getById(userId);
 
-		if (member && member.login) {
+		if (user && user.login) {
 			throw new AppForbiddenException("FORBIDDEN", "You already have a linked login");
 		}
 
@@ -351,7 +351,7 @@ export class AuthService {
 			throw new InternalServerErrorException("API 42 credentials are not set");
 		}
 
-		const state = await this.tokensService.create42LinkStateToken(memberId);
+		const state = await this.tokensService.create42LinkStateToken(userId);
 
 		const url = `https://api.intra.42.fr/oauth/authorize?client_id=${api42_client_uid}&redirect_uri=${env.BASE_FRONT_URL}${ftIntraLinkCallbackPath}&response_type=code&scope=public&state=${state}`;
 		return url;
@@ -371,27 +371,27 @@ export class AuthService {
 			throw new AppUnauthorizedException("UNAUTHORIZED", "Failed to retrieve user data from 42");
 		}
 
-		let member = await this.members.getByLogin(userData.login);
+		let user = await this.users.getByLogin(userData.login);
 
-		if (!member) {
-			member = await this.members.createFromIntra(
+		if (!user) {
+			user = await this.users.createFromIntra(
 				userData.email,
 				userData.login,
 			);
 		}
 
-		if (!member) {
+		if (!user) {
 			throw new InternalServerErrorException("An error occured while creating the user");
 		}
 
-		if (!member?.login) {
-			await this.members.setLogin(member.id, userData.login);
+		if (!user?.login) {
+			await this.users.setLogin(user.id, userData.login);
 		}
 
 		return {
-			accessToken: await this.generateAccessToken(member.id),
+			accessToken: await this.generateAccessToken(user.id),
 			refreshToken: await this.generateRefreshToken(
-				member.id,
+				user.id,
 				userAgent ?? "",
 				ipAddress ?? "unknown",
 			),
@@ -399,25 +399,25 @@ export class AuthService {
 	}
 
 	public async link42(
-		memberId: number,
+		userId: number,
 		code: string,
 		state: string,
 	) {
-		const state_member = await this.tokensService.isValidToken(state, "STATE_42LINK");
+		const state_user = await this.tokensService.isValidToken(state, "STATE_42LINK");
 
-		if (state_member.memberId !== memberId) {
+		if (state_user.userId !== userId) {
 			throw new AppForbiddenException("FORBIDDEN", "This is not your token");
 		}
 
 		const userData = await this.get42UserInfo(code, env.BASE_FRONT_URL + ftIntraLinkCallbackPath);
 
-		const existingMember = await this.members.getByLogin(userData.login);
+		const existingUser = await this.users.getByLogin(userData.login);
 
-		if (existingMember) {
+		if (existingUser) {
 			throw new ConflictException("This login is already linked to an account");
 		}
 
-		await this.members.setLogin(memberId, userData.login);
+		await this.users.setLogin(userId, userData.login);
 	}
 
 	private async get42UserInfo(code: string, redirectUri: string) {

@@ -8,11 +8,11 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Member'
+export type * from './models/User'
 export type * from './models/Session'
 export type * from './models/Token'
 export type * from './models/Role'
 export type * from './models/RolePermission'
-export type * from './models/MemberRole'
+export type * from './models/UserRole'
 export type * from './models/AppConfig'
 export type * from './commonInputTypes'

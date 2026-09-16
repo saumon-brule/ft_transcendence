@@ -8,9 +8,9 @@ import { WinstonLoggerService } from "../core/logging/logger.service";
 import { LogBuilder } from "../core/logging/log-builder";
 
 export type TokenCreationParam<T extends TokenPurpose>
-	= T extends "EMAIL_RESET" ? { memberId: number; data: { newEmail: string } }
+	= T extends "EMAIL_RESET" ? { userId: number; data: { newEmail: string } }
 		: T extends "STATE_42AUTH" ? null
-			: { memberId: number };
+			: { userId: number };
 
 @Injectable()
 export class TokensService {
@@ -27,28 +27,28 @@ export class TokensService {
 		this.logger.log(LogBuilder.token.cleanupCompleted(result.count));
 	}
 
-	public async createConfirmEmailToken(memberId: number) {
-		return await this.createToken(memberId, "EMAIL_VERIFICATION");
+	public async createConfirmEmailToken(userId: number) {
+		return await this.createToken(userId, "EMAIL_VERIFICATION");
 	}
 
-	public async createResetPasswordToken(memberId: number) {
-		return await this.createToken(memberId, "PASSWORD_RESET");
+	public async createResetPasswordToken(userId: number) {
+		return await this.createToken(userId, "PASSWORD_RESET");
 	}
 
-	public async createResetEmailToken(memberId: number, newEmail: string) {
-		return await this.createToken(memberId, "EMAIL_RESET", { newEmail });
+	public async createResetEmailToken(userId: number, newEmail: string) {
+		return await this.createToken(userId, "EMAIL_RESET", { newEmail });
 	}
 
 	public async create42AuthStateToken() {
 		return await this.createToken(null, "STATE_42AUTH");
 	}
 
-	public async create42LinkStateToken(memberId: number) {
-		return await this.createToken(memberId, "STATE_42LINK");
+	public async create42LinkStateToken(userId: number) {
+		return await this.createToken(userId, "STATE_42LINK");
 	}
 
 	private async createToken(
-		memberId: number | null,
+		userId: number | null,
 		tokenPurpose: TokenPurpose,
 		data: object | undefined = undefined,
 	) {
@@ -57,12 +57,12 @@ export class TokensService {
 			data: {
 				token: token,
 				purpose: tokenPurpose,
-				memberId,
+				userId,
 				data,
 				expiresAt: new Date(Date.now() + 15 * 60 * 1000),
 			},
 		});
-		this.logger.log(LogBuilder.token.created(tokenPurpose, memberId ?? undefined));
+		this.logger.log(LogBuilder.token.created(tokenPurpose, userId ?? undefined));
 		return token;
 	}
 
@@ -93,13 +93,13 @@ export class TokensService {
 			);
 		}
 
-		this.logger.log(LogBuilder.token.validated(purpose, token.memberId ?? undefined));
+		this.logger.log(LogBuilder.token.validated(purpose, token.userId ?? undefined));
 		return (
 			purpose === "EMAIL_RESET"
-				? { memberId: token.memberId, data: token.data }
+				? { userId: token.userId, data: token.data }
 				: purpose === "STATE_42AUTH"
 					? null
-					: { memberId: token.memberId }
+					: { userId: token.userId }
 		) as TokenCreationParam<typeof purpose>;
 	}
 }

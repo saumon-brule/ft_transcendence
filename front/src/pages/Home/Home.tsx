@@ -4,7 +4,7 @@ import Button from "~/components/ui/Button";
 import { authActions } from "~/store/auth.store";
 
 export default function Home() {
-	const profile = client.members.profile.createQuery(queryKeys.members.profile, () => ({}));
+	const profile = client.users.profile.createQuery(queryKeys.users.profile, () => ({}));
 
 
 	function logout() {

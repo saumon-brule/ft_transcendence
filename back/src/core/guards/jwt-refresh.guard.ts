@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AppUnauthorizedException } from "../error/unauthorized";
-import { AuthMember } from "../decorators/current-member.decorator";
+import { AuthUser } from "../decorators/current-user.decorator";
 
 @Injectable()
 export class JwtAuthRefreshGuard extends AuthGuard("jwt-refresh") {
-	handleRequest<TUser = AuthMember>(
+	handleRequest<TUser = AuthUser>(
 		err: Error | null,
-		user: AuthMember | null,
+		user: AuthUser | null,
 	) {
 		if (err || !user) {
 			throw new AppUnauthorizedException(

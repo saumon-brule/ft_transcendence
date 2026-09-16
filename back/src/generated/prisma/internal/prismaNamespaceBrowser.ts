@@ -51,12 +51,12 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Member: 'Member',
+  User: 'User',
   Session: 'Session',
   Token: 'Token',
   Role: 'Role',
   RolePermission: 'RolePermission',
-  MemberRole: 'MemberRole',
+  UserRole: 'UserRole',
   AppConfig: 'AppConfig'
 } as const
 
@@ -76,7 +76,7 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const MemberScalarFieldEnum = {
+export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   password: 'password',
@@ -89,12 +89,12 @@ export const MemberScalarFieldEnum = {
   createdAt: 'createdAt'
 } as const
 
-export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {
   id: 'id',
-  memberId: 'memberId',
+  userId: 'userId',
   jti: 'jti',
   userAgent: 'userAgent',
   ipAddress: 'ipAddress',
@@ -109,7 +109,7 @@ export const TokenScalarFieldEnum = {
   id: 'id',
   token: 'token',
   purpose: 'purpose',
-  memberId: 'memberId',
+  userId: 'userId',
   data: 'data',
   expiresAt: 'expiresAt',
   createdAt: 'createdAt'
@@ -138,13 +138,13 @@ export const RolePermissionScalarFieldEnum = {
 export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
 
 
-export const MemberRoleScalarFieldEnum = {
+export const UserRoleScalarFieldEnum = {
   id: 'id',
-  memberId: 'memberId',
+  userId: 'userId',
   roleId: 'roleId'
 } as const
 
-export type MemberRoleScalarFieldEnum = (typeof MemberRoleScalarFieldEnum)[keyof typeof MemberRoleScalarFieldEnum]
+export type UserRoleScalarFieldEnum = (typeof UserRoleScalarFieldEnum)[keyof typeof UserRoleScalarFieldEnum]
 
 
 export const AppConfigScalarFieldEnum = {

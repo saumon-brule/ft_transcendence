@@ -93,7 +93,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 
 		const hashedPassword = await bcrypt.hash("abcdefgh", 10);
 
-		const liamMember = await this.prisma.member.upsert({
+		const liamUser = await this.prisma.user.upsert({
 			where: { email: "liam@test.com" },
 			update: {},
 			create: {
@@ -104,7 +104,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			},
 		});
 
-		const chantalMember = await this.prisma.member.upsert({
+		const chantalUser = await this.prisma.user.upsert({
 			where: { email: "chantal@test.com" },
 			update: {},
 			create: {
@@ -115,7 +115,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			},
 		});
 
-		const machinMember = await this.prisma.member.upsert({
+		const machinUser = await this.prisma.user.upsert({
 			where: { email: "machin@test.com" },
 			update: {},
 			create: {
@@ -129,30 +129,30 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			"Users created : liam@test.com, chantal@test.com, machin@test.com",
 		);
 
-		// ─── Member roles ─────────────────────────────────────────────────────────────
+		// ─── User roles ─────────────────────────────────────────────────────────────
 
-		await this.prisma.memberRole.upsert({
+		await this.prisma.userRole.upsert({
 			where: {
-				memberId_roleId: { memberId: liamMember.id, roleId: bigboss.id },
+				userId_roleId: { userId: liamUser.id, roleId: bigboss.id },
 			},
 			update: {},
-			create: { memberId: liamMember.id, roleId: bigboss.id },
+			create: { userId: liamUser.id, roleId: bigboss.id },
 		});
 
-		await this.prisma.memberRole.upsert({
+		await this.prisma.userRole.upsert({
 			where: {
-				memberId_roleId: { memberId: chantalMember.id, roleId: manager.id },
+				userId_roleId: { userId: chantalUser.id, roleId: manager.id },
 			},
 			update: {},
-			create: { memberId: chantalMember.id, roleId: manager.id },
+			create: { userId: chantalUser.id, roleId: manager.id },
 		});
 
-		await this.prisma.memberRole.upsert({
+		await this.prisma.userRole.upsert({
 			where: {
-				memberId_roleId: { memberId: machinMember.id, roleId: user.id },
+				userId_roleId: { userId: machinUser.id, roleId: user.id },
 			},
 			update: {},
-			create: { memberId: machinMember.id, roleId: user.id },
+			create: { userId: machinUser.id, roleId: user.id },
 		});
 
 		console.log("Roles asignated : liam→bigboss, chantal→manager, machin→user");
