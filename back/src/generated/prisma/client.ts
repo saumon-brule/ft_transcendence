@@ -74,3 +74,33 @@ export type UserRole = Prisma.UserRoleModel
  * 
  */
 export type AppConfig = Prisma.AppConfigModel
+/**
+ * Model Provider
+ * 
+ */
+export type Provider = Prisma.ProviderModel
+/**
+ * Model ProviderUser
+ * 
+ */
+export type ProviderUser = Prisma.ProviderUserModel
+/**
+ * Model Playlist
+ * 
+ */
+export type Playlist = Prisma.PlaylistModel
+/**
+ * Model UserPlaylist
+ * 
+ */
+export type UserPlaylist = Prisma.UserPlaylistModel
+/**
+ * Model PlaylistMusic
+ * 
+ */
+export type PlaylistMusic = Prisma.PlaylistMusicModel
+/**
+ * Model Music
+ * 
+ */
+export type Music = Prisma.MusicModel

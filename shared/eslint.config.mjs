@@ -41,7 +41,7 @@ export default tseslint.config(
 			"@stylistic/eol-last": ["error", "always"],
 			"@stylistic/linebreak-style": ["error", "unix"],
 
-			"@stylistic/lines-between-class-users": ["error", "always", { exceptAfterOverload: true, exceptAfterSingleLine: true }],
+			"@stylistic/lines-between-class-members": ["error", "always", { exceptAfterOverload: true, exceptAfterSingleLine: true }],
 			"@stylistic/new-parens": "error",
 
 			"@stylistic/function-call-argument-newline": ["error", "consistent"],
@@ -105,7 +105,7 @@ export default tseslint.config(
 			"@stylistic/type-annotation-spacing": "error",
 			"@stylistic/type-generic-spacing": "error",
 			"@stylistic/type-named-tuple-spacing": "error",
-			"@stylistic/user-delimiter-style": "error",
+			"@stylistic/member-delimiter-style": "error",
 			"@typescript-eslint/no-explicit-any": "off",
 			"@typescript-eslint/no-floating-promises": "warn",
 			"@typescript-eslint/no-unsafe-argument": "warn",

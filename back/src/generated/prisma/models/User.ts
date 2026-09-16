@@ -227,7 +227,7 @@ export type UserGroupByOutputType = {
   _max: UserMaxAggregateOutputType | null
 }
 
-type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
+export type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<UserGroupByOutputType, T['by']> &
       {
@@ -259,6 +259,9 @@ export type UserWhereInput = {
   userRoles?: Prisma.UserRoleListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   tokens?: Prisma.TokenListRelationFilter
+  ownedProviders?: Prisma.ProviderListRelationFilter
+  providers?: Prisma.ProviderUserListRelationFilter
+  playlists?: Prisma.UserPlaylistListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -275,6 +278,9 @@ export type UserOrderByWithRelationInput = {
   userRoles?: Prisma.UserRoleOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   tokens?: Prisma.TokenOrderByRelationAggregateInput
+  ownedProviders?: Prisma.ProviderOrderByRelationAggregateInput
+  providers?: Prisma.ProviderUserOrderByRelationAggregateInput
+  playlists?: Prisma.UserPlaylistOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -294,6 +300,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   userRoles?: Prisma.UserRoleListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   tokens?: Prisma.TokenListRelationFilter
+  ownedProviders?: Prisma.ProviderListRelationFilter
+  providers?: Prisma.ProviderUserListRelationFilter
+  playlists?: Prisma.UserPlaylistListRelationFilter
 }, "id" | "email" | "login">
 
 export type UserOrderByWithAggregationInput = {
@@ -343,6 +352,9 @@ export type UserCreateInput = {
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -359,6 +371,9 @@ export type UserUncheckedCreateInput = {
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -374,6 +389,9 @@ export type UserUpdateInput = {
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -390,6 +408,9 @@ export type UserUncheckedUpdateInput = {
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -555,6 +576,48 @@ export type UserUpdateOneRequiredWithoutUserRolesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserRolesInput, Prisma.UserUpdateWithoutUserRolesInput>, Prisma.UserUncheckedUpdateWithoutUserRolesInput>
 }
 
+export type UserCreateNestedOneWithoutOwnedProvidersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedProvidersInput, Prisma.UserUncheckedCreateWithoutOwnedProvidersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedProvidersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOwnedProvidersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedProvidersInput, Prisma.UserUncheckedCreateWithoutOwnedProvidersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedProvidersInput
+  upsert?: Prisma.UserUpsertWithoutOwnedProvidersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOwnedProvidersInput, Prisma.UserUpdateWithoutOwnedProvidersInput>, Prisma.UserUncheckedUpdateWithoutOwnedProvidersInput>
+}
+
+export type UserCreateNestedOneWithoutProvidersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProvidersInput, Prisma.UserUncheckedCreateWithoutProvidersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProvidersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutProvidersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProvidersInput, Prisma.UserUncheckedCreateWithoutProvidersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProvidersInput
+  upsert?: Prisma.UserUpsertWithoutProvidersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProvidersInput, Prisma.UserUpdateWithoutProvidersInput>, Prisma.UserUncheckedUpdateWithoutProvidersInput>
+}
+
+export type UserCreateNestedOneWithoutPlaylistsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlaylistsInput, Prisma.UserUncheckedCreateWithoutPlaylistsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlaylistsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPlaylistsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlaylistsInput, Prisma.UserUncheckedCreateWithoutPlaylistsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlaylistsInput
+  upsert?: Prisma.UserUpsertWithoutPlaylistsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPlaylistsInput, Prisma.UserUpdateWithoutPlaylistsInput>, Prisma.UserUncheckedUpdateWithoutPlaylistsInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   email: string
   password?: string | null
@@ -567,6 +630,9 @@ export type UserCreateWithoutSessionsInput = {
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
   tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -582,6 +648,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
   tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -612,6 +681,9 @@ export type UserUpdateWithoutSessionsInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
   tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -627,6 +699,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
   tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTokensInput = {
@@ -641,6 +716,9 @@ export type UserCreateWithoutTokensInput = {
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTokensInput = {
@@ -656,6 +734,9 @@ export type UserUncheckedCreateWithoutTokensInput = {
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTokensInput = {
@@ -686,6 +767,9 @@ export type UserUpdateWithoutTokensInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTokensInput = {
@@ -701,6 +785,9 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserRolesInput = {
@@ -715,6 +802,9 @@ export type UserCreateWithoutUserRolesInput = {
   createdAt?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserRolesInput = {
@@ -730,6 +820,9 @@ export type UserUncheckedCreateWithoutUserRolesInput = {
   createdAt?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserRolesInput = {
@@ -760,6 +853,9 @@ export type UserUpdateWithoutUserRolesInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserRolesInput = {
@@ -775,6 +871,267 @@ export type UserUncheckedUpdateWithoutUserRolesInput = {
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutOwnedProvidersInput = {
+  email: string
+  password?: string | null
+  login?: string | null
+  displayName?: string | null
+  internalNote?: string | null
+  joinDate?: Date | string | null
+  emailValidated?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutOwnedProvidersInput = {
+  id?: number
+  email: string
+  password?: string | null
+  login?: string | null
+  displayName?: string | null
+  internalNote?: string | null
+  joinDate?: Date | string | null
+  emailValidated?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutOwnedProvidersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedProvidersInput, Prisma.UserUncheckedCreateWithoutOwnedProvidersInput>
+}
+
+export type UserUpsertWithoutOwnedProvidersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOwnedProvidersInput, Prisma.UserUncheckedUpdateWithoutOwnedProvidersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedProvidersInput, Prisma.UserUncheckedCreateWithoutOwnedProvidersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOwnedProvidersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOwnedProvidersInput, Prisma.UserUncheckedUpdateWithoutOwnedProvidersInput>
+}
+
+export type UserUpdateWithoutOwnedProvidersInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOwnedProvidersInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutProvidersInput = {
+  email: string
+  password?: string | null
+  login?: string | null
+  displayName?: string | null
+  internalNote?: string | null
+  joinDate?: Date | string | null
+  emailValidated?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderCreateNestedManyWithoutOwnerInput
+  playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutProvidersInput = {
+  id?: number
+  email: string
+  password?: string | null
+  login?: string | null
+  displayName?: string | null
+  internalNote?: string | null
+  joinDate?: Date | string | null
+  emailValidated?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
+  playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutProvidersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProvidersInput, Prisma.UserUncheckedCreateWithoutProvidersInput>
+}
+
+export type UserUpsertWithoutProvidersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProvidersInput, Prisma.UserUncheckedUpdateWithoutProvidersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProvidersInput, Prisma.UserUncheckedCreateWithoutProvidersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProvidersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProvidersInput, Prisma.UserUncheckedUpdateWithoutProvidersInput>
+}
+
+export type UserUpdateWithoutProvidersInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUpdateManyWithoutOwnerNestedInput
+  playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProvidersInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
+  playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPlaylistsInput = {
+  email: string
+  password?: string | null
+  login?: string | null
+  displayName?: string | null
+  internalNote?: string | null
+  joinDate?: Date | string | null
+  emailValidated?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPlaylistsInput = {
+  id?: number
+  email: string
+  password?: string | null
+  login?: string | null
+  displayName?: string | null
+  internalNote?: string | null
+  joinDate?: Date | string | null
+  emailValidated?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPlaylistsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlaylistsInput, Prisma.UserUncheckedCreateWithoutPlaylistsInput>
+}
+
+export type UserUpsertWithoutPlaylistsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPlaylistsInput, Prisma.UserUncheckedUpdateWithoutPlaylistsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlaylistsInput, Prisma.UserUncheckedCreateWithoutPlaylistsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPlaylistsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPlaylistsInput, Prisma.UserUncheckedUpdateWithoutPlaylistsInput>
+}
+
+export type UserUpdateWithoutPlaylistsInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPlaylistsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  login?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -786,12 +1143,18 @@ export type UserCountOutputType = {
   userRoles: number
   sessions: number
   tokens: number
+  ownedProviders: number
+  providers: number
+  playlists: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userRoles?: boolean | UserCountOutputTypeCountUserRolesArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   tokens?: boolean | UserCountOutputTypeCountTokensArgs
+  ownedProviders?: boolean | UserCountOutputTypeCountOwnedProvidersArgs
+  providers?: boolean | UserCountOutputTypeCountProvidersArgs
+  playlists?: boolean | UserCountOutputTypeCountPlaylistsArgs
 }
 
 /**
@@ -825,6 +1188,27 @@ export type UserCountOutputTypeCountTokensArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.TokenWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOwnedProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProviderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProviderUserWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPlaylistsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserPlaylistWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -840,6 +1224,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   userRoles?: boolean | Prisma.User$userRolesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   tokens?: boolean | Prisma.User$tokensArgs<ExtArgs>
+  ownedProviders?: boolean | Prisma.User$ownedProvidersArgs<ExtArgs>
+  providers?: boolean | Prisma.User$providersArgs<ExtArgs>
+  playlists?: boolean | Prisma.User$playlistsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -887,6 +1274,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   userRoles?: boolean | Prisma.User$userRolesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   tokens?: boolean | Prisma.User$tokensArgs<ExtArgs>
+  ownedProviders?: boolean | Prisma.User$ownedProvidersArgs<ExtArgs>
+  providers?: boolean | Prisma.User$providersArgs<ExtArgs>
+  playlists?: boolean | Prisma.User$playlistsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -898,6 +1288,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     userRoles: Prisma.$UserRolePayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     tokens: Prisma.$TokenPayload<ExtArgs>[]
+    ownedProviders: Prisma.$ProviderPayload<ExtArgs>[]
+    providers: Prisma.$ProviderUserPayload<ExtArgs>[]
+    playlists: Prisma.$UserPlaylistPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1307,6 +1700,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   userRoles<T extends Prisma.User$userRolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userRolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tokens<T extends Prisma.User$tokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ownedProviders<T extends Prisma.User$ownedProvidersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedProvidersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  providers<T extends Prisma.User$providersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$providersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  playlists<T extends Prisma.User$playlistsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$playlistsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPlaylistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1542,6 +1938,11 @@ export type UserFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Skip the first `n` Users.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Users.
+   */
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
@@ -1803,6 +2204,78 @@ export type User$tokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.TokenScalarFieldEnum | Prisma.TokenScalarFieldEnum[]
+}
+
+/**
+ * User.ownedProviders
+ */
+export type User$ownedProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Provider
+   */
+  select?: Prisma.ProviderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Provider
+   */
+  omit?: Prisma.ProviderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProviderInclude<ExtArgs> | null
+  where?: Prisma.ProviderWhereInput
+  orderBy?: Prisma.ProviderOrderByWithRelationInput | Prisma.ProviderOrderByWithRelationInput[]
+  cursor?: Prisma.ProviderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProviderScalarFieldEnum | Prisma.ProviderScalarFieldEnum[]
+}
+
+/**
+ * User.providers
+ */
+export type User$providersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProviderUser
+   */
+  select?: Prisma.ProviderUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProviderUser
+   */
+  omit?: Prisma.ProviderUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProviderUserInclude<ExtArgs> | null
+  where?: Prisma.ProviderUserWhereInput
+  orderBy?: Prisma.ProviderUserOrderByWithRelationInput | Prisma.ProviderUserOrderByWithRelationInput[]
+  cursor?: Prisma.ProviderUserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProviderUserScalarFieldEnum | Prisma.ProviderUserScalarFieldEnum[]
+}
+
+/**
+ * User.playlists
+ */
+export type User$playlistsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserPlaylist
+   */
+  select?: Prisma.UserPlaylistSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserPlaylist
+   */
+  omit?: Prisma.UserPlaylistOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPlaylistInclude<ExtArgs> | null
+  where?: Prisma.UserPlaylistWhereInput
+  orderBy?: Prisma.UserPlaylistOrderByWithRelationInput | Prisma.UserPlaylistOrderByWithRelationInput[]
+  cursor?: Prisma.UserPlaylistWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserPlaylistScalarFieldEnum | Prisma.UserPlaylistScalarFieldEnum[]
 }
 
 /**
