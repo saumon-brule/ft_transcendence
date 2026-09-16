@@ -23,7 +23,7 @@ model Permissions {
   createdAt DateTime @default(now())
 }
 
-model Song {
+model Music {
   id      Int     @id @default(autoincrement())
   uuid    String  @unique
   path    String
@@ -31,17 +31,17 @@ model Song {
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 
-  artists SongArtist[]
+  artists MusicArtist[]
 }
 
-model SongArtist {
+model MusicArtist {
   id        Int       @id @default(autoincrement())
-  songId    Int
+  musicId    Int
   artistId  Int
   updatedAt DateTime  @updatedAt
   createdAt DateTime  @default(now())
 
-  song      Song      @relation(fields: [songId], references: [id], onDelete: Cascade)
+  music      Music      @relation(fields: [musicId], references: [id], onDelete: Cascade)
   artist      Artist      @relation(fields: [artistId], references: [id], onDelete: Cascade)
 }
 
@@ -52,5 +52,5 @@ model Artist {
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 
-  song      SongArtist[]
+  music      MusicArtist[]
 }
