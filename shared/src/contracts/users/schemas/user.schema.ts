@@ -8,7 +8,7 @@ export const profileSchema = z.object({
 	joinDate: z.date().nullable(),
 });
 
-export const memberSchema = z.object({
+export const userSchema = z.object({
 	id: z.number(),
 	login: z.string().nullable(),
 	displayName: z.string().nullable(),
@@ -16,13 +16,13 @@ export const memberSchema = z.object({
 	// + liste des roles et toutes les choses a display sur un profile
 });
 
-export const memberBasicSchema = z.object({
+export const userBasicSchema = z.object({
 	id: z.number(),
 	login: z.string().nullable(),
 	displayName: z.string().nullable(),
 });
 
-export const addRoleMemberSchema = z.object({
+export const addRoleUserSchema = z.object({
 	roleId: z.number(),
 });
 

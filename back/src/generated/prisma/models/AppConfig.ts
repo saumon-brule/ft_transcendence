@@ -144,7 +144,7 @@ export type AppConfigGroupByOutputType = {
   _max: AppConfigMaxAggregateOutputType | null
 }
 
-type GetAppConfigGroupByPayload<T extends AppConfigGroupByArgs> = Prisma.PrismaPromise<
+export type GetAppConfigGroupByPayload<T extends AppConfigGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AppConfigGroupByOutputType, T['by']> &
       {
@@ -898,6 +898,11 @@ export type AppConfigFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` AppConfigs.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of AppConfigs.
+   */
   distinct?: Prisma.AppConfigScalarFieldEnum | Prisma.AppConfigScalarFieldEnum[]
 }
 

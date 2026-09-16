@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
-import { MembersModule } from "../members/members.module";
+import { UsersModule } from "../users/users.module";
 import { SessionsModule } from "../sessions/sessions.module";
 import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "./strategies/jwt.strategy";
@@ -12,7 +12,7 @@ import { AppConfigModule } from "../config/config.module";
 import { LoggingModule } from "../core/logging/logging.module";
 
 @Module({
-	imports: [MembersModule, SessionsModule, JwtModule, MailModule, TokensModule, AppConfigModule, LoggingModule],
+	imports: [UsersModule, SessionsModule, JwtModule, MailModule, TokensModule, AppConfigModule, LoggingModule],
 	providers: [AuthService, JwtStrategy, RefreshStrategy],
 	controllers: [AuthController],
 	exports: [AuthService],

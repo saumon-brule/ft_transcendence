@@ -86,15 +86,15 @@ export class RolesService {
 		}));
 	}
 
-	public async getRoleMembers(roleId: number) {
-		const roleMembers = await this.prisma.memberRole.findMany({
+	public async getRoleUsers(roleId: number) {
+		const roleUsers = await this.prisma.userRole.findMany({
 			where: { roleId },
 			include: {
-				memberRef: true,
+				userRef: true,
 			},
 		});
 
-		return roleMembers.map((member) => member.memberRef);
+		return roleUsers.map((user) => user.userRef);
 	}
 
 	public async addRolePermissions(roleId: number, permissions: Permission[]) {

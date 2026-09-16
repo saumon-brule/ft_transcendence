@@ -1,6 +1,6 @@
 import { initContract } from "@ts-rest/core";
 import { authContract } from "./auth/auth.contract";
-import { membersContract } from "./members/members.contract";
+import { usersContract } from "./users/users.contract";
 import { rolesContract } from "./roles/roles.contract";
 import { permissionsContract } from "./permissions/permissions.contract";
 import { error401BaseSchema } from "./schemas/error401";
@@ -14,7 +14,7 @@ const c = initContract();
 export const appContract = c.router(
 	{
 		auth: authContract,
-		members: membersContract,
+		users: usersContract,
 		roles: rolesContract,
 		permissions: permissionsContract,
 		config: appConfigContract,
