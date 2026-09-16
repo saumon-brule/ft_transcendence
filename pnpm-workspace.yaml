@@ -10,16 +10,7 @@ allowBuilds:
   '@scarf/scarf': true
   bcrypt: true
   esbuild: true
+  msgpackr-extract: true
   prisma: true
   unrs-resolver: true
-
-onlyBuiltDependencies:
-  - '@nestjs/core'
-  - '@parcel/watcher'
-  - '@prisma/engines'
-  - '@scarf/scarf'
-  - '@swc/core'
-  - bcrypt
-  - esbuild
-  - prisma
-  - unrs-resolver
+  workerd: true
