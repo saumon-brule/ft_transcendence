@@ -136,7 +136,7 @@ This module requires you to have implemented at least one game (see
 "Gaming and user experience" section). You cannot claim this module
 without a functional game.
 
-profile/info on aura de base, avatar/friend/online c'est faisable mais useless pour 42eat
+profile/info on aura de base, avatar/friend/online
 
 2pt
 

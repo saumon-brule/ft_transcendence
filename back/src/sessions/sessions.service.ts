@@ -23,7 +23,7 @@ export class SessionsService {
 	}
 
 	public async create(
-		userId: number,
+		userUUID: string,
 		jti: string,
 		expiresAt: Date,
 		userAgent: string,
@@ -31,7 +31,7 @@ export class SessionsService {
 	) {
 		return this.prisma.session.create({
 			data: {
-				userId: userId,
+				userUUID: userUUID,
 				jti: jti,
 				expiresAt: expiresAt,
 				userAgent: userAgent,
@@ -40,15 +40,15 @@ export class SessionsService {
 		});
 	}
 
-	public async getUserSessions(userId: number) {
-		return this.prisma.session.findMany({ where: { userId: userId } });
+	public async getUserSessions(userUUID: string) {
+		return this.prisma.session.findMany({ where: { userUUID: userUUID } });
 	}
 
 	public async removeSession(sessionId: number) {
 		return this.prisma.session.delete({ where: { id: sessionId } });
 	}
 
-	public async isValidSession(userId: number, jti: UUID) {
-		return this.prisma.session.findUnique({ where: { userId_jti: { userId, jti } } });
+	public async isValidSession(userUUID: string, jti: UUID) {
+		return this.prisma.session.findUnique({ where: { userUUID_jti: { userUUID, jti } } });
 	}
 }

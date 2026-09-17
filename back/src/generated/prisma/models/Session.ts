@@ -28,17 +28,15 @@ export type AggregateSession = {
 
 export type SessionAvgAggregateOutputType = {
   id: number | null
-  userId: number | null
 }
 
 export type SessionSumAggregateOutputType = {
   id: number | null
-  userId: number | null
 }
 
 export type SessionMinAggregateOutputType = {
   id: number | null
-  userId: number | null
+  userUUID: string | null
   jti: string | null
   userAgent: string | null
   ipAddress: string | null
@@ -48,7 +46,7 @@ export type SessionMinAggregateOutputType = {
 
 export type SessionMaxAggregateOutputType = {
   id: number | null
-  userId: number | null
+  userUUID: string | null
   jti: string | null
   userAgent: string | null
   ipAddress: string | null
@@ -58,7 +56,7 @@ export type SessionMaxAggregateOutputType = {
 
 export type SessionCountAggregateOutputType = {
   id: number
-  userId: number
+  userUUID: number
   jti: number
   userAgent: number
   ipAddress: number
@@ -70,17 +68,15 @@ export type SessionCountAggregateOutputType = {
 
 export type SessionAvgAggregateInputType = {
   id?: true
-  userId?: true
 }
 
 export type SessionSumAggregateInputType = {
   id?: true
-  userId?: true
 }
 
 export type SessionMinAggregateInputType = {
   id?: true
-  userId?: true
+  userUUID?: true
   jti?: true
   userAgent?: true
   ipAddress?: true
@@ -90,7 +86,7 @@ export type SessionMinAggregateInputType = {
 
 export type SessionMaxAggregateInputType = {
   id?: true
-  userId?: true
+  userUUID?: true
   jti?: true
   userAgent?: true
   ipAddress?: true
@@ -100,7 +96,7 @@ export type SessionMaxAggregateInputType = {
 
 export type SessionCountAggregateInputType = {
   id?: true
-  userId?: true
+  userUUID?: true
   jti?: true
   userAgent?: true
   ipAddress?: true
@@ -197,7 +193,7 @@ export type SessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type SessionGroupByOutputType = {
   id: number
-  userId: number
+  userUUID: string
   jti: string
   userAgent: string | null
   ipAddress: string | null
@@ -210,7 +206,7 @@ export type SessionGroupByOutputType = {
   _max: SessionMaxAggregateOutputType | null
 }
 
-export type GetSessionGroupByPayload<T extends SessionGroupByArgs> = Prisma.PrismaPromise<
+type GetSessionGroupByPayload<T extends SessionGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<SessionGroupByOutputType, T['by']> &
       {
@@ -230,7 +226,7 @@ export type SessionWhereInput = {
   OR?: Prisma.SessionWhereInput[]
   NOT?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
   id?: Prisma.IntFilter<"Session"> | number
-  userId?: Prisma.IntFilter<"Session"> | number
+  userUUID?: Prisma.StringFilter<"Session"> | string
   jti?: Prisma.StringFilter<"Session"> | string
   userAgent?: Prisma.StringNullableFilter<"Session"> | string | null
   ipAddress?: Prisma.StringNullableFilter<"Session"> | string | null
@@ -241,7 +237,7 @@ export type SessionWhereInput = {
 
 export type SessionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userUUID?: Prisma.SortOrder
   jti?: Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -252,22 +248,22 @@ export type SessionOrderByWithRelationInput = {
 
 export type SessionWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  userId_jti?: Prisma.SessionUserIdJtiCompoundUniqueInput
+  userUUID_jti?: Prisma.SessionUserUUIDJtiCompoundUniqueInput
   AND?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
   OR?: Prisma.SessionWhereInput[]
   NOT?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
-  userId?: Prisma.IntFilter<"Session"> | number
+  userUUID?: Prisma.StringFilter<"Session"> | string
   jti?: Prisma.StringFilter<"Session"> | string
   userAgent?: Prisma.StringNullableFilter<"Session"> | string | null
   ipAddress?: Prisma.StringNullableFilter<"Session"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   expiresAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "userId_jti">
+}, "id" | "userUUID_jti">
 
 export type SessionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userUUID?: Prisma.SortOrder
   jti?: Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -285,7 +281,7 @@ export type SessionScalarWhereWithAggregatesInput = {
   OR?: Prisma.SessionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SessionScalarWhereWithAggregatesInput | Prisma.SessionScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Session"> | number
-  userId?: Prisma.IntWithAggregatesFilter<"Session"> | number
+  userUUID?: Prisma.StringWithAggregatesFilter<"Session"> | string
   jti?: Prisma.StringWithAggregatesFilter<"Session"> | string
   userAgent?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
   ipAddress?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
@@ -304,7 +300,7 @@ export type SessionCreateInput = {
 
 export type SessionUncheckedCreateInput = {
   id?: number
-  userId: number
+  userUUID: string
   jti: string
   userAgent?: string | null
   ipAddress?: string | null
@@ -323,7 +319,7 @@ export type SessionUpdateInput = {
 
 export type SessionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  userUUID?: Prisma.StringFieldUpdateOperationsInput | string
   jti?: Prisma.StringFieldUpdateOperationsInput | string
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -333,7 +329,7 @@ export type SessionUncheckedUpdateInput = {
 
 export type SessionCreateManyInput = {
   id?: number
-  userId: number
+  userUUID: string
   jti: string
   userAgent?: string | null
   ipAddress?: string | null
@@ -351,7 +347,7 @@ export type SessionUpdateManyMutationInput = {
 
 export type SessionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  userUUID?: Prisma.StringFieldUpdateOperationsInput | string
   jti?: Prisma.StringFieldUpdateOperationsInput | string
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -369,14 +365,14 @@ export type SessionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type SessionUserIdJtiCompoundUniqueInput = {
-  userId: number
+export type SessionUserUUIDJtiCompoundUniqueInput = {
+  userUUID: string
   jti: string
 }
 
 export type SessionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userUUID?: Prisma.SortOrder
   jti?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
@@ -386,12 +382,11 @@ export type SessionCountOrderByAggregateInput = {
 
 export type SessionAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type SessionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userUUID?: Prisma.SortOrder
   jti?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
@@ -401,7 +396,7 @@ export type SessionMaxOrderByAggregateInput = {
 
 export type SessionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userUUID?: Prisma.SortOrder
   jti?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
@@ -411,7 +406,6 @@ export type SessionMinOrderByAggregateInput = {
 
 export type SessionSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type SessionCreateNestedManyWithoutUserInput = {
@@ -508,7 +502,7 @@ export type SessionScalarWhereInput = {
   OR?: Prisma.SessionScalarWhereInput[]
   NOT?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
   id?: Prisma.IntFilter<"Session"> | number
-  userId?: Prisma.IntFilter<"Session"> | number
+  userUUID?: Prisma.StringFilter<"Session"> | string
   jti?: Prisma.StringFilter<"Session"> | string
   userAgent?: Prisma.StringNullableFilter<"Session"> | string | null
   ipAddress?: Prisma.StringNullableFilter<"Session"> | string | null
@@ -555,7 +549,7 @@ export type SessionUncheckedUpdateManyWithoutUserInput = {
 
 export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
+  userUUID?: boolean
   jti?: boolean
   userAgent?: boolean
   ipAddress?: boolean
@@ -566,7 +560,7 @@ export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
+  userUUID?: boolean
   jti?: boolean
   userAgent?: boolean
   ipAddress?: boolean
@@ -577,7 +571,7 @@ export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
+  userUUID?: boolean
   jti?: boolean
   userAgent?: boolean
   ipAddress?: boolean
@@ -588,7 +582,7 @@ export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type SessionSelectScalar = {
   id?: boolean
-  userId?: boolean
+  userUUID?: boolean
   jti?: boolean
   userAgent?: boolean
   ipAddress?: boolean
@@ -596,7 +590,7 @@ export type SessionSelectScalar = {
   expiresAt?: boolean
 }
 
-export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "jti" | "userAgent" | "ipAddress" | "createdAt" | "expiresAt", ExtArgs["result"]["session"]>
+export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userUUID" | "jti" | "userAgent" | "ipAddress" | "createdAt" | "expiresAt", ExtArgs["result"]["session"]>
 export type SessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -614,7 +608,7 @@ export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    userId: number
+    userUUID: string
     jti: string
     userAgent: string | null
     ipAddress: string | null
@@ -1045,7 +1039,7 @@ export interface Prisma__SessionClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface SessionFieldRefs {
   readonly id: Prisma.FieldRef<"Session", 'Int'>
-  readonly userId: Prisma.FieldRef<"Session", 'Int'>
+  readonly userUUID: Prisma.FieldRef<"Session", 'String'>
   readonly jti: Prisma.FieldRef<"Session", 'String'>
   readonly userAgent: Prisma.FieldRef<"Session", 'String'>
   readonly ipAddress: Prisma.FieldRef<"Session", 'String'>
@@ -1247,11 +1241,6 @@ export type SessionFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Skip the first `n` Sessions.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of Sessions.
-   */
   distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
 }
 

@@ -53,3 +53,19 @@ export class JwtAuthOptionalGuard extends AuthGuard("jwt") {
 		return user as TUser;
 	}
 }
+
+@Injectable()
+export class JwtNoAuthGuard extends AuthGuard("jwt") {
+	handleRequest<TUser = any>(
+		err: Error | null,
+		user: AuthUser | null,
+	) {
+		if (!err && user) {
+			throw new AppForbiddenException(
+				"ALREADY_LOGGED_IN",
+				"User is already logged in",
+			);
+		}
+		return null as TUser;
+	}
+}

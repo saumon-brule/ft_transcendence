@@ -26,7 +26,7 @@ export class MailService {
 				headers: {
 					"List-Unsubscribe": `<mailto:${env.SMTP_USER}?subject=unsubscribe>`,
 					"List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-					"X-Mailer": "42eat",
+					"X-Mailer": "Flex",
 					"X-Priority": "3",
 					"X-MSMail-Priority": "Normal",
 					"Content-Type": "text/html; charset=UTF-8",

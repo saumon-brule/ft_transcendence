@@ -20,7 +20,7 @@ async function bootstrap() {
 	if (env.NODE_ENV === "dev") {
 		const document = generateOpenApi(appContract, {
 			info: {
-				title: "42eat API",
+				title: "Flex API",
 				version: "1.0.0",
 			},
 			components: {

@@ -200,7 +200,7 @@ export type ProviderUserGroupByOutputType = {
   _max: ProviderUserMaxAggregateOutputType | null
 }
 
-export type GetProviderUserGroupByPayload<T extends ProviderUserGroupByArgs> = Prisma.PrismaPromise<
+type GetProviderUserGroupByPayload<T extends ProviderUserGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ProviderUserGroupByOutputType, T['by']> &
       {
@@ -1297,11 +1297,6 @@ export type ProviderUserFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` ProviderUsers.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of ProviderUsers.
-   */
   distinct?: Prisma.ProviderUserScalarFieldEnum | Prisma.ProviderUserScalarFieldEnum[]
 }
 

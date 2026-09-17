@@ -4,7 +4,7 @@ import {
 	InternalServerErrorException,
 } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
-import { emailConfirmationPath, ftIntraAuthCallbackPath, ftIntraLinkCallbackPath, RegisterDto } from "@flex/shared";
+import { emailConfirmationPath, ftIntraAuthCallbackPath, RegisterDto } from "@flex/shared";
 import * as bcrypt from "bcrypt";
 import { LoginDto } from "@flex/shared";
 import { JwtService } from "@nestjs/jwt";
@@ -48,9 +48,9 @@ export class AuthService {
 		userAgent: string | undefined,
 		ipAddress: string | undefined,
 	) {
-		const existing = await this.users.getByEmail(dto.email);
+		const existingEmail = await this.users.getByEmail(dto.email);
 
-		if (existing) {
+		if (existingEmail) {
 			this.logger.warn(LogBuilder.auth.registrationFailed(dto.email, "Email already exists"));
 			throw new ConflictException("Email already used");
 		}
@@ -58,7 +58,7 @@ export class AuthService {
 		const insertedUser = await this.users.createFromRegister(
 			dto.email,
 			dto.password,
-			dto.displayName,
+			dto.username,
 		);
 
 		if (!insertedUser) {
@@ -71,9 +71,9 @@ export class AuthService {
 		await this.sendEmailValidation(insertedUser);
 
 		return {
-			accessToken: await this.generateAccessToken(insertedUser.id),
+			accessToken: await this.generateAccessToken(insertedUser.uuid, insertedUser.emailValidated),
 			refreshToken: await this.generateRefreshToken(
-				insertedUser.id,
+				insertedUser.uuid,
 				userAgent,
 				ipAddress,
 			),
@@ -112,9 +112,9 @@ export class AuthService {
 		this.logger.log(LogBuilder.auth.login(dto.email, existing.id));
 
 		return {
-			accessToken: await this.generateAccessToken(existing.id),
+			accessToken: await this.generateAccessToken(existing.uuid, existing.emailValidated),
 			refreshToken: await this.generateRefreshToken(
-				existing.id,
+				existing.uuid,
 				userAgent,
 				ipAddress,
 			),
@@ -122,22 +122,22 @@ export class AuthService {
 	}
 
 	public async refresh(
-		userId: number,
+		userUUID: string,
 		jti: UUID | undefined,
 		userAgent: string | undefined,
 		ipAddress: string | undefined,
 	) {
 		if (!jti) throw new AppUnauthorizedException("INVALID_REFRESH_TOKEN", "Invalid refresh token");
 
-		const validSession = await this.sessions.isValidSession(userId, jti);
+		const validSession = await this.sessions.isValidSession(userUUID, jti);
 
 		if (validSession) {
 			await this.sessions.removeSession(validSession.id);
 
 			return {
-				accessToken: await this.generateAccessToken(userId),
+				accessToken: await this.generateAccessTokenUUID(userUUID),
 				refreshToken: await this.generateRefreshToken(
-					userId,
+					userUUID,
 					userAgent,
 					ipAddress,
 				),
@@ -147,10 +147,31 @@ export class AuthService {
 		throw new AppUnauthorizedException("INVALID_REFRESH_TOKEN", "Invalid refresh token");
 	}
 
-	private async generateAccessToken(userId: number) {
+	private async generateAccessToken(userUUID: string, emailValidated: boolean) {
+		return this.jwtService.signAsync(
+			createJwtPayload(userUUID, emailValidated),
+			{
+				secret: env.JWT_SECRET,
+				expiresIn: "15m",
+			},
+		);
+	}
+
+	private async generateAccessTokenId(userId: number) {
 		const user = await this.users.getById(userId);
 		return this.jwtService.signAsync(
-			createJwtPayload(userId, user.emailValidated),
+			createJwtPayload(user.uuid, user.emailValidated),
+			{
+				secret: env.JWT_SECRET,
+				expiresIn: "15m",
+			},
+		);
+	}
+
+	private async generateAccessTokenUUID(userUUID: string) {
+		const user = await this.users.getByUUID(userUUID);
+		return this.jwtService.signAsync(
+			createJwtPayload(userUUID, user.emailValidated),
 			{
 				secret: env.JWT_SECRET,
 				expiresIn: "15m",
@@ -159,20 +180,20 @@ export class AuthService {
 	}
 
 	private async generateRefreshToken(
-		userId: number,
+		userUUID: string,
 		userAgent: string | undefined,
 		ipAddress: string | undefined,
 	) {
 		const jti = randomUUID();
 		const token = await this.jwtService.signAsync(
-			{ sub: userId, jti },
+			{ sub: userUUID, jti },
 			{ secret: env.JWT_REFRESH_SECRET, expiresIn: "7d" },
 		);
 		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
 		if (
 			!(await this.sessions.create(
-				userId,
+				userUUID,
 				jti,
 				expiresAt,
 				userAgent ?? "",
@@ -190,8 +211,8 @@ export class AuthService {
 			throw new AppForbiddenException("FORBIDDEN", "your email is already validated");
 		}
 
-		await this.mailService.sendEmail([user.email], "Confirm your email - 42's Foyer", "confirm-email", {
-			username: user.displayName,
+		await this.mailService.sendEmail([user.email], "Confirm your email - Flex", "confirm-email", {
+			username: user.username,
 			token: await this.tokensService.createConfirmEmailToken(user.id),
 			baseFrontUrl: env.BASE_FRONT_URL,
 			emailConfirmationPath,
@@ -208,15 +229,15 @@ export class AuthService {
 		await this.users.verifyEmail(payload.userId);
 	}
 
-	public async askNewConfirmationEmail(userId: number) {
-		const user = await this.users.getById(userId);
+	public async askNewConfirmationEmail(userUUID: string) {
+		const user = await this.users.getByUUID(userUUID);
 		await this.sendEmailValidation(user);
 	}
 
 	private async sendResetPasswordEmail(user: User) {
 		await this.mailService.sendEmail(
 			[user.email],
-			"Reset your password - 42's Foyer",
+			"Reset your password - Flex",
 			"reset-password",
 			{
 				token: await this.tokensService.createResetPasswordToken(user.id),
@@ -247,11 +268,11 @@ export class AuthService {
 	}
 
 	public async changePassword(
-		userId: number,
+		userUUID: string,
 		oldPassword: string,
 		newPassword: string,
 	) {
-		const existing = await this.users.getById(userId);
+		const existing = await this.users.getByUUID(userUUID);
 		if (!existing) {
 			throw new AppForbiddenException(
 				"FORBIDDEN",
@@ -271,25 +292,25 @@ export class AuthService {
 			throw new AppForbiddenException("FORBIDDEN", "Invalid password");
 		}
 
-		await this.users.setPassword(userId, newPassword);
-		this.logger.log(LogBuilder.auth.passwordChanged(userId));
+		await this.users.setPassword(existing.id, newPassword);
+		this.logger.log(LogBuilder.auth.passwordChanged(existing.id));
 	}
 
-	public async logout(userId: number, jti: UUID | undefined) {
+	public async logout(userUUID: string, jti: UUID | undefined) {
 		if (!jti) return;
 
-		const validSession = await this.sessions.isValidSession(userId, jti);
+		const validSession = await this.sessions.isValidSession(userUUID, jti);
 
 		if (validSession) {
 			await this.sessions.removeSession(validSession.id);
-			this.logger.log(LogBuilder.auth.logout(userId));
+			this.logger.log(LogBuilder.auth.logout(userUUID));
 		}
 	}
 
 	private async sendChangeEmail(user: User, newEmail: string) {
 		await this.mailService.sendEmail(
 			[user.email],
-			"Change your email - 42's Foyer",
+			"Change your email - Flex",
 			"reset-email",
 			{
 				token: await this.tokensService.createResetEmailToken(
@@ -303,11 +324,11 @@ export class AuthService {
 	}
 
 	public async requestEmailReset(
-		userId: number,
+		userUUID: string,
 		password: string,
 		newEmail: string,
 	) {
-		const user = await this.users.getById(userId);
+		const user = await this.users.getByUUID(userUUID);
 
 		if (!user) {
 			throw new AppForbiddenException("FORBIDDEN", "This shouldn't happen");
@@ -338,25 +359,6 @@ export class AuthService {
 		return url;
 	}
 
-	public async get42LinkUrl(userId: number) {
-		const user = await this.users.getById(userId);
-
-		if (user && user.login) {
-			throw new AppForbiddenException("FORBIDDEN", "You already have a linked login");
-		}
-
-		const api42_client_uid = await this.appConfig.get("42api-uid");
-
-		if (!api42_client_uid) {
-			throw new InternalServerErrorException("API 42 credentials are not set");
-		}
-
-		const state = await this.tokensService.create42LinkStateToken(userId);
-
-		const url = `https://api.intra.42.fr/oauth/authorize?client_id=${api42_client_uid}&redirect_uri=${env.BASE_FRONT_URL}${ftIntraLinkCallbackPath}&response_type=code&scope=public&state=${state}`;
-		return url;
-	}
-
 	public async auth42(
 		code: string,
 		state: string,
@@ -371,7 +373,7 @@ export class AuthService {
 			throw new AppUnauthorizedException("UNAUTHORIZED", "Failed to retrieve user data from 42");
 		}
 
-		let user = await this.users.getByLogin(userData.login);
+		let user = await this.users.getByEmail(userData.email);
 
 		if (!user) {
 			user = await this.users.createFromIntra(
@@ -384,40 +386,14 @@ export class AuthService {
 			throw new InternalServerErrorException("An error occured while creating the user");
 		}
 
-		if (!user?.login) {
-			await this.users.setLogin(user.id, userData.login);
-		}
-
 		return {
-			accessToken: await this.generateAccessToken(user.id),
+			accessToken: await this.generateAccessToken(user.uuid, user.emailValidated),
 			refreshToken: await this.generateRefreshToken(
-				user.id,
+				user.uuid,
 				userAgent ?? "",
 				ipAddress ?? "unknown",
 			),
 		};
-	}
-
-	public async link42(
-		userId: number,
-		code: string,
-		state: string,
-	) {
-		const state_user = await this.tokensService.isValidToken(state, "STATE_42LINK");
-
-		if (state_user.userId !== userId) {
-			throw new AppForbiddenException("FORBIDDEN", "This is not your token");
-		}
-
-		const userData = await this.get42UserInfo(code, env.BASE_FRONT_URL + ftIntraLinkCallbackPath);
-
-		const existingUser = await this.users.getByLogin(userData.login);
-
-		if (existingUser) {
-			throw new ConflictException("This login is already linked to an account");
-		}
-
-		await this.users.setLogin(userId, userData.login);
 	}
 
 	private async get42UserInfo(code: string, redirectUri: string) {

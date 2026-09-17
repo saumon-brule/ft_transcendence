@@ -28,7 +28,7 @@ import { LoggingModule } from "../logging/logging.module";
 					},
 				},
 				defaults: {
-					from: `42's Foyer <${env.SMTP_USER}>`,
+					from: `Flex <${env.SMTP_USER}>`,
 				},
 				template: {
 					dir: join(__dirname, "templates"),
