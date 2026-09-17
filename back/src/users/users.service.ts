@@ -150,9 +150,10 @@ export class UsersService {
 	}
 
 	public async doUserHavePermission(
-		userId: number,
+		userUUID: string,
 		permission: Permission,
 	) {
+		const userId = (await this.getByUUID(userUUID)).id;
 		if (await this.doUserBypassPermission(userId)) return true;
 
 		const userPerm = await this.prisma.userRole.findFirst({
@@ -189,10 +190,4 @@ export class UsersService {
 		});
 	}
 
-	public async setLogin(userId: number, login: string) {
-		await this.prisma.user.update({
-			where: { id: userId },
-			data: { login },
-		});
-	}
 }

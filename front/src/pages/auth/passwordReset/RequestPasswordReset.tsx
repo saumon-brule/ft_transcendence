@@ -38,11 +38,11 @@ export default function RequestPasswordReset() {
 					ref={(e) => emailInput = e.htmlElement}
 					type="email"
 					required
-					disabled={requestPasswordReset.isPending}
+					disabled={requestPasswordReset.status === "loading"}
 					placeholder={t("pages.requestPasswordReset.input.placeholder")}
 					validator={(e) => validateFromZod(authContract.requestPasswordReset.body.shape.email, e.value)}
 				/>
-				<Button type="submit" style={{ transition: requestPasswordReset.isPending ? "0ms" : undefined }} disabled={requestPasswordReset.isPending}>{"->"}</Button>
+				<Button type="submit" style={{ transition: requestPasswordReset.status === "loading" ? "0ms" : undefined }} disabled={requestPasswordReset.status === "loading"}>{"->"}</Button>
 			</div>
 		</Form>
 		<Show when={requestPasswordReset.isError && requestPasswordReset.error} keyed>
