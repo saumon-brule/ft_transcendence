@@ -37,7 +37,7 @@ import { LoggingModule } from "../logging/logging.module";
 						strict: true,
 					},
 				},
-				preview: env.NODE_ENV !== "prod",
+				preview: false,
 			}),
 		}),
 		LoggingModule,

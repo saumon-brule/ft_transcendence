@@ -23,7 +23,7 @@ export class UsersController {
 	@UseGuards(JwtAuthGuardWithoutEmailVerif)
 	public profile(@CurrentUser() authUser: AuthUser) {
 		return tsRestHandler(usersContract.profile, async () => {
-			const user = await this.usersService.getById(authUser.id);
+			const user = await this.usersService.getByUUID(authUser.uuid);
 			return { status: 200, body: profileSchema.parse(user) };
 		});
 	}

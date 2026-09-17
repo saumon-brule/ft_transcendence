@@ -98,7 +98,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			update: {},
 			create: {
 				email: "liam@test.com",
-				login: "lilefebv",
+				username: "Liammmmmmmm",
 				password: hashedPassword,
 				emailValidated: true,
 			},
@@ -109,7 +109,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			update: {},
 			create: {
 				email: "chantal@test.com",
-				displayName: "Chantal",
+				username: "Chantal",
 				password: hashedPassword,
 				emailValidated: true,
 			},
@@ -120,6 +120,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			update: {},
 			create: {
 				email: "machin@test.com",
+				username: "Machin",
 				password: hashedPassword,
 				emailValidated: true,
 			},

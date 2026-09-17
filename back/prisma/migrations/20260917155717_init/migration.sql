@@ -4,12 +4,10 @@ CREATE TYPE "TokenPurpose" AS ENUM ('EMAIL_VERIFICATION', 'EMAIL_RESET', 'PASSWO
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
+    "uuid" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT,
-    "login" TEXT,
-    "displayName" TEXT,
-    "internalNote" TEXT,
-    "joinDate" TIMESTAMP(3),
+    "username" TEXT NOT NULL,
     "emailValidated" BOOLEAN NOT NULL DEFAULT false,
     "updatedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -20,7 +18,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Session" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userUUID" TEXT NOT NULL,
     "jti" TEXT NOT NULL,
     "userAgent" TEXT,
     "ipAddress" TEXT,
@@ -150,13 +148,13 @@ CREATE TABLE "Music" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_uuid_key" ON "User"("uuid");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_login_key" ON "User"("login");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Session_userId_jti_key" ON "Session"("userId", "jti");
+CREATE UNIQUE INDEX "Session_userUUID_jti_key" ON "Session"("userUUID", "jti");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Token_token_key" ON "Token"("token");
@@ -183,7 +181,7 @@ CREATE UNIQUE INDEX "ProviderUser_providerId_userId_key" ON "ProviderUser"("prov
 CREATE UNIQUE INDEX "UserPlaylist_userId_playlistId_key" ON "UserPlaylist"("userId", "playlistId");
 
 -- AddForeignKey
-ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Session" ADD CONSTRAINT "Session_userUUID_fkey" FOREIGN KEY ("userUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
