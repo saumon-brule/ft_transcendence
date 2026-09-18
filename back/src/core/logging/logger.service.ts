@@ -34,7 +34,7 @@ export class WinstonLoggerService implements LoggerService {
 					? devLogsFormat
 					: format.json(),
 			),
-			defaultMeta: { service: "42eat-api" },
+			defaultMeta: { service: "flex-api" },
 			transports: [
 				new transports.Console(),
 				new transports.File({

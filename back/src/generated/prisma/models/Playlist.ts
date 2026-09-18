@@ -196,7 +196,7 @@ export type PlaylistGroupByOutputType = {
   _max: PlaylistMaxAggregateOutputType | null
 }
 
-export type GetPlaylistGroupByPayload<T extends PlaylistGroupByArgs> = Prisma.PrismaPromise<
+type GetPlaylistGroupByPayload<T extends PlaylistGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PlaylistGroupByOutputType, T['by']> &
       {
@@ -1221,11 +1221,6 @@ export type PlaylistFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Skip the first `n` Playlists.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of Playlists.
-   */
   distinct?: Prisma.PlaylistScalarFieldEnum | Prisma.PlaylistScalarFieldEnum[]
 }
 

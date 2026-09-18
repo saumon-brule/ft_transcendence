@@ -12,12 +12,10 @@ datasource db {
 
 model User {
   id             Int       @id @default(autoincrement())
+  uuid           String    @unique @default(uuid())
   email          String    @unique
   password       String?
-  login          String?   @unique
-  displayName    String?
-  internalNote   String?
-  joinDate       DateTime?
+  username       String
   emailValidated Boolean   @default(false)
   updatedAt      DateTime? @updatedAt
   createdAt      DateTime? @default(now())
@@ -32,16 +30,16 @@ model User {
 
 model Session {
   id        Int      @id @default(autoincrement())
-  userId    Int
+  userUUID  String
   jti       String
   userAgent String?
   ipAddress String?
   createdAt DateTime @default(now())
   expiresAt DateTime
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
 
-  @@unique([userId, jti])
+  @@unique([userUUID, jti])
 }
 
 enum TokenPurpose {

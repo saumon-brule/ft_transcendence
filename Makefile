@@ -1,5 +1,5 @@
 init:
-	@mkdir -p /tmp/42eat-db
+	@mkdir -p /tmp/flex-db
 	@docker compose up -d
 	@cd back && npx prisma migrate dev --name init && cd ..
 

@@ -35,12 +35,16 @@ export class UsersService {
 		return this.prisma.user.findUnique({ where: { email: email } });
 	}
 
-	public async getByLogin(login: string): Promise<User | null> {
-		return this.prisma.user.findUnique({ where: { login: login } });
-	}
-
 	public async getById(id: number): Promise<User> {
 		const user = await this.prisma.user.findUnique({ where: { id: id } });
+		if (!user) {
+			throw new NotFoundException("Cannot load the user profile");
+		}
+		return user;
+	}
+
+	public async getByUUID(uuid: string): Promise<User> {
+		const user = await this.prisma.user.findUnique({ where: { uuid: uuid } });
 		if (!user) {
 			throw new NotFoundException("Cannot load the user profile");
 		}
@@ -52,7 +56,7 @@ export class UsersService {
 		login: string,
 	): Promise<User | null> {
 		const newUser = await this.prisma.user.create({
-			data: { email, login, emailValidated: true },
+			data: { email, username: login, emailValidated: true },
 		});
 
 		await this.setDefaultUserRoles(newUser.id);
@@ -63,10 +67,10 @@ export class UsersService {
 	public async createFromRegister(
 		email: string,
 		password: string,
-		displayName: string | null = null,
+		username: string,
 	): Promise<User | null> {
 		const newUser = await this.prisma.user.create({
-			data: { email, password: await bcrypt.hash(password, 10), displayName },
+			data: { email, password: await bcrypt.hash(password, 10), username },
 		});
 
 		await this.setDefaultUserRoles(newUser.id);
@@ -146,9 +150,10 @@ export class UsersService {
 	}
 
 	public async doUserHavePermission(
-		userId: number,
+		userUUID: string,
 		permission: Permission,
 	) {
+		const userId = (await this.getByUUID(userUUID)).id;
 		if (await this.doUserBypassPermission(userId)) return true;
 
 		const userPerm = await this.prisma.userRole.findFirst({
@@ -185,10 +190,4 @@ export class UsersService {
 		});
 	}
 
-	public async setLogin(userId: number, login: string) {
-		await this.prisma.user.update({
-			where: { id: userId },
-			data: { login },
-		});
-	}
 }

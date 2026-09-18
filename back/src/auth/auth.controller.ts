@@ -11,7 +11,7 @@ import { authContract } from "@flex/shared";
 import {
 	JwtAuthGuard,
 	JwtAuthGuardWithoutEmailVerif,
-	JwtAuthOptionalGuard,
+	JwtNoAuthGuard,
 } from "../core/guards/jwt-auth.guard";
 import { Throttle } from "@nestjs/throttler";
 import { env } from "../core/env";
@@ -42,6 +42,7 @@ export class AuthController {
 	}
 
 	@Throttle({ default: { limit: 3, ttl: 60000 } })
+	@UseGuards(JwtNoAuthGuard)
 	@TsRestHandler(authContract.register)
 	public register(
 		@Req() req: Request,
@@ -61,6 +62,7 @@ export class AuthController {
 	}
 
 	@Throttle({ default: { limit: 20, ttl: 60000 } })
+	@UseGuards(JwtNoAuthGuard)
 	@TsRestHandler(authContract.login)
 	public login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
 		return tsRestHandler(authContract.login, async ({ body }) => {
@@ -83,7 +85,7 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response,
 	) {
 		return tsRestHandler(authContract.logout, async () => {
-			await this.authService.logout(user.id, user.jti);
+			await this.authService.logout(user.uuid, user.jti);
 
 			this.setRefreshTokenCookie(res, null);
 
@@ -100,7 +102,7 @@ export class AuthController {
 	) {
 		return tsRestHandler(authContract.refresh, async () => {
 			const { accessToken, refreshToken } = await this.authService.refresh(
-				user.id,
+				user.uuid,
 				user.jti,
 				req.headers["user-agent"],
 				req.ip,
@@ -125,7 +127,7 @@ export class AuthController {
 	@UseGuards(JwtAuthGuardWithoutEmailVerif)
 	public askNewConfirmationEmail(@CurrentUser() user: AuthUser) {
 		return tsRestHandler(authContract.askNewConfirmationEmail, async () => {
-			await this.authService.askNewConfirmationEmail(user.id);
+			await this.authService.askNewConfirmationEmail(user.uuid);
 			return { status: 204, body: null };
 		});
 	}
@@ -135,7 +137,7 @@ export class AuthController {
 	public changePassword(@CurrentUser() user: AuthUser) {
 		return tsRestHandler(authContract.changePassword, async ({ body }) => {
 			await this.authService.changePassword(
-				user.id,
+				user.uuid,
 				body.oldPassword,
 				body.newPassword,
 			);
@@ -169,7 +171,7 @@ export class AuthController {
 	public requestEmailReset(@CurrentUser() user: AuthUser) {
 		return tsRestHandler(authContract.requestEmailReset, async ({ body }) => {
 			await this.authService.requestEmailReset(
-				user.id,
+				user.uuid,
 				body.password,
 				body.newEmail,
 			);
@@ -186,29 +188,21 @@ export class AuthController {
 	}
 
 	@Throttle({ default: { limit: 20, ttl: 60000 } })
-	@UseGuards(JwtAuthOptionalGuard)
+	@UseGuards(JwtNoAuthGuard)
 	@TsRestHandler(authContract.redirectLogin42url)
-	public redirectAuth42(@Res() res: Response, @CurrentUser() user?: AuthUser) {
+	public redirectAuth42(@Res() res: Response) {
 		return tsRestHandler(authContract.redirectLogin42url, async () => {
-			let url: string;
-			if (user) url = await this.authService.get42LinkUrl(user.id);
-			else url = await this.authService.get42LoginUrl();
-
-			res.redirect(url);
+			res.redirect(await this.authService.get42LoginUrl());
 			return { status: 302, body: null };
 		});
 	}
 
 	@Throttle({ default: { limit: 20, ttl: 60000 } })
-	@UseGuards(JwtAuthOptionalGuard)
+	@UseGuards(JwtNoAuthGuard)
 	@TsRestHandler(authContract.getLogin42url)
-	public getAuth42Url(@CurrentUser() user?: AuthUser) {
+	public getAuth42Url() {
 		return tsRestHandler(authContract.getLogin42url, async () => {
-			let url: string;
-			if (user) url = await this.authService.get42LinkUrl(user.id);
-			else url = await this.authService.get42LoginUrl();
-
-			return { status: 200, body: { url } };
+			return { status: 200, body: { url: await this.authService.get42LoginUrl() } };
 		});
 	}
 
@@ -229,21 +223,6 @@ export class AuthController {
 			this.setRefreshTokenCookie(res, refreshToken);
 
 			return { status: 200, body: { accessToken } };
-		});
-	}
-
-	@Throttle({ default: { limit: 20, ttl: 60000 } })
-	@UseGuards(JwtAuthGuard)
-	@TsRestHandler(authContract.link42)
-	public link42(@CurrentUser() user: AuthUser) {
-		return tsRestHandler(authContract.link42, async ({ body }) => {
-			await this.authService.link42(
-				user.id,
-				body.code,
-				body.state,
-			);
-
-			return { status: 204, body: null };
 		});
 	}
 

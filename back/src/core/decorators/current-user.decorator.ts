@@ -2,7 +2,7 @@ import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { UUID } from "crypto";
 
 export interface AuthUser {
-	id: number;
+	uuid: string;
 	emailValidated: boolean;
 	jti?: UUID;
 }

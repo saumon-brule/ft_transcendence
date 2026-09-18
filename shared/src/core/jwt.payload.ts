@@ -1,5 +1,5 @@
-export function createJwtPayload(userId: number, emailVerified: boolean) {
-	return { sub: userId, emailVerified };
+export function createJwtPayload(userUUID: string, emailVerified: boolean) {
+	return { sub: userUUID, emailVerified };
 }
 
 export type JwtPayload = ReturnType<typeof createJwtPayload>;

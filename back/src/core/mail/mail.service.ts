@@ -26,7 +26,7 @@ export class MailService {
 				headers: {
 					"List-Unsubscribe": `<mailto:${env.SMTP_USER}?subject=unsubscribe>`,
 					"List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-					"X-Mailer": "42eat",
+					"X-Mailer": "Flex",
 					"X-Priority": "3",
 					"X-MSMail-Priority": "Normal",
 					"Content-Type": "text/html; charset=UTF-8",
@@ -35,6 +35,7 @@ export class MailService {
 			await this.mailerService.sendMail(sendMailParams);
 			this.logger.log(LogBuilder.mail.send(emailsList, template));
 		} catch (_e) {
+			console.log(_e);
 			this.logger.error(LogBuilder.error("SEND_EMAIL", "Failed to send the email"));
 			throw new InternalServerErrorException(
 				"An error occurred while sending the email",

@@ -21,9 +21,9 @@ export class LogBuilder {
 			email,
 			reason,
 		}),
-		logout: (userId: number) => ({
+		logout: (userUUID: string) => ({
 			action: "AUTH_LOGOUT",
-			userId,
+			userUUID,
 		}),
 		passwordChanged: (userId: number) => ({
 			action: "PASSWORD_CHANGED",
