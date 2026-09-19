@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev
-      POSTGRES_DB: 42eat
+      POSTGRES_DB: flex
     ports:
       - "5432:5432"
     volumes:
@@ -15,5 +15,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /tmp/42eat-db
+      device: /tmp/flex-db
       o: bind

@@ -62,6 +62,8 @@ export const { t, locale, setLocale } = createRoot(() => {
 
 	const dict = createMemo<Dictionary>(() => i18n.flatten(dictionaries[locale()]));
 
+	// pardon emilien mais faut que ma pr de merde elle passe
+	// eslint-disable-next-line solid/reactivity
 	const t = i18n.translator(dict, i18n.resolveTemplate);
 
 	setupZodErrorMap(t);

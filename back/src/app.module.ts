@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ScheduleModule } from "@nestjs/schedule";
 import { PrismaModule } from "./core/prisma/prisma.module";
-import { MembersModule } from "./members/members.module";
+import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { SessionsModule } from "./sessions/sessions.module";
 import { APP_GUARD } from "@nestjs/core";
@@ -13,7 +13,6 @@ import { TokensService } from "./tokens/tokens.service";
 import { TokensModule } from "./tokens/tokens.module";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { LoggingModule } from "./core/logging/logging.module";
-import { ShiftsModule } from "./shifts/shifts.module";
 import { AppConfigModule } from "./config/config.module";
 
 @Module({
@@ -30,7 +29,7 @@ import { AppConfigModule } from "./config/config.module";
 	],
 	imports: [
 		PrismaModule,
-		MembersModule,
+		UsersModule,
 		AuthModule,
 		RolesModule,
 		SessionsModule,
@@ -43,7 +42,6 @@ import { AppConfigModule } from "./config/config.module";
 		ThrottlerModule.forRoot({
 			throttlers: [{ ttl: 60000, limit: 100 }],
 		}),
-		ShiftsModule,
 	],
 })
 export class AppModule {}

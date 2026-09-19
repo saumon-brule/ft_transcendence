@@ -4,7 +4,7 @@ import TextInput from "~/components/ui/TextInput";
 import { client } from "~/api/client";
 import { createSignal, JSXElement, Show } from "solid-js";
 import { authActions } from "~/store/auth.store";
-import { loginSchema } from "@42eat-web/shared";
+import { loginSchema } from "@flex/shared";
 import { useTranslation } from "~/i18n/context";
 import "./LoginForm.scss";
 import Form from "~/components/ui/Form/Form";

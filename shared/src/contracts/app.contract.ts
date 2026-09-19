@@ -1,12 +1,11 @@
 import { initContract } from "@ts-rest/core";
 import { authContract } from "./auth/auth.contract";
-import { membersContract } from "./members/members.contract";
+import { usersContract } from "./users/users.contract";
 import { rolesContract } from "./roles/roles.contract";
 import { permissionsContract } from "./permissions/permissions.contract";
 import { error401BaseSchema } from "./schemas/error401";
 import { error403Schema } from "./schemas/error403";
 import { error400Schema } from "./schemas/error400";
-import { shiftsContract } from "./shifts/shifts.contract";
 import { error429Schema } from "./schemas/error429";
 import { appConfigContract } from "./appConfig/app-config.contract";
 
@@ -15,10 +14,9 @@ const c = initContract();
 export const appContract = c.router(
 	{
 		auth: authContract,
-		members: membersContract,
+		users: usersContract,
 		roles: rolesContract,
 		permissions: permissionsContract,
-		shifts: shiftsContract,
 		config: appConfigContract,
 	},
 	{

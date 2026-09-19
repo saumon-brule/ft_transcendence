@@ -1,4 +1,4 @@
-import { authContract } from "@42eat-web/shared";
+import { authContract } from "@flex/shared";
 import { initClient } from "@ts-rest/core";
 import { env } from "~/env";
 

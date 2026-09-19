@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AppUnauthorizedException } from "../error/unauthorized";
-import { AuthMember } from "../decorators/current-member.decorator";
+import { AuthUser } from "../decorators/current-user.decorator";
 import { AppForbiddenException } from "../error/forbidden";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") {
-	handleRequest<TUser = AuthMember>(
+	handleRequest<TUser = AuthUser>(
 		err: Error | null,
-		user: AuthMember | null,
+		user: AuthUser | null,
 	) {
 		if (err || !user) {
 			throw new AppUnauthorizedException(
@@ -30,9 +30,9 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
 
 @Injectable()
 export class JwtAuthGuardWithoutEmailVerif extends AuthGuard("jwt") {
-	handleRequest<TUser = AuthMember>(
+	handleRequest<TUser = AuthUser>(
 		err: Error | null,
-		user: AuthMember | null,
+		user: AuthUser | null,
 	) {
 		if (err || !user) {
 			throw new AppUnauthorizedException(
@@ -46,10 +46,26 @@ export class JwtAuthGuardWithoutEmailVerif extends AuthGuard("jwt") {
 
 @Injectable()
 export class JwtAuthOptionalGuard extends AuthGuard("jwt") {
-	handleRequest<TUser = AuthMember>(
+	handleRequest<TUser = AuthUser>(
 		err: Error | null,
-		user: AuthMember | null,
+		user: AuthUser | null,
 	) {
 		return user as TUser;
+	}
+}
+
+@Injectable()
+export class JwtNoAuthGuard extends AuthGuard("jwt") {
+	handleRequest<TUser = any>(
+		err: Error | null,
+		user: AuthUser | null,
+	) {
+		if (!err && user) {
+			throw new AppForbiddenException(
+				"ALREADY_LOGGED_IN",
+				"User is already logged in",
+			);
+		}
+		return null as TUser;
 	}
 }

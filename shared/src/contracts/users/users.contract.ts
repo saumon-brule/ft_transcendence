@@ -1,9 +1,9 @@
 import { initContract } from "@ts-rest/core";
 import {
-	addRoleMemberSchema,
+	addRoleUserSchema,
 	DeleteRoleParamSchema,
 	profileSchema,
-} from "./schemas/member.schema";
+} from "./schemas/user.schema";
 import {
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
@@ -13,41 +13,41 @@ import { errorDefaultSchema } from "../schemas/error-default";
 
 const c = initContract();
 
-export const membersContract = c.router(
+export const usersContract = c.router(
 	{
 		profile: {
 			method: "GET",
 			path: "/profile",
 			responses: { 200: profileSchema },
 		},
-		getMemberRoles: {
+		getUserRoles: {
 			method: "GET",
 			path: "/:id/roles",
 			pathParams: idParamSchema,
 			responses: { 200: rolesListResponseSchema },
 		},
-		getMemberRolesDetailed: {
+		getUserRolesDetailed: {
 			method: "GET",
 			path: "/:id/roles/detailed",
 			pathParams: idParamSchema,
 			responses: { 200: rolesListDetailedResponseSchema },
 		},
-		addMemberRole: {
+		addUserRole: {
 			method: "POST",
 			path: "/:id/roles",
 			pathParams: idParamSchema,
-			body: addRoleMemberSchema,
+			body: addRoleUserSchema,
 			responses: {
 				204: null,
 				404: errorDefaultSchema,
 			},
 		},
-		removeMemberRole: {
+		removeUserRole: {
 			method: "DELETE",
 			path: "/:id/roles/:roleId",
 			pathParams: DeleteRoleParamSchema,
 			responses: { 204: null },
 		},
 	},
-	{ pathPrefix: "/members" },
+	{ pathPrefix: "/users" },
 );

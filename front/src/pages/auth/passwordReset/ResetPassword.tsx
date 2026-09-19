@@ -4,7 +4,7 @@ import "./ResetPassword.scss";
 import Form from "~/components/ui/Form/Form";
 import TextInput from "~/components/ui/TextInput";
 import { validateFromZod } from "~/utils/validateFromZod";
-import { resetPasswordSchema } from "@42eat-web/shared";
+import { resetPasswordSchema } from "@flex/shared";
 import { client } from "~/api/client";
 import { useLocation, useNavigate } from "@solidjs/router";
 import { createSignal, onMount, Show } from "solid-js";

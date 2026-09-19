@@ -29,8 +29,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Members
- * const members = await prisma.member.findMany()
+ * // Fetch zero or more Users
+ * const users = await prisma.user.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -40,10 +40,10 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Member
+ * Model User
  * 
  */
-export type Member = Prisma.MemberModel
+export type User = Prisma.UserModel
 /**
  * Model Session
  * 
@@ -55,11 +55,6 @@ export type Session = Prisma.SessionModel
  */
 export type Token = Prisma.TokenModel
 /**
- * Model Adhesion
- * 
- */
-export type Adhesion = Prisma.AdhesionModel
-/**
  * Model Role
  * 
  */
@@ -70,72 +65,42 @@ export type Role = Prisma.RoleModel
  */
 export type RolePermission = Prisma.RolePermissionModel
 /**
- * Model MemberRole
+ * Model UserRole
  * 
  */
-export type MemberRole = Prisma.MemberRoleModel
-/**
- * Model Shift
- * 
- */
-export type Shift = Prisma.ShiftModel
-/**
- * Model ShiftMember
- * 
- */
-export type ShiftMember = Prisma.ShiftMemberModel
-/**
- * Model ShiftPosition
- * 
- */
-export type ShiftPosition = Prisma.ShiftPositionModel
-/**
- * Model ShiftType
- * 
- */
-export type ShiftType = Prisma.ShiftTypeModel
-/**
- * Model ShiftAssignment
- * 
- */
-export type ShiftAssignment = Prisma.ShiftAssignmentModel
-/**
- * Model StockCategory
- * 
- */
-export type StockCategory = Prisma.StockCategoryModel
-/**
- * Model StockItem
- * 
- */
-export type StockItem = Prisma.StockItemModel
-/**
- * Model Vehicle
- * 
- */
-export type Vehicle = Prisma.VehicleModel
-/**
- * Model ExpenseTrip
- * 
- */
-export type ExpenseTrip = Prisma.ExpenseTripModel
-/**
- * Model BattlepassSeason
- * 
- */
-export type BattlepassSeason = Prisma.BattlepassSeasonModel
-/**
- * Model BattlepassTier
- * 
- */
-export type BattlepassTier = Prisma.BattlepassTierModel
-/**
- * Model MemberBattlepassReward
- * 
- */
-export type MemberBattlepassReward = Prisma.MemberBattlepassRewardModel
+export type UserRole = Prisma.UserRoleModel
 /**
  * Model AppConfig
  * 
  */
 export type AppConfig = Prisma.AppConfigModel
+/**
+ * Model Provider
+ * 
+ */
+export type Provider = Prisma.ProviderModel
+/**
+ * Model ProviderUser
+ * 
+ */
+export type ProviderUser = Prisma.ProviderUserModel
+/**
+ * Model Playlist
+ * 
+ */
+export type Playlist = Prisma.PlaylistModel
+/**
+ * Model UserPlaylist
+ * 
+ */
+export type UserPlaylist = Prisma.UserPlaylistModel
+/**
+ * Model PlaylistMusic
+ * 
+ */
+export type PlaylistMusic = Prisma.PlaylistMusicModel
+/**
+ * Model Music
+ * 
+ */
+export type Music = Prisma.MusicModel

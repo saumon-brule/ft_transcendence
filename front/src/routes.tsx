@@ -11,7 +11,7 @@ import VerifiedEmailGuard from "./components/guards/VerifiedEmailGuard";
 
 import PromptVerifyEmail from "./pages/auth/verifyEmail/PromptVerifyEmail";
 import UnverifiedEmailGuard from "./components/guards/UnverifiedEmailGuard";
-import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath, ftIntraLinkCallbackPath } from "@42eat-web/shared";
+import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath } from "@flex/shared";
 import FtAuthCallback from "./pages/ftCallback/FtAuthCallback";
 import ResetPassword from "./pages/auth/passwordReset/ResetPassword";
 import RequestPasswordReset from "./pages/auth/passwordReset/RequestPasswordReset";
@@ -29,7 +29,6 @@ export const AppRouter = () => {
 		</Route>
 		<Route path={emailConfirmationPath} component={VerifyEmail} />
 		<Route path={ftIntraAuthCallbackPath} component={FtAuthCallback} />
-		<Route path={ftIntraLinkCallbackPath} component={() => null} />
 		<Route path={passwordResetConfirmationPath} component={ResetPassword} />
 		<Route path="/" component={AuthGuard}>
 			<Route path="/" component={UnverifiedEmailGuard}>

@@ -1,13 +1,13 @@
 {
-	"name": "42eat-web",
+	"name": "flex",
 	"scripts": {
-		"dev:shared": "pnpm --filter @42eat-web/shared run dev",
-		"dev:front": "pnpm --filter @42eat-web/front run dev",
-		"dev:back": "pnpm --filter @42eat-web/back run start:dev",
+		"dev:shared": "pnpm --filter @flex/shared run dev",
+		"dev:front": "pnpm --filter @flex/front run dev",
+		"dev:back": "pnpm --filter @flex/back run start:dev",
 		"dev": "concurrently -n back,front -c blue,green \"pnpm run dev:back\" \"wait-on tcp:localhost:3001 && pnpm run dev:front\"",
-		"lint": "concurrently -n back,front,shared -c blue,green,pink \"pnpm --filter @42eat-web/back run lint\" \"pnpm --filter @42eat-web/front run lint\" \"pnpm --filter @42eat-web/shared run lint\"",
-		"check": "concurrently -n back,front,shared -c blue,green,pink \"pnpm --filter @42eat-web/back run check\" \"pnpm --filter @42eat-web/front run check\" \"pnpm --filter @42eat-web/shared run check\"",
-		"build": "pnpm --filter @42eat-web/shared run build && concurrently -n back,front -c blue,green \"pnpm --filter @42eat-web/back run build\" \"pnpm --filter @42eat-web/front run build\""
+		"lint": "concurrently -n back,front,shared -c blue,green,pink \"pnpm --filter @flex/back run lint\" \"pnpm --filter @flex/front run lint\" \"pnpm --filter @flex/shared run lint\"",
+		"check": "concurrently -n back,front,shared -c blue,green,pink \"pnpm --filter @flex/back run check\" \"pnpm --filter @flex/front run check\" \"pnpm --filter @flex/shared run check\"",
+		"build": "pnpm --filter @flex/shared run build && concurrently -n back,front -c blue,green \"pnpm --filter @flex/back run build\" \"pnpm --filter @flex/front run build\""
 	},
 	"devDependencies": {
 		"concurrently": "^9.2.1",

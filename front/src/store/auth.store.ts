@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
-import { createSignal } from "solid-js";
+import { createSignal, untrack } from "solid-js";
 import { doRefresh } from "~/api/doRefresh";
-import { JwtPayload } from "@42eat-web/shared";
+import { JwtPayload } from "@flex/shared";
 import { queryClient } from "~/App";
 import { client, queryKeys } from "~/api/client";
 import { createStore } from "solid-js/store";
@@ -33,8 +33,9 @@ function authStateFromToken(accessToken: string | null): AuthState {
 const [auth, setAuth] = createStore<AuthState>(authStateFromToken(null));
 
 function setAccessToken(accessToken: string | null) {
-	if ((auth.accessToken == null && accessToken)
-		|| (auth.accessToken && accessToken == null)) {
+	const currentAccessToken = untrack(() => auth.accessToken);
+	if ((currentAccessToken == null && accessToken)
+		|| (currentAccessToken && accessToken == null)) {
 		void queryClient.invalidateQueries({ queryKey: queryKeys.auth.getLogin42url() });
 	}
 	setAuth(authStateFromToken(accessToken));

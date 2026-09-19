@@ -1,4 +1,4 @@
-import { Code401 } from "@42eat-web/shared";
+import { Code401 } from "@flex/shared";
 import { UnauthorizedException } from "@nestjs/common";
 
 export class AppUnauthorizedException extends UnauthorizedException {

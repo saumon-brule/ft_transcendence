@@ -18,6 +18,6 @@ export class RefreshStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
 	}
 
 	validate(req: Request, payload: { sub: number; jti: UUID }) {
-		return { id: payload.sub, jti: payload.jti };
+		return { uuid: payload.sub, jti: payload.jti };
 	}
 }
