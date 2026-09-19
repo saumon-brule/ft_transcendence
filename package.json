@@ -10,8 +10,8 @@
 		"build": "pnpm --filter @flex/shared run build && concurrently -n back,front -c blue,green \"pnpm --filter @flex/back run build\" \"pnpm --filter @flex/front run build\""
 	},
 	"devDependencies": {
-		"concurrently": "^9.2.1",
+		"concurrently": "^9.2.4",
 		"typescript": "^5.9.3",
-		"wait-on": "^9.0.1"
+		"wait-on": "^9.1.0"
 	}
 }

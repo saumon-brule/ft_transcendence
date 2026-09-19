@@ -1,6 +1,7 @@
 packages:
   - front
   - back
+  - provider
   - shared
 
 allowBuilds:

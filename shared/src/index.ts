@@ -4,6 +4,7 @@ export { membersContract } from "./contracts/members/members.contract";
 export { rolesContract } from "./contracts/roles/roles.contract";
 export { permissionsContract } from "./contracts/permissions/permissions.contract";
 export { appConfigContract } from "./contracts/appConfig/app-config.contract";
+export { providerContract } from "./contracts/provider/provider.contract";
 
 export { loginSchema, type LoginDto } from "./contracts/auth/schemas/login.schema";
 export { registerSchema, type RegisterDto } from "./contracts/auth/schemas/register.schema";
