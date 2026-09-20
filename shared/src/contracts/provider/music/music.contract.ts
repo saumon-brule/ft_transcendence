@@ -1,5 +1,5 @@
 import { initContract } from "@ts-rest/core";
-import { musicItemSchema, musicListResponseSchema } from "./schemas/music.schema";
+import { musicDetailedItemSchema, musicListResponseSchema } from "./schemas/music.schema";
 import { uuidParamSchema } from "../../schemas/common.schema";
 
 const c = initContract();
@@ -15,7 +15,7 @@ export const musicContract = c.router(
 			method: "GET",
 			path: "/:uuid",
 			pathParams: uuidParamSchema,
-			responses: { 200: musicItemSchema },
+			responses: { 200: musicDetailedItemSchema },
 		},
 	},
 	{ pathPrefix: "/music" },

@@ -11,6 +11,8 @@ export const albumItemSchema = z.object({
 export const albumDetailedItemSchema = z.object({
 	uuid: z.string(),
 	name: z.string(),
+	addedBy: z.string().nullable(),
+	addedAt: z.date(),
 	publishedAt: z.date().nullable(),
 	musics: z.array(musicItemSchema),
 	artists: z.array(artistItemSchema),
