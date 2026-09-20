@@ -51,7 +51,12 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Permissions: 'Permissions',
+  Provider: 'Provider',
+  AccessRequest: 'AccessRequest',
+  Member: 'Member',
+  MemberRole: 'MemberRole',
+  Role: 'Role',
+  RolePermission: 'RolePermission',
   Music: 'Music',
   MusicArtist: 'MusicArtist',
   Artist: 'Artist',
@@ -75,26 +80,85 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const PermissionsScalarFieldEnum = {
+export const ProviderScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  role: 'role',
+  visibility: 'visibility',
+  ownerId: 'ownerId',
+  defaultRoleId: 'defaultRoleId'
+} as const
+
+export type ProviderScalarFieldEnum = (typeof ProviderScalarFieldEnum)[keyof typeof ProviderScalarFieldEnum]
+
+
+export const AccessRequestScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  status: 'status',
+  decidedById: 'decidedById',
+  decidedAt: 'decidedAt',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'
 } as const
 
-export type PermissionsScalarFieldEnum = (typeof PermissionsScalarFieldEnum)[keyof typeof PermissionsScalarFieldEnum]
+export type AccessRequestScalarFieldEnum = (typeof AccessRequestScalarFieldEnum)[keyof typeof AccessRequestScalarFieldEnum]
+
+
+export const MemberScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  revokedAt: 'revokedAt',
+  revokedById: 'revokedById',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
+
+
+export const MemberRoleScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  roleId: 'roleId',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type MemberRoleScalarFieldEnum = (typeof MemberRoleScalarFieldEnum)[keyof typeof MemberRoleScalarFieldEnum]
+
+
+export const RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  addedById: 'addedById',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+export const RolePermissionScalarFieldEnum = {
+  id: 'id',
+  roleId: 'roleId',
+  permission: 'permission',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
 
 
 export const MusicScalarFieldEnum = {
   id: 'id',
-  albumId: 'albumId',
   uuid: 'uuid',
   path: 'path',
   coverPath: 'coverPath',
   name: 'name',
   duration: 'duration',
+  albumId: 'albumId',
   publishedAt: 'publishedAt',
+  addedById: 'addedById',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'
 } as const
@@ -119,6 +183,7 @@ export const ArtistScalarFieldEnum = {
   name: 'name',
   coverPath: 'coverPath',
   biography: 'biography',
+  addedById: 'addedById',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'
 } as const
@@ -143,6 +208,7 @@ export const AlbumScalarFieldEnum = {
   name: 'name',
   coverPath: 'coverPath',
   publishedAt: 'publishedAt',
+  addedById: 'addedById',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'
 } as const

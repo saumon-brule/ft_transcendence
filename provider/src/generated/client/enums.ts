@@ -9,11 +9,27 @@
 * 🟢 You can import this file directly.
 */
 
-export const Role = {
-  READ: 'READ',
-  WRITE: 'WRITE',
-  ADMIN: 'ADMIN',
-  OWNER: 'OWNER'
+export const Visibility = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
 } as const
 
-export type Role = (typeof Role)[keyof typeof Role]
+export type Visibility = (typeof Visibility)[keyof typeof Visibility]
+
+
+export const RequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus]
+
+
+export const Permission = {
+  MANAGE_CATALOG: 'MANAGE_CATALOG',
+  MANAGE_MEMBERS: 'MANAGE_MEMBERS',
+  MANAGE_ROLES: 'MANAGE_ROLES'
+} as const
+
+export type Permission = (typeof Permission)[keyof typeof Permission]

@@ -28,51 +28,56 @@ export type AggregateMusic = {
 
 export type MusicAvgAggregateOutputType = {
   id: number | null
-  albumId: number | null
   duration: number | null
+  albumId: number | null
+  addedById: number | null
 }
 
 export type MusicSumAggregateOutputType = {
   id: number | null
-  albumId: number | null
   duration: number | null
+  albumId: number | null
+  addedById: number | null
 }
 
 export type MusicMinAggregateOutputType = {
   id: number | null
-  albumId: number | null
   uuid: string | null
   path: string | null
   coverPath: string | null
   name: string | null
   duration: number | null
+  albumId: number | null
   publishedAt: Date | null
+  addedById: number | null
   updatedAt: Date | null
   createdAt: Date | null
 }
 
 export type MusicMaxAggregateOutputType = {
   id: number | null
-  albumId: number | null
   uuid: string | null
   path: string | null
   coverPath: string | null
   name: string | null
   duration: number | null
+  albumId: number | null
   publishedAt: Date | null
+  addedById: number | null
   updatedAt: Date | null
   createdAt: Date | null
 }
 
 export type MusicCountAggregateOutputType = {
   id: number
-  albumId: number
   uuid: number
   path: number
   coverPath: number
   name: number
   duration: number
+  albumId: number
   publishedAt: number
+  addedById: number
   updatedAt: number
   createdAt: number
   _all: number
@@ -81,51 +86,56 @@ export type MusicCountAggregateOutputType = {
 
 export type MusicAvgAggregateInputType = {
   id?: true
-  albumId?: true
   duration?: true
+  albumId?: true
+  addedById?: true
 }
 
 export type MusicSumAggregateInputType = {
   id?: true
-  albumId?: true
   duration?: true
+  albumId?: true
+  addedById?: true
 }
 
 export type MusicMinAggregateInputType = {
   id?: true
-  albumId?: true
   uuid?: true
   path?: true
   coverPath?: true
   name?: true
   duration?: true
+  albumId?: true
   publishedAt?: true
+  addedById?: true
   updatedAt?: true
   createdAt?: true
 }
 
 export type MusicMaxAggregateInputType = {
   id?: true
-  albumId?: true
   uuid?: true
   path?: true
   coverPath?: true
   name?: true
   duration?: true
+  albumId?: true
   publishedAt?: true
+  addedById?: true
   updatedAt?: true
   createdAt?: true
 }
 
 export type MusicCountAggregateInputType = {
   id?: true
-  albumId?: true
   uuid?: true
   path?: true
   coverPath?: true
   name?: true
   duration?: true
+  albumId?: true
   publishedAt?: true
+  addedById?: true
   updatedAt?: true
   createdAt?: true
   _all?: true
@@ -219,13 +229,14 @@ export type MusicGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type MusicGroupByOutputType = {
   id: number
-  albumId: number | null
   uuid: string
   path: string
   coverPath: string | null
   name: string
   duration: number
+  albumId: number | null
   publishedAt: Date | null
+  addedById: number | null
   updatedAt: Date
   createdAt: Date
   _count: MusicCountAggregateOutputType | null
@@ -255,30 +266,34 @@ export type MusicWhereInput = {
   OR?: Prisma.MusicWhereInput[]
   NOT?: Prisma.MusicWhereInput | Prisma.MusicWhereInput[]
   id?: Prisma.IntFilter<"Music"> | number
-  albumId?: Prisma.IntNullableFilter<"Music"> | number | null
   uuid?: Prisma.StringFilter<"Music"> | string
   path?: Prisma.StringFilter<"Music"> | string
   coverPath?: Prisma.StringNullableFilter<"Music"> | string | null
   name?: Prisma.StringFilter<"Music"> | string
   duration?: Prisma.IntFilter<"Music"> | number
+  albumId?: Prisma.IntNullableFilter<"Music"> | number | null
   publishedAt?: Prisma.DateTimeNullableFilter<"Music"> | Date | string | null
+  addedById?: Prisma.IntNullableFilter<"Music"> | number | null
   updatedAt?: Prisma.DateTimeFilter<"Music"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Music"> | Date | string
+  addedBy?: Prisma.XOR<Prisma.MemberNullableScalarRelationFilter, Prisma.MemberWhereInput> | null
   album?: Prisma.XOR<Prisma.AlbumNullableScalarRelationFilter, Prisma.AlbumWhereInput> | null
   artists?: Prisma.MusicArtistListRelationFilter
 }
 
 export type MusicOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  albumId?: Prisma.SortOrderInput | Prisma.SortOrder
   uuid?: Prisma.SortOrder
   path?: Prisma.SortOrder
   coverPath?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   duration?: Prisma.SortOrder
+  albumId?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  addedById?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  addedBy?: Prisma.MemberOrderByWithRelationInput
   album?: Prisma.AlbumOrderByWithRelationInput
   artists?: Prisma.MusicArtistOrderByRelationAggregateInput
 }
@@ -289,27 +304,30 @@ export type MusicWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.MusicWhereInput | Prisma.MusicWhereInput[]
   OR?: Prisma.MusicWhereInput[]
   NOT?: Prisma.MusicWhereInput | Prisma.MusicWhereInput[]
-  albumId?: Prisma.IntNullableFilter<"Music"> | number | null
   path?: Prisma.StringFilter<"Music"> | string
   coverPath?: Prisma.StringNullableFilter<"Music"> | string | null
   name?: Prisma.StringFilter<"Music"> | string
   duration?: Prisma.IntFilter<"Music"> | number
+  albumId?: Prisma.IntNullableFilter<"Music"> | number | null
   publishedAt?: Prisma.DateTimeNullableFilter<"Music"> | Date | string | null
+  addedById?: Prisma.IntNullableFilter<"Music"> | number | null
   updatedAt?: Prisma.DateTimeFilter<"Music"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Music"> | Date | string
+  addedBy?: Prisma.XOR<Prisma.MemberNullableScalarRelationFilter, Prisma.MemberWhereInput> | null
   album?: Prisma.XOR<Prisma.AlbumNullableScalarRelationFilter, Prisma.AlbumWhereInput> | null
   artists?: Prisma.MusicArtistListRelationFilter
 }, "id" | "uuid">
 
 export type MusicOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  albumId?: Prisma.SortOrderInput | Prisma.SortOrder
   uuid?: Prisma.SortOrder
   path?: Prisma.SortOrder
   coverPath?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   duration?: Prisma.SortOrder
+  albumId?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  addedById?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.MusicCountOrderByAggregateInput
@@ -324,19 +342,20 @@ export type MusicScalarWhereWithAggregatesInput = {
   OR?: Prisma.MusicScalarWhereWithAggregatesInput[]
   NOT?: Prisma.MusicScalarWhereWithAggregatesInput | Prisma.MusicScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Music"> | number
-  albumId?: Prisma.IntNullableWithAggregatesFilter<"Music"> | number | null
   uuid?: Prisma.StringWithAggregatesFilter<"Music"> | string
   path?: Prisma.StringWithAggregatesFilter<"Music"> | string
   coverPath?: Prisma.StringNullableWithAggregatesFilter<"Music"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Music"> | string
   duration?: Prisma.IntWithAggregatesFilter<"Music"> | number
+  albumId?: Prisma.IntNullableWithAggregatesFilter<"Music"> | number | null
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Music"> | Date | string | null
+  addedById?: Prisma.IntNullableWithAggregatesFilter<"Music"> | number | null
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Music"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Music"> | Date | string
 }
 
 export type MusicCreateInput = {
-  uuid: string
+  uuid?: string
   path: string
   coverPath?: string | null
   name: string
@@ -344,19 +363,21 @@ export type MusicCreateInput = {
   publishedAt?: Date | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
+  addedBy?: Prisma.MemberCreateNestedOneWithoutMusicCreatedInput
   album?: Prisma.AlbumCreateNestedOneWithoutMusicsInput
   artists?: Prisma.MusicArtistCreateNestedManyWithoutMusicInput
 }
 
 export type MusicUncheckedCreateInput = {
   id?: number
-  albumId?: number | null
-  uuid: string
+  uuid?: string
   path: string
   coverPath?: string | null
   name: string
   duration: number
+  albumId?: number | null
   publishedAt?: Date | string | null
+  addedById?: number | null
   updatedAt?: Date | string
   createdAt?: Date | string
   artists?: Prisma.MusicArtistUncheckedCreateNestedManyWithoutMusicInput
@@ -371,19 +392,21 @@ export type MusicUpdateInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.MemberUpdateOneWithoutMusicCreatedNestedInput
   album?: Prisma.AlbumUpdateOneWithoutMusicsNestedInput
   artists?: Prisma.MusicArtistUpdateManyWithoutMusicNestedInput
 }
 
 export type MusicUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  albumId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   coverPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  albumId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  addedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artists?: Prisma.MusicArtistUncheckedUpdateManyWithoutMusicNestedInput
@@ -391,13 +414,14 @@ export type MusicUncheckedUpdateInput = {
 
 export type MusicCreateManyInput = {
   id?: number
-  albumId?: number | null
-  uuid: string
+  uuid?: string
   path: string
   coverPath?: string | null
   name: string
   duration: number
+  albumId?: number | null
   publishedAt?: Date | string | null
+  addedById?: number | null
   updatedAt?: Date | string
   createdAt?: Date | string
 }
@@ -415,71 +439,16 @@ export type MusicUpdateManyMutationInput = {
 
 export type MusicUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  albumId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   coverPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  albumId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  addedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type MusicCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  albumId?: Prisma.SortOrder
-  uuid?: Prisma.SortOrder
-  path?: Prisma.SortOrder
-  coverPath?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
-  publishedAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-}
-
-export type MusicAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  albumId?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
-}
-
-export type MusicMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  albumId?: Prisma.SortOrder
-  uuid?: Prisma.SortOrder
-  path?: Prisma.SortOrder
-  coverPath?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
-  publishedAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-}
-
-export type MusicMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  albumId?: Prisma.SortOrder
-  uuid?: Prisma.SortOrder
-  path?: Prisma.SortOrder
-  coverPath?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
-  publishedAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-}
-
-export type MusicSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  albumId?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
-}
-
-export type MusicScalarRelationFilter = {
-  is?: Prisma.MusicWhereInput
-  isNot?: Prisma.MusicWhereInput
 }
 
 export type MusicListRelationFilter = {
@@ -492,20 +461,111 @@ export type MusicOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type MusicCountOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  uuid?: Prisma.SortOrder
+  path?: Prisma.SortOrder
+  coverPath?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
+  addedById?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+}
+
+export type MusicAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
+  addedById?: Prisma.SortOrder
+}
+
+export type MusicMaxOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  uuid?: Prisma.SortOrder
+  path?: Prisma.SortOrder
+  coverPath?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
+  addedById?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+}
+
+export type MusicMinOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  uuid?: Prisma.SortOrder
+  path?: Prisma.SortOrder
+  coverPath?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
+  addedById?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+}
+
+export type MusicSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
+  addedById?: Prisma.SortOrder
+}
+
+export type MusicScalarRelationFilter = {
+  is?: Prisma.MusicWhereInput
+  isNot?: Prisma.MusicWhereInput
+}
+
+export type MusicCreateNestedManyWithoutAddedByInput = {
+  create?: Prisma.XOR<Prisma.MusicCreateWithoutAddedByInput, Prisma.MusicUncheckedCreateWithoutAddedByInput> | Prisma.MusicCreateWithoutAddedByInput[] | Prisma.MusicUncheckedCreateWithoutAddedByInput[]
+  connectOrCreate?: Prisma.MusicCreateOrConnectWithoutAddedByInput | Prisma.MusicCreateOrConnectWithoutAddedByInput[]
+  createMany?: Prisma.MusicCreateManyAddedByInputEnvelope
+  connect?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+}
+
+export type MusicUncheckedCreateNestedManyWithoutAddedByInput = {
+  create?: Prisma.XOR<Prisma.MusicCreateWithoutAddedByInput, Prisma.MusicUncheckedCreateWithoutAddedByInput> | Prisma.MusicCreateWithoutAddedByInput[] | Prisma.MusicUncheckedCreateWithoutAddedByInput[]
+  connectOrCreate?: Prisma.MusicCreateOrConnectWithoutAddedByInput | Prisma.MusicCreateOrConnectWithoutAddedByInput[]
+  createMany?: Prisma.MusicCreateManyAddedByInputEnvelope
+  connect?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+}
+
+export type MusicUpdateManyWithoutAddedByNestedInput = {
+  create?: Prisma.XOR<Prisma.MusicCreateWithoutAddedByInput, Prisma.MusicUncheckedCreateWithoutAddedByInput> | Prisma.MusicCreateWithoutAddedByInput[] | Prisma.MusicUncheckedCreateWithoutAddedByInput[]
+  connectOrCreate?: Prisma.MusicCreateOrConnectWithoutAddedByInput | Prisma.MusicCreateOrConnectWithoutAddedByInput[]
+  upsert?: Prisma.MusicUpsertWithWhereUniqueWithoutAddedByInput | Prisma.MusicUpsertWithWhereUniqueWithoutAddedByInput[]
+  createMany?: Prisma.MusicCreateManyAddedByInputEnvelope
+  set?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+  disconnect?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+  delete?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+  connect?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+  update?: Prisma.MusicUpdateWithWhereUniqueWithoutAddedByInput | Prisma.MusicUpdateWithWhereUniqueWithoutAddedByInput[]
+  updateMany?: Prisma.MusicUpdateManyWithWhereWithoutAddedByInput | Prisma.MusicUpdateManyWithWhereWithoutAddedByInput[]
+  deleteMany?: Prisma.MusicScalarWhereInput | Prisma.MusicScalarWhereInput[]
+}
+
+export type MusicUncheckedUpdateManyWithoutAddedByNestedInput = {
+  create?: Prisma.XOR<Prisma.MusicCreateWithoutAddedByInput, Prisma.MusicUncheckedCreateWithoutAddedByInput> | Prisma.MusicCreateWithoutAddedByInput[] | Prisma.MusicUncheckedCreateWithoutAddedByInput[]
+  connectOrCreate?: Prisma.MusicCreateOrConnectWithoutAddedByInput | Prisma.MusicCreateOrConnectWithoutAddedByInput[]
+  upsert?: Prisma.MusicUpsertWithWhereUniqueWithoutAddedByInput | Prisma.MusicUpsertWithWhereUniqueWithoutAddedByInput[]
+  createMany?: Prisma.MusicCreateManyAddedByInputEnvelope
+  set?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+  disconnect?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+  delete?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+  connect?: Prisma.MusicWhereUniqueInput | Prisma.MusicWhereUniqueInput[]
+  update?: Prisma.MusicUpdateWithWhereUniqueWithoutAddedByInput | Prisma.MusicUpdateWithWhereUniqueWithoutAddedByInput[]
+  updateMany?: Prisma.MusicUpdateManyWithWhereWithoutAddedByInput | Prisma.MusicUpdateManyWithWhereWithoutAddedByInput[]
+  deleteMany?: Prisma.MusicScalarWhereInput | Prisma.MusicScalarWhereInput[]
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type MusicCreateNestedOneWithoutArtistsInput = {
@@ -564,8 +624,8 @@ export type MusicUncheckedUpdateManyWithoutAlbumNestedInput = {
   deleteMany?: Prisma.MusicScalarWhereInput | Prisma.MusicScalarWhereInput[]
 }
 
-export type MusicCreateWithoutArtistsInput = {
-  uuid: string
+export type MusicCreateWithoutAddedByInput = {
+  uuid?: string
   path: string
   coverPath?: string | null
   name: string
@@ -574,17 +634,89 @@ export type MusicCreateWithoutArtistsInput = {
   updatedAt?: Date | string
   createdAt?: Date | string
   album?: Prisma.AlbumCreateNestedOneWithoutMusicsInput
+  artists?: Prisma.MusicArtistCreateNestedManyWithoutMusicInput
 }
 
-export type MusicUncheckedCreateWithoutArtistsInput = {
+export type MusicUncheckedCreateWithoutAddedByInput = {
   id?: number
+  uuid?: string
+  path: string
+  coverPath?: string | null
+  name: string
+  duration: number
   albumId?: number | null
-  uuid: string
+  publishedAt?: Date | string | null
+  updatedAt?: Date | string
+  createdAt?: Date | string
+  artists?: Prisma.MusicArtistUncheckedCreateNestedManyWithoutMusicInput
+}
+
+export type MusicCreateOrConnectWithoutAddedByInput = {
+  where: Prisma.MusicWhereUniqueInput
+  create: Prisma.XOR<Prisma.MusicCreateWithoutAddedByInput, Prisma.MusicUncheckedCreateWithoutAddedByInput>
+}
+
+export type MusicCreateManyAddedByInputEnvelope = {
+  data: Prisma.MusicCreateManyAddedByInput | Prisma.MusicCreateManyAddedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type MusicUpsertWithWhereUniqueWithoutAddedByInput = {
+  where: Prisma.MusicWhereUniqueInput
+  update: Prisma.XOR<Prisma.MusicUpdateWithoutAddedByInput, Prisma.MusicUncheckedUpdateWithoutAddedByInput>
+  create: Prisma.XOR<Prisma.MusicCreateWithoutAddedByInput, Prisma.MusicUncheckedCreateWithoutAddedByInput>
+}
+
+export type MusicUpdateWithWhereUniqueWithoutAddedByInput = {
+  where: Prisma.MusicWhereUniqueInput
+  data: Prisma.XOR<Prisma.MusicUpdateWithoutAddedByInput, Prisma.MusicUncheckedUpdateWithoutAddedByInput>
+}
+
+export type MusicUpdateManyWithWhereWithoutAddedByInput = {
+  where: Prisma.MusicScalarWhereInput
+  data: Prisma.XOR<Prisma.MusicUpdateManyMutationInput, Prisma.MusicUncheckedUpdateManyWithoutAddedByInput>
+}
+
+export type MusicScalarWhereInput = {
+  AND?: Prisma.MusicScalarWhereInput | Prisma.MusicScalarWhereInput[]
+  OR?: Prisma.MusicScalarWhereInput[]
+  NOT?: Prisma.MusicScalarWhereInput | Prisma.MusicScalarWhereInput[]
+  id?: Prisma.IntFilter<"Music"> | number
+  uuid?: Prisma.StringFilter<"Music"> | string
+  path?: Prisma.StringFilter<"Music"> | string
+  coverPath?: Prisma.StringNullableFilter<"Music"> | string | null
+  name?: Prisma.StringFilter<"Music"> | string
+  duration?: Prisma.IntFilter<"Music"> | number
+  albumId?: Prisma.IntNullableFilter<"Music"> | number | null
+  publishedAt?: Prisma.DateTimeNullableFilter<"Music"> | Date | string | null
+  addedById?: Prisma.IntNullableFilter<"Music"> | number | null
+  updatedAt?: Prisma.DateTimeFilter<"Music"> | Date | string
+  createdAt?: Prisma.DateTimeFilter<"Music"> | Date | string
+}
+
+export type MusicCreateWithoutArtistsInput = {
+  uuid?: string
   path: string
   coverPath?: string | null
   name: string
   duration: number
   publishedAt?: Date | string | null
+  updatedAt?: Date | string
+  createdAt?: Date | string
+  addedBy?: Prisma.MemberCreateNestedOneWithoutMusicCreatedInput
+  album?: Prisma.AlbumCreateNestedOneWithoutMusicsInput
+}
+
+export type MusicUncheckedCreateWithoutArtistsInput = {
+  id?: number
+  uuid?: string
+  path: string
+  coverPath?: string | null
+  name: string
+  duration: number
+  albumId?: number | null
+  publishedAt?: Date | string | null
+  addedById?: number | null
   updatedAt?: Date | string
   createdAt?: Date | string
 }
@@ -614,24 +746,26 @@ export type MusicUpdateWithoutArtistsInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.MemberUpdateOneWithoutMusicCreatedNestedInput
   album?: Prisma.AlbumUpdateOneWithoutMusicsNestedInput
 }
 
 export type MusicUncheckedUpdateWithoutArtistsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  albumId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   coverPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  albumId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  addedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MusicCreateWithoutAlbumInput = {
-  uuid: string
+  uuid?: string
   path: string
   coverPath?: string | null
   name: string
@@ -639,17 +773,19 @@ export type MusicCreateWithoutAlbumInput = {
   publishedAt?: Date | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
+  addedBy?: Prisma.MemberCreateNestedOneWithoutMusicCreatedInput
   artists?: Prisma.MusicArtistCreateNestedManyWithoutMusicInput
 }
 
 export type MusicUncheckedCreateWithoutAlbumInput = {
   id?: number
-  uuid: string
+  uuid?: string
   path: string
   coverPath?: string | null
   name: string
   duration: number
   publishedAt?: Date | string | null
+  addedById?: number | null
   updatedAt?: Date | string
   createdAt?: Date | string
   artists?: Prisma.MusicArtistUncheckedCreateNestedManyWithoutMusicInput
@@ -681,30 +817,68 @@ export type MusicUpdateManyWithWhereWithoutAlbumInput = {
   data: Prisma.XOR<Prisma.MusicUpdateManyMutationInput, Prisma.MusicUncheckedUpdateManyWithoutAlbumInput>
 }
 
-export type MusicScalarWhereInput = {
-  AND?: Prisma.MusicScalarWhereInput | Prisma.MusicScalarWhereInput[]
-  OR?: Prisma.MusicScalarWhereInput[]
-  NOT?: Prisma.MusicScalarWhereInput | Prisma.MusicScalarWhereInput[]
-  id?: Prisma.IntFilter<"Music"> | number
-  albumId?: Prisma.IntNullableFilter<"Music"> | number | null
-  uuid?: Prisma.StringFilter<"Music"> | string
-  path?: Prisma.StringFilter<"Music"> | string
-  coverPath?: Prisma.StringNullableFilter<"Music"> | string | null
-  name?: Prisma.StringFilter<"Music"> | string
-  duration?: Prisma.IntFilter<"Music"> | number
-  publishedAt?: Prisma.DateTimeNullableFilter<"Music"> | Date | string | null
-  updatedAt?: Prisma.DateTimeFilter<"Music"> | Date | string
-  createdAt?: Prisma.DateTimeFilter<"Music"> | Date | string
+export type MusicCreateManyAddedByInput = {
+  id?: number
+  uuid?: string
+  path: string
+  coverPath?: string | null
+  name: string
+  duration: number
+  albumId?: number | null
+  publishedAt?: Date | string | null
+  updatedAt?: Date | string
+  createdAt?: Date | string
+}
+
+export type MusicUpdateWithoutAddedByInput = {
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.StringFieldUpdateOperationsInput | string
+  coverPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  album?: Prisma.AlbumUpdateOneWithoutMusicsNestedInput
+  artists?: Prisma.MusicArtistUpdateManyWithoutMusicNestedInput
+}
+
+export type MusicUncheckedUpdateWithoutAddedByInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.StringFieldUpdateOperationsInput | string
+  coverPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  albumId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  artists?: Prisma.MusicArtistUncheckedUpdateManyWithoutMusicNestedInput
+}
+
+export type MusicUncheckedUpdateManyWithoutAddedByInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.StringFieldUpdateOperationsInput | string
+  coverPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  albumId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MusicCreateManyAlbumInput = {
   id?: number
-  uuid: string
+  uuid?: string
   path: string
   coverPath?: string | null
   name: string
   duration: number
   publishedAt?: Date | string | null
+  addedById?: number | null
   updatedAt?: Date | string
   createdAt?: Date | string
 }
@@ -718,6 +892,7 @@ export type MusicUpdateWithoutAlbumInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.MemberUpdateOneWithoutMusicCreatedNestedInput
   artists?: Prisma.MusicArtistUpdateManyWithoutMusicNestedInput
 }
 
@@ -729,6 +904,7 @@ export type MusicUncheckedUpdateWithoutAlbumInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  addedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artists?: Prisma.MusicArtistUncheckedUpdateManyWithoutMusicNestedInput
@@ -742,6 +918,7 @@ export type MusicUncheckedUpdateManyWithoutAlbumInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  addedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -779,15 +956,17 @@ export type MusicCountOutputTypeCountArtistsArgs<ExtArgs extends runtime.Types.E
 
 export type MusicSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  albumId?: boolean
   uuid?: boolean
   path?: boolean
   coverPath?: boolean
   name?: boolean
   duration?: boolean
+  albumId?: boolean
   publishedAt?: boolean
+  addedById?: boolean
   updatedAt?: boolean
   createdAt?: boolean
+  addedBy?: boolean | Prisma.Music$addedByArgs<ExtArgs>
   album?: boolean | Prisma.Music$albumArgs<ExtArgs>
   artists?: boolean | Prisma.Music$artistsArgs<ExtArgs>
   _count?: boolean | Prisma.MusicCountOutputTypeDefaultArgs<ExtArgs>
@@ -795,73 +974,83 @@ export type MusicSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 
 export type MusicSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  albumId?: boolean
   uuid?: boolean
   path?: boolean
   coverPath?: boolean
   name?: boolean
   duration?: boolean
+  albumId?: boolean
   publishedAt?: boolean
+  addedById?: boolean
   updatedAt?: boolean
   createdAt?: boolean
+  addedBy?: boolean | Prisma.Music$addedByArgs<ExtArgs>
   album?: boolean | Prisma.Music$albumArgs<ExtArgs>
 }, ExtArgs["result"]["music"]>
 
 export type MusicSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  albumId?: boolean
   uuid?: boolean
   path?: boolean
   coverPath?: boolean
   name?: boolean
   duration?: boolean
+  albumId?: boolean
   publishedAt?: boolean
+  addedById?: boolean
   updatedAt?: boolean
   createdAt?: boolean
+  addedBy?: boolean | Prisma.Music$addedByArgs<ExtArgs>
   album?: boolean | Prisma.Music$albumArgs<ExtArgs>
 }, ExtArgs["result"]["music"]>
 
 export type MusicSelectScalar = {
   id?: boolean
-  albumId?: boolean
   uuid?: boolean
   path?: boolean
   coverPath?: boolean
   name?: boolean
   duration?: boolean
+  albumId?: boolean
   publishedAt?: boolean
+  addedById?: boolean
   updatedAt?: boolean
   createdAt?: boolean
 }
 
-export type MusicOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "albumId" | "uuid" | "path" | "coverPath" | "name" | "duration" | "publishedAt" | "updatedAt" | "createdAt", ExtArgs["result"]["music"]>
+export type MusicOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "uuid" | "path" | "coverPath" | "name" | "duration" | "albumId" | "publishedAt" | "addedById" | "updatedAt" | "createdAt", ExtArgs["result"]["music"]>
 export type MusicInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  addedBy?: boolean | Prisma.Music$addedByArgs<ExtArgs>
   album?: boolean | Prisma.Music$albumArgs<ExtArgs>
   artists?: boolean | Prisma.Music$artistsArgs<ExtArgs>
   _count?: boolean | Prisma.MusicCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MusicIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  addedBy?: boolean | Prisma.Music$addedByArgs<ExtArgs>
   album?: boolean | Prisma.Music$albumArgs<ExtArgs>
 }
 export type MusicIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  addedBy?: boolean | Prisma.Music$addedByArgs<ExtArgs>
   album?: boolean | Prisma.Music$albumArgs<ExtArgs>
 }
 
 export type $MusicPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Music"
   objects: {
+    addedBy: Prisma.$MemberPayload<ExtArgs> | null
     album: Prisma.$AlbumPayload<ExtArgs> | null
     artists: Prisma.$MusicArtistPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    albumId: number | null
     uuid: string
     path: string
     coverPath: string | null
     name: string
     duration: number
+    albumId: number | null
     publishedAt: Date | null
+    addedById: number | null
     updatedAt: Date
     createdAt: Date
   }, ExtArgs["result"]["music"]>
@@ -1258,6 +1447,7 @@ readonly fields: MusicFieldRefs;
  */
 export interface Prisma__MusicClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  addedBy<T extends Prisma.Music$addedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Music$addedByArgs<ExtArgs>>): Prisma.Prisma__MemberClient<runtime.Types.Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   album<T extends Prisma.Music$albumArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Music$albumArgs<ExtArgs>>): Prisma.Prisma__AlbumClient<runtime.Types.Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   artists<T extends Prisma.Music$artistsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Music$artistsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MusicArtistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1290,13 +1480,14 @@ export interface Prisma__MusicClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface MusicFieldRefs {
   readonly id: Prisma.FieldRef<"Music", 'Int'>
-  readonly albumId: Prisma.FieldRef<"Music", 'Int'>
   readonly uuid: Prisma.FieldRef<"Music", 'String'>
   readonly path: Prisma.FieldRef<"Music", 'String'>
   readonly coverPath: Prisma.FieldRef<"Music", 'String'>
   readonly name: Prisma.FieldRef<"Music", 'String'>
   readonly duration: Prisma.FieldRef<"Music", 'Int'>
+  readonly albumId: Prisma.FieldRef<"Music", 'Int'>
   readonly publishedAt: Prisma.FieldRef<"Music", 'DateTime'>
+  readonly addedById: Prisma.FieldRef<"Music", 'Int'>
   readonly updatedAt: Prisma.FieldRef<"Music", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Music", 'DateTime'>
 }
@@ -1697,6 +1888,25 @@ export type MusicDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Music to delete.
    */
   limit?: number
+}
+
+/**
+ * Music.addedBy
+ */
+export type Music$addedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Member
+   */
+  select?: Prisma.MemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Member
+   */
+  omit?: Prisma.MemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MemberInclude<ExtArgs> | null
+  where?: Prisma.MemberWhereInput
 }
 
 /**

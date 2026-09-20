@@ -1,12 +1,5 @@
 import { z } from "zod";
-import { musicItemSchema } from "../../music/schemas/music.schema";
-import { artistItemSchema } from "../../artist/schemas/artist.schema";
-
-export const albumItemSchema = z.object({
-	uuid: z.string(),
-	name: z.string(),
-	publishedAt: z.date().nullable(),
-});
+import { artistItemSchema, musicItemSchema, albumItemSchema } from "../../schemas/items.schema";
 
 export const albumDetailedItemSchema = z.object({
 	uuid: z.string(),

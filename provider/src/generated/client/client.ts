@@ -29,8 +29,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Permissions
- * const permissions = await prisma.permissions.findMany()
+ * // Fetch zero or more Providers
+ * const providers = await prisma.provider.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -40,10 +40,35 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Permissions
+ * Model Provider
  * 
  */
-export type Permissions = Prisma.PermissionsModel
+export type Provider = Prisma.ProviderModel
+/**
+ * Model AccessRequest
+ * 
+ */
+export type AccessRequest = Prisma.AccessRequestModel
+/**
+ * Model Member
+ * 
+ */
+export type Member = Prisma.MemberModel
+/**
+ * Model MemberRole
+ * 
+ */
+export type MemberRole = Prisma.MemberRoleModel
+/**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model RolePermission
+ * 
+ */
+export type RolePermission = Prisma.RolePermissionModel
 /**
  * Model Music
  * 
