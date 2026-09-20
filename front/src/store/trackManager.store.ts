@@ -60,15 +60,20 @@ export function useTrackManager() {
 		}));
 	}
 
-	function prev() {
+	function prev(): Track | null {
+		let historyTrack: Track | null = null;
 		setTrackManager(produce((manager) => {
 			if (manager.history.length > 0) {
 				if (manager.current) {
 					manager.queue.unshift(manager.current);
 				}
 				manager.current = manager.history.pop() ?? null;
+				historyTrack = manager.current;
+			} else {
+				historyTrack = null;
 			}
 		}));
+		return historyTrack;
 	}
 
 	function setCurrentTrack(track: Track): void;

@@ -1,15 +1,18 @@
-import { createContext, useContext, ParentComponent, createEffect, onCleanup, Accessor } from "solid-js";
+import { createContext, useContext, ParentComponent, createEffect, onCleanup, onMount } from "solid-js";
 import { createSignal } from "solid-js";
 import { Music } from "~/class/Music";
 import { PushTrackToQueueFn, SetCurrentTrackFn, useTrackManager } from "~/store/trackManager.store";
+import { setupMediaSession } from "./mediaSession";
 
-type AudioManagerContextValue = {
-	playing: Accessor<boolean>;
-	currentMusic: Accessor<Music | null>;
-	duration: Accessor<number>;
-	progression: Accessor<number>;
+export type AudioManager = {
+	get playing(): boolean;
+	get currentMusic(): Music | null;
+	get duration(): number;
+	get progression(): number;
+	set progression(time: number);
 	play: () => Promise<void>;
 	pause: () => void;
+	stop: () => void;
 	toggle: () => void;
 	forward: () => void;
 	back: () => void;
@@ -17,25 +20,31 @@ type AudioManagerContextValue = {
 	setCurrentTrack: SetCurrentTrackFn;
 };
 
-const AudioManagerContext = createContext<AudioManagerContextValue>();
+const AudioManagerContext = createContext<AudioManager>();
 
 export const AudioPlayerProvider: ParentComponent = (props) => {
-	const player = new Audio();
+	const audio = new Audio();
 	const trackManager = useTrackManager();
 	const [playing, setIsPlaying] = createSignal(false);
 	const [duration, setDuration] = createSignal(0.0);
 
 	function play() {
-		return player.play();
+		return audio.play();
 	}
 
 	function pause() {
-		return player.pause();
+		return audio.pause();
+	}
+
+	function stop() {
+		audio.pause();
+		audio.currentTime = 0;
 	}
 
 	function toggle() {
-		if (player.paused) void player.play();
-		else player.pause();
+		if (audio.src === "") return;
+		if (audio.paused) void audio.play().catch(() => {});
+		else audio.pause();
 	}
 
 	function forward() {
@@ -43,66 +52,80 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	}
 
 	function back() {
-		if (player.currentTime > 3) {
-			player.currentTime = 0;
+		if (audio.currentTime > 3) {
+			audio.currentTime = 0;
 		} else {
-			trackManager.prevTrack();
+			if (!trackManager.prevTrack()) audio.currentTime = 0;
 		}
 	}
 
-	window.addEventListener("keypress", (e) => {
+	const handleKeyDown = (e: KeyboardEvent) => {
 		if (e.key === " ") {
+			e.preventDefault();
 			toggle();
-		}
-	});
-
+		} else if (e.key === "ArrowRight" && e.ctrlKey) forward();
+		else if (e.key === "ArrowLeft" && e.ctrlKey) back();
+	};
 	const handlePlay = () => setIsPlaying(true);
 	const handlePause = () => setIsPlaying(false);
-	const handleTimeUpdate = () => trackManager.setProgression(player.currentTime);
-	const handleLoadedMetadata = () => setDuration(player.duration);
+	const handleEnded = () => trackManager.nextTrack();
+	const handleTimeUpdate = () => trackManager.setProgression(audio.currentTime);
+	const handleLoadedMetadata = () => setDuration(audio.duration);
 
-	player.addEventListener("play", handlePlay);
-	player.addEventListener("pause", handlePause);
-	player.addEventListener("timeupdate", handleTimeUpdate);
-	player.addEventListener("loadedmetadata", handleLoadedMetadata);
+	window.addEventListener("keydown", handleKeyDown);
+	audio.addEventListener("play", handlePlay);
+	audio.addEventListener("pause", handlePause);
+	audio.addEventListener("ended", handleEnded);
+	audio.addEventListener("timeupdate", handleTimeUpdate);
+	audio.addEventListener("loadedmetadata", handleLoadedMetadata);
 
 	createEffect(() => {
 		if (trackManager.manager.current !== null) {
-			player.src = trackManager.manager.current.music.url().href;
-			void player.play();
+			audio.src = trackManager.manager.current.music.url().href;
+			void audio.play();
 		} else {
-			player.pause();
+			audio.pause();
+			audio.src = "";
 		}
 	});
 
-	onCleanup(() => {
-		player.removeEventListener("play", handlePlay);
-		player.removeEventListener("pause", handlePause);
-		player.removeEventListener("timeupdate", handleTimeUpdate);
-		player.removeEventListener("loadedmetadata", handleLoadedMetadata);
-
-		player.pause();
-		player.src = "";
-		player.load();
-	});
-
-	(window as typeof window & { setCurrentTrack: SetCurrentTrackFn }).setCurrentTrack = trackManager.setCurrentTrack;
-	(window as typeof window & { pushTrackToQueue: PushTrackToQueueFn }).pushTrackToQueue = trackManager.pushTrackToQueue;
-	(window as typeof window & { Music: typeof Music }).Music = Music;
-
-	return <AudioManagerContext.Provider value={{
-		playing,
-		currentMusic: () => (trackManager.manager.current?.music ?? null),
-		progression: () => trackManager.manager.progression,
-		duration,
+	const audioManager = {
+		get playing() { return playing(); },
+		get currentMusic() { return trackManager.manager.current?.music ?? null; },
+		get progression() { return trackManager.manager.progression; },
+		set progression(time: number) { audio.currentTime = time; },
+		get duration() { return duration(); },
 		play,
 		pause,
+		stop,
 		toggle,
 		forward,
 		back,
 		pushTrackToQueue: trackManager.pushTrackToQueue,
 		setCurrentTrack: trackManager.setCurrentTrack,
-	}} >
+	};
+
+
+	onMount(() => {
+		const callback = setupMediaSession(audioManager, audio);
+
+		if (callback) onCleanup(callback);
+
+		onCleanup(() => {
+			window.removeEventListener("keydown", handleKeyDown);
+			audio.removeEventListener("play", handlePlay);
+			audio.removeEventListener("pause", handlePause);
+			audio.removeEventListener("ended", handleEnded);
+			audio.removeEventListener("timeupdate", handleTimeUpdate);
+			audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+
+			audio.pause();
+			audio.src = "";
+			audio.load();
+		});
+	});
+
+	return <AudioManagerContext.Provider value={audioManager} >
 		{props.children}
 	</AudioManagerContext.Provider>;
 };
