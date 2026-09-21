@@ -24,3 +24,6 @@ export { type Permission } from "./core/permissions";
 
 export { type Code401, code401 } from "./contracts/schemas/error401";
 export { type Code403, code403 } from "./contracts/schemas/error403";
+
+export { providerPermissions, providerPermissionSchema, type ProviderPermission } from "./contracts/provider/roles/schemas/role.schema";
+export { providerCode403, type ProviderCode403 } from "./contracts/schemas/error403";

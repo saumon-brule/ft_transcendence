@@ -7,6 +7,7 @@ const EnvSchema = z.object({
 	FLEX_API_KEY: z.string(),
 	NODE_ENV: z.enum(["dev", "prod"]),
 	PORT: z.string().transform(Number).optional(),
+	MEDIA_DIR: z.string().default("media"),
 });
 
 const result = EnvSchema.safeParse(process.env);

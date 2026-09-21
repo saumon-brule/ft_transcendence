@@ -317,7 +317,7 @@ export type AlbumCreateInput = {
   publishedAt?: Date | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
-  addedBy?: Prisma.MemberCreateNestedOneWithoutAlbumsCreatedInput
+  addedBy?: Prisma.MemberCreateNestedOneWithoutAlbumsAddedInput
   musics?: Prisma.MusicCreateNestedManyWithoutAlbumInput
   artists?: Prisma.AlbumArtistCreateNestedManyWithoutAlbumInput
 }
@@ -342,7 +342,7 @@ export type AlbumUpdateInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  addedBy?: Prisma.MemberUpdateOneWithoutAlbumsCreatedNestedInput
+  addedBy?: Prisma.MemberUpdateOneWithoutAlbumsAddedNestedInput
   musics?: Prisma.MusicUpdateManyWithoutAlbumNestedInput
   artists?: Prisma.AlbumArtistUpdateManyWithoutAlbumNestedInput
 }
@@ -596,7 +596,7 @@ export type AlbumCreateWithoutMusicsInput = {
   publishedAt?: Date | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
-  addedBy?: Prisma.MemberCreateNestedOneWithoutAlbumsCreatedInput
+  addedBy?: Prisma.MemberCreateNestedOneWithoutAlbumsAddedInput
   artists?: Prisma.AlbumArtistCreateNestedManyWithoutAlbumInput
 }
 
@@ -635,7 +635,7 @@ export type AlbumUpdateWithoutMusicsInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  addedBy?: Prisma.MemberUpdateOneWithoutAlbumsCreatedNestedInput
+  addedBy?: Prisma.MemberUpdateOneWithoutAlbumsAddedNestedInput
   artists?: Prisma.AlbumArtistUpdateManyWithoutAlbumNestedInput
 }
 
@@ -658,7 +658,7 @@ export type AlbumCreateWithoutArtistsInput = {
   publishedAt?: Date | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
-  addedBy?: Prisma.MemberCreateNestedOneWithoutAlbumsCreatedInput
+  addedBy?: Prisma.MemberCreateNestedOneWithoutAlbumsAddedInput
   musics?: Prisma.MusicCreateNestedManyWithoutAlbumInput
 }
 
@@ -697,7 +697,7 @@ export type AlbumUpdateWithoutArtistsInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  addedBy?: Prisma.MemberUpdateOneWithoutAlbumsCreatedNestedInput
+  addedBy?: Prisma.MemberUpdateOneWithoutAlbumsAddedNestedInput
   musics?: Prisma.MusicUpdateManyWithoutAlbumNestedInput
 }
 

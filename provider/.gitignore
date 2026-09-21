@@ -58,3 +58,6 @@ node_modules/
 dist/
 
 /src/generated/prisma
+
+# Fichiers audio envoyés (MEDIA_DIR)
+/media

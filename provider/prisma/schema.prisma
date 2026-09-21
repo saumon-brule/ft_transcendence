@@ -32,7 +32,8 @@ enum RequestStatus {
 
 model AccessRequest {
   id          Int           @id @default(autoincrement())
-  uuid        String
+  uuid        String        @unique @default(uuid())
+  userUuid    String
   status      RequestStatus @default(PENDING)
   decidedById Int?
   decidedAt   DateTime?
@@ -43,6 +44,7 @@ model AccessRequest {
 
   @@index([decidedById])
   @@index([status, createdAt])
+  @@index([userUuid])
   @@index([uuid])
 }
 
@@ -58,13 +60,14 @@ model Member {
   revokedBy             Member?         @relation("RevokedBy", fields: [revokedById], references: [id], onDelete: SetNull)
   roles                 MemberRole[]
   rolesCreated          Role[]
-  musicCreated          Music[]
-  artistsCreated        Artist[]
-  albumsCreated         Album[]
+  musicAdded            Music[]
+  artistsAdded          Artist[]
+  albumsAdded           Album[]
   accessRequestsManaged AccessRequest[]
   revokedMembers        Member[]        @relation("RevokedBy")
 
   @@index([revokedById])
+  @@index([uuid])
 }
 
 model MemberRole {
@@ -82,11 +85,12 @@ model MemberRole {
 }
 
 model Role {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  uuid      String   @unique @default(uuid())
   addedById Int?
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 
   isDefault   Provider?
   addedBy     Member?          @relation(fields: [addedById], references: [id], onDelete: SetNull)
@@ -124,16 +128,17 @@ model Music {
   duration    Int
   albumId     Int?
   publishedAt DateTime?
-  addedById Int?
+  addedById   Int?
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
 
   addedBy Member?       @relation(fields: [addedById], references: [id], onDelete: SetNull)
-  album     Album?        @relation(fields: [albumId], references: [id], onDelete: SetNull)
-  artists   MusicArtist[]
+  album   Album?        @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  artists MusicArtist[]
 
   @@index([addedById])
   @@index([albumId])
+  @@index([uuid])
 }
 
 model MusicArtist {
@@ -151,20 +156,21 @@ model MusicArtist {
 }
 
 model Artist {
-  id          Int      @id @default(autoincrement())
-  uuid        String   @unique @default(uuid())
-  name        String
-  coverPath   String?
-  biography   String?
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid())
+  name      String
+  coverPath String?
+  biography String?
   addedById Int?
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 
   addedBy Member?       @relation(fields: [addedById], references: [id], onDelete: SetNull)
-  music     MusicArtist[]
-  albums    AlbumArtist[]
+  music   MusicArtist[]
+  albums  AlbumArtist[]
 
   @@index([addedById])
+  @@index([uuid])
 }
 
 model AlbumArtist {
@@ -187,13 +193,14 @@ model Album {
   name        String
   coverPath   String?
   publishedAt DateTime?
-  addedById Int?
+  addedById   Int?
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
 
   addedBy Member?       @relation(fields: [addedById], references: [id], onDelete: SetNull)
-  musics    Music[]
-  artists   AlbumArtist[]
+  musics  Music[]
+  artists AlbumArtist[]
 
   @@index([addedById])
+  @@index([uuid])
 }

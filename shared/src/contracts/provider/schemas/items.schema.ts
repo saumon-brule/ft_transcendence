@@ -8,14 +8,14 @@ export const artistItemSchema = z.object({
 export const albumItemSchema = z.object({
 	uuid: z.string(),
 	name: z.string(),
-	publishedAt: z.date().nullable(),
+	publishedAt: z.coerce.date().nullable(),
 });
 
 export const musicItemSchema = z.object({
 	uuid: z.string(),
 	name: z.string(),
 	duration: z.number(),
-	publishedAt: z.date().nullable(),
+	publishedAt: z.coerce.date().nullable(),
 	artists: z.array(artistItemSchema),
-	album: albumItemSchema,
+	album: albumItemSchema.nullable(),
 });

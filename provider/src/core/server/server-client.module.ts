@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-import { ServerClientService } from './server-client.service';
+import { Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
+import { ServerClientService } from "./server-client.service";
 
 @Module({
-    imports: [],
-    controllers: [],
-    providers: [ServerClientService],
-    exports: [ServerClientService],
+	imports: [JwtModule.register({})],
+	providers: [ServerClientService],
+	exports: [ServerClientService],
 })
 export class ServerClientModule {}

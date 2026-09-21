@@ -94,6 +94,7 @@ export type ProviderScalarFieldEnum = (typeof ProviderScalarFieldEnum)[keyof typ
 export const AccessRequestScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
+  userUuid: 'userUuid',
   status: 'status',
   decidedById: 'decidedById',
   decidedAt: 'decidedAt',
@@ -130,6 +131,7 @@ export type MemberRoleScalarFieldEnum = (typeof MemberRoleScalarFieldEnum)[keyof
 export const RoleScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  uuid: 'uuid',
   addedById: 'addedById',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'

@@ -232,9 +232,9 @@ export type MemberWhereInput = {
   revokedBy?: Prisma.XOR<Prisma.MemberNullableScalarRelationFilter, Prisma.MemberWhereInput> | null
   roles?: Prisma.MemberRoleListRelationFilter
   rolesCreated?: Prisma.RoleListRelationFilter
-  musicCreated?: Prisma.MusicListRelationFilter
-  artistsCreated?: Prisma.ArtistListRelationFilter
-  albumsCreated?: Prisma.AlbumListRelationFilter
+  musicAdded?: Prisma.MusicListRelationFilter
+  artistsAdded?: Prisma.ArtistListRelationFilter
+  albumsAdded?: Prisma.AlbumListRelationFilter
   accessRequestsManaged?: Prisma.AccessRequestListRelationFilter
   revokedMembers?: Prisma.MemberListRelationFilter
 }
@@ -250,9 +250,9 @@ export type MemberOrderByWithRelationInput = {
   revokedBy?: Prisma.MemberOrderByWithRelationInput
   roles?: Prisma.MemberRoleOrderByRelationAggregateInput
   rolesCreated?: Prisma.RoleOrderByRelationAggregateInput
-  musicCreated?: Prisma.MusicOrderByRelationAggregateInput
-  artistsCreated?: Prisma.ArtistOrderByRelationAggregateInput
-  albumsCreated?: Prisma.AlbumOrderByRelationAggregateInput
+  musicAdded?: Prisma.MusicOrderByRelationAggregateInput
+  artistsAdded?: Prisma.ArtistOrderByRelationAggregateInput
+  albumsAdded?: Prisma.AlbumOrderByRelationAggregateInput
   accessRequestsManaged?: Prisma.AccessRequestOrderByRelationAggregateInput
   revokedMembers?: Prisma.MemberOrderByRelationAggregateInput
 }
@@ -271,9 +271,9 @@ export type MemberWhereUniqueInput = Prisma.AtLeast<{
   revokedBy?: Prisma.XOR<Prisma.MemberNullableScalarRelationFilter, Prisma.MemberWhereInput> | null
   roles?: Prisma.MemberRoleListRelationFilter
   rolesCreated?: Prisma.RoleListRelationFilter
-  musicCreated?: Prisma.MusicListRelationFilter
-  artistsCreated?: Prisma.ArtistListRelationFilter
-  albumsCreated?: Prisma.AlbumListRelationFilter
+  musicAdded?: Prisma.MusicListRelationFilter
+  artistsAdded?: Prisma.ArtistListRelationFilter
+  albumsAdded?: Prisma.AlbumListRelationFilter
   accessRequestsManaged?: Prisma.AccessRequestListRelationFilter
   revokedMembers?: Prisma.MemberListRelationFilter
 }, "id" | "uuid">
@@ -313,9 +313,9 @@ export type MemberCreateInput = {
   revokedBy?: Prisma.MemberCreateNestedOneWithoutRevokedMembersInput
   roles?: Prisma.MemberRoleCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberCreateNestedManyWithoutRevokedByInput
 }
@@ -330,9 +330,9 @@ export type MemberUncheckedCreateInput = {
   isOwner?: Prisma.ProviderUncheckedCreateNestedOneWithoutOwnerInput
   roles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleUncheckedCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberUncheckedCreateNestedManyWithoutRevokedByInput
 }
@@ -346,9 +346,9 @@ export type MemberUpdateInput = {
   revokedBy?: Prisma.MemberUpdateOneWithoutRevokedMembersNestedInput
   roles?: Prisma.MemberRoleUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUpdateManyWithoutRevokedByNestedInput
 }
@@ -363,9 +363,9 @@ export type MemberUncheckedUpdateInput = {
   isOwner?: Prisma.ProviderUncheckedUpdateOneWithoutOwnerNestedInput
   roles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUncheckedUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUncheckedUpdateManyWithoutRevokedByNestedInput
 }
@@ -570,52 +570,52 @@ export type MemberUpdateOneWithoutRolesCreatedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutRolesCreatedInput, Prisma.MemberUpdateWithoutRolesCreatedInput>, Prisma.MemberUncheckedUpdateWithoutRolesCreatedInput>
 }
 
-export type MemberCreateNestedOneWithoutMusicCreatedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutMusicCreatedInput, Prisma.MemberUncheckedCreateWithoutMusicCreatedInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutMusicCreatedInput
+export type MemberCreateNestedOneWithoutMusicAddedInput = {
+  create?: Prisma.XOR<Prisma.MemberCreateWithoutMusicAddedInput, Prisma.MemberUncheckedCreateWithoutMusicAddedInput>
+  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutMusicAddedInput
   connect?: Prisma.MemberWhereUniqueInput
 }
 
-export type MemberUpdateOneWithoutMusicCreatedNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutMusicCreatedInput, Prisma.MemberUncheckedCreateWithoutMusicCreatedInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutMusicCreatedInput
-  upsert?: Prisma.MemberUpsertWithoutMusicCreatedInput
+export type MemberUpdateOneWithoutMusicAddedNestedInput = {
+  create?: Prisma.XOR<Prisma.MemberCreateWithoutMusicAddedInput, Prisma.MemberUncheckedCreateWithoutMusicAddedInput>
+  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutMusicAddedInput
+  upsert?: Prisma.MemberUpsertWithoutMusicAddedInput
   disconnect?: Prisma.MemberWhereInput | boolean
   delete?: Prisma.MemberWhereInput | boolean
   connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutMusicCreatedInput, Prisma.MemberUpdateWithoutMusicCreatedInput>, Prisma.MemberUncheckedUpdateWithoutMusicCreatedInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutMusicAddedInput, Prisma.MemberUpdateWithoutMusicAddedInput>, Prisma.MemberUncheckedUpdateWithoutMusicAddedInput>
 }
 
-export type MemberCreateNestedOneWithoutArtistsCreatedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutArtistsCreatedInput, Prisma.MemberUncheckedCreateWithoutArtistsCreatedInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutArtistsCreatedInput
+export type MemberCreateNestedOneWithoutArtistsAddedInput = {
+  create?: Prisma.XOR<Prisma.MemberCreateWithoutArtistsAddedInput, Prisma.MemberUncheckedCreateWithoutArtistsAddedInput>
+  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutArtistsAddedInput
   connect?: Prisma.MemberWhereUniqueInput
 }
 
-export type MemberUpdateOneWithoutArtistsCreatedNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutArtistsCreatedInput, Prisma.MemberUncheckedCreateWithoutArtistsCreatedInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutArtistsCreatedInput
-  upsert?: Prisma.MemberUpsertWithoutArtistsCreatedInput
+export type MemberUpdateOneWithoutArtistsAddedNestedInput = {
+  create?: Prisma.XOR<Prisma.MemberCreateWithoutArtistsAddedInput, Prisma.MemberUncheckedCreateWithoutArtistsAddedInput>
+  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutArtistsAddedInput
+  upsert?: Prisma.MemberUpsertWithoutArtistsAddedInput
   disconnect?: Prisma.MemberWhereInput | boolean
   delete?: Prisma.MemberWhereInput | boolean
   connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutArtistsCreatedInput, Prisma.MemberUpdateWithoutArtistsCreatedInput>, Prisma.MemberUncheckedUpdateWithoutArtistsCreatedInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutArtistsAddedInput, Prisma.MemberUpdateWithoutArtistsAddedInput>, Prisma.MemberUncheckedUpdateWithoutArtistsAddedInput>
 }
 
-export type MemberCreateNestedOneWithoutAlbumsCreatedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutAlbumsCreatedInput, Prisma.MemberUncheckedCreateWithoutAlbumsCreatedInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutAlbumsCreatedInput
+export type MemberCreateNestedOneWithoutAlbumsAddedInput = {
+  create?: Prisma.XOR<Prisma.MemberCreateWithoutAlbumsAddedInput, Prisma.MemberUncheckedCreateWithoutAlbumsAddedInput>
+  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutAlbumsAddedInput
   connect?: Prisma.MemberWhereUniqueInput
 }
 
-export type MemberUpdateOneWithoutAlbumsCreatedNestedInput = {
-  create?: Prisma.XOR<Prisma.MemberCreateWithoutAlbumsCreatedInput, Prisma.MemberUncheckedCreateWithoutAlbumsCreatedInput>
-  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutAlbumsCreatedInput
-  upsert?: Prisma.MemberUpsertWithoutAlbumsCreatedInput
+export type MemberUpdateOneWithoutAlbumsAddedNestedInput = {
+  create?: Prisma.XOR<Prisma.MemberCreateWithoutAlbumsAddedInput, Prisma.MemberUncheckedCreateWithoutAlbumsAddedInput>
+  connectOrCreate?: Prisma.MemberCreateOrConnectWithoutAlbumsAddedInput
+  upsert?: Prisma.MemberUpsertWithoutAlbumsAddedInput
   disconnect?: Prisma.MemberWhereInput | boolean
   delete?: Prisma.MemberWhereInput | boolean
   connect?: Prisma.MemberWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutAlbumsCreatedInput, Prisma.MemberUpdateWithoutAlbumsCreatedInput>, Prisma.MemberUncheckedUpdateWithoutAlbumsCreatedInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MemberUpdateToOneWithWhereWithoutAlbumsAddedInput, Prisma.MemberUpdateWithoutAlbumsAddedInput>, Prisma.MemberUncheckedUpdateWithoutAlbumsAddedInput>
 }
 
 export type MemberCreateWithoutIsOwnerInput = {
@@ -626,9 +626,9 @@ export type MemberCreateWithoutIsOwnerInput = {
   revokedBy?: Prisma.MemberCreateNestedOneWithoutRevokedMembersInput
   roles?: Prisma.MemberRoleCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberCreateNestedManyWithoutRevokedByInput
 }
@@ -642,9 +642,9 @@ export type MemberUncheckedCreateWithoutIsOwnerInput = {
   createdAt?: Date | string
   roles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleUncheckedCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberUncheckedCreateNestedManyWithoutRevokedByInput
 }
@@ -673,9 +673,9 @@ export type MemberUpdateWithoutIsOwnerInput = {
   revokedBy?: Prisma.MemberUpdateOneWithoutRevokedMembersNestedInput
   roles?: Prisma.MemberRoleUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUpdateManyWithoutRevokedByNestedInput
 }
@@ -689,9 +689,9 @@ export type MemberUncheckedUpdateWithoutIsOwnerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUncheckedUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUncheckedUpdateManyWithoutRevokedByNestedInput
 }
@@ -705,9 +705,9 @@ export type MemberCreateWithoutAccessRequestsManagedInput = {
   revokedBy?: Prisma.MemberCreateNestedOneWithoutRevokedMembersInput
   roles?: Prisma.MemberRoleCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
   revokedMembers?: Prisma.MemberCreateNestedManyWithoutRevokedByInput
 }
 
@@ -721,9 +721,9 @@ export type MemberUncheckedCreateWithoutAccessRequestsManagedInput = {
   isOwner?: Prisma.ProviderUncheckedCreateNestedOneWithoutOwnerInput
   roles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleUncheckedCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
   revokedMembers?: Prisma.MemberUncheckedCreateNestedManyWithoutRevokedByInput
 }
 
@@ -752,9 +752,9 @@ export type MemberUpdateWithoutAccessRequestsManagedInput = {
   revokedBy?: Prisma.MemberUpdateOneWithoutRevokedMembersNestedInput
   roles?: Prisma.MemberRoleUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
   revokedMembers?: Prisma.MemberUpdateManyWithoutRevokedByNestedInput
 }
 
@@ -768,9 +768,9 @@ export type MemberUncheckedUpdateWithoutAccessRequestsManagedInput = {
   isOwner?: Prisma.ProviderUncheckedUpdateOneWithoutOwnerNestedInput
   roles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUncheckedUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
   revokedMembers?: Prisma.MemberUncheckedUpdateManyWithoutRevokedByNestedInput
 }
 
@@ -783,9 +783,9 @@ export type MemberCreateWithoutRevokedMembersInput = {
   revokedBy?: Prisma.MemberCreateNestedOneWithoutRevokedMembersInput
   roles?: Prisma.MemberRoleCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestCreateNestedManyWithoutDecidedByInput
 }
 
@@ -799,9 +799,9 @@ export type MemberUncheckedCreateWithoutRevokedMembersInput = {
   isOwner?: Prisma.ProviderUncheckedCreateNestedOneWithoutOwnerInput
   roles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleUncheckedCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedCreateNestedManyWithoutDecidedByInput
 }
 
@@ -818,9 +818,9 @@ export type MemberCreateWithoutRevokedByInput = {
   isOwner?: Prisma.ProviderCreateNestedOneWithoutOwnerInput
   roles?: Prisma.MemberRoleCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberCreateNestedManyWithoutRevokedByInput
 }
@@ -834,9 +834,9 @@ export type MemberUncheckedCreateWithoutRevokedByInput = {
   isOwner?: Prisma.ProviderUncheckedCreateNestedOneWithoutOwnerInput
   roles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleUncheckedCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberUncheckedCreateNestedManyWithoutRevokedByInput
 }
@@ -871,9 +871,9 @@ export type MemberUpdateWithoutRevokedMembersInput = {
   revokedBy?: Prisma.MemberUpdateOneWithoutRevokedMembersNestedInput
   roles?: Prisma.MemberRoleUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUpdateManyWithoutDecidedByNestedInput
 }
 
@@ -887,9 +887,9 @@ export type MemberUncheckedUpdateWithoutRevokedMembersInput = {
   isOwner?: Prisma.ProviderUncheckedUpdateOneWithoutOwnerNestedInput
   roles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUncheckedUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput
 }
 
@@ -929,9 +929,9 @@ export type MemberCreateWithoutRolesInput = {
   isOwner?: Prisma.ProviderCreateNestedOneWithoutOwnerInput
   revokedBy?: Prisma.MemberCreateNestedOneWithoutRevokedMembersInput
   rolesCreated?: Prisma.RoleCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberCreateNestedManyWithoutRevokedByInput
 }
@@ -945,9 +945,9 @@ export type MemberUncheckedCreateWithoutRolesInput = {
   createdAt?: Date | string
   isOwner?: Prisma.ProviderUncheckedCreateNestedOneWithoutOwnerInput
   rolesCreated?: Prisma.RoleUncheckedCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberUncheckedCreateNestedManyWithoutRevokedByInput
 }
@@ -976,9 +976,9 @@ export type MemberUpdateWithoutRolesInput = {
   isOwner?: Prisma.ProviderUpdateOneWithoutOwnerNestedInput
   revokedBy?: Prisma.MemberUpdateOneWithoutRevokedMembersNestedInput
   rolesCreated?: Prisma.RoleUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUpdateManyWithoutRevokedByNestedInput
 }
@@ -992,9 +992,9 @@ export type MemberUncheckedUpdateWithoutRolesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isOwner?: Prisma.ProviderUncheckedUpdateOneWithoutOwnerNestedInput
   rolesCreated?: Prisma.RoleUncheckedUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUncheckedUpdateManyWithoutRevokedByNestedInput
 }
@@ -1007,9 +1007,9 @@ export type MemberCreateWithoutRolesCreatedInput = {
   isOwner?: Prisma.ProviderCreateNestedOneWithoutOwnerInput
   revokedBy?: Prisma.MemberCreateNestedOneWithoutRevokedMembersInput
   roles?: Prisma.MemberRoleCreateNestedManyWithoutMemberInput
-  musicCreated?: Prisma.MusicCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberCreateNestedManyWithoutRevokedByInput
 }
@@ -1023,9 +1023,9 @@ export type MemberUncheckedCreateWithoutRolesCreatedInput = {
   createdAt?: Date | string
   isOwner?: Prisma.ProviderUncheckedCreateNestedOneWithoutOwnerInput
   roles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberInput
-  musicCreated?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberUncheckedCreateNestedManyWithoutRevokedByInput
 }
@@ -1054,9 +1054,9 @@ export type MemberUpdateWithoutRolesCreatedInput = {
   isOwner?: Prisma.ProviderUpdateOneWithoutOwnerNestedInput
   revokedBy?: Prisma.MemberUpdateOneWithoutRevokedMembersNestedInput
   roles?: Prisma.MemberRoleUpdateManyWithoutMemberNestedInput
-  musicCreated?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUpdateManyWithoutRevokedByNestedInput
 }
@@ -1070,14 +1070,14 @@ export type MemberUncheckedUpdateWithoutRolesCreatedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isOwner?: Prisma.ProviderUncheckedUpdateOneWithoutOwnerNestedInput
   roles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberNestedInput
-  musicCreated?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUncheckedUpdateManyWithoutRevokedByNestedInput
 }
 
-export type MemberCreateWithoutMusicCreatedInput = {
+export type MemberCreateWithoutMusicAddedInput = {
   uuid: string
   revokedAt?: Date | string | null
   updatedAt?: Date | string
@@ -1086,13 +1086,13 @@ export type MemberCreateWithoutMusicCreatedInput = {
   revokedBy?: Prisma.MemberCreateNestedOneWithoutRevokedMembersInput
   roles?: Prisma.MemberRoleCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberCreateNestedManyWithoutRevokedByInput
 }
 
-export type MemberUncheckedCreateWithoutMusicCreatedInput = {
+export type MemberUncheckedCreateWithoutMusicAddedInput = {
   id?: number
   uuid: string
   revokedAt?: Date | string | null
@@ -1102,29 +1102,29 @@ export type MemberUncheckedCreateWithoutMusicCreatedInput = {
   isOwner?: Prisma.ProviderUncheckedCreateNestedOneWithoutOwnerInput
   roles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleUncheckedCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberUncheckedCreateNestedManyWithoutRevokedByInput
 }
 
-export type MemberCreateOrConnectWithoutMusicCreatedInput = {
+export type MemberCreateOrConnectWithoutMusicAddedInput = {
   where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutMusicCreatedInput, Prisma.MemberUncheckedCreateWithoutMusicCreatedInput>
+  create: Prisma.XOR<Prisma.MemberCreateWithoutMusicAddedInput, Prisma.MemberUncheckedCreateWithoutMusicAddedInput>
 }
 
-export type MemberUpsertWithoutMusicCreatedInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutMusicCreatedInput, Prisma.MemberUncheckedUpdateWithoutMusicCreatedInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutMusicCreatedInput, Prisma.MemberUncheckedCreateWithoutMusicCreatedInput>
+export type MemberUpsertWithoutMusicAddedInput = {
+  update: Prisma.XOR<Prisma.MemberUpdateWithoutMusicAddedInput, Prisma.MemberUncheckedUpdateWithoutMusicAddedInput>
+  create: Prisma.XOR<Prisma.MemberCreateWithoutMusicAddedInput, Prisma.MemberUncheckedCreateWithoutMusicAddedInput>
   where?: Prisma.MemberWhereInput
 }
 
-export type MemberUpdateToOneWithWhereWithoutMusicCreatedInput = {
+export type MemberUpdateToOneWithWhereWithoutMusicAddedInput = {
   where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutMusicCreatedInput, Prisma.MemberUncheckedUpdateWithoutMusicCreatedInput>
+  data: Prisma.XOR<Prisma.MemberUpdateWithoutMusicAddedInput, Prisma.MemberUncheckedUpdateWithoutMusicAddedInput>
 }
 
-export type MemberUpdateWithoutMusicCreatedInput = {
+export type MemberUpdateWithoutMusicAddedInput = {
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1133,13 +1133,13 @@ export type MemberUpdateWithoutMusicCreatedInput = {
   revokedBy?: Prisma.MemberUpdateOneWithoutRevokedMembersNestedInput
   roles?: Prisma.MemberRoleUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUpdateManyWithoutRevokedByNestedInput
 }
 
-export type MemberUncheckedUpdateWithoutMusicCreatedInput = {
+export type MemberUncheckedUpdateWithoutMusicAddedInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1149,13 +1149,13 @@ export type MemberUncheckedUpdateWithoutMusicCreatedInput = {
   isOwner?: Prisma.ProviderUncheckedUpdateOneWithoutOwnerNestedInput
   roles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUncheckedUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUncheckedUpdateManyWithoutRevokedByNestedInput
 }
 
-export type MemberCreateWithoutArtistsCreatedInput = {
+export type MemberCreateWithoutArtistsAddedInput = {
   uuid: string
   revokedAt?: Date | string | null
   updatedAt?: Date | string
@@ -1164,13 +1164,13 @@ export type MemberCreateWithoutArtistsCreatedInput = {
   revokedBy?: Prisma.MemberCreateNestedOneWithoutRevokedMembersInput
   roles?: Prisma.MemberRoleCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberCreateNestedManyWithoutRevokedByInput
 }
 
-export type MemberUncheckedCreateWithoutArtistsCreatedInput = {
+export type MemberUncheckedCreateWithoutArtistsAddedInput = {
   id?: number
   uuid: string
   revokedAt?: Date | string | null
@@ -1180,29 +1180,29 @@ export type MemberUncheckedCreateWithoutArtistsCreatedInput = {
   isOwner?: Prisma.ProviderUncheckedCreateNestedOneWithoutOwnerInput
   roles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleUncheckedCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
-  albumsCreated?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
+  albumsAdded?: Prisma.AlbumUncheckedCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberUncheckedCreateNestedManyWithoutRevokedByInput
 }
 
-export type MemberCreateOrConnectWithoutArtistsCreatedInput = {
+export type MemberCreateOrConnectWithoutArtistsAddedInput = {
   where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutArtistsCreatedInput, Prisma.MemberUncheckedCreateWithoutArtistsCreatedInput>
+  create: Prisma.XOR<Prisma.MemberCreateWithoutArtistsAddedInput, Prisma.MemberUncheckedCreateWithoutArtistsAddedInput>
 }
 
-export type MemberUpsertWithoutArtistsCreatedInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutArtistsCreatedInput, Prisma.MemberUncheckedUpdateWithoutArtistsCreatedInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutArtistsCreatedInput, Prisma.MemberUncheckedCreateWithoutArtistsCreatedInput>
+export type MemberUpsertWithoutArtistsAddedInput = {
+  update: Prisma.XOR<Prisma.MemberUpdateWithoutArtistsAddedInput, Prisma.MemberUncheckedUpdateWithoutArtistsAddedInput>
+  create: Prisma.XOR<Prisma.MemberCreateWithoutArtistsAddedInput, Prisma.MemberUncheckedCreateWithoutArtistsAddedInput>
   where?: Prisma.MemberWhereInput
 }
 
-export type MemberUpdateToOneWithWhereWithoutArtistsCreatedInput = {
+export type MemberUpdateToOneWithWhereWithoutArtistsAddedInput = {
   where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutArtistsCreatedInput, Prisma.MemberUncheckedUpdateWithoutArtistsCreatedInput>
+  data: Prisma.XOR<Prisma.MemberUpdateWithoutArtistsAddedInput, Prisma.MemberUncheckedUpdateWithoutArtistsAddedInput>
 }
 
-export type MemberUpdateWithoutArtistsCreatedInput = {
+export type MemberUpdateWithoutArtistsAddedInput = {
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1211,13 +1211,13 @@ export type MemberUpdateWithoutArtistsCreatedInput = {
   revokedBy?: Prisma.MemberUpdateOneWithoutRevokedMembersNestedInput
   roles?: Prisma.MemberRoleUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUpdateManyWithoutRevokedByNestedInput
 }
 
-export type MemberUncheckedUpdateWithoutArtistsCreatedInput = {
+export type MemberUncheckedUpdateWithoutArtistsAddedInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1227,13 +1227,13 @@ export type MemberUncheckedUpdateWithoutArtistsCreatedInput = {
   isOwner?: Prisma.ProviderUncheckedUpdateOneWithoutOwnerNestedInput
   roles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUncheckedUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUncheckedUpdateManyWithoutRevokedByNestedInput
 }
 
-export type MemberCreateWithoutAlbumsCreatedInput = {
+export type MemberCreateWithoutAlbumsAddedInput = {
   uuid: string
   revokedAt?: Date | string | null
   updatedAt?: Date | string
@@ -1242,13 +1242,13 @@ export type MemberCreateWithoutAlbumsCreatedInput = {
   revokedBy?: Prisma.MemberCreateNestedOneWithoutRevokedMembersInput
   roles?: Prisma.MemberRoleCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberCreateNestedManyWithoutRevokedByInput
 }
 
-export type MemberUncheckedCreateWithoutAlbumsCreatedInput = {
+export type MemberUncheckedCreateWithoutAlbumsAddedInput = {
   id?: number
   uuid: string
   revokedAt?: Date | string | null
@@ -1258,29 +1258,29 @@ export type MemberUncheckedCreateWithoutAlbumsCreatedInput = {
   isOwner?: Prisma.ProviderUncheckedCreateNestedOneWithoutOwnerInput
   roles?: Prisma.MemberRoleUncheckedCreateNestedManyWithoutMemberInput
   rolesCreated?: Prisma.RoleUncheckedCreateNestedManyWithoutAddedByInput
-  musicCreated?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
-  artistsCreated?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
+  musicAdded?: Prisma.MusicUncheckedCreateNestedManyWithoutAddedByInput
+  artistsAdded?: Prisma.ArtistUncheckedCreateNestedManyWithoutAddedByInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedCreateNestedManyWithoutDecidedByInput
   revokedMembers?: Prisma.MemberUncheckedCreateNestedManyWithoutRevokedByInput
 }
 
-export type MemberCreateOrConnectWithoutAlbumsCreatedInput = {
+export type MemberCreateOrConnectWithoutAlbumsAddedInput = {
   where: Prisma.MemberWhereUniqueInput
-  create: Prisma.XOR<Prisma.MemberCreateWithoutAlbumsCreatedInput, Prisma.MemberUncheckedCreateWithoutAlbumsCreatedInput>
+  create: Prisma.XOR<Prisma.MemberCreateWithoutAlbumsAddedInput, Prisma.MemberUncheckedCreateWithoutAlbumsAddedInput>
 }
 
-export type MemberUpsertWithoutAlbumsCreatedInput = {
-  update: Prisma.XOR<Prisma.MemberUpdateWithoutAlbumsCreatedInput, Prisma.MemberUncheckedUpdateWithoutAlbumsCreatedInput>
-  create: Prisma.XOR<Prisma.MemberCreateWithoutAlbumsCreatedInput, Prisma.MemberUncheckedCreateWithoutAlbumsCreatedInput>
+export type MemberUpsertWithoutAlbumsAddedInput = {
+  update: Prisma.XOR<Prisma.MemberUpdateWithoutAlbumsAddedInput, Prisma.MemberUncheckedUpdateWithoutAlbumsAddedInput>
+  create: Prisma.XOR<Prisma.MemberCreateWithoutAlbumsAddedInput, Prisma.MemberUncheckedCreateWithoutAlbumsAddedInput>
   where?: Prisma.MemberWhereInput
 }
 
-export type MemberUpdateToOneWithWhereWithoutAlbumsCreatedInput = {
+export type MemberUpdateToOneWithWhereWithoutAlbumsAddedInput = {
   where?: Prisma.MemberWhereInput
-  data: Prisma.XOR<Prisma.MemberUpdateWithoutAlbumsCreatedInput, Prisma.MemberUncheckedUpdateWithoutAlbumsCreatedInput>
+  data: Prisma.XOR<Prisma.MemberUpdateWithoutAlbumsAddedInput, Prisma.MemberUncheckedUpdateWithoutAlbumsAddedInput>
 }
 
-export type MemberUpdateWithoutAlbumsCreatedInput = {
+export type MemberUpdateWithoutAlbumsAddedInput = {
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1289,13 +1289,13 @@ export type MemberUpdateWithoutAlbumsCreatedInput = {
   revokedBy?: Prisma.MemberUpdateOneWithoutRevokedMembersNestedInput
   roles?: Prisma.MemberRoleUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUpdateManyWithoutRevokedByNestedInput
 }
 
-export type MemberUncheckedUpdateWithoutAlbumsCreatedInput = {
+export type MemberUncheckedUpdateWithoutAlbumsAddedInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1305,8 +1305,8 @@ export type MemberUncheckedUpdateWithoutAlbumsCreatedInput = {
   isOwner?: Prisma.ProviderUncheckedUpdateOneWithoutOwnerNestedInput
   roles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUncheckedUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUncheckedUpdateManyWithoutRevokedByNestedInput
 }
@@ -1327,9 +1327,9 @@ export type MemberUpdateWithoutRevokedByInput = {
   isOwner?: Prisma.ProviderUpdateOneWithoutOwnerNestedInput
   roles?: Prisma.MemberRoleUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUpdateManyWithoutRevokedByNestedInput
 }
@@ -1343,9 +1343,9 @@ export type MemberUncheckedUpdateWithoutRevokedByInput = {
   isOwner?: Prisma.ProviderUncheckedUpdateOneWithoutOwnerNestedInput
   roles?: Prisma.MemberRoleUncheckedUpdateManyWithoutMemberNestedInput
   rolesCreated?: Prisma.RoleUncheckedUpdateManyWithoutAddedByNestedInput
-  musicCreated?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
-  artistsCreated?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
-  albumsCreated?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
+  musicAdded?: Prisma.MusicUncheckedUpdateManyWithoutAddedByNestedInput
+  artistsAdded?: Prisma.ArtistUncheckedUpdateManyWithoutAddedByNestedInput
+  albumsAdded?: Prisma.AlbumUncheckedUpdateManyWithoutAddedByNestedInput
   accessRequestsManaged?: Prisma.AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput
   revokedMembers?: Prisma.MemberUncheckedUpdateManyWithoutRevokedByNestedInput
 }
@@ -1366,9 +1366,9 @@ export type MemberUncheckedUpdateManyWithoutRevokedByInput = {
 export type MemberCountOutputType = {
   roles: number
   rolesCreated: number
-  musicCreated: number
-  artistsCreated: number
-  albumsCreated: number
+  musicAdded: number
+  artistsAdded: number
+  albumsAdded: number
   accessRequestsManaged: number
   revokedMembers: number
 }
@@ -1376,9 +1376,9 @@ export type MemberCountOutputType = {
 export type MemberCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   roles?: boolean | MemberCountOutputTypeCountRolesArgs
   rolesCreated?: boolean | MemberCountOutputTypeCountRolesCreatedArgs
-  musicCreated?: boolean | MemberCountOutputTypeCountMusicCreatedArgs
-  artistsCreated?: boolean | MemberCountOutputTypeCountArtistsCreatedArgs
-  albumsCreated?: boolean | MemberCountOutputTypeCountAlbumsCreatedArgs
+  musicAdded?: boolean | MemberCountOutputTypeCountMusicAddedArgs
+  artistsAdded?: boolean | MemberCountOutputTypeCountArtistsAddedArgs
+  albumsAdded?: boolean | MemberCountOutputTypeCountAlbumsAddedArgs
   accessRequestsManaged?: boolean | MemberCountOutputTypeCountAccessRequestsManagedArgs
   revokedMembers?: boolean | MemberCountOutputTypeCountRevokedMembersArgs
 }
@@ -1410,21 +1410,21 @@ export type MemberCountOutputTypeCountRolesCreatedArgs<ExtArgs extends runtime.T
 /**
  * MemberCountOutputType without action
  */
-export type MemberCountOutputTypeCountMusicCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type MemberCountOutputTypeCountMusicAddedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.MusicWhereInput
 }
 
 /**
  * MemberCountOutputType without action
  */
-export type MemberCountOutputTypeCountArtistsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type MemberCountOutputTypeCountArtistsAddedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ArtistWhereInput
 }
 
 /**
  * MemberCountOutputType without action
  */
-export type MemberCountOutputTypeCountAlbumsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type MemberCountOutputTypeCountAlbumsAddedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AlbumWhereInput
 }
 
@@ -1454,9 +1454,9 @@ export type MemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   revokedBy?: boolean | Prisma.Member$revokedByArgs<ExtArgs>
   roles?: boolean | Prisma.Member$rolesArgs<ExtArgs>
   rolesCreated?: boolean | Prisma.Member$rolesCreatedArgs<ExtArgs>
-  musicCreated?: boolean | Prisma.Member$musicCreatedArgs<ExtArgs>
-  artistsCreated?: boolean | Prisma.Member$artistsCreatedArgs<ExtArgs>
-  albumsCreated?: boolean | Prisma.Member$albumsCreatedArgs<ExtArgs>
+  musicAdded?: boolean | Prisma.Member$musicAddedArgs<ExtArgs>
+  artistsAdded?: boolean | Prisma.Member$artistsAddedArgs<ExtArgs>
+  albumsAdded?: boolean | Prisma.Member$albumsAddedArgs<ExtArgs>
   accessRequestsManaged?: boolean | Prisma.Member$accessRequestsManagedArgs<ExtArgs>
   revokedMembers?: boolean | Prisma.Member$revokedMembersArgs<ExtArgs>
   _count?: boolean | Prisma.MemberCountOutputTypeDefaultArgs<ExtArgs>
@@ -1497,9 +1497,9 @@ export type MemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   revokedBy?: boolean | Prisma.Member$revokedByArgs<ExtArgs>
   roles?: boolean | Prisma.Member$rolesArgs<ExtArgs>
   rolesCreated?: boolean | Prisma.Member$rolesCreatedArgs<ExtArgs>
-  musicCreated?: boolean | Prisma.Member$musicCreatedArgs<ExtArgs>
-  artistsCreated?: boolean | Prisma.Member$artistsCreatedArgs<ExtArgs>
-  albumsCreated?: boolean | Prisma.Member$albumsCreatedArgs<ExtArgs>
+  musicAdded?: boolean | Prisma.Member$musicAddedArgs<ExtArgs>
+  artistsAdded?: boolean | Prisma.Member$artistsAddedArgs<ExtArgs>
+  albumsAdded?: boolean | Prisma.Member$albumsAddedArgs<ExtArgs>
   accessRequestsManaged?: boolean | Prisma.Member$accessRequestsManagedArgs<ExtArgs>
   revokedMembers?: boolean | Prisma.Member$revokedMembersArgs<ExtArgs>
   _count?: boolean | Prisma.MemberCountOutputTypeDefaultArgs<ExtArgs>
@@ -1518,9 +1518,9 @@ export type $MemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     revokedBy: Prisma.$MemberPayload<ExtArgs> | null
     roles: Prisma.$MemberRolePayload<ExtArgs>[]
     rolesCreated: Prisma.$RolePayload<ExtArgs>[]
-    musicCreated: Prisma.$MusicPayload<ExtArgs>[]
-    artistsCreated: Prisma.$ArtistPayload<ExtArgs>[]
-    albumsCreated: Prisma.$AlbumPayload<ExtArgs>[]
+    musicAdded: Prisma.$MusicPayload<ExtArgs>[]
+    artistsAdded: Prisma.$ArtistPayload<ExtArgs>[]
+    albumsAdded: Prisma.$AlbumPayload<ExtArgs>[]
     accessRequestsManaged: Prisma.$AccessRequestPayload<ExtArgs>[]
     revokedMembers: Prisma.$MemberPayload<ExtArgs>[]
   }
@@ -1929,9 +1929,9 @@ export interface Prisma__MemberClient<T, Null = never, ExtArgs extends runtime.T
   revokedBy<T extends Prisma.Member$revokedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$revokedByArgs<ExtArgs>>): Prisma.Prisma__MemberClient<runtime.Types.Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   roles<T extends Prisma.Member$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   rolesCreated<T extends Prisma.Member$rolesCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$rolesCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  musicCreated<T extends Prisma.Member$musicCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$musicCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  artistsCreated<T extends Prisma.Member$artistsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$artistsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArtistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  albumsCreated<T extends Prisma.Member$albumsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$albumsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  musicAdded<T extends Prisma.Member$musicAddedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$musicAddedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  artistsAdded<T extends Prisma.Member$artistsAddedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$artistsAddedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArtistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  albumsAdded<T extends Prisma.Member$albumsAddedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$albumsAddedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accessRequestsManaged<T extends Prisma.Member$accessRequestsManagedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$accessRequestsManagedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   revokedMembers<T extends Prisma.Member$revokedMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Member$revokedMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2456,9 +2456,9 @@ export type Member$rolesCreatedArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Member.musicCreated
+ * Member.musicAdded
  */
-export type Member$musicCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Member$musicAddedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Music
    */
@@ -2480,9 +2480,9 @@ export type Member$musicCreatedArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Member.artistsCreated
+ * Member.artistsAdded
  */
-export type Member$artistsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Member$artistsAddedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Artist
    */
@@ -2504,9 +2504,9 @@ export type Member$artistsCreatedArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
- * Member.albumsCreated
+ * Member.albumsAdded
  */
-export type Member$albumsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Member$albumsAddedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Album
    */

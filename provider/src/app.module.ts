@@ -1,11 +1,31 @@
-import { PrismaModule } from './core/prisma/prisma.module';
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from "@nestjs/common";
+import { TsRestModule } from "@ts-rest/nest";
+import { AuthModule } from "./core/auth/auth.module";
+import { PrismaModule } from "./core/prisma/prisma.module";
+import { AccessRequestsModule } from "./access-requests/access-requests.module";
+import { AlbumsModule } from "./albums/albums.module";
+import { ArtistsModule } from "./artists/artists.module";
+import { InfoModule } from "./info/info.module";
+import { MediaModule } from "./media/media.module";
+import { MembersModule } from "./members/members.module";
+import { MusicModule } from "./music/music.module";
+import { RolesModule } from "./roles/roles.module";
+import { SettingsModule } from "./settings/settings.module";
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [
+		TsRestModule.register({ validateResponses: true }),
+		PrismaModule,
+		AuthModule,
+		InfoModule,
+		AccessRequestsModule,
+		MembersModule,
+		RolesModule,
+		SettingsModule,
+		MusicModule,
+		ArtistsModule,
+		AlbumsModule,
+		MediaModule,
+	],
 })
-export class AppModule { }
+export class AppModule {}

@@ -39,6 +39,7 @@ export type AccessRequestSumAggregateOutputType = {
 export type AccessRequestMinAggregateOutputType = {
   id: number | null
   uuid: string | null
+  userUuid: string | null
   status: $Enums.RequestStatus | null
   decidedById: number | null
   decidedAt: Date | null
@@ -49,6 +50,7 @@ export type AccessRequestMinAggregateOutputType = {
 export type AccessRequestMaxAggregateOutputType = {
   id: number | null
   uuid: string | null
+  userUuid: string | null
   status: $Enums.RequestStatus | null
   decidedById: number | null
   decidedAt: Date | null
@@ -59,6 +61,7 @@ export type AccessRequestMaxAggregateOutputType = {
 export type AccessRequestCountAggregateOutputType = {
   id: number
   uuid: number
+  userUuid: number
   status: number
   decidedById: number
   decidedAt: number
@@ -81,6 +84,7 @@ export type AccessRequestSumAggregateInputType = {
 export type AccessRequestMinAggregateInputType = {
   id?: true
   uuid?: true
+  userUuid?: true
   status?: true
   decidedById?: true
   decidedAt?: true
@@ -91,6 +95,7 @@ export type AccessRequestMinAggregateInputType = {
 export type AccessRequestMaxAggregateInputType = {
   id?: true
   uuid?: true
+  userUuid?: true
   status?: true
   decidedById?: true
   decidedAt?: true
@@ -101,6 +106,7 @@ export type AccessRequestMaxAggregateInputType = {
 export type AccessRequestCountAggregateInputType = {
   id?: true
   uuid?: true
+  userUuid?: true
   status?: true
   decidedById?: true
   decidedAt?: true
@@ -198,6 +204,7 @@ export type AccessRequestGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type AccessRequestGroupByOutputType = {
   id: number
   uuid: string
+  userUuid: string
   status: $Enums.RequestStatus
   decidedById: number | null
   decidedAt: Date | null
@@ -231,6 +238,7 @@ export type AccessRequestWhereInput = {
   NOT?: Prisma.AccessRequestWhereInput | Prisma.AccessRequestWhereInput[]
   id?: Prisma.IntFilter<"AccessRequest"> | number
   uuid?: Prisma.StringFilter<"AccessRequest"> | string
+  userUuid?: Prisma.StringFilter<"AccessRequest"> | string
   status?: Prisma.EnumRequestStatusFilter<"AccessRequest"> | $Enums.RequestStatus
   decidedById?: Prisma.IntNullableFilter<"AccessRequest"> | number | null
   decidedAt?: Prisma.DateTimeNullableFilter<"AccessRequest"> | Date | string | null
@@ -242,6 +250,7 @@ export type AccessRequestWhereInput = {
 export type AccessRequestOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   uuid?: Prisma.SortOrder
+  userUuid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   decidedById?: Prisma.SortOrderInput | Prisma.SortOrder
   decidedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -252,21 +261,23 @@ export type AccessRequestOrderByWithRelationInput = {
 
 export type AccessRequestWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  uuid?: string
   AND?: Prisma.AccessRequestWhereInput | Prisma.AccessRequestWhereInput[]
   OR?: Prisma.AccessRequestWhereInput[]
   NOT?: Prisma.AccessRequestWhereInput | Prisma.AccessRequestWhereInput[]
-  uuid?: Prisma.StringFilter<"AccessRequest"> | string
+  userUuid?: Prisma.StringFilter<"AccessRequest"> | string
   status?: Prisma.EnumRequestStatusFilter<"AccessRequest"> | $Enums.RequestStatus
   decidedById?: Prisma.IntNullableFilter<"AccessRequest"> | number | null
   decidedAt?: Prisma.DateTimeNullableFilter<"AccessRequest"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"AccessRequest"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"AccessRequest"> | Date | string
   decidedBy?: Prisma.XOR<Prisma.MemberNullableScalarRelationFilter, Prisma.MemberWhereInput> | null
-}, "id">
+}, "id" | "uuid">
 
 export type AccessRequestOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   uuid?: Prisma.SortOrder
+  userUuid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   decidedById?: Prisma.SortOrderInput | Prisma.SortOrder
   decidedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -285,6 +296,7 @@ export type AccessRequestScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AccessRequestScalarWhereWithAggregatesInput | Prisma.AccessRequestScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"AccessRequest"> | number
   uuid?: Prisma.StringWithAggregatesFilter<"AccessRequest"> | string
+  userUuid?: Prisma.StringWithAggregatesFilter<"AccessRequest"> | string
   status?: Prisma.EnumRequestStatusWithAggregatesFilter<"AccessRequest"> | $Enums.RequestStatus
   decidedById?: Prisma.IntNullableWithAggregatesFilter<"AccessRequest"> | number | null
   decidedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AccessRequest"> | Date | string | null
@@ -293,7 +305,8 @@ export type AccessRequestScalarWhereWithAggregatesInput = {
 }
 
 export type AccessRequestCreateInput = {
-  uuid: string
+  uuid?: string
+  userUuid: string
   status?: $Enums.RequestStatus
   decidedAt?: Date | string | null
   updatedAt?: Date | string
@@ -303,7 +316,8 @@ export type AccessRequestCreateInput = {
 
 export type AccessRequestUncheckedCreateInput = {
   id?: number
-  uuid: string
+  uuid?: string
+  userUuid: string
   status?: $Enums.RequestStatus
   decidedById?: number | null
   decidedAt?: Date | string | null
@@ -313,6 +327,7 @@ export type AccessRequestUncheckedCreateInput = {
 
 export type AccessRequestUpdateInput = {
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  userUuid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
   decidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -323,6 +338,7 @@ export type AccessRequestUpdateInput = {
 export type AccessRequestUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  userUuid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
   decidedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   decidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -332,7 +348,8 @@ export type AccessRequestUncheckedUpdateInput = {
 
 export type AccessRequestCreateManyInput = {
   id?: number
-  uuid: string
+  uuid?: string
+  userUuid: string
   status?: $Enums.RequestStatus
   decidedById?: number | null
   decidedAt?: Date | string | null
@@ -342,6 +359,7 @@ export type AccessRequestCreateManyInput = {
 
 export type AccessRequestUpdateManyMutationInput = {
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  userUuid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
   decidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -351,6 +369,7 @@ export type AccessRequestUpdateManyMutationInput = {
 export type AccessRequestUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  userUuid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
   decidedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   decidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -361,6 +380,7 @@ export type AccessRequestUncheckedUpdateManyInput = {
 export type AccessRequestCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   uuid?: Prisma.SortOrder
+  userUuid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   decidedById?: Prisma.SortOrder
   decidedAt?: Prisma.SortOrder
@@ -376,6 +396,7 @@ export type AccessRequestAvgOrderByAggregateInput = {
 export type AccessRequestMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   uuid?: Prisma.SortOrder
+  userUuid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   decidedById?: Prisma.SortOrder
   decidedAt?: Prisma.SortOrder
@@ -386,6 +407,7 @@ export type AccessRequestMaxOrderByAggregateInput = {
 export type AccessRequestMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   uuid?: Prisma.SortOrder
+  userUuid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   decidedById?: Prisma.SortOrder
   decidedAt?: Prisma.SortOrder
@@ -463,7 +485,8 @@ export type AccessRequestUncheckedUpdateManyWithoutDecidedByNestedInput = {
 }
 
 export type AccessRequestCreateWithoutDecidedByInput = {
-  uuid: string
+  uuid?: string
+  userUuid: string
   status?: $Enums.RequestStatus
   decidedAt?: Date | string | null
   updatedAt?: Date | string
@@ -472,7 +495,8 @@ export type AccessRequestCreateWithoutDecidedByInput = {
 
 export type AccessRequestUncheckedCreateWithoutDecidedByInput = {
   id?: number
-  uuid: string
+  uuid?: string
+  userUuid: string
   status?: $Enums.RequestStatus
   decidedAt?: Date | string | null
   updatedAt?: Date | string
@@ -511,6 +535,7 @@ export type AccessRequestScalarWhereInput = {
   NOT?: Prisma.AccessRequestScalarWhereInput | Prisma.AccessRequestScalarWhereInput[]
   id?: Prisma.IntFilter<"AccessRequest"> | number
   uuid?: Prisma.StringFilter<"AccessRequest"> | string
+  userUuid?: Prisma.StringFilter<"AccessRequest"> | string
   status?: Prisma.EnumRequestStatusFilter<"AccessRequest"> | $Enums.RequestStatus
   decidedById?: Prisma.IntNullableFilter<"AccessRequest"> | number | null
   decidedAt?: Prisma.DateTimeNullableFilter<"AccessRequest"> | Date | string | null
@@ -520,7 +545,8 @@ export type AccessRequestScalarWhereInput = {
 
 export type AccessRequestCreateManyDecidedByInput = {
   id?: number
-  uuid: string
+  uuid?: string
+  userUuid: string
   status?: $Enums.RequestStatus
   decidedAt?: Date | string | null
   updatedAt?: Date | string
@@ -529,6 +555,7 @@ export type AccessRequestCreateManyDecidedByInput = {
 
 export type AccessRequestUpdateWithoutDecidedByInput = {
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  userUuid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
   decidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -538,6 +565,7 @@ export type AccessRequestUpdateWithoutDecidedByInput = {
 export type AccessRequestUncheckedUpdateWithoutDecidedByInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  userUuid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
   decidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -547,6 +575,7 @@ export type AccessRequestUncheckedUpdateWithoutDecidedByInput = {
 export type AccessRequestUncheckedUpdateManyWithoutDecidedByInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  userUuid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
   decidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -558,6 +587,7 @@ export type AccessRequestUncheckedUpdateManyWithoutDecidedByInput = {
 export type AccessRequestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   uuid?: boolean
+  userUuid?: boolean
   status?: boolean
   decidedById?: boolean
   decidedAt?: boolean
@@ -569,6 +599,7 @@ export type AccessRequestSelect<ExtArgs extends runtime.Types.Extensions.Interna
 export type AccessRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   uuid?: boolean
+  userUuid?: boolean
   status?: boolean
   decidedById?: boolean
   decidedAt?: boolean
@@ -580,6 +611,7 @@ export type AccessRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Types
 export type AccessRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   uuid?: boolean
+  userUuid?: boolean
   status?: boolean
   decidedById?: boolean
   decidedAt?: boolean
@@ -591,6 +623,7 @@ export type AccessRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type AccessRequestSelectScalar = {
   id?: boolean
   uuid?: boolean
+  userUuid?: boolean
   status?: boolean
   decidedById?: boolean
   decidedAt?: boolean
@@ -598,7 +631,7 @@ export type AccessRequestSelectScalar = {
   createdAt?: boolean
 }
 
-export type AccessRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "uuid" | "status" | "decidedById" | "decidedAt" | "updatedAt" | "createdAt", ExtArgs["result"]["accessRequest"]>
+export type AccessRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "uuid" | "userUuid" | "status" | "decidedById" | "decidedAt" | "updatedAt" | "createdAt", ExtArgs["result"]["accessRequest"]>
 export type AccessRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   decidedBy?: boolean | Prisma.AccessRequest$decidedByArgs<ExtArgs>
 }
@@ -617,6 +650,7 @@ export type $AccessRequestPayload<ExtArgs extends runtime.Types.Extensions.Inter
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     uuid: string
+    userUuid: string
     status: $Enums.RequestStatus
     decidedById: number | null
     decidedAt: Date | null
@@ -1048,6 +1082,7 @@ export interface Prisma__AccessRequestClient<T, Null = never, ExtArgs extends ru
 export interface AccessRequestFieldRefs {
   readonly id: Prisma.FieldRef<"AccessRequest", 'Int'>
   readonly uuid: Prisma.FieldRef<"AccessRequest", 'String'>
+  readonly userUuid: Prisma.FieldRef<"AccessRequest", 'String'>
   readonly status: Prisma.FieldRef<"AccessRequest", 'RequestStatus'>
   readonly decidedById: Prisma.FieldRef<"AccessRequest", 'Int'>
   readonly decidedAt: Prisma.FieldRef<"AccessRequest", 'DateTime'>
