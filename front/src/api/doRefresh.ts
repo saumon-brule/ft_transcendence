@@ -11,11 +11,11 @@ let refreshPromise: Promise<string | null> | null = null;
 export async function doRefresh(): Promise<string | null> {
 	if (refreshPromise) return refreshPromise;
 
-	refreshPromise = refreshClient.refresh().
-		then((r) => r.status === 200
+	refreshPromise = refreshClient.refresh()
+		.then((r) => r.status === 200
 			? r.body.accessToken
-			: null).
-		finally(() => { refreshPromise = null; });
+			: null)
+		.finally(() => { refreshPromise = null; });
 
 	return refreshPromise;
 }
