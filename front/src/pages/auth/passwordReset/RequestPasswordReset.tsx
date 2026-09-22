@@ -1,7 +1,7 @@
 
 import { useTranslation } from "~/i18n/context";
 import TextInput from "~/components/ui/TextInput";
-import { authContract } from "@42eat-web/shared";
+import { authContract } from "@flex/shared";
 import { validateFromZod } from "~/utils/validateFromZod";
 import Button from "~/components/ui/Button";
 import Form from "~/components/ui/Form/Form";
@@ -38,11 +38,11 @@ export default function RequestPasswordReset() {
 					ref={(e) => emailInput = e.htmlElement}
 					type="email"
 					required
-					disabled={requestPasswordReset.isPending}
+					disabled={requestPasswordReset.status === "loading"}
 					placeholder={t("pages.requestPasswordReset.input.placeholder")}
 					validator={(e) => validateFromZod(authContract.requestPasswordReset.body.shape.email, e.value)}
 				/>
-				<Button type="submit" style={{ transition: requestPasswordReset.isPending ? "0ms" : undefined }} disabled={requestPasswordReset.isPending}>{"->"}</Button>
+				<Button type="submit" style={{ transition: requestPasswordReset.status === "loading" ? "0ms" : undefined }} disabled={requestPasswordReset.status === "loading"}>{"->"}</Button>
 			</div>
 		</Form>
 		<Show when={requestPasswordReset.isError && requestPasswordReset.error} keyed>

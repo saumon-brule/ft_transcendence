@@ -3,6 +3,7 @@ import { z } from "zod";
 export const code403 = [
 	"INVALID_PERMISSION",
 	"EMAIL_NOT_VERIFIED",
+	"ALREADY_LOGGED_IN",
 	"FORBIDDEN",
 ] as const;
 

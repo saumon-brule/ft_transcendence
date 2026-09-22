@@ -3,15 +3,15 @@ import { AuthService } from "./auth.service";
 import type { Response, Request } from "express";
 import { JwtAuthRefreshGuard } from "../core/guards/jwt-refresh.guard";
 import {
-	type AuthMember,
-	CurrentMember,
-} from "../core/decorators/current-member.decorator";
+	type AuthUser,
+	CurrentUser,
+} from "../core/decorators/current-user.decorator";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
-import { authContract } from "@42eat-web/shared";
+import { authContract } from "@flex/shared";
 import {
 	JwtAuthGuard,
 	JwtAuthGuardWithoutEmailVerif,
-	JwtAuthOptionalGuard,
+	JwtNoAuthGuard,
 } from "../core/guards/jwt-auth.guard";
 import { Throttle } from "@nestjs/throttler";
 import { env } from "../core/env";
@@ -42,6 +42,7 @@ export class AuthController {
 	}
 
 	@Throttle({ default: { limit: 3, ttl: 60000 } })
+	@UseGuards(JwtNoAuthGuard)
 	@TsRestHandler(authContract.register)
 	public register(
 		@Req() req: Request,
@@ -61,6 +62,7 @@ export class AuthController {
 	}
 
 	@Throttle({ default: { limit: 20, ttl: 60000 } })
+	@UseGuards(JwtNoAuthGuard)
 	@TsRestHandler(authContract.login)
 	public login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
 		return tsRestHandler(authContract.login, async ({ body }) => {
@@ -79,11 +81,11 @@ export class AuthController {
 	@TsRestHandler(authContract.logout)
 	@UseGuards(JwtAuthRefreshGuard)
 	public logout(
-		@CurrentMember() member: AuthMember,
+		@CurrentUser() user: AuthUser,
 		@Res({ passthrough: true }) res: Response,
 	) {
 		return tsRestHandler(authContract.logout, async () => {
-			await this.authService.logout(member.id, member.jti);
+			await this.authService.logout(user.uuid, user.jti);
 
 			this.setRefreshTokenCookie(res, null);
 
@@ -94,14 +96,14 @@ export class AuthController {
 	@TsRestHandler(authContract.refresh)
 	@UseGuards(JwtAuthRefreshGuard)
 	public refresh(
-		@CurrentMember() member: AuthMember,
+		@CurrentUser() user: AuthUser,
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response,
 	) {
 		return tsRestHandler(authContract.refresh, async () => {
 			const { accessToken, refreshToken } = await this.authService.refresh(
-				member.id,
-				member.jti,
+				user.uuid,
+				user.jti,
 				req.headers["user-agent"],
 				req.ip,
 			);
@@ -123,19 +125,19 @@ export class AuthController {
 	@Throttle({ default: { limit: 1, ttl: 60000 } })
 	@TsRestHandler(authContract.askNewConfirmationEmail)
 	@UseGuards(JwtAuthGuardWithoutEmailVerif)
-	public askNewConfirmationEmail(@CurrentMember() member: AuthMember) {
+	public askNewConfirmationEmail(@CurrentUser() user: AuthUser) {
 		return tsRestHandler(authContract.askNewConfirmationEmail, async () => {
-			await this.authService.askNewConfirmationEmail(member.id);
+			await this.authService.askNewConfirmationEmail(user.uuid);
 			return { status: 204, body: null };
 		});
 	}
 
 	@TsRestHandler(authContract.changePassword)
 	@UseGuards(JwtAuthGuard)
-	public changePassword(@CurrentMember() member: AuthMember) {
+	public changePassword(@CurrentUser() user: AuthUser) {
 		return tsRestHandler(authContract.changePassword, async ({ body }) => {
 			await this.authService.changePassword(
-				member.id,
+				user.uuid,
 				body.oldPassword,
 				body.newPassword,
 			);
@@ -166,10 +168,10 @@ export class AuthController {
 	@Throttle({ default: { limit: 1, ttl: 60000 } })
 	@TsRestHandler(authContract.requestEmailReset)
 	@UseGuards(JwtAuthGuard)
-	public requestEmailReset(@CurrentMember() member: AuthMember) {
+	public requestEmailReset(@CurrentUser() user: AuthUser) {
 		return tsRestHandler(authContract.requestEmailReset, async ({ body }) => {
 			await this.authService.requestEmailReset(
-				member.id,
+				user.uuid,
 				body.password,
 				body.newEmail,
 			);
@@ -186,29 +188,21 @@ export class AuthController {
 	}
 
 	@Throttle({ default: { limit: 20, ttl: 60000 } })
-	@UseGuards(JwtAuthOptionalGuard)
+	@UseGuards(JwtNoAuthGuard)
 	@TsRestHandler(authContract.redirectLogin42url)
-	public redirectAuth42(@Res() res: Response, @CurrentMember() member?: AuthMember) {
+	public redirectAuth42(@Res() res: Response) {
 		return tsRestHandler(authContract.redirectLogin42url, async () => {
-			let url: string;
-			if (member) url = await this.authService.get42LinkUrl(member.id);
-			else url = await this.authService.get42LoginUrl();
-
-			res.redirect(url);
+			res.redirect(await this.authService.get42LoginUrl());
 			return { status: 302, body: null };
 		});
 	}
 
 	@Throttle({ default: { limit: 20, ttl: 60000 } })
-	@UseGuards(JwtAuthOptionalGuard)
+	@UseGuards(JwtNoAuthGuard)
 	@TsRestHandler(authContract.getLogin42url)
-	public getAuth42Url(@CurrentMember() member?: AuthMember) {
+	public getAuth42Url() {
 		return tsRestHandler(authContract.getLogin42url, async () => {
-			let url: string;
-			if (member) url = await this.authService.get42LinkUrl(member.id);
-			else url = await this.authService.get42LoginUrl();
-
-			return { status: 200, body: { url } };
+			return { status: 200, body: { url: await this.authService.get42LoginUrl() } };
 		});
 	}
 
@@ -229,21 +223,6 @@ export class AuthController {
 			this.setRefreshTokenCookie(res, refreshToken);
 
 			return { status: 200, body: { accessToken } };
-		});
-	}
-
-	@Throttle({ default: { limit: 20, ttl: 60000 } })
-	@UseGuards(JwtAuthGuard)
-	@TsRestHandler(authContract.link42)
-	public link42(@CurrentMember() member: AuthMember) {
-		return tsRestHandler(authContract.link42, async ({ body }) => {
-			await this.authService.link42(
-				member.id,
-				body.code,
-				body.state,
-			);
-
-			return { status: 204, body: null };
 		});
 	}
 

@@ -10,7 +10,7 @@ import "./PromptVerifyEmail.scss";
 export default function PromptVerifyEmail() {
 	const { t } = useTranslation();
 
-	const profile = client.members.profile.createQuery(queryKeys.members.profile, {});
+	const profile = client.users.profile.createQuery(queryKeys.users.profile, {});
 	const logoutMutation = client.auth.logout.createMutation();
 	const resendEmailMutation = client.auth.askNewConfirmationEmail.createMutation();
 

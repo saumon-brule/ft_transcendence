@@ -3,7 +3,7 @@ import {
 	createRoleSchema,
 	editRoleSchema,
 	permissionListSchema,
-	roleMembersResponseSchema,
+	roleUsersResponseSchema,
 	roleResponseSchema,
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
@@ -62,11 +62,11 @@ export const rolesContract = c.router(
 			path: "/",
 			responses: { 200: rolesListResponseSchema },
 		},
-		getRoleMembers: {
+		getRoleUsers: {
 			method: "GET",
-			path: "/:id/members",
+			path: "/:id/users",
 			pathParams: idParamSchema,
-			responses: { 200: roleMembersResponseSchema },
+			responses: { 200: roleUsersResponseSchema },
 		},
 		addRolePermissions: {
 			method: "POST",

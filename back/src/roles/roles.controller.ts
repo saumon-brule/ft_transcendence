@@ -1,15 +1,15 @@
 import { Controller } from "@nestjs/common";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { RequirePermission } from "../core/decorators/require-permission.decorator";
-import { PERMISSIONS } from "@42eat-web/shared";
+import { PERMISSIONS } from "@flex/shared";
 import { RolesService } from "./roles.service";
 import {
 	rolesContract,
-	roleMembersResponseSchema,
+	roleUsersResponseSchema,
 	roleResponseSchema,
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
-} from "@42eat-web/shared";
+} from "@flex/shared";
 
 @Controller()
 export class RolesController {
@@ -81,14 +81,14 @@ export class RolesController {
 		});
 	}
 
-	@TsRestHandler(rolesContract.getRoleMembers)
+	@TsRestHandler(rolesContract.getRoleUsers)
 	@RequirePermission(PERMISSIONS.ROLES.LIST_DETAILED)
-	public getRoleMembers() {
-		return tsRestHandler(rolesContract.getRoleMembers, async ({ params }) => {
-			const roles = await this.rolesService.getRoleMembers(params.id);
+	public getRoleUsers() {
+		return tsRestHandler(rolesContract.getRoleUsers, async ({ params }) => {
+			const roles = await this.rolesService.getRoleUsers(params.id);
 			return {
 				status: 200,
-				body: roleMembersResponseSchema.parse(roles),
+				body: roleUsersResponseSchema.parse(roles),
 			};
 		});
 	}

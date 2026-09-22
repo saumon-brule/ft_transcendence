@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { PrismaService } from "./prisma.service";
-import { PERMISSIONS } from "@42eat-web/shared";
+import { PERMISSIONS } from "@flex/shared";
 import * as bcrypt from "bcrypt";
 import { env } from "../env";
 
@@ -13,13 +13,11 @@ const MANAGER_PERMISSIONS = [
 	PERMISSIONS.ROLES.LIST,
 	PERMISSIONS.ROLES.DETAILS,
 	PERMISSIONS.ROLES.LIST_MEMBERS,
-	PERMISSIONS.SHIFT.GET_SHIFTS,
 ];
 
 const USER_PERMISSIONS = [
 	PERMISSIONS.MEMBERS.MY_PROFILE,
 	PERMISSIONS.ROLES.LIST,
-	PERMISSIONS.SHIFT.GET_SHIFTS,
 ];
 
 @Injectable()
@@ -95,33 +93,34 @@ export class DatabaseBootstrapService implements OnModuleInit {
 
 		const hashedPassword = await bcrypt.hash("abcdefgh", 10);
 
-		const liamMember = await this.prisma.member.upsert({
+		const liamUser = await this.prisma.user.upsert({
 			where: { email: "liam@test.com" },
 			update: {},
 			create: {
 				email: "liam@test.com",
-				login: "lilefebv",
+				username: "Liammmmmmmm",
 				password: hashedPassword,
 				emailValidated: true,
 			},
 		});
 
-		const chantalMember = await this.prisma.member.upsert({
+		const chantalUser = await this.prisma.user.upsert({
 			where: { email: "chantal@test.com" },
 			update: {},
 			create: {
 				email: "chantal@test.com",
-				displayName: "Chantal",
+				username: "Chantal",
 				password: hashedPassword,
 				emailValidated: true,
 			},
 		});
 
-		const machinMember = await this.prisma.member.upsert({
+		const machinUser = await this.prisma.user.upsert({
 			where: { email: "machin@test.com" },
 			update: {},
 			create: {
 				email: "machin@test.com",
+				username: "Machin",
 				password: hashedPassword,
 				emailValidated: true,
 			},
@@ -131,83 +130,33 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			"Users created : liam@test.com, chantal@test.com, machin@test.com",
 		);
 
-		// ─── Member roles ─────────────────────────────────────────────────────────────
+		// ─── User roles ─────────────────────────────────────────────────────────────
 
-		await this.prisma.memberRole.upsert({
+		await this.prisma.userRole.upsert({
 			where: {
-				memberId_roleId: { memberId: liamMember.id, roleId: bigboss.id },
+				userId_roleId: { userId: liamUser.id, roleId: bigboss.id },
 			},
 			update: {},
-			create: { memberId: liamMember.id, roleId: bigboss.id },
+			create: { userId: liamUser.id, roleId: bigboss.id },
 		});
 
-		await this.prisma.memberRole.upsert({
+		await this.prisma.userRole.upsert({
 			where: {
-				memberId_roleId: { memberId: chantalMember.id, roleId: manager.id },
+				userId_roleId: { userId: chantalUser.id, roleId: manager.id },
 			},
 			update: {},
-			create: { memberId: chantalMember.id, roleId: manager.id },
+			create: { userId: chantalUser.id, roleId: manager.id },
 		});
 
-		await this.prisma.memberRole.upsert({
+		await this.prisma.userRole.upsert({
 			where: {
-				memberId_roleId: { memberId: machinMember.id, roleId: user.id },
+				userId_roleId: { userId: machinUser.id, roleId: user.id },
 			},
 			update: {},
-			create: { memberId: machinMember.id, roleId: user.id },
+			create: { userId: machinUser.id, roleId: user.id },
 		});
 
 		console.log("Roles asignated : liam→bigboss, chantal→manager, machin→user");
-
-		// ─── Shifts ───────────────────────────────────────────────────────────────────
-
-		await this.prisma.shiftType.upsert({
-			where: { type: "Midi" },
-			update: {},
-			create: {
-				type: "Midi",
-			},
-		});
-		await this.prisma.shiftType.upsert({
-			where: { type: "Soir" },
-			update: {},
-			create: {
-				type: "Soir",
-			},
-		});
-		await this.prisma.shiftType.upsert({
-			where: { type: "Gouter" },
-			update: {},
-			create: {
-				type: "Gouter",
-			},
-		});
-
-		console.log("Shift types inserted");
-
-		await this.prisma.shiftPosition.upsert({
-			where: { position: "Caisse" },
-			update: {},
-			create: {
-				position: "Caisse",
-			},
-		});
-		await this.prisma.shiftPosition.upsert({
-			where: { position: "Croq" },
-			update: {},
-			create: {
-				position: "Croq",
-			},
-		});
-		await this.prisma.shiftPosition.upsert({
-			where: { position: "Wrap" },
-			update: {},
-			create: {
-				position: "Wrap",
-			},
-		});
-
-		console.log("Shift positions inserted");
 
 		console.log("Seed finished!");
 	}

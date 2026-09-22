@@ -1,8 +1,8 @@
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import { Injectable } from "@nestjs/common";
-import { JwtPayload } from "@42eat-web/shared";
-import { AuthMember } from "../../core/decorators/current-member.decorator";
+import { JwtPayload } from "@flex/shared";
+import { AuthUser } from "../../core/decorators/current-user.decorator";
 import { env } from "../../core/env";
 
 @Injectable()
@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		});
 	}
 
-	validate(payload: JwtPayload): AuthMember {
-		return { id: payload.sub, emailValidated: payload.emailVerified };
+	validate(payload: JwtPayload): AuthUser {
+		return { uuid: payload.sub, emailValidated: payload.emailVerified };
 	}
 }

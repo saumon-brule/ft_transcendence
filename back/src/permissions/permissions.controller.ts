@@ -1,8 +1,8 @@
 import { Controller } from "@nestjs/common";
-import { permissionsContract } from "@42eat-web/shared";
+import { permissionsContract } from "@flex/shared";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { RequirePermission } from "../core/decorators/require-permission.decorator";
-import { PERMISSIONS } from "@42eat-web/shared";
+import { PERMISSIONS } from "@flex/shared";
 
 @Controller()
 export class PermissionsController {

@@ -1,5 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from "@nestjs/common";
-import { Code401, Code403, code401, code403 } from "@42eat-web/shared";
+import { Code401, Code403, code401, code403 } from "@flex/shared";
 import { Response } from "express";
 import { Prisma } from "../../generated/prisma/client";
 import { env } from "../env";

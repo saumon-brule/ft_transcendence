@@ -1,7 +1,7 @@
 import globals from "globals"
 import tseslint from "typescript-eslint";
 import stylistic from "@stylistic/eslint-plugin"
-import { localPlugin } from "@42eat-web/shared/eslint-plugin";
+import { localPlugin } from "@flex/shared/eslint-plugin";
 import solid from "eslint-plugin-solid"
 import eslint from "@eslint/js"
 
