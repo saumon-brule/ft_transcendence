@@ -9,6 +9,7 @@ import { client } from "~/api/client";
 import { Match, Show, Switch } from "solid-js";
 import "./RequestPasswordReset.scss";
 import DialogPage from "~/components/ui/DialogPage";
+import LinkParticles from "~/components/ui/LinkParticles";
 
 export default function RequestPasswordReset() {
 	const { t } = useTranslation();
@@ -29,7 +30,7 @@ export default function RequestPasswordReset() {
 		return false;
 	}
 
-	return <DialogPage id="request-password-reset">
+	return <><LinkParticles/><DialogPage id="request-password-reset">
 		<h2>{t("pages.requestPasswordReset.title")}</h2>
 		<p class="description">{t("pages.requestPasswordReset.description")}</p>
 		<Form onSubmit={handleSubmit} >
@@ -64,5 +65,5 @@ export default function RequestPasswordReset() {
 				{t("pages.requestPasswordReset.success")}
 			</p>
 		</Show>
-	</DialogPage>;
+	</DialogPage></>;
 }
