@@ -4,6 +4,7 @@ import "./ComfirmEmail.scss";
 import { A, useLocation } from "@solidjs/router";
 import DialogPage from "~/components/ui/DialogPage";
 import { useTranslation } from "~/i18n/context";
+import LinkParticles from "~/components/ui/LinkParticles";
 
 type State = "WAITING" | "CONFIRMED" | "MISSING_TOKEN" | "ERROR";
 
@@ -30,7 +31,7 @@ export default function ConfirmEmail() {
 		);
 	});
 
-	return <DialogPage id="confirm-email">
+	return <><LinkParticles/><DialogPage id="confirm-email">
 		<h2>{t("pages.confirmEmail.title")}</h2>
 		<hr/>
 		<div class="content">
@@ -52,5 +53,5 @@ export default function ConfirmEmail() {
 				</Match>
 			</Switch>
 		</div>
-	</DialogPage>;
+	</DialogPage></>;
 }

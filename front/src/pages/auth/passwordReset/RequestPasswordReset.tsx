@@ -6,9 +6,10 @@ import { validateFromZod } from "~/utils/validateFromZod";
 import Button from "~/components/ui/Button";
 import Form from "~/components/ui/Form/Form";
 import { client } from "~/api/client";
-import { Match, Show, Switch } from "solid-js";
+import { createEffect, Match, Show, Switch } from "solid-js";
 import "./RequestPasswordReset.scss";
-import DialogPage from "~/components/ui/DialogPage";
+import { A } from "@solidjs/router";
+import { summonSuccessToast } from "~/components/ui/Toaster";
 
 export default function RequestPasswordReset() {
 	const { t } = useTranslation();
@@ -29,40 +30,42 @@ export default function RequestPasswordReset() {
 		return false;
 	}
 
-	return <DialogPage id="request-password-reset">
+	createEffect(() => {
+		if (requestPasswordReset.isSuccess) {
+			summonSuccessToast(t("pages.requestPasswordReset.success"));
+		}
+	});
+
+	return <Form onSubmit={handleSubmit} id="request-password-reset">
 		<h2>{t("pages.requestPasswordReset.title")}</h2>
 		<p class="description">{t("pages.requestPasswordReset.description")}</p>
-		<Form onSubmit={handleSubmit} >
-			<div class="inputs">
-				<TextInput
-					ref={(e) => emailInput = e.htmlElement}
-					type="email"
-					required
-					disabled={requestPasswordReset.status === "loading"}
-					placeholder={t("pages.requestPasswordReset.input.placeholder")}
-					validator={(e) => validateFromZod(authContract.requestPasswordReset.body.shape.email, e.value)}
-				/>
-				<Button type="submit" style={{ transition: requestPasswordReset.status === "loading" ? "0ms" : undefined }} disabled={requestPasswordReset.status === "loading"}>{"->"}</Button>
-			</div>
-		</Form>
-		<Show when={requestPasswordReset.isError && requestPasswordReset.error} keyed>
-			{(error) => <Switch>
-				<Match when={isRateLimitError(error)} keyed>
-					{(rateLimitError) => <p class="invalid-message">
-						{t("pages.requestPasswordReset.rateLimit", { time: rateLimitError.body.retryAfter })}
-					</p>}
-				</Match>
-				<Match when={true}>
-					<p class="invalid-message">
-						{t("errors.unknownFallback")}
-					</p>
-				</Match>
-			</Switch>}
-		</Show>
-		<Show when={requestPasswordReset.isSuccess}>
-			<p class="success-message">
-				{t("pages.requestPasswordReset.success")}
+		<div class="inputs">
+			<TextInput
+				ref={(e) => emailInput = e.htmlElement}
+				type="email"
+				required
+				disabled={requestPasswordReset.status === "loading"}
+				placeholder={t("pages.requestPasswordReset.input.placeholder")}
+				validator={(e) => validateFromZod(authContract.requestPasswordReset.body.shape.email, e.value)}
+			/>
+			<Button type="submit" style={{ transition: requestPasswordReset.status === "loading" ? "0ms" : undefined }} disabled={requestPasswordReset.status === "loading"}>{t("pages.requestPasswordReset.input.button")}</Button>
+			<Show when={requestPasswordReset.isError && requestPasswordReset.error} keyed>
+				{(error) => <Switch>
+					<Match when={isRateLimitError(error)} keyed>
+						{(rateLimitError) => <p class="invalid-message">
+							{t("pages.requestPasswordReset.rateLimit", { time: rateLimitError.body.retryAfter })}
+						</p>}
+					</Match>
+					<Match when={true}>
+						<p class="invalid-message">
+							{t("errors.unknownFallback")}
+						</p>
+					</Match>
+				</Switch>}
+			</Show>
+			<p class="back">
+				<A href="/login">Back to login</A>
 			</p>
-		</Show>
-	</DialogPage>;
+		</div>
+	</Form>;
 }
