@@ -6,6 +6,7 @@ import {
 } from "../core/decorators/current-user.decorator";
 import {
 	profileSchema,
+	userSchema,
 	usersContract,
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
@@ -13,7 +14,7 @@ import {
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { RequirePermission } from "../core/decorators/require-permission.decorator";
 import { PERMISSIONS } from "@flex/shared";
-import { JwtAuthGuardWithoutEmailVerif } from "../core/guards/jwt-auth.guard";
+import { JwtAuthGuardWithoutEmailVerif, JwtAuthGuard } from "../core/guards/jwt-auth.guard";
 
 @Controller()
 export class UsersController {
@@ -25,6 +26,15 @@ export class UsersController {
 		return tsRestHandler(usersContract.profile, async () => {
 			const user = await this.usersService.getByUUID(authUser.uuid);
 			return { status: 200, body: profileSchema.parse(user) };
+		});
+	}
+
+	@TsRestHandler(usersContract.getUser)
+	@UseGuards(JwtAuthGuard)
+	public getUser() {
+		return tsRestHandler(usersContract.getUser, async ({ params }) => {
+			const user = await this.usersService.getExposedInfoByUUID(params.uuid);
+			return { status: 200, body: userSchema.parse(user) };
 		});
 	}
 

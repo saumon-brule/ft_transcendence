@@ -88,6 +88,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   username: 'username',
+  picture: 'picture',
   emailValidated: 'emailValidated',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'
@@ -162,6 +163,7 @@ export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof t
 
 export const ProviderScalarFieldEnum = {
   id: 'id',
+  uuid: 'uuid',
   name: 'name',
   adress: 'adress',
   ownerId: 'ownerId',
@@ -185,6 +187,7 @@ export type ProviderUserScalarFieldEnum = (typeof ProviderUserScalarFieldEnum)[k
 
 export const PlaylistScalarFieldEnum = {
   id: 'id',
+  uuid: 'uuid',
   name: 'name',
   ownerId: 'ownerId',
   createdAt: 'createdAt',

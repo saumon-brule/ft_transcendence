@@ -15,6 +15,7 @@ import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallba
 import FtAuthCallback from "./pages/ftCallback/FtAuthCallback";
 import ResetPassword from "./pages/auth/passwordReset/ResetPassword";
 import RequestPasswordReset from "./pages/auth/passwordReset/RequestPasswordReset";
+import Profile from "./pages/Profile";
 
 export const AppRouter = () => {
 	return <Router >
@@ -35,6 +36,7 @@ export const AppRouter = () => {
 			</Route>
 			<Route path="/" component={VerifiedEmailGuard}>
 				<Route path="/home" component={Home} />
+				<Route path="/user/:uuid" component={Profile} />
 			</Route>
 		</Route>
 	</Router>;

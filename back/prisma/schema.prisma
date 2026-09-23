@@ -16,6 +16,7 @@ model User {
   email          String    @unique
   password       String?
   username       String
+  picture        String?
   emailValidated Boolean   @default(false)
   updatedAt      DateTime? @updatedAt
   createdAt      DateTime? @default(now())
@@ -26,6 +27,7 @@ model User {
   ownedProviders Provider[]
   providers      ProviderUser[]
   playlists      UserPlaylist[]
+  ownedPlaylists  Playlist[]
 }
 
 model Session {
@@ -106,6 +108,7 @@ model AppConfig {
 
 model Provider {
   id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid())
   name      String   @unique
   adress    String   @unique
   ownerId   Int
@@ -132,13 +135,15 @@ model ProviderUser {
 
 model Playlist {
   id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid())
   name      String
   ownerId   Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   userPlaylists UserPlaylist[]
-  musics         PlaylistMusic[]
+  musics        PlaylistMusic[]
+  owner         User     @relation(fields: [ownerId], references: [id])
 }
 
 model UserPlaylist {

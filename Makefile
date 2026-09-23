@@ -6,4 +6,7 @@ init:
 run: init
 	pnpm run dev
 
+migrate:
+	@cd back && npx prisma migrate dev --name init && cd ..
+
 .PHONY: run

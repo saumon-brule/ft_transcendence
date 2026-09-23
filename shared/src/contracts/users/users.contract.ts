@@ -3,12 +3,13 @@ import {
 	addRoleUserSchema,
 	DeleteRoleParamSchema,
 	profileSchema,
+	userSchema,
 } from "./schemas/user.schema";
 import {
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
 } from "../roles/schemas/role.schema";
-import { idParamSchema } from "../schemas/common.schema";
+import { idParamSchema, uuidParamSchema } from "../schemas/common.schema";
 import { errorDefaultSchema } from "../schemas/error-default";
 
 const c = initContract();
@@ -19,6 +20,12 @@ export const usersContract = c.router(
 			method: "GET",
 			path: "/profile",
 			responses: { 200: profileSchema },
+		},
+		getUser: {
+			method: "GET",
+			path: "/:uuid",
+			pathParams: uuidParamSchema,
+			responses: { 200: userSchema },
 		},
 		getUserRoles: {
 			method: "GET",
