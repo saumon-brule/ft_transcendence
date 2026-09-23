@@ -4,10 +4,11 @@ import Button from "~/components/ui/Button";
 import { ButtonProps } from "~/components/ui/Button/Button";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { useTranslation } from "~/i18n/context";
-import "./IntraButton.scss";
 import { encodeOauthState } from "~/utils/encodeOauthState";
 import { MessageEventData } from "~/types/MessageEventData";
 import { useLocation } from "@solidjs/router";
+
+import "./IntraButton.scss";
 
 export type IntraButtonProps = ButtonProps;
 
@@ -55,14 +56,12 @@ export default function IntraButton(props: IntraButtonProps) {
 		}
 	}
 
-	return (
-		<Button
-			type="button"
-			class={`ft-login-button ${local.class ?? ""}`}
-			disabled={fetchingUrl()}
-			onAuxClick={(e) => void handleClick(e)}
-			onClick={(e) => void handleClick(e)}
-			{...rest}
-		/>
-	);
+	return <Button
+		type="button"
+		class={`ft-login-button ${local.class ?? ""}`}
+		disabled={fetchingUrl()}
+		onAuxClick={(e) => void handleClick(e)}
+		onClick={(e) => void handleClick(e)}
+		{...rest}
+	/>;
 }
