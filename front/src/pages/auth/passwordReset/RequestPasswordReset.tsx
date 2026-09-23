@@ -6,9 +6,10 @@ import { validateFromZod } from "~/utils/validateFromZod";
 import Button from "~/components/ui/Button";
 import Form from "~/components/ui/Form/Form";
 import { client } from "~/api/client";
-import { Match, Show, Switch } from "solid-js";
+import { createEffect, Match, Show, Switch } from "solid-js";
 import "./RequestPasswordReset.scss";
 import { A } from "@solidjs/router";
+import { summonSuccessToast } from "~/components/ui/Toaster";
 
 export default function RequestPasswordReset() {
 	const { t } = useTranslation();
@@ -29,6 +30,12 @@ export default function RequestPasswordReset() {
 		return false;
 	}
 
+	createEffect(() => {
+		if (requestPasswordReset.isSuccess) {
+			summonSuccessToast(t("pages.requestPasswordReset.success"));
+		}
+	});
+
 	return <Form onSubmit={handleSubmit} id="request-password-reset">
 		<h2>{t("pages.requestPasswordReset.title")}</h2>
 		<p class="description">{t("pages.requestPasswordReset.description")}</p>
@@ -41,29 +48,24 @@ export default function RequestPasswordReset() {
 				placeholder={t("pages.requestPasswordReset.input.placeholder")}
 				validator={(e) => validateFromZod(authContract.requestPasswordReset.body.shape.email, e.value)}
 			/>
-			<Button type="submit" style={{ transition: requestPasswordReset.status === "loading" ? "0ms" : undefined }} disabled={requestPasswordReset.status === "loading"}>{"Réinitialiser"}</Button>
+			<Button type="submit" style={{ transition: requestPasswordReset.status === "loading" ? "0ms" : undefined }} disabled={requestPasswordReset.status === "loading"}>{t("pages.requestPasswordReset.input.button")}</Button>
+			<Show when={requestPasswordReset.isError && requestPasswordReset.error} keyed>
+				{(error) => <Switch>
+					<Match when={isRateLimitError(error)} keyed>
+						{(rateLimitError) => <p class="invalid-message">
+							{t("pages.requestPasswordReset.rateLimit", { time: rateLimitError.body.retryAfter })}
+						</p>}
+					</Match>
+					<Match when={true}>
+						<p class="invalid-message">
+							{t("errors.unknownFallback")}
+						</p>
+					</Match>
+				</Switch>}
+			</Show>
 			<p class="back">
 				<A href="/login">Back to login</A>
 			</p>
 		</div>
-		<Show when={requestPasswordReset.isError && requestPasswordReset.error} keyed>
-			{(error) => <Switch>
-				<Match when={isRateLimitError(error)} keyed>
-					{(rateLimitError) => <p class="invalid-message">
-						{t("pages.requestPasswordReset.rateLimit", { time: rateLimitError.body.retryAfter })}
-					</p>}
-				</Match>
-				<Match when={true}>
-					<p class="invalid-message">
-						{t("errors.unknownFallback")}
-					</p>
-				</Match>
-			</Switch>}
-		</Show>
-		<Show when={requestPasswordReset.isSuccess}>
-			<p class="success-message">
-				{t("pages.requestPasswordReset.success")}
-			</p>
-		</Show>
 	</Form>;
 }

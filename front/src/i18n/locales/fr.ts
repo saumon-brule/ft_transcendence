@@ -42,6 +42,7 @@ export default {
 			success: "Si un compte est associé à cette adresse email, vous recevrez un lien pour réinitialiser votre mot de passe",
 			input: {
 				placeholder: "Adresse email",
+				button: "Réinitialiser",
 			},
 		},
 		resetPassword: {

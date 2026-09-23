@@ -51,8 +51,8 @@ export default function RegisterForm() {
 
 	return <Form onSubmit={handleSubmit} id="register-form">
 		<div class="register-inputs">
-			<TextInput ref={(e) => usernameInput = e.htmlElement} type="text" validator={(e) => validateFromZod(registerSchema.shape.username, e.value)} placeholder="Username" required />
 			<TextInput ref={(e) => emailInput = e.htmlElement} type="email" validator={(e) => validateFromZod(registerSchema.shape.email, e.value)} placeholder="Email" required />
+			<TextInput ref={(e) => usernameInput = e.htmlElement} type="text" validator={(e) => validateFromZod(registerSchema.shape.username, e.value)} placeholder="Username" required />
 			<TextInput ref={(e) => passwordInput = e.htmlElement} type="password" validator={(e) => validateFromZod(registerSchema.shape.password, e.value)} placeholder="Password" required />
 			<TextInput type="password" validator={(e) => e.value !== passwordInput.value && t("errors.input.text.password.confirmationMismatch")} placeholder="Confirm password" />
 			<Show when={error()}>
