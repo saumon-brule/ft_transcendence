@@ -8,8 +8,7 @@ import Form from "~/components/ui/Form/Form";
 import { client } from "~/api/client";
 import { Match, Show, Switch } from "solid-js";
 import "./RequestPasswordReset.scss";
-import DialogPage from "~/components/ui/DialogPage";
-import LinkParticles from "~/components/ui/LinkParticles";
+import { A } from "@solidjs/router";
 
 export default function RequestPasswordReset() {
 	const { t } = useTranslation();
@@ -30,22 +29,23 @@ export default function RequestPasswordReset() {
 		return false;
 	}
 
-	return <><LinkParticles/><DialogPage id="request-password-reset">
+	return <Form onSubmit={handleSubmit} id="request-password-reset">
 		<h2>{t("pages.requestPasswordReset.title")}</h2>
 		<p class="description">{t("pages.requestPasswordReset.description")}</p>
-		<Form onSubmit={handleSubmit} >
-			<div class="inputs">
-				<TextInput
-					ref={(e) => emailInput = e.htmlElement}
-					type="email"
-					required
-					disabled={requestPasswordReset.status === "loading"}
-					placeholder={t("pages.requestPasswordReset.input.placeholder")}
-					validator={(e) => validateFromZod(authContract.requestPasswordReset.body.shape.email, e.value)}
-				/>
-				<Button type="submit" style={{ transition: requestPasswordReset.status === "loading" ? "0ms" : undefined }} disabled={requestPasswordReset.status === "loading"}>{"->"}</Button>
-			</div>
-		</Form>
+		<div class="inputs">
+			<TextInput
+				ref={(e) => emailInput = e.htmlElement}
+				type="email"
+				required
+				disabled={requestPasswordReset.status === "loading"}
+				placeholder={t("pages.requestPasswordReset.input.placeholder")}
+				validator={(e) => validateFromZod(authContract.requestPasswordReset.body.shape.email, e.value)}
+			/>
+			<Button type="submit" style={{ transition: requestPasswordReset.status === "loading" ? "0ms" : undefined }} disabled={requestPasswordReset.status === "loading"}>{"Réinitialiser"}</Button>
+			<p class="back">
+				<A href="/login">Back to login</A>
+			</p>
+		</div>
 		<Show when={requestPasswordReset.isError && requestPasswordReset.error} keyed>
 			{(error) => <Switch>
 				<Match when={isRateLimitError(error)} keyed>
@@ -65,5 +65,5 @@ export default function RequestPasswordReset() {
 				{t("pages.requestPasswordReset.success")}
 			</p>
 		</Show>
-	</DialogPage></>;
+	</Form>;
 }
