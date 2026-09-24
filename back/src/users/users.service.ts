@@ -51,13 +51,21 @@ export class UsersService {
 		return user;
 	}
 
-	public async getExposedInfoByUUID(uuid: string): Promise<User> {
+	public async getExposedInfoByUUID(uuid: string) {
 		const user = await this.prisma.user.findUnique({
 			where: { uuid: uuid },
 			include: {
-				ownedProviders: true,
-				providers: true,
+				ownedProviders: { where: { publicDisplay: true } },
+				providers: {
+					where: {
+						publicDisplay: true,
+						provider: { is: { publicDisplay: true } },
+					},
+					include: { provider: true },
+				},
+				currentlyListening: true,
 				ownedPlaylists: {
+					where: { private: false },
 					include: {
 						_count: {
 							select: { musics: true },
@@ -69,7 +77,11 @@ export class UsersService {
 		if (!user) {
 			throw new NotFoundException("Cannot load the user profile");
 		}
-		return user;
+		if (user.listeningPrivate) {
+			user.currentlyListeningId = null;
+			user.listeningUntil = null;
+		}
+		return { ...user, connectedProviders: user.providers.map((p) => p.provider) };
 	}
 
 	public async createFromIntra(

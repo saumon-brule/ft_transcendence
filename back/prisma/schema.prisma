@@ -11,23 +11,27 @@ datasource db {
 // ─── Auth & Users ───────────────────────────────────────────────────────────
 
 model User {
-  id             Int       @id @default(autoincrement())
-  uuid           String    @unique @default(uuid())
-  email          String    @unique
-  password       String?
-  username       String
-  picture        String?
-  emailValidated Boolean   @default(false)
-  updatedAt      DateTime? @updatedAt
-  createdAt      DateTime? @default(now())
+  id                   Int       @id @default(autoincrement())
+  uuid                 String    @unique @default(uuid())
+  email                String    @unique
+  password             String?
+  username             String
+  picture              String?
+  emailValidated       Boolean   @default(false)
+  currentlyListeningId Int?
+  listeningUntil       DateTime?
+  listeningPrivate     Boolean   @default(false)
+  updatedAt            DateTime? @updatedAt
+  createdAt            DateTime? @default(now())
 
-  userRoles      UserRole[]
-  sessions       Session[]
-  tokens         Token[]
-  ownedProviders Provider[]
-  providers      ProviderUser[]
-  playlists      UserPlaylist[]
-  ownedPlaylists  Playlist[]
+  userRoles          UserRole[]
+  sessions           Session[]
+  tokens             Token[]
+  ownedProviders     Provider[]
+  providers          ProviderUser[]
+  playlists          UserPlaylist[]
+  ownedPlaylists     Playlist[]
+  currentlyListening Music?         @relation(fields: [currentlyListeningId], references: [id])
 }
 
 model Session {
@@ -107,25 +111,27 @@ model AppConfig {
 }
 
 model Provider {
-  id        Int      @id @default(autoincrement())
-  uuid      String   @unique @default(uuid())
-  name      String   @unique
-  adress    String   @unique
-  ownerId   Int
+  id            Int      @id @default(autoincrement())
+  uuid          String   @unique @default(uuid())
+  name          String   @unique
+  adress        String   @unique
+  ownerId       Int
+  publicDisplay Boolean  @default(true)
   //note      Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   users ProviderUser[]
   owner User           @relation(fields: [ownerId], references: [id])
 }
 
 model ProviderUser {
-  id         Int      @id @default(autoincrement())
-  providerId Int
-  userId     Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  providerId    Int
+  userId        Int
+  publicDisplay Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   provider Provider @relation(fields: [providerId], references: [id])
   user     User     @relation(fields: [userId], references: [id])
@@ -138,12 +144,13 @@ model Playlist {
   uuid      String   @unique @default(uuid())
   name      String
   ownerId   Int
+  private   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   userPlaylists UserPlaylist[]
   musics        PlaylistMusic[]
-  owner         User     @relation(fields: [ownerId], references: [id])
+  owner         User            @relation(fields: [ownerId], references: [id])
 }
 
 model UserPlaylist {
@@ -172,12 +179,14 @@ model PlaylistMusic {
 }
 
 model Music {
-  id         Int      @id @default(autoincrement())
-  title      String
-  artist     String
-  duration   Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid())
+  title     String
+  artist    String
+  duration  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  playlistMusics PlaylistMusic[]
+  playlistMusics          PlaylistMusic[]
+  currentlyListeningUsers User[]
 }

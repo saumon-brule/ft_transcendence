@@ -158,6 +158,170 @@ export class DatabaseBootstrapService implements OnModuleInit {
 
 		console.log("Roles asignated : liam→bigboss, chantal→manager, machin→user");
 
+		const privateProvider = await this.prisma.provider.upsert({
+			where: { name: "Liam's Private Provider" },
+			update: {
+				ownerId: liamUser.id,
+				adress: "liam-private-provider",
+				publicDisplay: false,
+			},
+			create: {
+				name: "Liam's Private Provider",
+				adress: "liam-private-provider",
+				ownerId: liamUser.id,
+				publicDisplay: false,
+			},
+		});
+
+		const publicProvider = await this.prisma.provider.upsert({
+			where: { name: "Liam's Public Provider" },
+			update: {
+				ownerId: liamUser.id,
+				adress: "liam-public-provider",
+				publicDisplay: true,
+			},
+			create: {
+				name: "Liam's Public Provider",
+				adress: "liam-public-provider",
+				ownerId: liamUser.id,
+				publicDisplay: true,
+			},
+		});
+
+		await this.prisma.providerUser.upsert({
+			where: {
+				providerId_userId: {
+					providerId: privateProvider.id,
+					userId: liamUser.id,
+				},
+			},
+			update: { publicDisplay: false },
+			create: {
+				providerId: privateProvider.id,
+				userId: liamUser.id,
+				publicDisplay: false,
+			},
+		});
+
+		await this.prisma.providerUser.upsert({
+			where: {
+				providerId_userId: {
+					providerId: publicProvider.id,
+					userId: liamUser.id,
+				},
+			},
+			update: { publicDisplay: true },
+			create: {
+				providerId: publicProvider.id,
+				userId: liamUser.id,
+				publicDisplay: true,
+			},
+		});
+
+		const musicData = [
+			{ title: "Midnight Drive", artist: "Neon Avenue", duration: 214 },
+			{ title: "Afterglow", artist: "Paper Satellites", duration: 189 },
+			{ title: "Static Hearts", artist: "The Frequency", duration: 242 },
+			{ title: "Blue Hour", artist: "Lumen Coast", duration: 201 },
+			{ title: "Last Signal", artist: "Northbound", duration: 227 },
+		];
+		const musics: { id: number }[] = [];
+		for (const data of musicData) {
+			const existingMusic = await this.prisma.music.findFirst({
+				where: { title: data.title, artist: data.artist },
+			});
+			musics.push(
+				existingMusic ?? (await this.prisma.music.create({ data })),
+			);
+		}
+
+		const privatePlaylist = await this.prisma.playlist.findFirst({
+			where: { ownerId: liamUser.id, name: "Liam's Private Playlist" },
+		});
+		let liamPrivatePlaylist = privatePlaylist;
+		if (!liamPrivatePlaylist) {
+			liamPrivatePlaylist = await this.prisma.playlist.create({
+				data: {
+					name: "Liam's Private Playlist",
+					ownerId: liamUser.id,
+					private: true,
+				},
+			});
+		}
+		await this.prisma.playlist.update({
+			where: { id: liamPrivatePlaylist.id },
+			data: { private: true },
+		});
+
+		const publicPlaylist = await this.prisma.playlist.findFirst({
+			where: { ownerId: liamUser.id, name: "Liam's Public Playlist" },
+		});
+		let liamPublicPlaylist = publicPlaylist;
+		if (!liamPublicPlaylist) {
+			liamPublicPlaylist = await this.prisma.playlist.create({
+				data: {
+					name: "Liam's Public Playlist",
+					ownerId: liamUser.id,
+					private: false,
+				},
+			});
+		}
+		await this.prisma.playlist.update({
+			where: { id: liamPublicPlaylist.id },
+			data: { private: false },
+		});
+
+		await this.prisma.userPlaylist.upsert({
+			where: {
+				userId_playlistId: {
+					userId: liamUser.id,
+					playlistId: liamPrivatePlaylist.id,
+				},
+			},
+			update: {},
+			create: {
+				userId: liamUser.id,
+				playlistId: liamPrivatePlaylist.id,
+			},
+		});
+		await this.prisma.userPlaylist.upsert({
+			where: {
+				userId_playlistId: {
+					userId: liamUser.id,
+					playlistId: liamPublicPlaylist.id,
+				},
+			},
+			update: {},
+			create: {
+				userId: liamUser.id,
+				playlistId: liamPublicPlaylist.id,
+			},
+		});
+
+		const addMusicToPlaylist = async (playlistId: number, musicId: number) => {
+			const existingLink = await this.prisma.playlistMusic.findFirst({
+				where: { playlistId, musicId },
+			});
+			if (!existingLink) {
+				await this.prisma.playlistMusic.create({ data: { playlistId, musicId } });
+			}
+		};
+		for (const music of musics.slice(0, 2)) {
+			await addMusicToPlaylist(liamPrivatePlaylist.id, music.id);
+		}
+		for (const music of musics.slice(2)) {
+			await addMusicToPlaylist(liamPublicPlaylist.id, music.id);
+		}
+
+		await this.prisma.user.update({
+			where: { id: liamUser.id },
+			data: {
+				currentlyListeningId: musics[0].id,
+				listeningUntil: new Date(Date.now() + 5 * 60 * 1000),
+				listeningPrivate: false,
+			},
+		});
+
 		console.log("Seed finished!");
 	}
 }

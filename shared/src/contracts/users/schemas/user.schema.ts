@@ -11,13 +11,21 @@ export const providerSchema = z.object({
 	uuid: z.string().uuid(),
 	name: z.string(),
 	adress: z.string(),
+	publicDisplay: z.boolean(),
 });
 export const playlistSchema = z.object({
 	uuid: z.string().uuid(),
 	name: z.string(),
+	private: z.boolean(),
 	_count: z.object({
 		musics: z.number(),
 	}),
+});
+export const musicSchema = z.object({
+	uuid: z.string().uuid(),
+	title: z.string(),
+	artist: z.string(),
+	duration: z.number(),
 });
 
 export const userSchema = z.object({
@@ -25,8 +33,10 @@ export const userSchema = z.object({
 	username: z.string(),
 	picture: z.string().nullable(),
 	createdAt: z.date(),
+	currentlyListening: musicSchema.nullable(),
+	listeningUntil: z.date().nullable(),
 	ownedProviders: z.array(providerSchema),
-	providers: z.array(providerSchema),
+	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
 });
 

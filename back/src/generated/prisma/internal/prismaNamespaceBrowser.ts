@@ -90,6 +90,9 @@ export const UserScalarFieldEnum = {
   username: 'username',
   picture: 'picture',
   emailValidated: 'emailValidated',
+  currentlyListeningId: 'currentlyListeningId',
+  listeningUntil: 'listeningUntil',
+  listeningPrivate: 'listeningPrivate',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'
 } as const
@@ -167,6 +170,7 @@ export const ProviderScalarFieldEnum = {
   name: 'name',
   adress: 'adress',
   ownerId: 'ownerId',
+  publicDisplay: 'publicDisplay',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -178,6 +182,7 @@ export const ProviderUserScalarFieldEnum = {
   id: 'id',
   providerId: 'providerId',
   userId: 'userId',
+  publicDisplay: 'publicDisplay',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -190,6 +195,7 @@ export const PlaylistScalarFieldEnum = {
   uuid: 'uuid',
   name: 'name',
   ownerId: 'ownerId',
+  private: 'private',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -221,6 +227,7 @@ export type PlaylistMusicScalarFieldEnum = (typeof PlaylistMusicScalarFieldEnum)
 
 export const MusicScalarFieldEnum = {
   id: 'id',
+  uuid: 'uuid',
   title: 'title',
   artist: 'artist',
   duration: 'duration',

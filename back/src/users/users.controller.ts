@@ -34,6 +34,7 @@ export class UsersController {
 	public getUser() {
 		return tsRestHandler(usersContract.getUser, async ({ params }) => {
 			const user = await this.usersService.getExposedInfoByUUID(params.uuid);
+			console.log(user);
 			return { status: 200, body: userSchema.parse(user) };
 		});
 	}

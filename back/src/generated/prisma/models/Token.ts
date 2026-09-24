@@ -448,14 +448,6 @@ export type EnumTokenPurposeFieldUpdateOperationsInput = {
   set?: $Enums.TokenPurpose
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type TokenCreateWithoutUserInput = {
   token: string
   purpose: $Enums.TokenPurpose
