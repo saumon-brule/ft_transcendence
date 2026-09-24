@@ -31,7 +31,17 @@ export const musicSchema = z.object({
 export const userSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
-	picture: z.string().nullable(),
+	createdAt: z.date(),
+	currentlyListening: musicSchema.nullable(),
+	listeningUntil: z.date().nullable(),
+	ownedProviders: z.array(providerSchema),
+	connectedProviders: z.array(providerSchema),
+	ownedPlaylists: z.array(playlistSchema),
+});
+export const meSchema = z.object({
+	uuid: z.string().uuid(),
+	username: z.string(),
+	email: z.string().email(),
 	createdAt: z.date(),
 	currentlyListening: musicSchema.nullable(),
 	listeningUntil: z.date().nullable(),

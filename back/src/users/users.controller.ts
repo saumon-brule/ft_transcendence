@@ -1,12 +1,24 @@
-import { Controller, UseGuards } from "@nestjs/common";
+import {
+	Controller,
+	UseGuards,
+	UseInterceptors,
+	UploadedFile,
+	ParseFilePipe,
+	FileTypeValidator,
+	MaxFileSizeValidator,
+	Get,
+	StreamableFile,
+	Param,
+	BadRequestException,
+} from "@nestjs/common";
 import { UsersService } from "./users.service";
 import {
 	type AuthUser,
 	CurrentUser,
 } from "../core/decorators/current-user.decorator";
 import {
-	profileSchema,
 	userSchema,
+	meSchema,
 	usersContract,
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
@@ -15,17 +27,27 @@ import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { RequirePermission } from "../core/decorators/require-permission.decorator";
 import { PERMISSIONS } from "@flex/shared";
 import { JwtAuthGuardWithoutEmailVerif, JwtAuthGuard } from "../core/guards/jwt-auth.guard";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { join } from "node:path";
+import type { Express } from "express";
+import sharp from "sharp";
+import { isUUID } from "../core/utils/isUuid";
+import { createReadStream, existsSync } from "node:fs";
+
+const AVATAR_DIR = join(process.cwd(), "uploads", "avatars");
+const ASSET_DIR = join(process.cwd(), "assets");
+const MAX_SIZE = 5 * 1024 * 1024;
 
 @Controller()
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
-	@TsRestHandler(usersContract.profile)
+	@TsRestHandler(usersContract.me)
 	@UseGuards(JwtAuthGuardWithoutEmailVerif)
-	public profile(@CurrentUser() authUser: AuthUser) {
-		return tsRestHandler(usersContract.profile, async () => {
-			const user = await this.usersService.getByUUID(authUser.uuid);
-			return { status: 200, body: profileSchema.parse(user) };
+	public me(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(usersContract.me, async () => {
+			const user = await this.usersService.getExposedInfoByUUID(authUser.uuid);
+			return { status: 200, body: meSchema.parse(user) };
 		});
 	}
 
@@ -34,8 +56,49 @@ export class UsersController {
 	public getUser() {
 		return tsRestHandler(usersContract.getUser, async ({ params }) => {
 			const user = await this.usersService.getExposedInfoByUUID(params.uuid);
-			console.log(user);
 			return { status: 200, body: userSchema.parse(user) };
+		});
+	}
+
+	@UseInterceptors(FileInterceptor("avatar"))
+	@TsRestHandler(usersContract.uploadAvatar)
+	@UseGuards(JwtAuthGuard)
+	public uploadAvatar(
+		@UploadedFile(new ParseFilePipe({ validators: [
+			new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp)$/ }),
+			new MaxFileSizeValidator({ maxSize: MAX_SIZE }),
+		] }))
+		file: Express.Multer.File,
+		@CurrentUser() authUser: AuthUser,
+	) {
+		return tsRestHandler(usersContract.uploadAvatar, async () => {
+			const filename = `${authUser.uuid}.webp`;
+			const filepath = join(AVATAR_DIR, filename);
+
+			await sharp(file.buffer)
+				.resize(256, 256, { fit: "cover" })
+				.webp({ quality: 80 })
+				.toFile(filepath);
+
+			return { status: 204, body: null };
+		});
+	}
+
+	@Get("user/:uuid/avatar")
+	getAvatar(@Param("uuid") uuid: string): StreamableFile {
+		if (!isUUID(uuid)) {
+			throw new BadRequestException("Invalid UUID");
+		}
+		const filename = `${uuid}.webp`;
+
+		let filepath = join(AVATAR_DIR, filename);
+		if (!existsSync(filepath)) {
+			filepath = join(ASSET_DIR, "avatar.webp");
+		}
+
+		return new StreamableFile(createReadStream(filepath), {
+			type: "image/webp",
+			disposition: "inline",
 		});
 	}
 

@@ -84,6 +84,13 @@ export class UsersService {
 		return { ...user, connectedProviders: user.providers.map((p) => p.provider) };
 	}
 
+	public async updateAvatarUrl(userId: number, avatarUrl: string) {
+		await this.prisma.user.update({
+			where: { id: userId },
+			data: { picture: avatarUrl },
+		});
+	}
+
 	public async createFromIntra(
 		email: string,
 		login: string,

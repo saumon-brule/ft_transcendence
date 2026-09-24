@@ -3,6 +3,7 @@ import { createEffect, For, Show } from "solid-js";
 import { client, queryKeys } from "~/api/client";
 import MusicBars from "~/components/graphics/icons/MusicBars";
 import { summonErrorToast } from "~/components/ui/Toaster";
+import { env } from "~/env";
 
 export default function Profile() {
 	const params = useParams<{ uuid: string }>();
@@ -24,7 +25,7 @@ export default function Profile() {
 	return <div id="user-profile">
 		<Show when={profile.data} keyed>{(data) => <>
 			<div class="profile-header">
-				<img src={data.body.picture ?? "/images/default-profile.png"} alt="Profile picture" />
+				<img src={env.VITE_API_URL + "/user/" + data.body.uuid + "/avatar"} alt="Profile picture" />
 				<div class="header-info">
 					<h2>{data.body.username}</h2>
 					<div class="user-stats"><p>Joined on {new Date(data.body.createdAt).toLocaleDateString()}</p><p>{data.body.connectedProviders.length} provider(s) connectés</p><p>{data.body.ownedProviders.length} providers possédés</p><p>{data.body.ownedPlaylists.length} playlists</p></div>

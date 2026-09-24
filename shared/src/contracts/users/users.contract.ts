@@ -2,7 +2,7 @@ import { initContract } from "@ts-rest/core";
 import {
 	addRoleUserSchema,
 	DeleteRoleParamSchema,
-	profileSchema,
+	meSchema,
 	userSchema,
 } from "./schemas/user.schema";
 import {
@@ -16,16 +16,25 @@ const c = initContract();
 
 export const usersContract = c.router(
 	{
-		profile: {
+		me: {
 			method: "GET",
-			path: "/profile",
-			responses: { 200: profileSchema },
+			path: "/me",
+			responses: { 200: meSchema },
 		},
 		getUser: {
 			method: "GET",
 			path: "/:uuid",
 			pathParams: uuidParamSchema,
 			responses: { 200: userSchema },
+		},
+		uploadAvatar: {
+			method: "PATCH",
+			path: "/me/avatar",
+			contentType: "multipart/form-data",
+			body: c.type<{ avatar: File }>(),
+			responses: {
+				204: null,
+			},
 		},
 		getUserRoles: {
 			method: "GET",

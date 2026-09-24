@@ -3,7 +3,7 @@
     "target": "ES2023",
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": ["ES2023"],
+    "lib": ["ES2023", "DOM"],
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

@@ -18,6 +18,10 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "types": ["node", "Multer", "jest"],
+  },
+  "ts-node": {
+    "experimentalResolver": true
   }
 }
