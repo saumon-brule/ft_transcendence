@@ -63,14 +63,67 @@
 	}
 
 	section {
+		margin-bottom: 20px;
+		padding-left: 40px;
+		padding-right: 40px;
 
-		margin-left: 40px;
+		.section-heading {
+			display: flex;
+			align-items: baseline;
+			gap: 12px;
+		}
 
 		h3 {
 			font-size: 20px;
-			margin-bottom: 10px;
+			margin: 0 0 10px;
 		}
 
+	}
+
+	.providers {
+		.providers-list {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			padding-right: 8px;
+		}
+
+		.provider-card {
+			display: flex;
+			width: 100%;
+			min-height: 72px;
+			align-items: center;
+			padding: 14px 18px;
+			background-color: var(--background-card);
+			border: 1px solid var(--background-accent-hover);
+			border-radius: 8px;
+
+			.provider-info {
+				min-width: 0;
+
+				h4,
+				p {
+					margin: 0;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				h4 {
+					font-size: 16px;
+				}
+
+				p {
+					margin-top: 6px;
+					color: var(--text-secondary);
+					font-size: 14px;
+				}
+			}
+		}
+
+		.section-heading a {
+			font-size: 14px;
+		}
 	}
 
 	.playlists {

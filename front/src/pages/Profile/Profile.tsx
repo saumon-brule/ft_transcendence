@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "@solidjs/router";
-import { createEffect, For, JSX, Show } from "solid-js";
+import { createEffect, createSignal, For, JSX, Show } from "solid-js";
 import { client, queryKeys } from "~/api/client";
 import MusicBars from "~/components/graphics/icons/MusicBars";
 import { summonErrorToast } from "~/components/ui/Toaster";
@@ -10,6 +10,8 @@ import "./Profile.scss";
 export default function Profile() {
 	const params = useParams<{ uuid: string }>();
 	const navigate = useNavigate();
+	const [showAllConnectedProviders, setShowAllConnectedProviders] = createSignal(false);
+	const [showAllOwnedProviders, setShowAllOwnedProviders] = createSignal(false);
 
 	const profile = client.users.getUser.createQuery(queryKeys.users.getUser, {
 		params: { uuid: params.uuid },
@@ -70,10 +72,17 @@ export default function Profile() {
 						</div>
 					</div>
 					<section class="providers">
-						<h3>Connected providers</h3>
+						<div class="section-heading">
+							<h3>Connected providers</h3>
+							<Show when={data.body.connectedProviders.length > 5}>
+								<a href="#" onClick={(event) => { event.preventDefault(); setShowAllConnectedProviders((value) => !value); }}>
+									{showAllConnectedProviders() ? "Show less" : "Show more"}
+								</a>
+							</Show>
+						</div>
 						<div class="providers-list">
 							<Show when={data.body.connectedProviders.length > 0}>
-								<For each={data.body.connectedProviders}>{(provider) => <div class="provider-card">
+								<For each={showAllConnectedProviders() ? data.body.connectedProviders : data.body.connectedProviders.slice(0, 5)}>{(provider) => <div class="provider-card">
 									<div class="provider-info">
 										<h4>{provider.name}</h4>
 										<p>{provider.adress}</p>
@@ -86,10 +95,17 @@ export default function Profile() {
 						</div>
 					</section>
 					<section class="providers">
-						<h3>Owned providers</h3>
+						<div class="section-heading">
+							<h3>Owned providers</h3>
+							<Show when={data.body.ownedProviders.length > 5}>
+								<a href="#" onClick={(event) => { event.preventDefault(); setShowAllOwnedProviders((value) => !value); }}>
+									{showAllOwnedProviders() ? "Show less" : "Show more"}
+								</a>
+							</Show>
+						</div>
 						<div class="providers-list">
 							<Show when={data.body.ownedProviders.length > 0}>
-								<For each={data.body.ownedProviders}>{(provider) => <div class="provider-card">
+								<For each={showAllOwnedProviders() ? data.body.ownedProviders : data.body.ownedProviders.slice(0, 5)}>{(provider) => <div class="provider-card">
 									<div class="provider-info">
 										<h4>{provider.name}</h4>
 										<p>{provider.adress}</p>

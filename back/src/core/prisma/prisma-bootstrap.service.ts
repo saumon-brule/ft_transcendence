@@ -188,6 +188,23 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			},
 		});
 
+		const additionalProviders = [
+			{ name: "Liam's Provider 3", adress: "liam-provider-3" },
+			{ name: "Liam's Provider 4", adress: "liam-provider-4" },
+			{ name: "Liam's Provider 5", adress: "liam-provider-5" },
+			{ name: "Liam's Provider 6", adress: "liam-provider-6" },
+			{ name: "Liam's Provider 7", adress: "liam-provider-7" },
+			{ name: "Liam's Provider 8", adress: "liam-provider-8" },
+		];
+
+		for (const provider of additionalProviders) {
+			await this.prisma.provider.upsert({
+				where: { name: provider.name },
+				update: { ownerId: liamUser.id, adress: provider.adress },
+				create: { ...provider, ownerId: liamUser.id },
+			});
+		}
+
 		await this.prisma.providerUser.upsert({
 			where: {
 				providerId_userId: {
