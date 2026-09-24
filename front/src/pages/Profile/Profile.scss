@@ -1,0 +1,128 @@
+#user-profile {
+	width: 100%;
+	
+	.profile-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px;
+		padding: 20px;
+		padding-top: 40px;
+		padding-left: 40px;
+		background-color: var(--background-surface);
+
+		img {
+			width: 150px;
+			height: 150px;
+			border-radius: 50%;
+			margin-right: 20px;
+		}
+
+		.header-info {
+			h2 {
+				font-size: 28px;
+				margin: 0;
+			}
+
+			.user-stats {
+				display: flex;
+				flex-direction: row;
+				gap: 8px;
+				margin-top: 6px;
+				align-items: center;
+				color: var(--text-secondary);
+
+				.stat {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+					font-size: 14px;
+				}
+
+				.separator {
+					width: 3px;
+					height: 3px;
+					background-color: var(--text-secondary);
+					border-radius: 50%;
+				}
+			}
+
+			.listening {
+				display: flex;
+				align-items: center;
+				background-color: var(--background-card);
+				font-size: 14px;
+				color: var(--text-primary);
+				width: fit-content;
+				margin-top: 10px;
+				gap: 8px;
+				padding: 8px 12px;
+				border-radius: 32px;
+				border: 1px solid var(--background-accent-hover);
+			}
+		}
+	}
+
+	section {
+
+		margin-left: 40px;
+
+		h3 {
+			font-size: 20px;
+			margin-bottom: 10px;
+		}
+
+	}
+
+	.playlists {
+		.playlists-list {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 16px;
+			align-items: stretch;
+		}
+
+		.playlist-card {
+			display: flex;
+			flex-direction: column;
+			flex: 0 1 180px;
+			min-width: 0;
+			align-items: center;
+			gap: 14px;
+			padding: 12px;
+			background-color: var(--background-card);
+			border: 1px solid var(--background-accent-hover);
+			border-radius: 8px;
+
+			img {
+				width: 150px;
+				height: 150px;
+				flex: 0 0 72px;
+				object-fit: cover;
+				border-radius: 6px;
+			}
+
+			.playlist-info {
+				width: 100%;
+
+				h4, p {
+					margin: 0;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				h4 {
+					font-size: 14px;
+				}
+
+				p {
+					margin-top: 4px;
+					color: var(--text-secondary);
+					font-size: 12px;
+				}
+			}
+		}
+	}
+
+}

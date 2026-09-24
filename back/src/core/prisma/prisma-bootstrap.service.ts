@@ -219,7 +219,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 		});
 
 		const musicData = [
-			{ title: "Midnight Drive", artist: "Neon Avenue", duration: 214 },
+			{ title: "the newer sweet groove", artist: "Chris Gouge", duration: 214 },
 			{ title: "Afterglow", artist: "Paper Satellites", duration: 189 },
 			{ title: "Static Hearts", artist: "The Frequency", duration: 242 },
 			{ title: "Blue Hour", artist: "Lumen Coast", duration: 201 },

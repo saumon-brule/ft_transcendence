@@ -37,6 +37,10 @@ export const userSchema = z.object({
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
+	_count: z.object({
+		ownedProviders: z.number(),
+		ownedPlaylists: z.number(),
+	}),
 });
 export const meSchema = z.object({
 	uuid: z.string().uuid(),

@@ -33,10 +33,7 @@ import type { Express } from "express";
 import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
 import { createReadStream, existsSync } from "node:fs";
-
-const AVATAR_DIR = join(process.cwd(), "uploads", "avatars");
-const ASSET_DIR = join(process.cwd(), "assets");
-const MAX_SIZE = 5 * 1024 * 1024;
+import { ASSET_DIR, AVATAR_DIR, MAX_SIZE } from "../core/utils/constants";
 
 @Controller()
 export class UsersController {
@@ -84,7 +81,7 @@ export class UsersController {
 		});
 	}
 
-	@Get("user/:uuid/avatar")
+	@Get("users/:uuid/avatar")
 	getAvatar(@Param("uuid") uuid: string): StreamableFile {
 		if (!isUUID(uuid)) {
 			throw new BadRequestException("Invalid UUID");

@@ -55,6 +55,7 @@ export class UsersService {
 		const user = await this.prisma.user.findUnique({
 			where: { uuid: uuid },
 			include: {
+				_count: { select: { ownedProviders: true, ownedPlaylists: true } },
 				ownedProviders: { where: { publicDisplay: true } },
 				providers: {
 					where: {
