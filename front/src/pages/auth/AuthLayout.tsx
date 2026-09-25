@@ -1,11 +1,12 @@
 import { RouteSectionProps } from "@solidjs/router";
 import { Transition } from "solid-transition-group";
+import LinkParticles from "~/components/ui/LinkParticles";
 
 import "./AuthLayout.scss";
 
 export default function AuthLayout(props: RouteSectionProps) {
 	return <div id="auth-page">
-		<div class="auth-hero" style={{ background: "pink" }} />
+		<LinkParticles />
 		<section class="auth-section">
 			<div class="auth-block">
 				<h1>Flex</h1>

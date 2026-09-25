@@ -114,6 +114,9 @@ export default function TextInput(props: TextInputProps) {
 			aria-describedby={isInvalid()
 				? ariaMessageId
 				: undefined}
+			id={props.placeholder?.replace(/\s+/g, "-").toLowerCase() ?? createUniqueId()}
+			name={props.placeholder?.replace(/\s+/g, "-").toLowerCase() ?? createUniqueId()}
+			autocomplete="on"
 			ref={(el) => {
 				componentRef = { htmlElement: el, checkErrors };
 				formContext.register(componentRef);

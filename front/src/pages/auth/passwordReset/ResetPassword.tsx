@@ -11,6 +11,7 @@ import { createSignal, onMount, Show } from "solid-js";
 import Button from "~/components/ui/Button";
 import DialogPage from "~/components/ui/DialogPage";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import LinkParticles from "~/components/ui/LinkParticles";
 
 export default function ResetPassword() {
 	const { t } = useTranslation();
@@ -56,7 +57,7 @@ export default function ResetPassword() {
 		);
 	}
 
-	return <DialogPage id="reset-password">
+	return <><LinkParticles/><DialogPage id="reset-password">
 		<h2>{t("pages.resetPassword.title")}</h2>
 		<Form class="reset-password-form" onSubmit={handleSubmit}>
 			<div class="inputs">
@@ -68,5 +69,5 @@ export default function ResetPassword() {
 		<Show when={error()}>
 			<p class="error-message">{t("errors.unknownFallback")}</p>
 		</Show>
-	</DialogPage>;
+	</DialogPage></>;
 }

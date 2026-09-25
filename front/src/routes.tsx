@@ -24,8 +24,8 @@ export const AppRouter = () => {
 			<Route path="/" component={AuthLayout}>
 				<Route path="/login" component={LoginForm}/>
 				<Route path="/register" component={RegisterForm} />
+				<Route path="/auth/request-password-reset" component={RequestPasswordReset} />
 			</Route>
-			<Route path="/auth/request-password-reset" component={RequestPasswordReset} />
 		</Route>
 		<Route path={emailConfirmationPath} component={VerifyEmail} />
 		<Route path={ftIntraAuthCallbackPath} component={FtAuthCallback} />
