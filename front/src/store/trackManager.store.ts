@@ -51,13 +51,17 @@ export function useTrackManager() {
 	});
 
 	function next() {
+		let nextTrack: Track | null = null;
 		setTrackManager(produce((manager) => {
 			if (manager.current != null) {
 				if (manager.history.length >= MAX_HISTORY_SIZE) manager.history.shift();
 				if (!manager.current.temporary) manager.history.push(manager.current);
 				manager.current = manager.queue.shift() ?? null;
+
+				nextTrack = manager.current;
 			}
 		}));
+		return nextTrack;
 	}
 
 	function prev(): Track | null {

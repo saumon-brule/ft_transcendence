@@ -1,6 +1,6 @@
 import { RouteSectionProps } from "@solidjs/router";
 import { AudioPlayerProvider } from "./context/AudioManagerContext";
-import ControllerBar from "./ui/Footer/Controller";
+import Footer from "./ui/Footer/Footer";
 
 export default function AppContainer(props: RouteSectionProps) {
 
@@ -9,7 +9,7 @@ export default function AppContainer(props: RouteSectionProps) {
 			<main>
 				{props.children}
 			</main>
-			<ControllerBar/>
+			<Footer/>
 		</AudioPlayerProvider>
 	</>;
 }

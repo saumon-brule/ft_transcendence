@@ -12,6 +12,6 @@ export class Track {
 		temporary: z.boolean(),
 	}).transform((track): Track => {
 		Object.setPrototypeOf(track, Track.prototype);
-		return track as Track;
+		return track;
 	});
 }
