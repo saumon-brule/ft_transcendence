@@ -1,0 +1,45 @@
+@use "../../styles/variables" as vars;
+
+#landing-page {
+	.hero-banner {
+		height: 100vh;
+		h1 {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			font-family: vars.$font-stack-fancy;
+			font-size: 16rem;
+		}
+	}
+
+	.section-container {
+		display: flex;
+		flex-direction: column;
+		padding: 35vh;
+		gap: 70vh;
+
+		.appearing-section {
+			position: relative;
+			opacity: 0;
+			transform: translateY(-25px);
+			transition:
+				opacity 1s ease-out 200ms,
+				transform 2s ease-out 200ms;
+
+			h2 {
+				text-align: center;
+			}
+		}
+
+		& > .visible {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		h2 {
+			font-family: vars.$font-stack-fancy;
+			font-size: 12rem;
+		}
+	}
+}
