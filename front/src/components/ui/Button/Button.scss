@@ -22,6 +22,7 @@ $variants: (
 		bg-dis: var(--button-danger-background-disabled),
 		col: var(--button-danger-text),
 	),
+	text: (),
 );
 
 $sizes: (
@@ -50,7 +51,6 @@ $sizes: (
 	display: flex;
 	align-items: center;
 
-
 	/* Important to make the inputs consistent.
 	Basically inputs like the TextInput have precisely the same properties
 	as the Button, BUT they have a border that make it 2px bigger. To keep
@@ -74,22 +74,38 @@ $sizes: (
 	}
 
 	@each $name, $values in $variants {
-		&--#{$name} {
-			background: map.get($values, bg);
-			color: map.get($values, col);
-		}
+		@if $name == text {
+			&--#{$name} {
+				background-color: transparent;
+				padding-inline: 0 !important;
+			}
 
-		&--#{$name}:is(:hover, :focus-visible) {
-			background: map.get($values, bg-hov);
-		}
+			&--#{$name}:is(:hover, :active, :focus-visible) {
+				text-decoration: underline;
+			}
 
-		&--#{$name}:active {
-			background: map.get($values, bg-act);
+			&--#{$name}:disabled {
+				cursor: default;
+			}
 		}
+		@if $name != text {
+			&--#{$name} {
+				background: map.get($values, bg);
+				color: map.get($values, col);
+			}
 
-		&--#{$name}:disabled {
-			cursor: default;
-			background: map.get($values, bg-dis);
+			&--#{$name}:is(:hover, :focus-visible) {
+				background: map.get($values, bg-hov);
+			}
+
+			&--#{$name}:active {
+				background: map.get($values, bg-act);
+			}
+
+			&--#{$name}:disabled {
+				cursor: default;
+				background: map.get($values, bg-dis);
+			}
 		}
 	}
 
