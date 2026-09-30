@@ -26,8 +26,8 @@ $variants: (
 
 $sizes: (
 	sm: (
-		padding: 0.75rem 1rem,
-		border-radius: 0.75rem,
+		padding: 0.25rem 0.25rem,
+		border-radius: 0.5rem,
 		font-size: 1rem,
 	),
 	md: (
@@ -50,7 +50,6 @@ $sizes: (
 	display: flex;
 	align-items: center;
 
-
 	/* Important to make the inputs consistent.
 	Basically inputs like the TextInput have precisely the same properties
 	as the Button, BUT they have a border that make it 2px bigger. To keep
@@ -58,16 +57,12 @@ $sizes: (
 	to the size of the button without changing the background behavior */
 	border: 1px solid transparent;
 
-	& .btn-content {
-		/* In most cases, you won't want the text to wrap and extend the button
-		height, feel free to override it in superior level of styling if it's
-		necessary */
-		display: inline-block;
-		white-space: nowrap;
-		overflow: hidden;
-		width: 100%;
-		height: 100%;
-	}
+	/* In most cases, you won't want the text to wrap and extend the button
+	height, feel free to override it in superior level of styling if it's
+	necessary */
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
 
 	&:disabled {
 		color: var(--button-text-disabled);

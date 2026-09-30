@@ -41,6 +41,7 @@
 		"@tsparticles/preset-links": "^4.4.0",
 		"class-validator": "^0.14.4",
 		"jwt-decode": "^4.0.0",
+		"lucide-solid": "^1.47.0",
 		"solid-js": "^1.9.5",
 		"solid-transition-group": "^0.3.0",
 		"zod": "^3.25.76"

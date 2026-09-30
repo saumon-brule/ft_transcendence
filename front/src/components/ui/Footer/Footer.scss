@@ -1,0 +1,14 @@
+#app-footer {
+	display: flex;
+	justify-content: space-between;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: var(--background-surface);
+	padding: 1rem;
+
+	& > :first-child,
+	& > :last-child {
+		flex: 1;
+	}
+}
