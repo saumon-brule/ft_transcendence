@@ -19,7 +19,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "types": ["node", "Multer", "jest"],
+    "types": ["node", "multer", "jest"],
   },
   "ts-node": {
     "experimentalResolver": true
