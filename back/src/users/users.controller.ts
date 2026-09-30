@@ -62,7 +62,7 @@ export class UsersController {
 	@UseGuards(JwtAuthGuard)
 	public uploadAvatar(
 		@UploadedFile(new ParseFilePipe({ validators: [
-			new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp)$/ }),
+			new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp|gif)$/ }),
 			new MaxFileSizeValidator({ maxSize: MAX_SIZE }),
 		] }))
 		file: Express.Multer.File,
@@ -72,7 +72,7 @@ export class UsersController {
 			const filename = `${authUser.uuid}.webp`;
 			const filepath = join(AVATAR_DIR, filename);
 
-			await sharp(file.buffer)
+			await sharp(file.buffer, { animated: true })
 				.resize(256, 256, { fit: "cover" })
 				.webp({ quality: 80 })
 				.toFile(filepath);
