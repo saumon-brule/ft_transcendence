@@ -94,7 +94,7 @@ y faut le faire dans tous les cas
 
 j'ai pas suivit a 100% mais je pense ca se fait facilement avec docker et c'est des pts presque donnés
 
-2pts
+2pts 
 
 
 ---
