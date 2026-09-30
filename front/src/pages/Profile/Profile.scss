@@ -100,11 +100,10 @@
 			text-decoration: none;
 			justify-content: space-between;
 			gap: 16px;
-			transition: border-color 160ms ease, transform 160ms ease;
-
+			transition: background-color .2s ease;
+			
 			&:hover {
-				border-color: var(--background-accent-hover);
-				transform: scale(1.007);
+				background-color: var(--background-overlay);
 			}
 
 			.provider-info {
@@ -189,11 +188,10 @@
 			border: 1px solid transparent;
 			color: inherit;
 			text-decoration: none;
-			transition: border-color 160ms ease, transform 160ms ease;
+			transition: background-color .2s ease;
 
 			&:hover {
-				border-color: var(--background-accent-hover);
-				transform: scale(1.007);
+				background-color: var(--background-overlay);
 			}
 
 			img {
