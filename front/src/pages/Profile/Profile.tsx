@@ -1,18 +1,16 @@
-import { useNavigate, useParams } from "@solidjs/router";
-import { createEffect, createSignal, For, JSX, Show } from "solid-js";
+import { useParams } from "@solidjs/router";
+import { createEffect, JSX, Show } from "solid-js";
 import { client, queryKeys } from "~/api/client";
-import MusicBars from "~/components/graphics/icons/MusicBars";
 import { summonErrorToast } from "~/components/ui/Toaster";
-import { env } from "~/env";
+import PlaylistSection from "./PlaylistSection";
+import ProfileHeader from "./ProfileHeader";
+import FriendsSection from "./FriendsSection";
+import ProviderSection from "./ProviderSection";
 
 import "./Profile.scss";
 
 export default function Profile() {
 	const params = useParams<{ uuid: string }>();
-	const navigate = useNavigate();
-	const [showAllConnectedProviders, setShowAllConnectedProviders] = createSignal(false);
-	const [showAllOwnedProviders, setShowAllOwnedProviders] = createSignal(false);
-
 	const profile = client.users.getUser.createQuery(queryKeys.users.getUser, {
 		params: { uuid: params.uuid },
 	});
@@ -21,8 +19,6 @@ export default function Profile() {
 		if (profile.isError) {
 			// navigate("/home"); // A remettre mais desact car chiant en dev
 			summonErrorToast("Unknown user");
-		} else if (profile.isSuccess) {
-			console.log(profile.data?.body);
 		}
 	});
 
@@ -31,7 +27,7 @@ export default function Profile() {
 		position: "fixed",
 		top: "0",
 		width: "100%",
-		background: "var(--background-card)",
+		background: "var(--background-surface)",
 	};
 	const tmpContainerStyle: JSX.CSSProperties = {
 		display: "flex",
@@ -43,101 +39,26 @@ export default function Profile() {
 	};
 	const tmpLeftPanelStyle: JSX.CSSProperties = {
 		width: "200px",
-		background: "var(--background-card)",
+		background: "var(--background-surface)",
 		height: "calc(100vh - 140px)",
 		position: "fixed",
 		top: "70px",
 		left: "0",
 	};
 
-	return <div style={{ height: "100vh" }}><div id="tmp-search-bar" style={tmpSearchBarStyle}/>
+	return <div style={{ height: "100vh" }}><div id="tmp-search-bar" style={tmpSearchBarStyle} />
 		<div id="tmp-container" style={tmpContainerStyle}>
-			<div class="tmp-left-panel" style={tmpLeftPanelStyle}/>
+			<div class="tmp-left-panel" style={tmpLeftPanelStyle} />
 			<div id="user-profile">
 				<Show when={profile.data} keyed>{(data) => <>
-					<div class="profile-header">
-						<img src={env.VITE_API_URL + "/users/" + data.body.uuid + "/avatar"} alt="Profile picture" />
-						<div class="header-info">
-							<h2>{data.body.username}</h2>
-							<div class="user-stats">
-								<div class="stat">Member since {new Date(data.body.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" }) /* rendre dynamique avec i18n*/}</div>
-								<div class="separator"/>
-								<div class="stat">{data.body._count.ownedProviders} owned providers</div>
-								<div class="separator"/>
-								<div class="stat">{data.body._count.ownedPlaylists} playlists</div>
-							</div>
-							<Show when={data.body.currentlyListening && data.body.listeningUntil && new Date(data.body.listeningUntil) > new Date()} keyed>
-								<div class="listening"><MusicBars/>Listening to « {data.body.currentlyListening!.title} » - {data.body.currentlyListening!.artist}</div>
-							</Show>
-						</div>
-					</div>
-					<section class="providers">
-						<div class="section-heading">
-							<h3>Connected providers</h3>
-							<Show when={data.body.connectedProviders.length > 5}>
-								<a href="#" onClick={(event) => { event.preventDefault(); setShowAllConnectedProviders((value) => !value); }}>
-									{showAllConnectedProviders() ? "Show less" : "Show more"}
-								</a>
-							</Show>
-						</div>
-						<div class="providers-list">
-							<Show when={data.body.connectedProviders.length > 0}>
-								<For each={showAllConnectedProviders() ? data.body.connectedProviders : data.body.connectedProviders.slice(0, 5)}>{(provider) => <div class="provider-card">
-									<div class="provider-info">
-										<h4>{provider.name}</h4>
-										<p>{provider.adress}</p>
-									</div>
-								</div>}</For>
-							</Show>
-							<Show when={data.body.connectedProviders.length === 0}>
-								<p class="no-providers">No connected providers</p>
-							</Show>
-						</div>
-					</section>
-					<section class="providers">
-						<div class="section-heading">
-							<h3>Owned providers</h3>
-							<Show when={data.body.ownedProviders.length > 5}>
-								<a href="#" onClick={(event) => { event.preventDefault(); setShowAllOwnedProviders((value) => !value); }}>
-									{showAllOwnedProviders() ? "Show less" : "Show more"}
-								</a>
-							</Show>
-						</div>
-						<div class="providers-list">
-							<Show when={data.body.ownedProviders.length > 0}>
-								<For each={showAllOwnedProviders() ? data.body.ownedProviders : data.body.ownedProviders.slice(0, 5)}>{(provider) => <div class="provider-card">
-									<div class="provider-info">
-										<h4>{provider.name}</h4>
-										<p>{provider.adress}</p>
-									</div>
-								</div>}</For>
-							</Show>
-							<Show when={data.body.ownedProviders.length === 0}>
-								<p class="no-providers">No owned providers</p>
-							</Show>
-						</div>
-					</section>
-					<section class="playlists">
-						<h3>Playlists</h3>
-						<div class="playlists-list">
-							<Show when={data.body.ownedPlaylists.length > 0}>
-								<For each={data.body.ownedPlaylists}>{(playlist) => <div class="playlist-card">
-									<img src={env.VITE_API_URL + "/playlists/" + playlist.uuid + "/cover"} alt="playlist logo" />
-									<div class="playlist-info">
-										<h4>{playlist.name}</h4>
-										<p>{playlist._count.musics} musics</p>
-									</div>
-								</div>}</For>
-							</Show>
-							<Show when={data.body.ownedPlaylists.length === 0}>
-								<p class="no-providers">No owned playlists</p>
-							</Show>
-						</div>
-					</section>
-					{/* Same pour les friends */}
+					<ProfileHeader profile={data.body} />
+					<ProviderSection title="Connected providers" emptyMessage="No connected providers" providers={data.body.connectedProviders} />
+					<ProviderSection title="Owned providers" emptyMessage="No owned providers" providers={data.body.ownedProviders} />
+					<PlaylistSection playlists={data.body.ownedPlaylists} />
+					<FriendsSection />
 				</>}</Show>
 			</div>
 		</div>
-		<div id="tmp-footer" style={{ position: "fixed", bottom: "0", width: "100%", height: "70px", background: "var(--background-card)" }}/>
+		<div id="tmp-footer" style={{ position: "fixed", bottom: "0", width: "100%", height: "70px", background: "var(--background-surface)" }}/>
 	</div>;
 }

@@ -8,7 +8,6 @@
 		padding: 20px;
 		padding-top: 40px;
 		padding-left: 40px;
-		background-color: var(--background-surface);
 
 		img {
 			width: 150px;
@@ -95,8 +94,18 @@
 			align-items: center;
 			padding: 14px 18px;
 			background-color: var(--background-card);
-			border: 1px solid var(--background-accent-hover);
 			border-radius: 8px;
+			border: 1px solid transparent;
+			color: inherit;
+			text-decoration: none;
+			justify-content: space-between;
+			gap: 16px;
+			transition: border-color 160ms ease, transform 160ms ease;
+
+			&:hover {
+				border-color: var(--background-accent-hover);
+				transform: scale(1.007);
+			}
 
 			.provider-info {
 				min-width: 0;
@@ -118,6 +127,38 @@
 					color: var(--text-secondary);
 					font-size: 14px;
 				}
+			}
+
+			.provider-status {
+				display: inline-flex;
+				flex: 0 0 auto;
+				align-items: center;
+				gap: 7px;
+				padding: 5px 9px;
+				border: 1px solid currentColor;
+				border-radius: 999px;
+				font-size: 12px;
+				font-weight: 600;
+				white-space: nowrap;
+
+				&.pinging {
+					color: var(--text-warning);
+				}
+
+				&.online {
+					color: var(--text-valid);
+				}
+
+				&.offline {
+					color: var(--text-danger);
+				}
+			}
+
+			.provider-status-dot {
+				width: 7px;
+				height: 7px;
+				border-radius: 50%;
+				background-color: currentColor;
 			}
 		}
 
@@ -144,8 +185,16 @@
 			gap: 14px;
 			padding: 12px;
 			background-color: var(--background-card);
-			border: 1px solid var(--background-accent-hover);
 			border-radius: 8px;
+			border: 1px solid transparent;
+			color: inherit;
+			text-decoration: none;
+			transition: border-color 160ms ease, transform 160ms ease;
+
+			&:hover {
+				border-color: var(--background-accent-hover);
+				transform: scale(1.007);
+			}
 
 			img {
 				width: 150px;
@@ -174,6 +223,42 @@
 					color: var(--text-secondary);
 					font-size: 12px;
 				}
+			}
+		}
+	}
+
+	.friends {
+		.friends-list {
+			display: flex;
+			gap: 16px;
+			overflow-x: auto;
+			padding-bottom: 8px;
+			scrollbar-width: thin;
+		}
+
+		.friend-card {
+			display: flex;
+			flex: 0 0 88px;
+			flex-direction: column;
+			align-items: center;
+			gap: 8px;
+			color: inherit;
+			text-align: center;
+
+			img {
+				width: 64px;
+				height: 64px;
+				border-radius: 50%;
+				object-fit: cover;
+				background-color: var(--background-card);
+			}
+
+			span {
+				max-width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				font-size: 13px;
 			}
 		}
 	}

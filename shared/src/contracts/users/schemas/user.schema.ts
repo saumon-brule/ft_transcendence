@@ -42,6 +42,8 @@ export const userSchema = z.object({
 		ownedPlaylists: z.number(),
 	}),
 });
+export type User = z.infer<typeof userSchema>;
+
 export const meSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
