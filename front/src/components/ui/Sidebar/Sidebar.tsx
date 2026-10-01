@@ -1,5 +1,5 @@
 import "./Sidebar.scss";
 
 export default function Sidebar() {
-	return <sidebar id="app-sidebar"/>;
+	return <div id="app-sidebar"/>;
 }
