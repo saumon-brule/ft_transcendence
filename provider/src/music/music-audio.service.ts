@@ -21,7 +21,7 @@ import { PrismaService } from "../core/prisma/prisma.service";
 
 export const NO_FILE = "";
 
-const TOKEN_TTL_SECONDS = 300;
+const TOKEN_TTL_SECONDS = 3600 * 24;
 const MAX_UPLOAD_BYTES = 200 * 1024 * 1024;
 
 const AUDIO_TYPES: Record<string, string> = {
@@ -90,7 +90,6 @@ export class MusicAudioService {
 		};
 	}
 
-	/** Vérifie le token de l'URL, qu'il vise bien cette musique, et que le membre a toujours accès. */
 	async resolveAudio(musicUuid: string, token: string) {
 		let claims: z.infer<typeof audioClaimsSchema>;
 		try {
