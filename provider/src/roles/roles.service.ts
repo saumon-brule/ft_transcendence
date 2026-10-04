@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { providerPermissions, type ProviderPermission } from "@flex/shared";
 import { Prisma } from "../generated/client/client";
 import { PrismaService } from "../core/prisma/prisma.service";
@@ -76,14 +76,8 @@ export class RolesService {
 	}
 
 	async remove(uuid: string) {
-		const [{ defaultRoleId }, role] = await Promise.all([
-			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } }),
-			this.prisma.role.findUnique({ where: { uuid }, select: { id: true } }),
-		]);
+		const role = await this.prisma.role.findUnique({ where: { uuid }, select: { id: true } });
 		if (!role) throw new NotFoundException("Role not found");
-		if (role.id === defaultRoleId) {
-			throw new ConflictException("The default role cannot be deleted, choose another default role first");
-		}
 
 		await this.prisma.role.delete({ where: { id: role.id } });
 	}

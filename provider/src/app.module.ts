@@ -6,7 +6,6 @@ import { AccessRequestsModule } from "./access-requests/access-requests.module";
 import { AlbumsModule } from "./albums/albums.module";
 import { ArtistsModule } from "./artists/artists.module";
 import { InfoModule } from "./info/info.module";
-import { MediaModule } from "./media/media.module";
 import { MembersModule } from "./members/members.module";
 import { MusicModule } from "./music/music.module";
 import { RolesModule } from "./roles/roles.module";
@@ -25,7 +24,6 @@ import { SettingsModule } from "./settings/settings.module";
 		MusicModule,
 		ArtistsModule,
 		AlbumsModule,
-		MediaModule,
 	],
 })
 export class AppModule {}

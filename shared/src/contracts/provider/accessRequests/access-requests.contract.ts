@@ -21,7 +21,7 @@ export const accessRequestsContract = c.router(
 				409: errorDefaultSchema,
 			},
 		},
-		getMine: {
+		me: {
 			method: "GET",
 			path: "/me",
 			responses: {

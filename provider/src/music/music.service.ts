@@ -3,7 +3,7 @@ import { Prisma } from "../generated/client/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { findAlbumId, findArtistIds } from "../core/catalog/catalog.lookups";
 import { musicDetailInclude, musicItemInclude, toMusicDetail, toMusicItem } from "../core/catalog/catalog.mappers";
-import { MediaService, NO_FILE } from "../media/media.service";
+import { MusicAudioService, NO_FILE } from "./music-audio.service";
 
 interface ListQuery {
 	limit: number;
@@ -25,7 +25,7 @@ type UpdateMusic = Partial<CreateMusic>;
 export class MusicService {
 	constructor(
 		private readonly prisma: PrismaService,
-		private readonly media: MediaService,
+		private readonly audio: MusicAudioService,
 	) {}
 
 	async list({ limit, offset, search }: ListQuery) {
@@ -116,17 +116,6 @@ export class MusicService {
 		if (!music) throw new NotFoundException("Music not found");
 
 		await this.prisma.music.delete({ where: { id: music.id } });
-		await this.media.deleteFile(music.path);
-	}
-
-	async streamUrl(uuid: string, userUuid: string, origin: string) {
-		const music = await this.prisma.music.findUnique({
-			where: { uuid },
-			select: { uuid: true, path: true },
-		});
-		if (!music) throw new NotFoundException("Music not found");
-		if (music.path === NO_FILE) throw new NotFoundException("This music has no audio file yet");
-
-		return this.media.createStreamUrl(origin, music.uuid, userUuid);
+		await this.audio.deleteFile(music.path);
 	}
 }

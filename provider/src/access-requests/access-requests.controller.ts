@@ -18,10 +18,10 @@ export class AccessRequestsController {
 		}));
 	}
 
-	@TsRestHandler(providerContract.accessRequests.getMine)
+	@TsRestHandler(providerContract.accessRequests.me)
 	@Authenticated()
 	getMine(@CurrentUser() user: CurrentUserData) {
-		return tsRestHandler(providerContract.accessRequests.getMine, async () => ({
+		return tsRestHandler(providerContract.accessRequests.me, async () => ({
 			status: 200,
 			body: await this.accessRequestsService.getMine(user.userUuid),
 		}));

@@ -53,13 +53,4 @@ export class ArtistsController {
 			return { status: 204, body: null };
 		});
 	}
-
-	@TsRestHandler(providerContract.artist.merge)
-	@RequirePermission("MANAGE_CATALOG")
-	merge() {
-		return tsRestHandler(providerContract.artist.merge, async ({ params, body }) => ({
-			status: 200,
-			body: await this.artistsService.merge(params.uuid, body.intoUuid),
-		}));
-	}
 }

@@ -1,9 +1,9 @@
 import { initContract } from "@ts-rest/core";
 import {
+	audioUrlResponseSchema,
 	createMusicSchema,
 	musicDetailedItemSchema,
 	musicListResponseSchema,
-	streamUrlResponseSchema,
 	updateMusicSchema,
 } from "./schemas/music.schema";
 import { listQuerySchema, uuidParamSchema } from "../../schemas/common.schema";
@@ -56,12 +56,12 @@ export const musicContract = c.router(
 				404: errorDefaultSchema,
 			},
 		},
-		streamUrl: {
+		audioUrl: {
 			method: "GET",
-			path: "/:uuid/stream-url",
+			path: "/:uuid/audio-url",
 			pathParams: uuidParamSchema,
 			responses: {
-				200: streamUrlResponseSchema,
+				200: audioUrlResponseSchema,
 				404: errorDefaultSchema,
 			},
 		},

@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from "@nestjs/common";
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from "@nestjs/common";
 import { Code401, code401, Code403, code403 } from "@flex/shared";
 import { Response } from "express";
 import { Prisma } from "../../generated/client/client";
@@ -106,7 +106,7 @@ export class TsRestValidationFilter implements ExceptionFilter {
 			});
 		}
 
-		if (status >= 500) {
+		if (status >= 500 && !(exception instanceof HttpException)) {
 			if (env.NODE_ENV !== "dev") {
 				console.error(exception);
 			}

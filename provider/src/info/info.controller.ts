@@ -7,9 +7,9 @@ import { InfoService } from "./info.service";
 export class InfoController {
 	constructor(private readonly infoService: InfoService) {}
 
-	@TsRestHandler(providerContract.info.get)
+	@TsRestHandler(providerContract.info.info)
 	get() {
-		return tsRestHandler(providerContract.info.get, async () => ({
+		return tsRestHandler(providerContract.info.info, async () => ({
 			status: 200,
 			body: await this.infoService.get(),
 		}));

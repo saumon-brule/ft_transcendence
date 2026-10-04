@@ -53,17 +53,6 @@ export const artistContract = c.router(
 				404: errorDefaultSchema,
 			},
 		},
-		merge: {
-			method: "POST",
-			path: "/:uuid/merge",
-			pathParams: uuidParamSchema,
-			body: mergeArtistSchema,
-			responses: {
-				200: artistDetailedItemSchema,
-				404: errorDefaultSchema,
-				409: errorDefaultSchema,
-			},
-		},
 	},
 	{ pathPrefix: "/artists" },
 );

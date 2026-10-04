@@ -44,7 +44,6 @@ export const providerRolesContract = c.router(
 			responses: {
 				204: null,
 				404: errorDefaultSchema,
-				409: errorDefaultSchema,
 			},
 		},
 	},

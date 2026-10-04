@@ -3,7 +3,6 @@ interface ConflictLike {
 	cause?: { kind?: string };
 }
 
-// P2034 (erreur Prisma) ou échec de sérialisation Postgres remonté par le driver adapter
 export function isWriteConflict(error: unknown) {
 	const { code, cause } = (error ?? {}) as ConflictLike;
 	return code === "P2034" || cause?.kind === "TransactionWriteConflict";

@@ -4,7 +4,7 @@ import { healthResponseSchema, providerPublicInfoSchema } from "./schemas/info.s
 const c = initContract();
 
 export const infoContract = c.router({
-	get: {
+	info: {
 		method: "GET",
 		path: "/info",
 		responses: { 200: providerPublicInfoSchema },

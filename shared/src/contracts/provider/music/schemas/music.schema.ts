@@ -27,7 +27,7 @@ export const createMusicSchema = z.object({
 
 export const updateMusicSchema = createMusicSchema.partial();
 
-export const streamUrlResponseSchema = z.object({
+export const audioUrlResponseSchema = z.object({
 	url: z.string().url(),
 	expiresAt: z.coerce.date(),
 });

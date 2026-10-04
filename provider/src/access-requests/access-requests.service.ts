@@ -45,6 +45,10 @@ export class AccessRequestsService {
 		const provider = await this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } });
 		const isPublic = provider.visibility === "PUBLIC";
 
+		//	retryOnWriteConflict retry 4 times the function passed in parameter catching error
+		//	if TransactionWriteConflict happens during transaction that can appear because of
+		//	isolationLevel: Serializable
+		//	else for any other error throw it normally
 		const created = await retryOnWriteConflict(() => this.prisma.$transaction(async (tx) => {
 			const member = await tx.member.findUnique({ where: { uuid: userUuid } });
 			if (member && !member.revokedAt) {
