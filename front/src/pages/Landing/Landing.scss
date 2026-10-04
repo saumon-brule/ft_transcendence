@@ -13,6 +13,15 @@
 		}
 	}
 
+
+	span.important {
+		font-family: vars.$font-stack-fancy;
+	}
+
+	span.very-important {
+		font-family: vars.$font-stack-fancy;
+	}
+
 	.section-container {
 		display: flex;
 		flex-direction: column;
@@ -39,7 +48,7 @@
 
 		h2 {
 			font-family: vars.$font-stack-fancy;
-			font-size: 12rem;
+			font-size: 8rem;
 		}
 	}
 }
