@@ -1,15 +1,36 @@
 @use "../../styles/variables" as vars;
 
 #landing-page {
+	& > header {
+		display: flex;
+		justify-content: space-between;
+		padding: 1rem;
+		background-color: var(--background-surface);
+
+		.logo {
+			padding: 0.4rem;
+			svg {
+				height: 100%;
+				width: auto;
+			}
+		}
+
+		.auth-buttons {
+			gap: 1rem;
+			display: flex;
+		}
+	}
+
 	.hero-banner {
 		height: 100vh;
 		h1 {
-			position: absolute;
+			position: relative;
 			left: 50%;
 			top: 50%;
 			transform: translate(-50%, -50%);
 			font-family: vars.$font-stack-fancy;
 			font-size: 16rem;
+			width: fit-content;
 		}
 	}
 
