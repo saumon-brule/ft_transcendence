@@ -42,6 +42,7 @@ export type ProviderUserMinAggregateOutputType = {
   id: number | null
   providerId: number | null
   userId: number | null
+  publicDisplay: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +51,7 @@ export type ProviderUserMaxAggregateOutputType = {
   id: number | null
   providerId: number | null
   userId: number | null
+  publicDisplay: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -58,6 +60,7 @@ export type ProviderUserCountAggregateOutputType = {
   id: number
   providerId: number
   userId: number
+  publicDisplay: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -80,6 +83,7 @@ export type ProviderUserMinAggregateInputType = {
   id?: true
   providerId?: true
   userId?: true
+  publicDisplay?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +92,7 @@ export type ProviderUserMaxAggregateInputType = {
   id?: true
   providerId?: true
   userId?: true
+  publicDisplay?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -96,6 +101,7 @@ export type ProviderUserCountAggregateInputType = {
   id?: true
   providerId?: true
   userId?: true
+  publicDisplay?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -191,6 +197,7 @@ export type ProviderUserGroupByOutputType = {
   id: number
   providerId: number
   userId: number
+  publicDisplay: boolean
   createdAt: Date
   updatedAt: Date
   _count: ProviderUserCountAggregateOutputType | null
@@ -200,7 +207,7 @@ export type ProviderUserGroupByOutputType = {
   _max: ProviderUserMaxAggregateOutputType | null
 }
 
-type GetProviderUserGroupByPayload<T extends ProviderUserGroupByArgs> = Prisma.PrismaPromise<
+export type GetProviderUserGroupByPayload<T extends ProviderUserGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ProviderUserGroupByOutputType, T['by']> &
       {
@@ -222,6 +229,7 @@ export type ProviderUserWhereInput = {
   id?: Prisma.IntFilter<"ProviderUser"> | number
   providerId?: Prisma.IntFilter<"ProviderUser"> | number
   userId?: Prisma.IntFilter<"ProviderUser"> | number
+  publicDisplay?: Prisma.BoolFilter<"ProviderUser"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ProviderUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProviderUser"> | Date | string
   provider?: Prisma.XOR<Prisma.ProviderScalarRelationFilter, Prisma.ProviderWhereInput>
@@ -232,6 +240,7 @@ export type ProviderUserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  publicDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   provider?: Prisma.ProviderOrderByWithRelationInput
@@ -246,6 +255,7 @@ export type ProviderUserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProviderUserWhereInput | Prisma.ProviderUserWhereInput[]
   providerId?: Prisma.IntFilter<"ProviderUser"> | number
   userId?: Prisma.IntFilter<"ProviderUser"> | number
+  publicDisplay?: Prisma.BoolFilter<"ProviderUser"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ProviderUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProviderUser"> | Date | string
   provider?: Prisma.XOR<Prisma.ProviderScalarRelationFilter, Prisma.ProviderWhereInput>
@@ -256,6 +266,7 @@ export type ProviderUserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  publicDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProviderUserCountOrderByAggregateInput
@@ -272,11 +283,13 @@ export type ProviderUserScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"ProviderUser"> | number
   providerId?: Prisma.IntWithAggregatesFilter<"ProviderUser"> | number
   userId?: Prisma.IntWithAggregatesFilter<"ProviderUser"> | number
+  publicDisplay?: Prisma.BoolWithAggregatesFilter<"ProviderUser"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProviderUser"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProviderUser"> | Date | string
 }
 
 export type ProviderUserCreateInput = {
+  publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   provider: Prisma.ProviderCreateNestedOneWithoutUsersInput
@@ -287,11 +300,13 @@ export type ProviderUserUncheckedCreateInput = {
   id?: number
   providerId: number
   userId: number
+  publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type ProviderUserUpdateInput = {
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   provider?: Prisma.ProviderUpdateOneRequiredWithoutUsersNestedInput
@@ -302,6 +317,7 @@ export type ProviderUserUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -310,11 +326,13 @@ export type ProviderUserCreateManyInput = {
   id?: number
   providerId: number
   userId: number
+  publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type ProviderUserUpdateManyMutationInput = {
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -323,6 +341,7 @@ export type ProviderUserUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -346,6 +365,7 @@ export type ProviderUserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  publicDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -360,6 +380,7 @@ export type ProviderUserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  publicDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -368,6 +389,7 @@ export type ProviderUserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  publicDisplay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -463,6 +485,7 @@ export type ProviderUserUncheckedUpdateManyWithoutProviderNestedInput = {
 }
 
 export type ProviderUserCreateWithoutUserInput = {
+  publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   provider: Prisma.ProviderCreateNestedOneWithoutUsersInput
@@ -471,6 +494,7 @@ export type ProviderUserCreateWithoutUserInput = {
 export type ProviderUserUncheckedCreateWithoutUserInput = {
   id?: number
   providerId: number
+  publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -508,11 +532,13 @@ export type ProviderUserScalarWhereInput = {
   id?: Prisma.IntFilter<"ProviderUser"> | number
   providerId?: Prisma.IntFilter<"ProviderUser"> | number
   userId?: Prisma.IntFilter<"ProviderUser"> | number
+  publicDisplay?: Prisma.BoolFilter<"ProviderUser"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ProviderUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProviderUser"> | Date | string
 }
 
 export type ProviderUserCreateWithoutProviderInput = {
+  publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProvidersInput
@@ -521,6 +547,7 @@ export type ProviderUserCreateWithoutProviderInput = {
 export type ProviderUserUncheckedCreateWithoutProviderInput = {
   id?: number
   userId: number
+  publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -554,11 +581,13 @@ export type ProviderUserUpdateManyWithWhereWithoutProviderInput = {
 export type ProviderUserCreateManyUserInput = {
   id?: number
   providerId: number
+  publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type ProviderUserUpdateWithoutUserInput = {
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   provider?: Prisma.ProviderUpdateOneRequiredWithoutUsersNestedInput
@@ -567,6 +596,7 @@ export type ProviderUserUpdateWithoutUserInput = {
 export type ProviderUserUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.IntFieldUpdateOperationsInput | number
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -574,6 +604,7 @@ export type ProviderUserUncheckedUpdateWithoutUserInput = {
 export type ProviderUserUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.IntFieldUpdateOperationsInput | number
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -581,11 +612,13 @@ export type ProviderUserUncheckedUpdateManyWithoutUserInput = {
 export type ProviderUserCreateManyProviderInput = {
   id?: number
   userId: number
+  publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type ProviderUserUpdateWithoutProviderInput = {
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProvidersNestedInput
@@ -594,6 +627,7 @@ export type ProviderUserUpdateWithoutProviderInput = {
 export type ProviderUserUncheckedUpdateWithoutProviderInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -601,6 +635,7 @@ export type ProviderUserUncheckedUpdateWithoutProviderInput = {
 export type ProviderUserUncheckedUpdateManyWithoutProviderInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -611,6 +646,7 @@ export type ProviderUserSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   providerId?: boolean
   userId?: boolean
+  publicDisplay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   provider?: boolean | Prisma.ProviderDefaultArgs<ExtArgs>
@@ -621,6 +657,7 @@ export type ProviderUserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   providerId?: boolean
   userId?: boolean
+  publicDisplay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   provider?: boolean | Prisma.ProviderDefaultArgs<ExtArgs>
@@ -631,6 +668,7 @@ export type ProviderUserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   providerId?: boolean
   userId?: boolean
+  publicDisplay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   provider?: boolean | Prisma.ProviderDefaultArgs<ExtArgs>
@@ -641,11 +679,12 @@ export type ProviderUserSelectScalar = {
   id?: boolean
   providerId?: boolean
   userId?: boolean
+  publicDisplay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProviderUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "providerId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["providerUser"]>
+export type ProviderUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "providerId" | "userId" | "publicDisplay" | "createdAt" | "updatedAt", ExtArgs["result"]["providerUser"]>
 export type ProviderUserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   provider?: boolean | Prisma.ProviderDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -669,6 +708,7 @@ export type $ProviderUserPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: number
     providerId: number
     userId: number
+    publicDisplay: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["providerUser"]>
@@ -1099,6 +1139,7 @@ export interface ProviderUserFieldRefs {
   readonly id: Prisma.FieldRef<"ProviderUser", 'Int'>
   readonly providerId: Prisma.FieldRef<"ProviderUser", 'Int'>
   readonly userId: Prisma.FieldRef<"ProviderUser", 'Int'>
+  readonly publicDisplay: Prisma.FieldRef<"ProviderUser", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"ProviderUser", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ProviderUser", 'DateTime'>
 }
@@ -1297,6 +1338,11 @@ export type ProviderUserFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` ProviderUsers.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ProviderUsers.
+   */
   distinct?: Prisma.ProviderUserScalarFieldEnum | Prisma.ProviderUserScalarFieldEnum[]
 }
 

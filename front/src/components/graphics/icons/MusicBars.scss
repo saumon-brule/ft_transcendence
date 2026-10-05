@@ -1,0 +1,34 @@
+
+.bars {
+	display: flex;
+	gap: 2px;
+	align-items: flex-end;
+	height: 12px;
+}
+
+.bars span {
+	width:2.5px;
+	background:var(--background-accent-hover);
+	border-radius:2px;
+	animation:eq 1s infinite ease-in-out;
+}
+
+.bars span:nth-child(1){
+	height:8px;
+	animation-delay:0s;
+}
+
+.bars span:nth-child(2){
+	height:12px;
+	animation-delay:.2s;
+}
+
+.bars span:nth-child(3){
+	height:8px;
+	animation-delay:.4s;
+}
+
+@keyframes eq{
+	0%,100%{transform:scaleY(.5);}
+	50%{transform:scaleY(1);}
+}

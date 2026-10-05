@@ -6,7 +6,13 @@ import { initialized } from "./store/auth.store";
 import LoadingSplash from "./pages/Loading/LoadingSplash";
 import { ToasterProvider } from "./components/ui/Toaster";
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: false,
+		},
+	},
+});
 
 const App: Component = () => {
 	return <I18nProvider>

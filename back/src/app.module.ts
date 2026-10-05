@@ -14,6 +14,7 @@ import { TokensModule } from "./tokens/tokens.module";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { LoggingModule } from "./core/logging/logging.module";
 import { AppConfigModule } from "./config/config.module";
+import { PlaylistsModule } from "./playlists/playlists.module";
 
 @Module({
 	providers: [
@@ -39,6 +40,7 @@ import { AppConfigModule } from "./config/config.module";
 		ScheduleModule.forRoot(),
 		TokensModule,
 		AppConfigModule,
+		PlaylistsModule,
 		ThrottlerModule.forRoot({
 			throttlers: [{ ttl: 60000, limit: 100 }],
 		}),

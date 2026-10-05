@@ -3,6 +3,7 @@ import { authContract } from "./auth/auth.contract";
 import { usersContract } from "./users/users.contract";
 import { rolesContract } from "./roles/roles.contract";
 import { permissionsContract } from "./permissions/permissions.contract";
+import { playlistsContract } from "./playlists/playlists.contract";
 import { error401BaseSchema } from "./schemas/error401";
 import { error403Schema } from "./schemas/error403";
 import { error400Schema } from "./schemas/error400";
@@ -18,6 +19,7 @@ export const appContract = c.router(
 		roles: rolesContract,
 		permissions: permissionsContract,
 		config: appConfigContract,
+		playlists: playlistsContract,
 	},
 	{
 		// Pour ceux qui se demandent, la difference entre 401 Unauthorized et 403 Forbidden :

@@ -11,7 +11,7 @@ import LinkParticles from "~/components/ui/LinkParticles";
 export default function PromptVerifyEmail() {
 	const { t } = useTranslation();
 
-	const profile = client.users.profile.createQuery(queryKeys.users.profile, {});
+	const profile = client.users.me.createQuery(queryKeys.users.me, {});
 	const logoutMutation = client.auth.logout.createMutation();
 	const resendEmailMutation = client.auth.askNewConfirmationEmail.createMutation();
 

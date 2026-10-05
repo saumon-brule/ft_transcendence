@@ -5,6 +5,11 @@ services:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev
       POSTGRES_DB: flex
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d flex"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
     ports:
       - "5432:5432"
     volumes:
