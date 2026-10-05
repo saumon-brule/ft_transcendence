@@ -18,10 +18,12 @@ export const musicListResponseSchema = z.object({
 });
 
 export const createMusicSchema = z.object({
-	name: z.string().trim().min(1).max(200),
+	name: z.string().trim().min(1).
+		max(200),
 	duration: z.number().int().positive(),
 	publishedAt: z.coerce.date().nullable().optional(),
-	albumUuid: z.string().uuid().nullable().optional(),
+	albumUuid: z.string().uuid().nullable().
+		optional(),
 	artistUuids: z.array(z.string().uuid()),
 });
 

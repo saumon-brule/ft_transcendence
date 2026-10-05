@@ -25,7 +25,8 @@ export const providerRoleListResponseSchema = z.object({
 });
 
 export const createProviderRoleSchema = z.object({
-	name: z.string().trim().min(1).max(50),
+	name: z.string().trim().min(1).
+		max(50),
 	permissions: z.array(providerPermissionSchema),
 });
 

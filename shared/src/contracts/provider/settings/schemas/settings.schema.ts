@@ -10,5 +10,6 @@ export const providerSettingsSchema = z.object({
 
 export const updateProviderSettingsSchema = z.object({
 	visibility: visibilitySchema.optional(),
-	defaultRoleUuid: z.string().uuid().nullable().optional(),
+	defaultRoleUuid: z.string().uuid().nullable().
+		optional(),
 });

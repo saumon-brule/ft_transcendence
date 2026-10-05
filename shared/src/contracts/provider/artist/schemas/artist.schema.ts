@@ -17,12 +17,10 @@ export const artistListResponseSchema = z.object({
 });
 
 export const createArtistSchema = z.object({
-	name: z.string().trim().min(1).max(200),
-	biography: z.string().max(5000).nullable().optional(),
+	name: z.string().trim().min(1).
+		max(200),
+	biography: z.string().max(5000).nullable().
+		optional(),
 });
 
 export const updateArtistSchema = createArtistSchema.partial();
-
-export const mergeArtistSchema = z.object({
-	intoUuid: z.string().uuid(),
-});

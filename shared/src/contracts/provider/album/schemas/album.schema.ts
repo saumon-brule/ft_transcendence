@@ -17,7 +17,8 @@ export const albumListResponseSchema = z.object({
 });
 
 export const createAlbumSchema = z.object({
-	name: z.string().trim().min(1).max(200),
+	name: z.string().trim().min(1).
+		max(200),
 	publishedAt: z.coerce.date().nullable().optional(),
 	artistUuids: z.array(z.string().uuid()),
 });

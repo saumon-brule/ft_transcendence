@@ -3,7 +3,6 @@ import {
 	artistDetailedItemSchema,
 	artistListResponseSchema,
 	createArtistSchema,
-	mergeArtistSchema,
 	updateArtistSchema,
 } from "./schemas/artist.schema";
 import { listQuerySchema, uuidParamSchema } from "../../schemas/common.schema";
