@@ -31,14 +31,17 @@
 	"dependencies": {
 		"@flex/shared": "workspace:*",
 		"@fontsource-variable/inter": "^5.2.8",
-		"@fontsource/instrument-serif": "^5.2.8",
+		"@fontsource/gasoek-one": "^5.3.0",
 		"@solid-primitives/i18n": "^2.2.1",
 		"@solidjs/router": "^0.16.1",
 		"@tanstack/solid-query": "^4.0.0",
 		"@ts-rest/core": "^3.52.1",
 		"@ts-rest/solid-query": "^3.52.1",
+		"@tsparticles/engine": "^4.4.0",
+		"@tsparticles/preset-links": "^4.4.0",
 		"class-validator": "^0.14.4",
 		"jwt-decode": "^4.0.0",
+		"lucide-solid": "^1.47.0",
 		"solid-js": "^1.9.5",
 		"solid-transition-group": "^0.3.0",
 		"zod": "^3.25.76"

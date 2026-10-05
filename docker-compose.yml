@@ -4,7 +4,12 @@ services:
     environment:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev
-      POSTGRES_DB: 42eat
+      POSTGRES_DB: flex
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d flex"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
     ports:
       - "5432:5432"
     volumes:
@@ -15,5 +20,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /tmp/42eat-db
+      device: /tmp/flex-db
       o: bind

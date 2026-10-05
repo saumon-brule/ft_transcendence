@@ -11,10 +11,12 @@ import VerifiedEmailGuard from "./components/guards/VerifiedEmailGuard";
 
 import PromptVerifyEmail from "./pages/auth/verifyEmail/PromptVerifyEmail";
 import UnverifiedEmailGuard from "./components/guards/UnverifiedEmailGuard";
-import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath, ftIntraLinkCallbackPath } from "@flex/shared";
+import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath } from "@flex/shared";
 import FtAuthCallback from "./pages/ftCallback/FtAuthCallback";
 import ResetPassword from "./pages/auth/passwordReset/ResetPassword";
 import RequestPasswordReset from "./pages/auth/passwordReset/RequestPasswordReset";
+import Profile from "./pages/Profile";
+import AppContainer from "./components/AppContainer";
 
 export const AppRouter = () => {
 	return <Router >
@@ -23,19 +25,21 @@ export const AppRouter = () => {
 			<Route path="/" component={AuthLayout}>
 				<Route path="/login" component={LoginForm}/>
 				<Route path="/register" component={RegisterForm} />
+				<Route path="/auth/request-password-reset" component={RequestPasswordReset} />
 			</Route>
-			<Route path="/auth/request-password-reset" component={RequestPasswordReset} />
 		</Route>
 		<Route path={emailConfirmationPath} component={VerifyEmail} />
 		<Route path={ftIntraAuthCallbackPath} component={FtAuthCallback} />
-		<Route path={ftIntraLinkCallbackPath} component={() => null} />
 		<Route path={passwordResetConfirmationPath} component={ResetPassword} />
 		<Route path="/" component={AuthGuard}>
 			<Route path="/" component={UnverifiedEmailGuard}>
 				<Route path="/verify-email" component={PromptVerifyEmail}/>
 			</Route>
 			<Route path="/" component={VerifiedEmailGuard}>
-				<Route path="/home" component={Home} />
+				<Route path="/" component={AppContainer}>
+					<Route path="/home" component={Home} />
+					<Route path="/user/:uuid" component={Profile} />
+				</Route>
 			</Route>
 		</Route>
 	</Router>;

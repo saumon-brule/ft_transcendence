@@ -51,13 +51,19 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Member: 'Member',
+  User: 'User',
   Session: 'Session',
   Token: 'Token',
   Role: 'Role',
   RolePermission: 'RolePermission',
-  MemberRole: 'MemberRole',
-  AppConfig: 'AppConfig'
+  UserRole: 'UserRole',
+  AppConfig: 'AppConfig',
+  Provider: 'Provider',
+  ProviderUser: 'ProviderUser',
+  Playlist: 'Playlist',
+  UserPlaylist: 'UserPlaylist',
+  PlaylistMusic: 'PlaylistMusic',
+  Music: 'Music'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -76,25 +82,26 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const MemberScalarFieldEnum = {
+export const UserScalarFieldEnum = {
   id: 'id',
+  uuid: 'uuid',
   email: 'email',
   password: 'password',
-  login: 'login',
-  displayName: 'displayName',
-  internalNote: 'internalNote',
-  joinDate: 'joinDate',
+  username: 'username',
   emailValidated: 'emailValidated',
+  currentlyListeningId: 'currentlyListeningId',
+  listeningUntil: 'listeningUntil',
+  listeningPrivate: 'listeningPrivate',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'
 } as const
 
-export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {
   id: 'id',
-  memberId: 'memberId',
+  userUUID: 'userUUID',
   jti: 'jti',
   userAgent: 'userAgent',
   ipAddress: 'ipAddress',
@@ -109,7 +116,7 @@ export const TokenScalarFieldEnum = {
   id: 'id',
   token: 'token',
   purpose: 'purpose',
-  memberId: 'memberId',
+  userId: 'userId',
   data: 'data',
   expiresAt: 'expiresAt',
   createdAt: 'createdAt'
@@ -138,13 +145,13 @@ export const RolePermissionScalarFieldEnum = {
 export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
 
 
-export const MemberRoleScalarFieldEnum = {
+export const UserRoleScalarFieldEnum = {
   id: 'id',
-  memberId: 'memberId',
+  userId: 'userId',
   roleId: 'roleId'
 } as const
 
-export type MemberRoleScalarFieldEnum = (typeof MemberRoleScalarFieldEnum)[keyof typeof MemberRoleScalarFieldEnum]
+export type UserRoleScalarFieldEnum = (typeof UserRoleScalarFieldEnum)[keyof typeof UserRoleScalarFieldEnum]
 
 
 export const AppConfigScalarFieldEnum = {
@@ -154,6 +161,80 @@ export const AppConfigScalarFieldEnum = {
 } as const
 
 export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
+
+
+export const ProviderScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  name: 'name',
+  adress: 'adress',
+  ownerId: 'ownerId',
+  publicDisplay: 'publicDisplay',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProviderScalarFieldEnum = (typeof ProviderScalarFieldEnum)[keyof typeof ProviderScalarFieldEnum]
+
+
+export const ProviderUserScalarFieldEnum = {
+  id: 'id',
+  providerId: 'providerId',
+  userId: 'userId',
+  publicDisplay: 'publicDisplay',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProviderUserScalarFieldEnum = (typeof ProviderUserScalarFieldEnum)[keyof typeof ProviderUserScalarFieldEnum]
+
+
+export const PlaylistScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  name: 'name',
+  ownerId: 'ownerId',
+  private: 'private',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlaylistScalarFieldEnum = (typeof PlaylistScalarFieldEnum)[keyof typeof PlaylistScalarFieldEnum]
+
+
+export const UserPlaylistScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  playlistId: 'playlistId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserPlaylistScalarFieldEnum = (typeof UserPlaylistScalarFieldEnum)[keyof typeof UserPlaylistScalarFieldEnum]
+
+
+export const PlaylistMusicScalarFieldEnum = {
+  id: 'id',
+  playlistId: 'playlistId',
+  musicId: 'musicId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlaylistMusicScalarFieldEnum = (typeof PlaylistMusicScalarFieldEnum)[keyof typeof PlaylistMusicScalarFieldEnum]
+
+
+export const MusicScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  title: 'title',
+  artist: 'artist',
+  duration: 'duration',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MusicScalarFieldEnum = (typeof MusicScalarFieldEnum)[keyof typeof MusicScalarFieldEnum]
 
 
 export const SortOrder = {

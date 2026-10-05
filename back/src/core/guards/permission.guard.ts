@@ -2,15 +2,15 @@ import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { RequirePermission } from "../decorators/require-permission.decorator";
 import { JwtAuthGuard } from "./jwt-auth.guard";
-import { AuthMember } from "../decorators/current-member.decorator";
-import { MembersService } from "../../members/members.service";
+import { AuthUser } from "../decorators/current-user.decorator";
+import { UsersService } from "../../users/users.service";
 import { AppForbiddenException } from "../error/forbidden";
 
 @Injectable()
 export class PermissionGuard extends JwtAuthGuard implements CanActivate {
 	constructor(
 		private reflector: Reflector,
-		private readonly members: MembersService,
+		private readonly users: UsersService,
 	) {
 		super();
 	}
@@ -25,10 +25,10 @@ export class PermissionGuard extends JwtAuthGuard implements CanActivate {
 		}
 		await super.canActivate(context);
 
-		const request = context.switchToHttp().getRequest<{ user: AuthMember }>();
-		const user: AuthMember = request.user;
+		const request = context.switchToHttp().getRequest<{ user: AuthUser }>();
+		const user: AuthUser = request.user;
 
-		if (await this.members.doMemberHavePermission(user.id, permission)) {
+		if (await this.users.doUserHavePermission(user.uuid, permission)) {
 			return true;
 		}
 

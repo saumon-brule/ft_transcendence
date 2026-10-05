@@ -93,33 +93,34 @@ export class DatabaseBootstrapService implements OnModuleInit {
 
 		const hashedPassword = await bcrypt.hash("abcdefgh", 10);
 
-		const liamMember = await this.prisma.member.upsert({
+		const liamUser = await this.prisma.user.upsert({
 			where: { email: "liam@test.com" },
 			update: {},
 			create: {
 				email: "liam@test.com",
-				login: "lilefebv",
+				username: "Liammmmmmmm",
 				password: hashedPassword,
 				emailValidated: true,
 			},
 		});
 
-		const chantalMember = await this.prisma.member.upsert({
+		const chantalUser = await this.prisma.user.upsert({
 			where: { email: "chantal@test.com" },
 			update: {},
 			create: {
 				email: "chantal@test.com",
-				displayName: "Chantal",
+				username: "Chantal",
 				password: hashedPassword,
 				emailValidated: true,
 			},
 		});
 
-		const machinMember = await this.prisma.member.upsert({
+		const machinUser = await this.prisma.user.upsert({
 			where: { email: "machin@test.com" },
 			update: {},
 			create: {
 				email: "machin@test.com",
+				username: "Machin",
 				password: hashedPassword,
 				emailValidated: true,
 			},
@@ -129,33 +130,214 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			"Users created : liam@test.com, chantal@test.com, machin@test.com",
 		);
 
-		// ─── Member roles ─────────────────────────────────────────────────────────────
+		// ─── User roles ─────────────────────────────────────────────────────────────
 
-		await this.prisma.memberRole.upsert({
+		await this.prisma.userRole.upsert({
 			where: {
-				memberId_roleId: { memberId: liamMember.id, roleId: bigboss.id },
+				userId_roleId: { userId: liamUser.id, roleId: bigboss.id },
 			},
 			update: {},
-			create: { memberId: liamMember.id, roleId: bigboss.id },
+			create: { userId: liamUser.id, roleId: bigboss.id },
 		});
 
-		await this.prisma.memberRole.upsert({
+		await this.prisma.userRole.upsert({
 			where: {
-				memberId_roleId: { memberId: chantalMember.id, roleId: manager.id },
+				userId_roleId: { userId: chantalUser.id, roleId: manager.id },
 			},
 			update: {},
-			create: { memberId: chantalMember.id, roleId: manager.id },
+			create: { userId: chantalUser.id, roleId: manager.id },
 		});
 
-		await this.prisma.memberRole.upsert({
+		await this.prisma.userRole.upsert({
 			where: {
-				memberId_roleId: { memberId: machinMember.id, roleId: user.id },
+				userId_roleId: { userId: machinUser.id, roleId: user.id },
 			},
 			update: {},
-			create: { memberId: machinMember.id, roleId: user.id },
+			create: { userId: machinUser.id, roleId: user.id },
 		});
 
 		console.log("Roles asignated : liam→bigboss, chantal→manager, machin→user");
+
+		const privateProvider = await this.prisma.provider.upsert({
+			where: { name: "Liam's Private Provider" },
+			update: {
+				ownerId: liamUser.id,
+				adress: "liam-private-provider",
+				publicDisplay: false,
+			},
+			create: {
+				name: "Liam's Private Provider",
+				adress: "liam-private-provider",
+				ownerId: liamUser.id,
+				publicDisplay: false,
+			},
+		});
+
+		const publicProvider = await this.prisma.provider.upsert({
+			where: { name: "Liam's Public Provider" },
+			update: {
+				ownerId: liamUser.id,
+				adress: "liam-public-provider",
+				publicDisplay: true,
+			},
+			create: {
+				name: "Liam's Public Provider",
+				adress: "liam-public-provider",
+				ownerId: liamUser.id,
+				publicDisplay: true,
+			},
+		});
+
+		const additionalProviders = [
+			{ name: "Liam's Provider 3", adress: "liam-provider-3" },
+			{ name: "Liam's Provider 4", adress: "liam-provider-4" },
+			{ name: "Liam's Provider 5", adress: "liam-provider-5" },
+			{ name: "Liam's Provider 6", adress: "liam-provider-6" },
+			{ name: "Liam's Provider 7", adress: "liam-provider-7" },
+			{ name: "Liam's Provider 8", adress: "liam-provider-8" },
+		];
+
+		for (const provider of additionalProviders) {
+			await this.prisma.provider.upsert({
+				where: { name: provider.name },
+				update: { ownerId: liamUser.id, adress: provider.adress },
+				create: { ...provider, ownerId: liamUser.id },
+			});
+		}
+
+		await this.prisma.providerUser.upsert({
+			where: {
+				providerId_userId: {
+					providerId: privateProvider.id,
+					userId: liamUser.id,
+				},
+			},
+			update: { publicDisplay: false },
+			create: {
+				providerId: privateProvider.id,
+				userId: liamUser.id,
+				publicDisplay: false,
+			},
+		});
+
+		await this.prisma.providerUser.upsert({
+			where: {
+				providerId_userId: {
+					providerId: publicProvider.id,
+					userId: liamUser.id,
+				},
+			},
+			update: { publicDisplay: true },
+			create: {
+				providerId: publicProvider.id,
+				userId: liamUser.id,
+				publicDisplay: true,
+			},
+		});
+
+		const musicData = [
+			{ title: "the newer sweet groove", artist: "Chris Gouge", duration: 214 },
+			{ title: "Afterglow", artist: "Paper Satellites", duration: 189 },
+			{ title: "Static Hearts", artist: "The Frequency", duration: 242 },
+			{ title: "Blue Hour", artist: "Lumen Coast", duration: 201 },
+			{ title: "Last Signal", artist: "Northbound", duration: 227 },
+		];
+		const musics: { id: number }[] = [];
+		for (const data of musicData) {
+			const existingMusic = await this.prisma.music.findFirst({
+				where: { title: data.title, artist: data.artist },
+			});
+			musics.push(
+				existingMusic ?? (await this.prisma.music.create({ data })),
+			);
+		}
+
+		const privatePlaylist = await this.prisma.playlist.findFirst({
+			where: { ownerId: liamUser.id, name: "Liam's Private Playlist" },
+		});
+		let liamPrivatePlaylist = privatePlaylist;
+		if (!liamPrivatePlaylist) {
+			liamPrivatePlaylist = await this.prisma.playlist.create({
+				data: {
+					name: "Liam's Private Playlist",
+					ownerId: liamUser.id,
+					private: true,
+				},
+			});
+		}
+		await this.prisma.playlist.update({
+			where: { id: liamPrivatePlaylist.id },
+			data: { private: true },
+		});
+
+		const publicPlaylist = await this.prisma.playlist.findFirst({
+			where: { ownerId: liamUser.id, name: "Liam's Public Playlist" },
+		});
+		let liamPublicPlaylist = publicPlaylist;
+		if (!liamPublicPlaylist) {
+			liamPublicPlaylist = await this.prisma.playlist.create({
+				data: {
+					name: "Liam's Public Playlist",
+					ownerId: liamUser.id,
+					private: false,
+				},
+			});
+		}
+		await this.prisma.playlist.update({
+			where: { id: liamPublicPlaylist.id },
+			data: { private: false },
+		});
+
+		await this.prisma.userPlaylist.upsert({
+			where: {
+				userId_playlistId: {
+					userId: liamUser.id,
+					playlistId: liamPrivatePlaylist.id,
+				},
+			},
+			update: {},
+			create: {
+				userId: liamUser.id,
+				playlistId: liamPrivatePlaylist.id,
+			},
+		});
+		await this.prisma.userPlaylist.upsert({
+			where: {
+				userId_playlistId: {
+					userId: liamUser.id,
+					playlistId: liamPublicPlaylist.id,
+				},
+			},
+			update: {},
+			create: {
+				userId: liamUser.id,
+				playlistId: liamPublicPlaylist.id,
+			},
+		});
+
+		const addMusicToPlaylist = async (playlistId: number, musicId: number) => {
+			const existingLink = await this.prisma.playlistMusic.findFirst({
+				where: { playlistId, musicId },
+			});
+			if (!existingLink) {
+				await this.prisma.playlistMusic.create({ data: { playlistId, musicId } });
+			}
+		};
+		for (const music of musics.slice(0, 2)) {
+			await addMusicToPlaylist(liamPrivatePlaylist.id, music.id);
+		}
+		for (const music of musics.slice(2)) {
+			await addMusicToPlaylist(liamPublicPlaylist.id, music.id);
+		}
+
+		await this.prisma.user.update({
+			where: { id: liamUser.id },
+			data: {
+				currentlyListeningId: musics[0].id,
+				listeningUntil: new Date(Date.now() + 5 * 60 * 1000),
+				listeningPrivate: false,
+			},
+		});
 
 		console.log("Seed finished!");
 	}

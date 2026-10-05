@@ -68,7 +68,7 @@ export default tseslint.config(
 			"@stylistic/computed-property-spacing": ["error", "never"],
 			"@stylistic/key-spacing": "error",
 			"@stylistic/no-floating-decimal": "error",
-			"@stylistic/dot-location": ["error", "object"],
+				"@stylistic/dot-location": ["error", "property"],
 			"@stylistic/no-whitespace-before-property": "error",
 			"local/object-newline-key-value": "error",
 

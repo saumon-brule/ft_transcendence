@@ -19,7 +19,7 @@ export default function RegisterForm() {
 
 	const registerMutation = client.auth.register.createMutation();
 
-	let displayNameInput!: HTMLInputElement;
+	let usernameInput!: HTMLInputElement;
 	let emailInput!: HTMLInputElement;
 	let passwordInput!: HTMLInputElement;
 
@@ -29,7 +29,7 @@ export default function RegisterForm() {
 		registerMutation.mutate(
 			{
 				body: {
-					displayName: displayNameInput.value,
+					username: usernameInput.value,
 					email: emailInput.value,
 					password: passwordInput.value,
 				},
@@ -51,8 +51,8 @@ export default function RegisterForm() {
 
 	return <Form onSubmit={handleSubmit} id="register-form">
 		<div class="register-inputs">
-			<TextInput ref={(e) => displayNameInput = e.htmlElement} type="text" validator={(e) => validateFromZod(registerSchema.shape.displayName, e.value)} placeholder="Display Name" required />
 			<TextInput ref={(e) => emailInput = e.htmlElement} type="email" validator={(e) => validateFromZod(registerSchema.shape.email, e.value)} placeholder="Email" required />
+			<TextInput ref={(e) => usernameInput = e.htmlElement} type="text" validator={(e) => validateFromZod(registerSchema.shape.username, e.value)} placeholder="Username" required />
 			<TextInput ref={(e) => passwordInput = e.htmlElement} type="password" validator={(e) => validateFromZod(registerSchema.shape.password, e.value)} placeholder="Password" required />
 			<TextInput type="password" validator={(e) => e.value !== passwordInput.value && t("errors.input.text.password.confirmationMismatch")} placeholder="Confirm password" />
 			<Show when={error()}>

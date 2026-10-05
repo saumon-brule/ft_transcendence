@@ -6,12 +6,10 @@
 		fill: white;
 	}
 
-	& .btn-content {
-		display: flex;
-		justify-content: center;
-		gap: 0.5rem;
-	}
-
+	display: flex;
+	justify-content: center;
+	gap: 0.5rem;
+	height: 2.875rem;
 
 	&:disabled {
 		background-color: #03030350;
@@ -21,12 +19,12 @@
 
 html[data-theme="dark"] {
 	.ft-login-button:is(:hover, :focus-visible) {
-		background-color: #1A1A1A;
+		background-color: #1a1a1a;
 	}
 }
 
 html[data-theme="light"] {
 	.ft-login-button:is(:hover, :focus-visible) {
-		background-color: #1D1D1D;
+		background-color: #1d1d1d;
 	}
 }

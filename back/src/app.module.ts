@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ScheduleModule } from "@nestjs/schedule";
 import { PrismaModule } from "./core/prisma/prisma.module";
-import { MembersModule } from "./members/members.module";
+import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { SessionsModule } from "./sessions/sessions.module";
 import { APP_GUARD } from "@nestjs/core";
@@ -14,6 +14,7 @@ import { TokensModule } from "./tokens/tokens.module";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { LoggingModule } from "./core/logging/logging.module";
 import { AppConfigModule } from "./config/config.module";
+import { PlaylistsModule } from "./playlists/playlists.module";
 
 @Module({
 	providers: [
@@ -29,7 +30,7 @@ import { AppConfigModule } from "./config/config.module";
 	],
 	imports: [
 		PrismaModule,
-		MembersModule,
+		UsersModule,
 		AuthModule,
 		RolesModule,
 		SessionsModule,
@@ -39,6 +40,7 @@ import { AppConfigModule } from "./config/config.module";
 		ScheduleModule.forRoot(),
 		TokensModule,
 		AppConfigModule,
+		PlaylistsModule,
 		ThrottlerModule.forRoot({
 			throttlers: [{ ttl: 60000, limit: 100 }],
 		}),

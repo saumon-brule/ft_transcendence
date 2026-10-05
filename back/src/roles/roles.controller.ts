@@ -5,7 +5,7 @@ import { PERMISSIONS } from "@flex/shared";
 import { RolesService } from "./roles.service";
 import {
 	rolesContract,
-	roleMembersResponseSchema,
+	roleUsersResponseSchema,
 	roleResponseSchema,
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
@@ -81,14 +81,14 @@ export class RolesController {
 		});
 	}
 
-	@TsRestHandler(rolesContract.getRoleMembers)
+	@TsRestHandler(rolesContract.getRoleUsers)
 	@RequirePermission(PERMISSIONS.ROLES.LIST_DETAILED)
-	public getRoleMembers() {
-		return tsRestHandler(rolesContract.getRoleMembers, async ({ params }) => {
-			const roles = await this.rolesService.getRoleMembers(params.id);
+	public getRoleUsers() {
+		return tsRestHandler(rolesContract.getRoleUsers, async ({ params }) => {
+			const roles = await this.rolesService.getRoleUsers(params.id);
 			return {
 				status: 200,
-				body: roleMembersResponseSchema.parse(roles),
+				body: roleUsersResponseSchema.parse(roles),
 			};
 		});
 	}

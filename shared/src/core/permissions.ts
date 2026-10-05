@@ -1,11 +1,11 @@
 export const PERMISSIONS = {
 	MEMBERS: {
-		MY_PROFILE: "members:my_profile",
-		ANY_PROFILE: "members:any_profile",
-		ALL_PROFILES: "members:all_profiles",
-		GET_ROLES: "members:get_roles",
-		GET_ROLES_DETAILED: "members:get_roles_detailed",
-		CHANGE_ROLES: "members:change_roles",
+		MY_PROFILE: "users:my_profile",
+		ANY_PROFILE: "users:any_profile",
+		ALL_PROFILES: "users:all_profiles",
+		GET_ROLES: "users:get_roles",
+		GET_ROLES_DETAILED: "users:get_roles_detailed",
+		CHANGE_ROLES: "users:change_roles",
 	},
 	ROLES: {
 		CREATE: "roles:create",
@@ -15,7 +15,7 @@ export const PERMISSIONS = {
 		DETAILS: "roles:details",
 		LIST: "roles:list",
 		LIST_DETAILED: "roles:list_detailed",
-		LIST_MEMBERS: "roles:list_members",
+		LIST_MEMBERS: "roles:list_users",
 	},
 	PERMISSIONS: {
 		LIST: "permissions:list",

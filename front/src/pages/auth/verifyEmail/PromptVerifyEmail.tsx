@@ -6,11 +6,12 @@ import { useTranslation } from "~/i18n/context";
 import DialogPage from "~/components/ui/DialogPage";
 
 import "./PromptVerifyEmail.scss";
+import LinkParticles from "~/components/ui/LinkParticles";
 
 export default function PromptVerifyEmail() {
 	const { t } = useTranslation();
 
-	const profile = client.members.profile.createQuery(queryKeys.members.profile, {});
+	const profile = client.users.me.createQuery(queryKeys.users.me, {});
 	const logoutMutation = client.auth.logout.createMutation();
 	const resendEmailMutation = client.auth.askNewConfirmationEmail.createMutation();
 
@@ -32,7 +33,7 @@ export default function PromptVerifyEmail() {
 		authActions.logout();
 	}
 
-	return <Show when={profile.isFetched && profile.data} keyed>
+	return <><LinkParticles/><Show when={profile.isFetched && profile.data} keyed>
 		{(data) => (<DialogPage id="prompt-verify-email">
 			<div class="main-block">
 				<h1>{t("pages.promptVerifyEmail.title")}</h1>
@@ -51,5 +52,5 @@ export default function PromptVerifyEmail() {
 			</div>
 			<a class="logout-link" onClick={(e) => { e.preventDefault(); logout(); }}>{t("pages.promptVerifyEmail.logout")}</a>
 		</DialogPage>)}
-	</Show>;
+	</Show></>;
 }

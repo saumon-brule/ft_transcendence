@@ -10,7 +10,7 @@ export class PermissionsController {
 
 	@TsRestHandler(permissionsContract.getPermissionList)
 	@RequirePermission(PERMISSIONS.PERMISSIONS.LIST)
-	public profile() {
+	public getPermissionList() {
 		return tsRestHandler(permissionsContract.getPermissionList, () => {
 			return Promise.resolve({ status: 200, body: PERMISSIONS });
 		});

@@ -29,8 +29,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Members
- * const members = await prisma.member.findMany()
+ * // Fetch zero or more Users
+ * const users = await prisma.user.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -40,10 +40,10 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Member
+ * Model User
  * 
  */
-export type Member = Prisma.MemberModel
+export type User = Prisma.UserModel
 /**
  * Model Session
  * 
@@ -65,12 +65,42 @@ export type Role = Prisma.RoleModel
  */
 export type RolePermission = Prisma.RolePermissionModel
 /**
- * Model MemberRole
+ * Model UserRole
  * 
  */
-export type MemberRole = Prisma.MemberRoleModel
+export type UserRole = Prisma.UserRoleModel
 /**
  * Model AppConfig
  * 
  */
 export type AppConfig = Prisma.AppConfigModel
+/**
+ * Model Provider
+ * 
+ */
+export type Provider = Prisma.ProviderModel
+/**
+ * Model ProviderUser
+ * 
+ */
+export type ProviderUser = Prisma.ProviderUserModel
+/**
+ * Model Playlist
+ * 
+ */
+export type Playlist = Prisma.PlaylistModel
+/**
+ * Model UserPlaylist
+ * 
+ */
+export type UserPlaylist = Prisma.UserPlaylistModel
+/**
+ * Model PlaylistMusic
+ * 
+ */
+export type PlaylistMusic = Prisma.PlaylistMusicModel
+/**
+ * Model Music
+ * 
+ */
+export type Music = Prisma.MusicModel

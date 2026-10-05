@@ -12,6 +12,7 @@ function error403SchemaVariant<T extends readonly [string, ...string[]]>(enumArr
 export const serverCode403 = [
 	"INVALID_PERMISSION",
 	"EMAIL_NOT_VERIFIED",
+	"ALREADY_LOGGED_IN",
 	"FORBIDDEN",
 ] as const;
 

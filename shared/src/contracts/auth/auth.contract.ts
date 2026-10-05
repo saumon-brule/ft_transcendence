@@ -123,15 +123,6 @@ export const authContract = c.router(
 				403: z.never(),
 			},
 		},
-		link42: {
-			method: "POST",
-			path: "/42/link",
-			body: auth42Schema,
-			responses: {
-				204: null,
-				409: errorDefaultSchema,
-			},
-		},
 	},
 	{ pathPrefix: "/auth" },
 );

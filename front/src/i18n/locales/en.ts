@@ -36,10 +36,11 @@ export default {
 		requestPasswordReset: {
 			title: "Reset your password",
 			description: "Enter your email address to reset your password.",
-			rateLimit: "You'll be able to resend an email in {{time}}",
+			rateLimit: "You'll be able to resend an email in {{time}}s",
 			success: "If an account with this email address exists, you will receive a link to reset your password",
 			input: {
 				placeholder: "Email address",
+				button: "Reset",
 			},
 		},
 		resetPassword: {

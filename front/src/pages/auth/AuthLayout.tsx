@@ -1,25 +1,21 @@
 import { RouteSectionProps } from "@solidjs/router";
 import { Transition } from "solid-transition-group";
+import LinkParticles from "~/components/ui/LinkParticles";
 
 import "./AuthLayout.scss";
-import NeonLogo from "~/components/common/NeonLogo";
 
 export default function AuthLayout(props: RouteSectionProps) {
 	return <div id="auth-page">
-		<div class="auth-hero">
-			<NeonLogo />
-		</div>
+		<LinkParticles />
 		<section class="auth-section">
-			{/* <header class="top-details" /> */}
 			<div class="auth-block">
-				<h1>42's Foyer</h1>
+				<h1>Flex</h1>
 				<Transition name="slide" mode="outin">
 					<main class="form-container">
 						{props.children}
 					</main>
 				</Transition>
 			</div>
-			{/* <footer class="bottom-details" /> */}
 		</section>
 	</div>;
 }

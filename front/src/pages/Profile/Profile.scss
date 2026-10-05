@@ -1,0 +1,264 @@
+#user-profile {
+	width: 100%;
+	
+	.profile-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px;
+		padding: 20px;
+		padding-top: 40px;
+		padding-left: 40px;
+
+		img {
+			width: 150px;
+			height: 150px;
+			border-radius: 50%;
+			margin-right: 20px;
+		}
+
+		.header-info {
+			h2 {
+				font-size: 28px;
+				margin: 0;
+			}
+
+			.user-stats {
+				display: flex;
+				flex-direction: row;
+				gap: 8px;
+				margin-top: 6px;
+				align-items: center;
+				color: var(--text-secondary);
+
+				.stat {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+					font-size: 14px;
+				}
+
+				.separator {
+					width: 3px;
+					height: 3px;
+					background-color: var(--text-secondary);
+					border-radius: 50%;
+				}
+			}
+
+			.listening {
+				display: flex;
+				align-items: center;
+				background-color: var(--background-card);
+				font-size: 14px;
+				color: var(--text-primary);
+				width: fit-content;
+				margin-top: 10px;
+				gap: 8px;
+				padding: 8px 12px;
+				border-radius: 32px;
+				border: 1px solid var(--background-accent-hover);
+			}
+		}
+	}
+
+	section {
+		margin-bottom: 20px;
+		padding-left: 40px;
+		padding-right: 40px;
+
+		.section-heading {
+			display: flex;
+			align-items: baseline;
+			gap: 12px;
+		}
+
+		h3 {
+			font-size: 20px;
+			margin: 0 0 10px;
+		}
+
+	}
+
+	.providers {
+		.providers-list {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			padding-right: 8px;
+		}
+
+		.provider-card {
+			display: flex;
+			width: 100%;
+			min-height: 72px;
+			align-items: center;
+			padding: 14px 18px;
+			background-color: var(--background-card);
+			border-radius: 8px;
+			border: 1px solid transparent;
+			color: inherit;
+			text-decoration: none;
+			justify-content: space-between;
+			gap: 16px;
+			transition: background-color .2s ease;
+			
+			&:hover {
+				background-color: var(--background-overlay);
+			}
+
+			.provider-info {
+				min-width: 0;
+
+				h4,
+				p {
+					margin: 0;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				h4 {
+					font-size: 16px;
+				}
+
+				p {
+					margin-top: 6px;
+					color: var(--text-secondary);
+					font-size: 14px;
+				}
+			}
+
+			.provider-status {
+				display: inline-flex;
+				flex: 0 0 auto;
+				align-items: center;
+				gap: 7px;
+				padding: 5px 9px;
+				border: 1px solid currentColor;
+				border-radius: 999px;
+				font-size: 12px;
+				font-weight: 600;
+				white-space: nowrap;
+
+				&.pinging {
+					color: var(--text-warning);
+				}
+
+				&.online {
+					color: var(--text-valid);
+				}
+
+				&.offline {
+					color: var(--text-danger);
+				}
+			}
+
+			.provider-status-dot {
+				width: 7px;
+				height: 7px;
+				border-radius: 50%;
+				background-color: currentColor;
+			}
+		}
+
+		.section-heading a {
+			font-size: 14px;
+		}
+	}
+
+	.playlists {
+		.playlists-list {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 16px;
+			align-items: stretch;
+		}
+
+		.playlist-card {
+			display: flex;
+			flex-direction: column;
+			flex: 0 1 180px;
+			min-width: 0;
+			align-items: center;
+			gap: 14px;
+			padding: 12px;
+			background-color: var(--background-card);
+			border-radius: 8px;
+			border: 1px solid transparent;
+			color: inherit;
+			text-decoration: none;
+			transition: background-color .2s ease;
+
+			&:hover {
+				background-color: var(--background-overlay);
+			}
+
+			img {
+				width: 150px;
+				height: 150px;
+				flex: 0 0 72px;
+				object-fit: cover;
+				border-radius: 6px;
+			}
+
+			.playlist-info {
+				width: 100%;
+
+				h4, p {
+					margin: 0;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				h4 {
+					font-size: 14px;
+				}
+
+				p {
+					margin-top: 4px;
+					color: var(--text-secondary);
+					font-size: 12px;
+				}
+			}
+		}
+	}
+
+	.friends {
+		.friends-list {
+			display: flex;
+			gap: 16px;
+			overflow-x: auto;
+			padding-bottom: 8px;
+			scrollbar-width: thin;
+		}
+
+		.friend-card {
+			display: flex;
+			flex: 0 0 88px;
+			flex-direction: column;
+			align-items: center;
+			gap: 8px;
+			color: inherit;
+			text-align: center;
+
+			img {
+				width: 64px;
+				height: 64px;
+				border-radius: 50%;
+				object-fit: cover;
+				background-color: var(--background-card);
+			}
+
+			span {
+				max-width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				font-size: 13px;
+			}
+		}
+	}
+
+}
