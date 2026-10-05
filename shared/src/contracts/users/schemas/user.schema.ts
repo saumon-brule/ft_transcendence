@@ -55,6 +55,7 @@ export const meSchema = z.object({
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
 });
+export type Profile = z.infer<typeof meSchema>;
 
 export const userBasicSchema = z.object({
 	id: z.number(),
