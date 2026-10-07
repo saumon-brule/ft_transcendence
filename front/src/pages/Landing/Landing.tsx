@@ -57,17 +57,23 @@ export default function Landing() {
 			<section class="appearing-section" ref={easySectionRef}>
 				<div style={{ display: "flex" }}>
 					<div>
-						<h2>Easy</h2>
-						<p>Like every other streaming service, you'll be able to easily create and manage your musics. But Flex also allows simple management of source servers.</p>
+						<h2>What is it ?</h2>
+						<p></p>
 					</div>
-					<p>This is supposed to be image This is supposed to be image This is supposed to be image This is supposed to be image This is supposed to be image This is supposed to be image This is supposed to be image This is supposed to be image </p>
+					<p></p>
 				</div>
 			</section>
 			<section class="appearing-section" ref={freeSectionRef}>
-				<h2>Free</h2>
+				<div style={{ display: "flex" }}>
+					<div>
+						<h2>How to use ?</h2>
+						<p></p>
+					</div>
+					<p></p>
+				</div>
 			</section>
 			<section class="appearing-section" ref={openSectionRef}>
-				<h2>Open</h2>
+				<h2>Join the project!</h2>
 			</section>
 		</div>
 	</main>;
