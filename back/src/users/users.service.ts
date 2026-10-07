@@ -224,4 +224,13 @@ export class UsersService {
 		});
 	}
 
+	public async updateMe(uuid: string, data: { username?: string; listeningPrivate?: boolean }) {
+		await this.prisma.user.update({
+			where: { uuid },
+			data,
+		});
+
+		return this.getExposedInfoByUUID(uuid);
+	}
+
 }

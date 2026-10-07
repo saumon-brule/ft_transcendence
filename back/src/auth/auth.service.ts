@@ -309,7 +309,7 @@ export class AuthService {
 
 	private async sendChangeEmail(user: User, newEmail: string) {
 		await this.mailService.sendEmail(
-			[user.email],
+			[newEmail],
 			"Change your email - Flex",
 			"reset-email",
 			{

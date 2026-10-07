@@ -11,13 +11,14 @@ import VerifiedEmailGuard from "./components/guards/VerifiedEmailGuard";
 
 import PromptVerifyEmail from "./pages/auth/verifyEmail/PromptVerifyEmail";
 import UnverifiedEmailGuard from "./components/guards/UnverifiedEmailGuard";
-import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath } from "@flex/shared";
+import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath, changeEmailConfirmationPath } from "@flex/shared";
 import FtAuthCallback from "./pages/ftCallback/FtAuthCallback";
 import ResetPassword from "./pages/auth/passwordReset/ResetPassword";
 import RequestPasswordReset from "./pages/auth/passwordReset/RequestPasswordReset";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import AppContainer from "./components/AppContainer";
+import ChangeEmailValidation from "./pages/auth/changeEmail/ChangeEmailValidation";
 
 export const AppRouter = () => {
 	return <Router >
@@ -30,6 +31,7 @@ export const AppRouter = () => {
 			</Route>
 		</Route>
 		<Route path={emailConfirmationPath} component={VerifyEmail} />
+		<Route path={changeEmailConfirmationPath} component={ChangeEmailValidation} />
 		<Route path={ftIntraAuthCallbackPath} component={FtAuthCallback} />
 		<Route path={passwordResetConfirmationPath} component={ResetPassword} />
 		<Route path="/" component={AuthGuard}>

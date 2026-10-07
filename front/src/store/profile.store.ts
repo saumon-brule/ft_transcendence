@@ -5,12 +5,14 @@ import { Profile } from "@flex/shared";
 interface ProfileState {
 	profile: Profile | null;
 	initialized: boolean;
+	avatarVersion: number;
 }
 
 export function createProfileStore() {
 	const [state, setState] = createStore<ProfileState>({
 		profile: null,
 		initialized: false,
+		avatarVersion: 0,
 	});
 
 	const actions = {
@@ -25,13 +27,16 @@ export function createProfileStore() {
 				setState("initialized", true);
 			}
 		},
-		set(profile: Profile | null) {
+		set: (profile: Profile | null) => {
 			setState("profile", reconcile(profile));
 		},
-		update(patch: Partial<Profile>) {
+		update: (patch: Partial<Profile>) => {
 			setState("profile", (p) => (p ? { ...p, ...patch } : p));
 		},
-		clear() {
+		avatarUpdated: () => {
+			setState("avatarVersion", (version) => version + 1);
+		},
+		clear: () => {
 			setState("profile", null);
 		},
 	};

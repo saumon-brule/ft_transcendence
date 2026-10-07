@@ -1,0 +1,63 @@
+.toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	cursor: pointer;
+	color: var(--text-primary);
+}
+
+.toggle input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.toggle-track {
+	display: inline-flex;
+	align-items: center;
+	width: 2.75rem;
+	height: 1.5rem;
+	padding: 0.1875rem;
+	border-radius: 999px;
+	border: 1px solid var(--input-outline-main);
+	background: var(--background-overlay);
+	transition:
+		background-color 120ms ease,
+		border-color 120ms ease;
+}
+
+.toggle-thumb {
+	width: 1.125rem;
+	height: 1.125rem;
+	border-radius: 50%;
+	background: var(--text-secondary);
+	transition: transform 120ms ease;
+}
+
+.toggle input:checked + .toggle-track {
+	border-color: var(--background-accent);
+	background: var(--background-accent);
+}
+
+.toggle input:checked + .toggle-track .toggle-thumb {
+	background: var(--neutral-0);
+	transform: translateX(1.25rem);
+}
+
+.toggle:hover .toggle-track {
+	border-color: var(--input-outline-hover);
+}
+
+.toggle input:disabled ~ .toggle-track {
+	opacity: 0.5;
+}
+
+.toggle:has(input:disabled) {
+	cursor: not-allowed;
+}
+
+.toggle input:focus-visible + .toggle-track {
+	outline: 2px solid var(--input-outline-active);
+	outline-offset: 3px;
+}

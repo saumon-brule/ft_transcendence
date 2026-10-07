@@ -69,7 +69,7 @@ export default function Header() {
 				>
 					<Show when={me.profile}>
 						{(user) => <>
-							<img class="profile-avatar" src={`${env.VITE_API_URL}/users/${user().uuid}/avatar`}/>
+							<img class="profile-avatar" src={`${env.VITE_API_URL}/users/${user().uuid}/avatar?v=${me.avatarVersion}`}/>
 							<span class="profile-username">{user().username}</span>
 						</>}
 					</Show>

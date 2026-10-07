@@ -3,6 +3,7 @@ import {
 	addRoleUserSchema,
 	DeleteRoleParamSchema,
 	meSchema,
+	updateMeSchema,
 	userSchema,
 } from "./schemas/user.schema";
 import {
@@ -19,6 +20,12 @@ export const usersContract = c.router(
 		me: {
 			method: "GET",
 			path: "/me",
+			responses: { 200: meSchema },
+		},
+		updateMe: {
+			method: "PATCH",
+			path: "/me",
+			body: updateMeSchema,
 			responses: { 200: meSchema },
 		},
 		getUser: {
