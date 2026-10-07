@@ -94,17 +94,38 @@ export default function Landing() {
 				</div>
 			</section>
 			<div class="bottom-sections">
-				<section id="get-started" class="appearing-section" ref={freeSectionRef}>
-					<div style={{ display: "flex" }}>
-						<div>
-							<h2>Get started !</h2>
-							<p></p>
+				<section id="get-started" class="appearing-section get-started" ref={freeSectionRef}>
+					<div class="title-section">
+						<h2>Get started</h2>
+						<p>Ready to start using Flex? Here's how you can get started.</p>
+					</div>
+					<div class="content-section">
+						<div class="content">
+							<h3>Create an account</h3>
+							<p>You need a Flex account to connect your provider to. Once it's created, generate a provider key from your account settings.</p>
 						</div>
-						<p></p>
+						<div class="separator"/>
+						<div class="content">
+							<h3>Setup your provider</h3>
+							<p>You need docker to run your provider, and you can follow the install instructions</p>
+							<code>
+								git clone git@github.com:saumon-brule/ft_transcendence.git flex<br/>
+								cd flex<br/>
+							</code>
+							<p>Edit the configuration file config.json with your provider key et tout le reste.</p>
+							<code>docker compose up -d</code>
+							<p>You can now fill your library from the flex interface, or by putting your music files in the directory you setup in your config. A automatic scan will try to recover the correct title, artist, album and cover info.</p>
+						</div>
+						<div class="separator"/>
+						<div class="content">
+							<h3>Share it</h3>
+							<p>Invite your friends on your provider to share your music with them.</p>
+						</div>
 					</div>
 				</section>
-				<section class="appearing-section" ref={openSectionRef}>
+				<section class="appearing-section contribute" ref={openSectionRef}>
 					<h2>Join the project!</h2>
+					<p>Flex is open source, contribute on <A class="github-link" href="https://github.com/saumon-brule/ft_transcendence">GitHub</A></p>
 				</section>
 			</div>
 		</div>
