@@ -225,6 +225,34 @@
 				font-size: 1.5rem;
 			}
 		}
+
+		@media (max-width: 1184px) {
+			.appearing-section {
+				flex-direction: column;
+				padding: 4rem;
+
+				.title-section {
+					width: 100%;
+				}
+				.content-section {
+					width: 100%;
+				}
+			}
+		}
+
+		@media (max-width: 542px) {
+			.appearing-section {
+				flex-direction: column;
+				padding: 2rem;
+
+				.title-section {
+					width: 100%;
+				}
+				.content-section {
+					width: 100%;
+				}
+			}
+		}
 	}
 }
 
