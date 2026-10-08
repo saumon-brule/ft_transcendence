@@ -1,0 +1,48 @@
+#overlay-container {
+	transition: background-color 0.2s;
+	width: 100vw;
+	height: 100vh;
+	pointer-events: none;
+	position: fixed;
+	z-index: 9999;
+
+	&.visible {
+		pointer-events: all;
+		background-color: #0000007f;
+	}
+
+	& > .overlay {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		scale: 100%;
+		translate: -50% -50%;
+
+		&.overlay-wrapper-enter {
+			opacity: 0;
+			scale: 90%;
+		}
+
+		&.overlay-wrapper-enter-active {
+			transition:
+				opacity 0.2s ease,
+				scale 0.2s ease;
+		}
+
+		&.overlay-wrapper-exit-active {
+			opacity: 0;
+			scale: 90%;
+
+			/* If you change transition time, you'll maybe need to change the timeout that call `done` in Toaster.tsx in the Transition component */
+			transition:
+				opacity 0.2s ease,
+				scale 0.2s ease;
+		}
+
+		&.pop-up {
+			background-color: var(--background-card);
+			padding: 1rem;
+			border-radius: 1rem;
+		}
+	}
+}
