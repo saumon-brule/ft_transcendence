@@ -240,17 +240,48 @@
 			}
 		}
 
-		@media (max-width: 542px) {
+		@media (max-width: 600px) {
 			.appearing-section {
-				flex-direction: column;
 				padding: 2rem;
 
 				.title-section {
-					width: 100%;
+					h2 {
+						font-size: 5rem;
+						line-height: 5rem;
+					}
+					p  {
+						font-size: 1.25rem;
+					}
 				}
-				.content-section {
-					width: 100%;
+				.content-section > .content {
+					h3 {
+						font-size: 1.5rem;
+					}
+					p {
+						font-size: 1rem;
+					}
 				}
+
+				h2 {
+					font-size: 5rem;
+					line-height: 5rem;
+				}
+				.mobile-center {
+					font-size: 1.25rem;
+					text-align: center;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 600px) {
+		.hero-banner {
+			h1 {
+				font-size: 8rem;
+				line-height: 10rem;
+			}
+			p {
+				font-size: 1.25rem;
 			}
 		}
 	}

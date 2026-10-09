@@ -125,7 +125,7 @@ export default function Landing() {
 				</section>
 				<section class="appearing-section contribute" ref={openSectionRef}>
 					<h2>Join the project!</h2>
-					<p>Flex is open source, contribute on <A class="github-link" href="https://github.com/saumon-brule/ft_transcendence">GitHub</A></p>
+					<p class="mobile-center">Flex is open source, contribute on <A class="github-link" href="https://github.com/saumon-brule/ft_transcendence">GitHub</A></p>
 				</section>
 			</div>
 		</div>
