@@ -177,6 +177,23 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type EnumFriendStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FriendStatus | Prisma.EnumFriendStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel> | $Enums.FriendStatus
+}
+
+export type EnumFriendStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FriendStatus | Prisma.EnumFriendStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFriendStatusWithAggregatesFilter<$PrismaModel> | $Enums.FriendStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel>
+}
+
 export type DateTimeFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel>
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel>
@@ -444,6 +461,23 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumFriendStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FriendStatus | Prisma.EnumFriendStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel> | $Enums.FriendStatus
+}
+
+export type NestedEnumFriendStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FriendStatus | Prisma.EnumFriendStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFriendStatusWithAggregatesFilter<$PrismaModel> | $Enums.FriendStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel>
 }
 
 export type NestedDateTimeFilter<$PrismaModel = never> = {

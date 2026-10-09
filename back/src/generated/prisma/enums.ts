@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const FriendStatus = {
+  ACCEPTED: 'ACCEPTED',
+  DENIED: 'DENIED',
+  PENDING: 'PENDING'
+} as const
+
+export type FriendStatus = (typeof FriendStatus)[keyof typeof FriendStatus]
+
+
 export const TokenPurpose = {
   EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
   EMAIL_RESET: 'EMAIL_RESET',

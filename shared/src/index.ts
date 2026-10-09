@@ -2,6 +2,7 @@ export { appContract } from "./contracts/app.contract";
 export { authContract } from "./contracts/auth/auth.contract";
 export { usersContract } from "./contracts/users/users.contract";
 export { rolesContract } from "./contracts/roles/roles.contract";
+export { friendsContract } from "./contracts/users/friends.contract";
 export { permissionsContract } from "./contracts/permissions/permissions.contract";
 export { appConfigContract } from "./contracts/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/playlists/playlists.contract";
