@@ -2,7 +2,12 @@ import { useNavigate } from "@solidjs/router";
 import { Show } from "solid-js";
 import { client, queryKeys } from "~/api/client";
 import Button from "~/components/ui/Button";
+import { summonPopUp } from "~/components/ui/Overlay";
 import { authActions } from "~/store/auth.store";
+
+function RecursivePopUp(props: { recursionCount?: number }) {
+	return <>Recusrive foutre {props.recursionCount ?? 0}<br/><Button onClick={() => summonPopUp(<RecursivePopUp recursionCount={(props.recursionCount ?? 0) + 1}/>)}>PopUp</Button></>;
+}
 
 export default function Home() {
 	const me = client.users.me.createQuery(queryKeys.users.me, () => ({}));
@@ -19,6 +24,7 @@ export default function Home() {
 			<pre><code>{JSON.stringify(me.data?.body, null, 2)}</code></pre>
 			<Button onClick={logout}>logout</Button>
 			<Button onClick={() => navigate("/")}>Landing</Button>
+			<Button onClick={() => summonPopUp(<RecursivePopUp/>)}>PopUp</Button>
 		</Show>
 	</div>;
 }

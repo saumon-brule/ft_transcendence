@@ -5,6 +5,7 @@ import { I18nProvider } from "./i18n/context";
 import { initialized } from "./store/auth.store";
 import LoadingSplash from "./pages/Loading/LoadingSplash";
 import { ToasterProvider } from "./components/ui/Toaster";
+import { OverlayProvider } from "./components/ui/Overlay";
 
 export const queryClient = new QueryClient({
 	defaultOptions: {
@@ -17,11 +18,13 @@ export const queryClient = new QueryClient({
 const App: Component = () => {
 	return <I18nProvider>
 		<ToasterProvider>
-			<Show when={initialized()} fallback={<LoadingSplash/>}>
-				<QueryClientProvider client={queryClient}>
-					<AppRouter />
-				</QueryClientProvider>
-			</Show>
+			<OverlayProvider>
+				<Show when={initialized()} fallback={<LoadingSplash/>}>
+					<QueryClientProvider client={queryClient}>
+						<AppRouter />
+					</QueryClientProvider>
+				</Show>
+			</OverlayProvider>
 		</ToasterProvider>
 	</I18nProvider>;
 };
