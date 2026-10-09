@@ -1,0 +1,75 @@
+@use "../../styles/variables" as vars;
+
+#landing-page {
+	& > header {
+		display: flex;
+		justify-content: space-between;
+		padding: 1rem;
+		background-color: var(--background-surface);
+
+		.logo {
+			padding: 0.4rem;
+			svg {
+				height: 100%;
+				width: auto;
+			}
+		}
+
+		.auth-buttons {
+			gap: 1rem;
+			display: flex;
+		}
+	}
+
+	.hero-banner {
+		height: 100vh;
+		h1 {
+			position: relative;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			font-family: vars.$font-stack-fancy;
+			font-size: 16rem;
+			width: fit-content;
+		}
+	}
+
+
+	span.important {
+		font-family: vars.$font-stack-fancy;
+	}
+
+	span.very-important {
+		font-family: vars.$font-stack-fancy;
+	}
+
+	.section-container {
+		display: flex;
+		flex-direction: column;
+		padding: 35vh;
+		gap: 70vh;
+
+		.appearing-section {
+			position: relative;
+			opacity: 0;
+			transform: translateY(-25px);
+			transition:
+				opacity 1s ease-out 200ms,
+				transform 2s ease-out 200ms;
+
+			h2 {
+				text-align: center;
+			}
+		}
+
+		& > .visible {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		h2 {
+			font-family: vars.$font-stack-fancy;
+			font-size: 8rem;
+		}
+	}
+}
