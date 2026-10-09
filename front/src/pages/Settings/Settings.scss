@@ -1,0 +1,68 @@
+#settings {
+	padding: 40px;
+
+	h1 {
+		font-size: 2rem;
+		margin-bottom: 20px;
+	}
+
+	h2 {
+		font-size: 1.5rem;
+		margin-bottom: 20px;
+	}
+
+	.profile-picture {
+		width: 200px;
+		height: 200px;
+		border-radius: 50%;
+		margin-bottom: 20px;
+		background-size: cover;
+		background-position: center;
+
+		input[type="file"] {
+			display: none;
+		}
+		label {
+			cursor: pointer;
+			position: relative;
+			width: 200px;
+			height: 200px;
+			border-radius: 50%;
+			overflow: hidden;
+			background-color: rgba(0, 0, 0, 0.5);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-size: 1rem;
+			opacity: 0;
+			transition: opacity 0.2s;
+
+			&:hover {
+				opacity: 1;
+			}
+
+			span {
+				pointer-events: none;
+			}
+		}
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		button {
+			margin-top: 10px;
+		}
+	}
+
+	.settings-section {
+		margin-top: 40px;
+
+		h2 {
+			margin-bottom: 20px;
+		}
+	}
+}
