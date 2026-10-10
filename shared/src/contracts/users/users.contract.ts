@@ -12,6 +12,7 @@ import {
 } from "../roles/schemas/role.schema";
 import { idParamSchema, uuidParamSchema } from "../schemas/common.schema";
 import { errorDefaultSchema } from "../schemas/error-default";
+import z from "zod";
 
 const c = initContract();
 
@@ -39,8 +40,13 @@ export const usersContract = c.router(
 			path: "/me/avatar",
 			contentType: "multipart/form-data",
 			body: c.type<{ avatar: File }>(),
+			// responses: {
+			// 	204: null,
+			// },
 			responses: {
-				204: null,
+				200: z.object({
+					avatarPath: z.string(),
+				}),
 			},
 		},
 		getUserRoles: {

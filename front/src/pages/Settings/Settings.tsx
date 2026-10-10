@@ -1,8 +1,7 @@
 import { createEffect, createSignal, Show } from "solid-js";
-import { client } from "~/api/client";
+import { client, queryKeys } from "~/api/client";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
-import { useProfile } from "~/components/context/ProfileContext";
-import { authContract, changePasswordSchema, updateMeSchema } from "@flex/shared";
+import { changePasswordSchema, updateMeSchema } from "@flex/shared";
 import { validateFromZod } from "~/utils/validateFromZod";
 
 import "./Settings.scss";
@@ -13,7 +12,8 @@ import Toggle from "~/components/ui/Toggle/Toggle";
 import { env } from "~/env";
 
 export default function Settings() {
-	const [me, { update, avatarUpdated }] = useProfile();
+	const profileQuery = client.users.me.createQuery(queryKeys.users.me, () => ({}));
+
 	const [listeningPrivate, setListeningPrivate] = createSignal(false);
 	const updateProfileMutation = client.users.updateMe.createMutation();
 	const updatePictureMutation = client.users.uploadAvatar.createMutation();
@@ -24,13 +24,6 @@ export default function Settings() {
 	let newEmailInput!: HTMLInputElement;
 	let oldPasswordInput!: HTMLInputElement;
 	let newPasswordInput!: HTMLInputElement;
-
-	createEffect(() => {
-		const profile = me.profile;
-		if (!profile) return;
-		usernameInput.value = profile.username;
-		setListeningPrivate(profile.listeningPrivate);
-	});
 
 	function updatePicture(e: Event) {
 		const file = (e.target as HTMLInputElement).files?.[0];
@@ -92,17 +85,16 @@ export default function Settings() {
 
 	return <div class="page" id="settings">
 		<h1>Settings</h1>
-		<Show when={me.profile}>
+		<Show when={profileQuery.data ? profileQuery.data.body : undefined}>
 			{(user) => <div class="settings-content">
 				<section class="settings-section">
 					<h2>Profile</h2>
-					<div class="profile-picture" style={{ "background-image": `url(${env.VITE_API_URL}/users/${user().uuid}/avatar?v=${me.avatarVersion})` }}>
+					<div class="profile-picture" style={{ "background-image": `url(${env.VITE_API_URL}/users/${user().uuid}/avatar?v=${me.avatarVersion}` }}>
 						<label for="avatar-upload">
 							<span>Change</span>
 						</label>
 						<input type="file" id="avatar-upload" accept="image/*" onChange={(e) => updatePicture(e)} />
 					</div>
-
 					<Form onSubmit={updateProfile}>
 						<TextInput
 							ref={(e) => usernameInput = e.htmlElement}
@@ -119,30 +111,7 @@ export default function Settings() {
 							Save
 						</Button>
 					</Form>
-				</section>
-
-				<section class="settings-section">
-					<h2>Update email</h2>
-					<Form onSubmit={requestEmailUpdate}>
-						<TextInput
-							ref={(e) => emailPasswordInput = e.htmlElement}
-							type="password"
-							validator={(e) => validateFromZod(authContract.requestEmailReset.body.shape.password, e.value)}
-							placeholder="Current password"
-							required
-						/>
-						<TextInput
-							ref={(e) => newEmailInput = e.htmlElement}
-							type="email"
-							validator={(e) => validateFromZod(authContract.requestEmailReset.body.shape.newEmail, e.value)}
-							placeholder="New email"
-							required
-						/>
-						<Button type="submit" disabled={requestEmailResetMutation.status === "loading"}>Update email</Button>
-					</Form>
-				</section>
-
-				<section class="settings-section">
+					<div style={{ display: "flex" }}><h3>Update email</h3><Button variant="text">edit</Button></div>
 					<h2>Update password</h2>
 					<Form onSubmit={changePassword}>
 						<TextInput

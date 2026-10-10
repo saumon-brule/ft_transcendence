@@ -18,7 +18,7 @@ export function createProfileStore() {
 	const actions = {
 		async init() {
 			try {
-				const query = client.users.me.createQuery(queryKeys.users.me, () => ({}));
+
 				const res = await query.refetch();
 				setState("profile", res.data?.body ?? null);
 			} catch {

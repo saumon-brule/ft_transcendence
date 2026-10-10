@@ -47,6 +47,7 @@ export type User = z.infer<typeof userSchema>;
 export const meSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
+	avatarPath: z.string(), // <-- C'est nouveau et ca devrait ressembler à `/users/:uuid/avatar?v=${lastModifTimestamp}`
 	email: z.string().email(),
 	listeningPrivate: z.boolean(),
 	createdAt: z.date(),
