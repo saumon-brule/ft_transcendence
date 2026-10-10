@@ -92,6 +92,7 @@ export const UserScalarFieldEnum = {
   currentlyListeningId: 'currentlyListeningId',
   listeningUntil: 'listeningUntil',
   listeningPrivate: 'listeningPrivate',
+  avatarUpdatedAt: 'avatarUpdatedAt',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'
 } as const

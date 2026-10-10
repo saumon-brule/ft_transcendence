@@ -53,6 +53,7 @@ export const meSchema = z.object({
 	createdAt: z.date(),
 	currentlyListening: musicSchema.nullable(),
 	listeningUntil: z.date().nullable(),
+	avatarUpdatedAt: z.date().nullable(),
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),

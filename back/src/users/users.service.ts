@@ -233,4 +233,11 @@ export class UsersService {
 		return this.getExposedInfoByUUID(uuid);
 	}
 
+	public async updateAvatarTimestamp(uuid: string) {
+		await this.prisma.user.update({
+			where: { uuid },
+			data: { avatarUpdatedAt: new Date() },
+		});
+	}
+
 }

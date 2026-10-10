@@ -86,6 +86,8 @@ export class UsersController {
 				.webp({ quality: 80 })
 				.toFile(filepath);
 
+			await this.usersService.updateAvatarTimestamp(authUser.uuid);
+
 			return { status: 204, body: null };
 		});
 	}
