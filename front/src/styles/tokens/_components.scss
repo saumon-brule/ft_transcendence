@@ -24,6 +24,7 @@
 
 	--link-main: var(--text-accent);
 	--link-hover: var(--text-accent-hover);
+	--link-disabled: color-mix(in oklab, var(--text-accent) 40%, var(--mix-disabled));;
 
 	/* Button */
 
@@ -48,4 +49,8 @@
 
 	--button-text: var(--text-primary);
 	--button-text-disabled: color-mix(in oklab, var(--text-primary) 80%, var(--mix-disabled));
+
+	--button-link: var(--text-accent-hover);
+	--button-link-hover: var(--text-accent);
+	--button-link-disabled: color-mix(in oklab, var(--text-accent-hover) 60%, var(--mix-disabled));;
 }
