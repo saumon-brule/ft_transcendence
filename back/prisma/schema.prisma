@@ -17,6 +17,8 @@ model User {
   password             String?
   username             String
   emailValidated       Boolean   @default(false)
+  intraId              Int?      @unique
+  language             String?   @default("en")
   currentlyListeningId Int?
   listeningUntil       DateTime?
   listeningPrivate     Boolean   @default(false)

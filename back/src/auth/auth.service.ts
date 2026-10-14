@@ -27,6 +27,7 @@ const TokenResponseSchema = z.object({
 });
 
 const Me42ResponseSchema = z.object({
+	id: z.number(),
 	login: z.string(),
 	email: z.string(),
 });

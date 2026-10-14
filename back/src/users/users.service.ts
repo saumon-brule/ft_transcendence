@@ -224,7 +224,7 @@ export class UsersService {
 		});
 	}
 
-	public async updateMe(uuid: string, data: { username?: string; listeningPrivate?: boolean }) {
+	public async updateMe(uuid: string, data: { username?: string; listeningPrivate?: boolean; lang?: string }) {
 		await this.prisma.user.update({
 			where: { uuid },
 			data,

@@ -28,11 +28,13 @@ export type AggregateUser = {
 
 export type UserAvgAggregateOutputType = {
   id: number | null
+  intraId: number | null
   currentlyListeningId: number | null
 }
 
 export type UserSumAggregateOutputType = {
   id: number | null
+  intraId: number | null
   currentlyListeningId: number | null
 }
 
@@ -43,6 +45,8 @@ export type UserMinAggregateOutputType = {
   password: string | null
   username: string | null
   emailValidated: boolean | null
+  intraId: number | null
+  language: string | null
   currentlyListeningId: number | null
   listeningUntil: Date | null
   listeningPrivate: boolean | null
@@ -58,6 +62,8 @@ export type UserMaxAggregateOutputType = {
   password: string | null
   username: string | null
   emailValidated: boolean | null
+  intraId: number | null
+  language: string | null
   currentlyListeningId: number | null
   listeningUntil: Date | null
   listeningPrivate: boolean | null
@@ -73,6 +79,8 @@ export type UserCountAggregateOutputType = {
   password: number
   username: number
   emailValidated: number
+  intraId: number
+  language: number
   currentlyListeningId: number
   listeningUntil: number
   listeningPrivate: number
@@ -85,11 +93,13 @@ export type UserCountAggregateOutputType = {
 
 export type UserAvgAggregateInputType = {
   id?: true
+  intraId?: true
   currentlyListeningId?: true
 }
 
 export type UserSumAggregateInputType = {
   id?: true
+  intraId?: true
   currentlyListeningId?: true
 }
 
@@ -100,6 +110,8 @@ export type UserMinAggregateInputType = {
   password?: true
   username?: true
   emailValidated?: true
+  intraId?: true
+  language?: true
   currentlyListeningId?: true
   listeningUntil?: true
   listeningPrivate?: true
@@ -115,6 +127,8 @@ export type UserMaxAggregateInputType = {
   password?: true
   username?: true
   emailValidated?: true
+  intraId?: true
+  language?: true
   currentlyListeningId?: true
   listeningUntil?: true
   listeningPrivate?: true
@@ -130,6 +144,8 @@ export type UserCountAggregateInputType = {
   password?: true
   username?: true
   emailValidated?: true
+  intraId?: true
+  language?: true
   currentlyListeningId?: true
   listeningUntil?: true
   listeningPrivate?: true
@@ -232,10 +248,12 @@ export type UserGroupByOutputType = {
   password: string | null
   username: string
   emailValidated: boolean
+  intraId: number | null
+  language: string | null
   currentlyListeningId: number | null
   listeningUntil: Date | null
   listeningPrivate: boolean
-  avatarUpdatedAt: Date | null
+  avatarUpdatedAt: Date
   updatedAt: Date | null
   createdAt: Date | null
   _count: UserCountAggregateOutputType | null
@@ -270,10 +288,12 @@ export type UserWhereInput = {
   password?: Prisma.StringNullableFilter<"User"> | string | null
   username?: Prisma.StringFilter<"User"> | string
   emailValidated?: Prisma.BoolFilter<"User"> | boolean
+  intraId?: Prisma.IntNullableFilter<"User"> | number | null
+  language?: Prisma.StringNullableFilter<"User"> | string | null
   currentlyListeningId?: Prisma.IntNullableFilter<"User"> | number | null
   listeningUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   listeningPrivate?: Prisma.BoolFilter<"User"> | boolean
-  avatarUpdatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   userRoles?: Prisma.UserRoleListRelationFilter
@@ -293,10 +313,12 @@ export type UserOrderByWithRelationInput = {
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   username?: Prisma.SortOrder
   emailValidated?: Prisma.SortOrder
+  intraId?: Prisma.SortOrderInput | Prisma.SortOrder
+  language?: Prisma.SortOrderInput | Prisma.SortOrder
   currentlyListeningId?: Prisma.SortOrderInput | Prisma.SortOrder
   listeningUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   listeningPrivate?: Prisma.SortOrder
-  avatarUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarUpdatedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
   userRoles?: Prisma.UserRoleOrderByRelationAggregateInput
@@ -313,16 +335,18 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   uuid?: string
   email?: string
+  intraId?: number
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   password?: Prisma.StringNullableFilter<"User"> | string | null
   username?: Prisma.StringFilter<"User"> | string
   emailValidated?: Prisma.BoolFilter<"User"> | boolean
+  language?: Prisma.StringNullableFilter<"User"> | string | null
   currentlyListeningId?: Prisma.IntNullableFilter<"User"> | number | null
   listeningUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   listeningPrivate?: Prisma.BoolFilter<"User"> | boolean
-  avatarUpdatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   userRoles?: Prisma.UserRoleListRelationFilter
@@ -333,7 +357,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   playlists?: Prisma.UserPlaylistListRelationFilter
   ownedPlaylists?: Prisma.PlaylistListRelationFilter
   currentlyListening?: Prisma.XOR<Prisma.MusicNullableScalarRelationFilter, Prisma.MusicWhereInput> | null
-}, "id" | "uuid" | "email">
+}, "id" | "uuid" | "email" | "intraId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -342,10 +366,12 @@ export type UserOrderByWithAggregationInput = {
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   username?: Prisma.SortOrder
   emailValidated?: Prisma.SortOrder
+  intraId?: Prisma.SortOrderInput | Prisma.SortOrder
+  language?: Prisma.SortOrderInput | Prisma.SortOrder
   currentlyListeningId?: Prisma.SortOrderInput | Prisma.SortOrder
   listeningUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   listeningPrivate?: Prisma.SortOrder
-  avatarUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarUpdatedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -365,10 +391,12 @@ export type UserScalarWhereWithAggregatesInput = {
   password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   emailValidated?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  intraId?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
+  language?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   currentlyListeningId?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
   listeningUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   listeningPrivate?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
-  avatarUpdatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
 }
@@ -379,9 +407,11 @@ export type UserCreateInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
@@ -401,10 +431,12 @@ export type UserUncheckedCreateInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   currentlyListeningId?: number | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
@@ -422,9 +454,11 @@ export type UserUpdateInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
@@ -444,10 +478,12 @@ export type UserUncheckedUpdateInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
@@ -466,10 +502,12 @@ export type UserCreateManyInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   currentlyListeningId?: number | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
 }
@@ -480,9 +518,11 @@ export type UserUpdateManyMutationInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -494,10 +534,12 @@ export type UserUncheckedUpdateManyInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -509,6 +551,8 @@ export type UserCountOrderByAggregateInput = {
   password?: Prisma.SortOrder
   username?: Prisma.SortOrder
   emailValidated?: Prisma.SortOrder
+  intraId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   currentlyListeningId?: Prisma.SortOrder
   listeningUntil?: Prisma.SortOrder
   listeningPrivate?: Prisma.SortOrder
@@ -519,6 +563,7 @@ export type UserCountOrderByAggregateInput = {
 
 export type UserAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  intraId?: Prisma.SortOrder
   currentlyListeningId?: Prisma.SortOrder
 }
 
@@ -529,6 +574,8 @@ export type UserMaxOrderByAggregateInput = {
   password?: Prisma.SortOrder
   username?: Prisma.SortOrder
   emailValidated?: Prisma.SortOrder
+  intraId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   currentlyListeningId?: Prisma.SortOrder
   listeningUntil?: Prisma.SortOrder
   listeningPrivate?: Prisma.SortOrder
@@ -544,6 +591,8 @@ export type UserMinOrderByAggregateInput = {
   password?: Prisma.SortOrder
   username?: Prisma.SortOrder
   emailValidated?: Prisma.SortOrder
+  intraId?: Prisma.SortOrder
+  language?: Prisma.SortOrder
   currentlyListeningId?: Prisma.SortOrder
   listeningUntil?: Prisma.SortOrder
   listeningPrivate?: Prisma.SortOrder
@@ -554,6 +603,7 @@ export type UserMinOrderByAggregateInput = {
 
 export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  intraId?: Prisma.SortOrder
   currentlyListeningId?: Prisma.SortOrder
 }
 
@@ -589,20 +639,24 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
   increment?: number
   decrement?: number
   multiply?: number
@@ -757,9 +811,11 @@ export type UserCreateWithoutSessionsInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
@@ -778,10 +834,12 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   currentlyListeningId?: number | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
@@ -814,9 +872,11 @@ export type UserUpdateWithoutSessionsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
@@ -835,10 +895,12 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
@@ -855,9 +917,11 @@ export type UserCreateWithoutTokensInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
@@ -876,10 +940,12 @@ export type UserUncheckedCreateWithoutTokensInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   currentlyListeningId?: number | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
@@ -912,9 +978,11 @@ export type UserUpdateWithoutTokensInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
@@ -933,10 +1001,12 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
@@ -953,9 +1023,11 @@ export type UserCreateWithoutUserRolesInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -974,10 +1046,12 @@ export type UserUncheckedCreateWithoutUserRolesInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   currentlyListeningId?: number | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1010,9 +1084,11 @@ export type UserUpdateWithoutUserRolesInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1031,10 +1107,12 @@ export type UserUncheckedUpdateWithoutUserRolesInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1051,9 +1129,11 @@ export type UserCreateWithoutOwnedProvidersInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
@@ -1072,10 +1152,12 @@ export type UserUncheckedCreateWithoutOwnedProvidersInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   currentlyListeningId?: number | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
@@ -1108,9 +1190,11 @@ export type UserUpdateWithoutOwnedProvidersInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
@@ -1129,10 +1213,12 @@ export type UserUncheckedUpdateWithoutOwnedProvidersInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
@@ -1149,9 +1235,11 @@ export type UserCreateWithoutProvidersInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
@@ -1170,10 +1258,12 @@ export type UserUncheckedCreateWithoutProvidersInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   currentlyListeningId?: number | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
@@ -1206,9 +1296,11 @@ export type UserUpdateWithoutProvidersInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
@@ -1227,10 +1319,12 @@ export type UserUncheckedUpdateWithoutProvidersInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
@@ -1247,9 +1341,11 @@ export type UserCreateWithoutOwnedPlaylistsInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
@@ -1268,10 +1364,12 @@ export type UserUncheckedCreateWithoutOwnedPlaylistsInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   currentlyListeningId?: number | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
@@ -1304,9 +1402,11 @@ export type UserUpdateWithoutOwnedPlaylistsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
@@ -1325,10 +1425,12 @@ export type UserUncheckedUpdateWithoutOwnedPlaylistsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
@@ -1345,9 +1447,11 @@ export type UserCreateWithoutPlaylistsInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
@@ -1366,10 +1470,12 @@ export type UserUncheckedCreateWithoutPlaylistsInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   currentlyListeningId?: number | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
@@ -1402,9 +1508,11 @@ export type UserUpdateWithoutPlaylistsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
@@ -1423,10 +1531,12 @@ export type UserUncheckedUpdateWithoutPlaylistsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
@@ -1443,9 +1553,11 @@ export type UserCreateWithoutCurrentlyListeningInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
@@ -1464,9 +1576,11 @@ export type UserUncheckedCreateWithoutCurrentlyListeningInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
@@ -1514,10 +1628,12 @@ export type UserScalarWhereInput = {
   password?: Prisma.StringNullableFilter<"User"> | string | null
   username?: Prisma.StringFilter<"User"> | string
   emailValidated?: Prisma.BoolFilter<"User"> | boolean
+  intraId?: Prisma.IntNullableFilter<"User"> | number | null
+  language?: Prisma.StringNullableFilter<"User"> | string | null
   currentlyListeningId?: Prisma.IntNullableFilter<"User"> | number | null
   listeningUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   listeningPrivate?: Prisma.BoolFilter<"User"> | boolean
-  avatarUpdatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
 }
@@ -1529,9 +1645,11 @@ export type UserCreateManyCurrentlyListeningInput = {
   password?: string | null
   username: string
   emailValidated?: boolean
+  intraId?: number | null
+  language?: string | null
   listeningUntil?: Date | string | null
   listeningPrivate?: boolean
-  avatarUpdatedAt?: Date | string | null
+  avatarUpdatedAt?: Date | string
   updatedAt?: Date | string | null
   createdAt?: Date | string | null
 }
@@ -1542,9 +1660,11 @@ export type UserUpdateWithoutCurrentlyListeningInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
@@ -1563,9 +1683,11 @@ export type UserUncheckedUpdateWithoutCurrentlyListeningInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
@@ -1584,9 +1706,11 @@ export type UserUncheckedUpdateManyWithoutCurrentlyListeningInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  intraId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  avatarUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  avatarUpdatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -1683,6 +1807,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   password?: boolean
   username?: boolean
   emailValidated?: boolean
+  intraId?: boolean
+  language?: boolean
   currentlyListeningId?: boolean
   listeningUntil?: boolean
   listeningPrivate?: boolean
@@ -1707,6 +1833,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   password?: boolean
   username?: boolean
   emailValidated?: boolean
+  intraId?: boolean
+  language?: boolean
   currentlyListeningId?: boolean
   listeningUntil?: boolean
   listeningPrivate?: boolean
@@ -1723,6 +1851,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   password?: boolean
   username?: boolean
   emailValidated?: boolean
+  intraId?: boolean
+  language?: boolean
   currentlyListeningId?: boolean
   listeningUntil?: boolean
   listeningPrivate?: boolean
@@ -1739,6 +1869,8 @@ export type UserSelectScalar = {
   password?: boolean
   username?: boolean
   emailValidated?: boolean
+  intraId?: boolean
+  language?: boolean
   currentlyListeningId?: boolean
   listeningUntil?: boolean
   listeningPrivate?: boolean
@@ -1747,7 +1879,7 @@ export type UserSelectScalar = {
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "uuid" | "email" | "password" | "username" | "emailValidated" | "currentlyListeningId" | "listeningUntil" | "listeningPrivate" | "avatarUpdatedAt" | "updatedAt" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "uuid" | "email" | "password" | "username" | "emailValidated" | "intraId" | "language" | "currentlyListeningId" | "listeningUntil" | "listeningPrivate" | "avatarUpdatedAt" | "updatedAt" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userRoles?: boolean | Prisma.User$userRolesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -1785,10 +1917,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     password: string | null
     username: string
     emailValidated: boolean
+    intraId: number | null
+    language: string | null
     currentlyListeningId: number | null
     listeningUntil: Date | null
     listeningPrivate: boolean
-    avatarUpdatedAt: Date | null
+    avatarUpdatedAt: Date
     updatedAt: Date | null
     createdAt: Date | null
   }, ExtArgs["result"]["user"]>
@@ -2228,6 +2362,8 @@ export interface UserFieldRefs {
   readonly password: Prisma.FieldRef<"User", 'String'>
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly emailValidated: Prisma.FieldRef<"User", 'Boolean'>
+  readonly intraId: Prisma.FieldRef<"User", 'Int'>
+  readonly language: Prisma.FieldRef<"User", 'String'>
   readonly currentlyListeningId: Prisma.FieldRef<"User", 'Int'>
   readonly listeningUntil: Prisma.FieldRef<"User", 'DateTime'>
   readonly listeningPrivate: Prisma.FieldRef<"User", 'Boolean'>
