@@ -32,7 +32,11 @@ export class UsersService {
 	}
 
 	public async getByEmail(email: string): Promise<User | null> {
-		return this.prisma.user.findUnique({ where: { email: email } });
+		return this.prisma.user.findUnique({ where: { email: this.normalizeEmail(email) } });
+	}
+
+	public async getByIntraId(intraId: number): Promise<User | null> {
+		return this.prisma.user.findUnique({ where: { intraId } });
 	}
 
 	public async getById(id: number): Promise<User> {
@@ -88,9 +92,10 @@ export class UsersService {
 	public async createFromIntra(
 		email: string,
 		login: string,
+		intraId: number,
 	): Promise<User | null> {
 		const newUser = await this.prisma.user.create({
-			data: { email, username: login, emailValidated: true },
+			data: { email: this.normalizeEmail(email), username: login, emailValidated: true, intraId },
 		});
 
 		await this.setDefaultUserRoles(newUser.id);
@@ -104,7 +109,7 @@ export class UsersService {
 		username: string,
 	): Promise<User | null> {
 		const newUser = await this.prisma.user.create({
-			data: { email, password: await bcrypt.hash(password, 10), username },
+			data: { email: this.normalizeEmail(email), password: await bcrypt.hash(password, 10), username },
 		});
 
 		await this.setDefaultUserRoles(newUser.id);
@@ -220,11 +225,11 @@ export class UsersService {
 	public async setEmail(userId: number, email: string) {
 		await this.prisma.user.update({
 			where: { id: userId },
-			data: { email },
+			data: { email: this.normalizeEmail(email) },
 		});
 	}
 
-	public async updateMe(uuid: string, data: { username?: string; listeningPrivate?: boolean; lang?: string }) {
+	public async updateMe(uuid: string, data: { username?: string; listeningPrivate?: boolean; language?: string }) {
 		await this.prisma.user.update({
 			where: { uuid },
 			data,
@@ -238,6 +243,24 @@ export class UsersService {
 			where: { uuid },
 			data: { avatarUpdatedAt: new Date() },
 		});
+	}
+
+	public async linkIntraAccount(uuid: string, intraId: number) {
+		await this.prisma.user.update({
+			where: { uuid },
+			data: { intraId },
+		});
+	}
+
+	public async unlinkIntraAccount(uuid: string) {
+		await this.prisma.user.update({
+			where: { uuid },
+			data: { intraId: null },
+		});
+	}
+
+	private normalizeEmail(email: string) {
+		return email.trim().toLowerCase();
 	}
 
 }

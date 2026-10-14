@@ -6,6 +6,7 @@ export const code403 = [
 	"ALREADY_LOGGED_IN",
 	"INVALID_PASSWORD",
 	"FORBIDDEN",
+	"INTRA_ONLY_ACCOUNT",
 ] as const;
 
 export type Code403 = (typeof code403)[number];

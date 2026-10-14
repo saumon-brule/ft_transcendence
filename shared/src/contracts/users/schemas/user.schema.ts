@@ -48,6 +48,7 @@ export const meSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
 	email: z.string().email(),
+	intraId: z.number().nullable(),
 	language: z.string(),
 	listeningPrivate: z.boolean(),
 	createdAt: z.coerce.date(),
