@@ -289,7 +289,7 @@ export class AuthService {
 
 		if (!(await bcrypt.compare(oldPassword, existing.password))) {
 			// Seule erreur a gerer coté front car les autres ne devraient pas pouvoir arriver
-			throw new AppForbiddenException("FORBIDDEN", "Invalid password");
+			throw new AppForbiddenException("INVALID_PASSWORD", "Invalid password");
 		}
 
 		await this.users.setPassword(existing.id, newPassword);
@@ -335,7 +335,7 @@ export class AuthService {
 		}
 
 		if (!user.password || !(await bcrypt.compare(password, user.password))) {
-			throw new AppForbiddenException("FORBIDDEN", "Invalid password");
+			throw new AppForbiddenException("INVALID_PASSWORD", "Invalid password");
 		}
 
 		await this.sendChangeEmail(user, newEmail);

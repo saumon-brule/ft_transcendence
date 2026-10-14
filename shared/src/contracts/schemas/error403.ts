@@ -4,6 +4,7 @@ export const code403 = [
 	"INVALID_PERMISSION",
 	"EMAIL_NOT_VERIFIED",
 	"ALREADY_LOGGED_IN",
+	"INVALID_PASSWORD",
 	"FORBIDDEN",
 ] as const;
 

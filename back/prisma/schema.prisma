@@ -20,7 +20,7 @@ model User {
   currentlyListeningId Int?
   listeningUntil       DateTime?
   listeningPrivate     Boolean   @default(false)
-  avatarUpdatedAt      DateTime?
+  avatarUpdatedAt      DateTime  @default(now())
   updatedAt            DateTime? @updatedAt
   createdAt            DateTime? @default(now())
 

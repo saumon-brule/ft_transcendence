@@ -31,9 +31,9 @@ export const musicSchema = z.object({
 export const userSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
-	createdAt: z.date(),
+	createdAt: z.coerce.date(),
 	currentlyListening: musicSchema.nullable(),
-	listeningUntil: z.date().nullable(),
+	listeningUntil: z.coerce.date().nullable(),
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
@@ -47,13 +47,12 @@ export type User = z.infer<typeof userSchema>;
 export const meSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
-	avatarPath: z.string(), // <-- C'est nouveau et ca devrait ressembler à `/users/:uuid/avatar?v=${lastModifTimestamp}`
 	email: z.string().email(),
 	listeningPrivate: z.boolean(),
-	createdAt: z.date(),
+	createdAt: z.coerce.date(),
 	currentlyListening: musicSchema.nullable(),
-	listeningUntil: z.date().nullable(),
-	avatarUpdatedAt: z.date().nullable(),
+	listeningUntil: z.coerce.date().nullable(),
+	avatarUpdatedAt: z.coerce.date(),
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
