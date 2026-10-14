@@ -17,15 +17,15 @@ export const queryClient = new QueryClient({
 
 const App: Component = () => {
 	return <I18nProvider>
-		<ToasterProvider>
-			<OverlayProvider>
-				<Show when={initialized()} fallback={<LoadingSplash/>}>
-					<QueryClientProvider client={queryClient}>
+		<QueryClientProvider client={queryClient}>
+			<ToasterProvider>
+				<OverlayProvider>
+					<Show when={initialized()} fallback={<LoadingSplash/>}>
 						<AppRouter />
-					</QueryClientProvider>
-				</Show>
-			</OverlayProvider>
-		</ToasterProvider>
+					</Show>
+				</OverlayProvider>
+			</ToasterProvider>
+		</QueryClientProvider>
 	</I18nProvider>;
 };
 

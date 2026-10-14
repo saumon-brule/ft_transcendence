@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "@solidjs/router";
 import { createEffect, Show } from "solid-js";
-import { client, queryKeys } from "~/api/client";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import PlaylistSection from "./PlaylistSection";
 import ProfileHeader from "./ProfileHeader";
@@ -8,17 +7,16 @@ import FriendsSection from "./FriendsSection";
 import ProviderSection from "./ProviderSection";
 
 import "./Profile.scss";
+import { useUserProfileQuery } from "~/api/queryHooks/userProfile";
 
 export default function Profile() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string }>();
-	const profile = client.users.getUser.createQuery(queryKeys.users.getUser, {
-		params: { uuid: params.uuid },
-	});
+	const profile = useUserProfileQuery(params.uuid);
 
 	createEffect(() => {
 		if (profile.isError) {
-			navigate("/home"); // A remettre mais desact car chiant en dev
+			navigate("/home"); // !:! A remettre mais desact car chiant en dev
 			summonErrorToast("Unknown user");
 		}
 	});
