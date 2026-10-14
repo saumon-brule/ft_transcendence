@@ -18,7 +18,7 @@ export default function FtAuthCallback() {
 			window.close();
 		} else {
 			navigate("/login", { replace: true });
-			summonErrorToast(<div>{t("pages.ftAuthCallback.mainErrorMessage")}<br />{t("pages.ftAuthCallback.subErrorMessage")}</div>);
+			summonErrorToast(() => <div>{t("pages.ftAuthCallback.mainErrorMessage")}<br />{t("pages.ftAuthCallback.subErrorMessage")}</div>);
 		}
 	}
 

@@ -32,7 +32,7 @@ export default function RequestPasswordReset() {
 
 	createEffect(() => {
 		if (requestPasswordReset.isSuccess) {
-			summonSuccessToast(t("pages.requestPasswordReset.success"));
+			summonSuccessToast(() => t("pages.requestPasswordReset.success"));
 		}
 	});
 

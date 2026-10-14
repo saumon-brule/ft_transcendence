@@ -21,7 +21,7 @@ export default function IntraButton(props: IntraButtonProps) {
 	const messageListener = (event: MessageEvent<MessageEventData>) => {
 		if (event.origin !== window.location.origin) return;
 		if (event.data?.type === "ft-oauth-error") {
-			summonErrorToast(<div>{t("pages.ftAuthCallback.mainErrorMessage")}<br />{t("pages.ftAuthCallback.subErrorMessage")}</div>);
+			summonErrorToast(() => <div>{t("pages.ftAuthCallback.mainErrorMessage")}<br />{t("pages.ftAuthCallback.subErrorMessage")}</div>);
 		}
 		cleanup();
 	};
@@ -52,7 +52,7 @@ export default function IntraButton(props: IntraButtonProps) {
 				window.addEventListener("message", messageListener);
 			}
 		} else {
-			summonErrorToast(t("errors.unknownFallback"));
+			summonErrorToast(() => t("errors.unknownFallback"));
 		}
 	}
 

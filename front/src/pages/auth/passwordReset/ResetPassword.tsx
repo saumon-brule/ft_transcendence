@@ -42,12 +42,12 @@ export default function ResetPassword() {
 			{ body: { token, newPassword: passwordInput.value } },
 			{
 				onSuccess: () => {
-					summonSuccessToast(t("pages.resetPassword.success"));
+					summonSuccessToast(() => t("pages.resetPassword.success"));
 					navigate("/login");
 				},
 				onError: (error) => {
 					if (error.status === 401) {
-						summonErrorToast(t("pages.resetPassword.error"));
+						summonErrorToast(() => t("pages.resetPassword.error"));
 						navigate("/auth/request-password-reset");
 					} else {
 						setError(true);
