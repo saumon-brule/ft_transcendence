@@ -1,13 +1,14 @@
 init:
 	@mkdir -p /tmp/flex-db
 	@docker compose up -d --wait
-	@cd back && npx prisma migrate dev --name init && cd ..
+	@cd back && pnpm prisma generate && pnpm prisma migrate dev --name init && cd ..
+	@cd provider && pnpm prisma generate && cd ..
 
 run: init
 	pnpm run dev
 
 migrate:
-	@cd back && npx prisma migrate dev --name init && cd ..
+	@cd back && pnpm prisma migrate dev --name init && cd ..
 
 .PHONY: run
 
