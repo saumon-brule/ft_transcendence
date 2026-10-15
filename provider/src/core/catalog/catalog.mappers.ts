@@ -47,7 +47,9 @@ export const toMusicItem = (music: MusicItemRow) => ({
 	duration: music.duration,
 	publishedAt: music.publishedAt,
 	artists: music.artists.map((link) => toArtistItem(link.artist)),
-	album: music.album ? toAlbumItem(music.album) : null,
+	album: music.album
+		? toAlbumItem(music.album)
+		: null,
 });
 
 export const toMusicDetail = (music: MusicDetailRow) => ({

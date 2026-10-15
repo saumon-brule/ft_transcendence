@@ -13,18 +13,15 @@ export const MemberOnly = () => UseGuards(TokenGuard, MemberGuard);
 
 export const OwnerOnly = () => UseGuards(TokenGuard, MemberGuard, OwnerGuard);
 
-export const RequirePermission = (permission: ProviderPermission) =>
-	applyDecorators(
-		SetMetadata(PERMISSION_KEY, permission),
-		UseGuards(TokenGuard, MemberGuard, PermissionGuard),
-	);
+export const RequirePermission = (permission: ProviderPermission) => applyDecorators(
+	SetMetadata(PERMISSION_KEY, permission),
+	UseGuards(TokenGuard, MemberGuard, PermissionGuard),
+);
 
 export const CurrentUser = createParamDecorator(
-	(_data: unknown, context: ExecutionContext) =>
-		context.switchToHttp().getRequest<AuthenticatedRequest>().auth!,
+	(_data: unknown, context: ExecutionContext) => context.switchToHttp().getRequest<AuthenticatedRequest>().auth!,
 );
 
 export const CurrentMember = createParamDecorator(
-	(_data: unknown, context: ExecutionContext) =>
-		context.switchToHttp().getRequest<AuthenticatedRequest>().member!,
+	(_data: unknown, context: ExecutionContext) => context.switchToHttp().getRequest<AuthenticatedRequest>().member!,
 );

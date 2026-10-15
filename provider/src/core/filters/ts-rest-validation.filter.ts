@@ -77,7 +77,9 @@ export class TsRestValidationFilter implements ExceptionFilter {
 			return response.status(400).json({
 				statusCode: 400,
 				error: "Bad Request",
-				message: messages.length ? messages : ["Bad Request"],
+				message: messages.length
+					? messages
+					: ["Bad Request"],
 			});
 		}
 

@@ -10,7 +10,9 @@ import { ServerClientService } from "./server-client.service";
 	providers: [
 		{
 			provide: ServerClientService,
-			useClass: env.FLEX_SERVER_MOCK ? MockServerClientService : HttpServerClientService,
+			useClass: env.FLEX_SERVER_MOCK
+				? MockServerClientService
+				: HttpServerClientService,
 		},
 	],
 	exports: [ServerClientService],

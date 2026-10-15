@@ -18,7 +18,7 @@ async function bootstrap() {
 			info: {
 				title: "Flex Provider API",
 				description: "API for the Flex Provider service",
-				version: "1.0.0"
+				version: "1.0.0",
 			},
 			components: {
 				securitySchemes: {
@@ -39,4 +39,4 @@ async function bootstrap() {
 
 	await app.listen(env.PORT);
 }
-bootstrap().catch((err) => { console.error(err) });
+bootstrap().catch((err) => { console.error(err); });

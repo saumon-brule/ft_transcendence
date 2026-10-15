@@ -11,8 +11,8 @@
     "start:dev": "nodemon",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\" --fix",
-    "check": "tsc --noEmit && eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\""
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "check": "tsc --noEmit && eslint \"src/**/*.ts\""
   },
   "dependencies": {
     "@flex/shared": "workspace:*",
@@ -56,7 +56,6 @@
     "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.71.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "typescript-eslint": "^8.71.0"
   }
 }

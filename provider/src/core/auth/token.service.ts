@@ -30,7 +30,7 @@ export class TokenService {
 		]);
 
 		try {
-			const payload = await this.jwt.verifyAsync(token, {
+			const payload: unknown = await this.jwt.verifyAsync(token, {
 				publicKey,
 				algorithms: ["RS256"],
 				audience,

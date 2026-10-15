@@ -21,12 +21,12 @@ export class MockServerClientService extends ServerClientService implements OnAp
 		super();
 	}
 
-	async getIdentity(): Promise<ProviderIdentity> {
-		return { uuid: PROVIDER_UUID, ownerUuid: OWNER_UUID };
+	getIdentity(): Promise<ProviderIdentity> {
+		return Promise.resolve({ uuid: PROVIDER_UUID, ownerUuid: OWNER_UUID });
 	}
 
-	async getPublicKey(): Promise<string> {
-		return this.keys.publicKey;
+	getPublicKey(): Promise<string> {
+		return Promise.resolve(this.keys.publicKey);
 	}
 
 	private signAccessToken(userUuid: string) {

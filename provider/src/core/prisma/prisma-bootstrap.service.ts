@@ -1,6 +1,6 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
-import { ServerAuthError, ServerClientService } from '../server/server-client.service';
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { PrismaService } from "./prisma.service";
+import { ServerAuthError, ServerClientService } from "../server/server-client.service";
 
 @Injectable()
 export class PrismaBootstrapService implements OnModuleInit {
