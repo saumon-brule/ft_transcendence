@@ -67,8 +67,12 @@ export class AccessRequestsService {
 			return tx.accessRequest.create({
 				data: {
 					userUuid,
-					status: isPublic ? "APPROVED" : "PENDING",
-					decidedAt: isPublic ? new Date() : null,
+					status: isPublic
+						? "APPROVED"
+						: "PENDING",
+					decidedAt: isPublic
+						? new Date()
+						: null,
 				},
 				include,
 			});
@@ -89,7 +93,9 @@ export class AccessRequestsService {
 	}
 
 	async list({ limit, offset, status }: ListQuery) {
-		const where: Prisma.AccessRequestWhereInput = status ? { status } : {};
+		const where: Prisma.AccessRequestWhereInput = status
+			? { status }
+			: {};
 
 		const [rows, total] = await this.prisma.$transaction([
 			this.prisma.accessRequest.findMany({

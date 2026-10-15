@@ -15,6 +15,7 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { LoggingModule } from "./core/logging/logging.module";
 import { AppConfigModule } from "./config/config.module";
 import { PlaylistsModule } from "./playlists/playlists.module";
+import { ProvidersModule } from "./providers/providers.module";
 
 @Module({
 	providers: [
@@ -41,6 +42,7 @@ import { PlaylistsModule } from "./playlists/playlists.module";
 		TokensModule,
 		AppConfigModule,
 		PlaylistsModule,
+		ProvidersModule,
 		ThrottlerModule.forRoot({
 			throttlers: [{ ttl: 60000, limit: 100 }],
 		}),

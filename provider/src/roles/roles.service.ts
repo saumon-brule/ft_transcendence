@@ -10,9 +10,7 @@ const toRole = (role: RoleRow, defaultRoleId: number | null) => ({
 	uuid: role.uuid,
 	name: role.name,
 	isDefault: role.id === defaultRoleId,
-	permissions: providerPermissions.filter((permission) =>
-		role.permissions.some((link) => link.permission === permission),
-	),
+	permissions: providerPermissions.filter((permission) => role.permissions.some((link) => link.permission === permission)),
 });
 
 interface CreateRole {
@@ -36,19 +34,17 @@ export class RolesService {
 	}
 
 	async create(dto: CreateRole, actorId: number) {
-		const [{ defaultRoleId }, created] = await Promise.all([
-			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } }),
-			this.prisma.role.create({
-				data: {
-					name: dto.name,
-					addedById: actorId,
-					permissions: { create: [...new Set(dto.permissions)].map((permission) => ({ permission })) },
-				},
-				include,
-			}),
-		]);
+		const created = await this.prisma.role.create({
+			data: {
+				name: dto.name,
+				addedById: actorId,
+				permissions: { create: [...new Set(dto.permissions)].map((permission) => ({ permission })) },
+			},
+			include,
+		});
 
-		return toRole(created, defaultRoleId);
+		// Un rôle qu'on vient de créer ne peut pas déjà être le rôle par défaut
+		return toRole(created, null);
 	}
 
 	update(uuid: string, dto: UpdateRole) {

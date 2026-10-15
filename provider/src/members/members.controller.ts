@@ -12,8 +12,8 @@ export class MembersController {
 	@TsRestHandler(providerContract.members.me)
 	@MemberOnly()
 	me(@CurrentMember() member: MemberContext) {
-		return tsRestHandler(providerContract.members.me, async () => ({
-			status: 200,
+		return tsRestHandler(providerContract.members.me, () => Promise.resolve({
+			status: 200 as const,
 			body: this.membersService.me(member),
 		}));
 	}

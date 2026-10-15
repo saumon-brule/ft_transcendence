@@ -7,7 +7,9 @@ const EnvSchema = z.object({
 	FLEX_API_KEY: z.string(),
 	FLEX_SERVER_MOCK: z.enum(["true", "false"]).default("false").transform((value) => value === "true"),
 	NODE_ENV: z.enum(["dev", "prod"]),
-	PORT: z.coerce.number().int().positive().max(65535).default(3000),
+	PORT: z.coerce.number().int().positive()
+		.max(65535)
+		.default(3000),
 	MUSIC_DIR: z.string().default("music"),
 });
 

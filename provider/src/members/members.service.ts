@@ -38,7 +38,9 @@ export class MembersService {
 	async list({ limit, offset, revoked }: ListQuery) {
 		const where: Prisma.MemberWhereInput = revoked === undefined
 			? {}
-			: { revokedAt: revoked ? { not: null } : null };
+			: { revokedAt: revoked
+				? { not: null }
+				: null };
 
 		const [{ ownerId }, rows, total] = await Promise.all([
 			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } }),

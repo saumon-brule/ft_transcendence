@@ -1,9 +1,16 @@
-import { Controller, Get, HttpCode, Param, ParseUUIDPipe, Put, Query, Req, Res } from "@nestjs/common";
+import { Controller, Get, Param, ParseUUIDPipe, Query, Req, Res, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { providerContract } from "@flex/shared";
 import type { Request, Response } from "express";
 import { CurrentMember, MemberOnly, RequirePermission } from "../core/auth/auth.decorators";
 import type { MemberContext } from "../core/auth/auth.types";
+import {
+	audioUploadStorage,
+	DiscardFailedUploadInterceptor,
+	MAX_UPLOAD_BYTES,
+	type UploadedAudio,
+} from "./audio-upload.storage";
 import { MusicAudioService } from "./music-audio.service";
 import { MusicService } from "./music.service";
 
@@ -79,14 +86,27 @@ export class MusicController {
 		const file = await this.audio.resolveAudio(uuid, token);
 		response.sendFile(file.path, {
 			dotfiles: "deny",
-			headers: { "Content-Type": file.mime, "Cache-Control": "private, no-store" },
+			headers: {
+				"Content-Type": file.mime,
+				"Cache-Control": "private, no-store",
+				"X-Content-Type-Options": "nosniff",
+			},
 		});
 	}
 
-	@Put("music/:uuid/audio")
+	@TsRestHandler(providerContract.music.uploadAudio)
 	@RequirePermission("MANAGE_CATALOG")
-	@HttpCode(204)
-	async upload(@Param("uuid", ParseUUIDPipe) uuid: string, @Req() request: Request) {
-		await this.audio.saveFile(uuid, request);
+	@UseInterceptors(
+		DiscardFailedUploadInterceptor,
+		FileInterceptor("file", {
+			storage: audioUploadStorage,
+			limits: { fileSize: MAX_UPLOAD_BYTES, files: 1, fields: 0 },
+		}),
+	)
+	uploadAudio(@UploadedFile() file: UploadedAudio | undefined) {
+		return tsRestHandler(providerContract.music.uploadAudio, async ({ params }) => {
+			await this.audio.saveFile(params.uuid, file);
+			return { status: 204, body: null };
+		});
 	}
 }

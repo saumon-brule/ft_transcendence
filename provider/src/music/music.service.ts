@@ -60,7 +60,9 @@ export class MusicService {
 	create(dto: CreateMusic, actorId: number) {
 		return this.prisma.$transaction(async (tx) => {
 			const artistIds = await findArtistIds(tx, dto.artistUuids);
-			const albumId = dto.albumUuid ? await findAlbumId(tx, dto.albumUuid) : null;
+			const albumId = dto.albumUuid
+				? await findAlbumId(tx, dto.albumUuid)
+				: null;
 
 			const created = await tx.music.create({
 				data: {
@@ -88,7 +90,9 @@ export class MusicService {
 			if (dto.duration !== undefined) data.duration = dto.duration;
 			if (dto.publishedAt !== undefined) data.publishedAt = dto.publishedAt;
 			if (dto.albumUuid !== undefined) {
-				data.albumId = dto.albumUuid === null ? null : await findAlbumId(tx, dto.albumUuid);
+				data.albumId = dto.albumUuid === null
+					? null
+					: await findAlbumId(tx, dto.albumUuid);
 			}
 
 			if (dto.artistUuids !== undefined) {

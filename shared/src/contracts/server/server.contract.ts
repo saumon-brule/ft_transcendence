@@ -1,10 +1,10 @@
 import { initContract } from "@ts-rest/core";
-import { providersContract } from "./providers/providers.contract";
+import { serverProvidersContract } from "./providers/providers.contract";
 
 const c = initContract();
 
 export const serverContract = c.router(
 	{
-		providers: providersContract,
+		providers: serverProvidersContract,
 	},
 );

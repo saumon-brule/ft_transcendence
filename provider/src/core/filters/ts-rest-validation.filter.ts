@@ -1,5 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from "@nestjs/common";
 import { Code401, code401, Code403, code403 } from "@flex/shared";
+import { STATUS_CODES } from "node:http";
 import { Response } from "express";
 import { Prisma } from "../../generated/client/client";
 import { env } from "../env";
@@ -21,6 +22,8 @@ interface TsRestException {
 	};
 	status?: number;
 	message?: string;
+	// Posé par http-errors (body-parser, send...) : false = message interne, à ne pas montrer au client
+	expose?: boolean;
 }
 
 @Catch()
@@ -117,10 +120,17 @@ export class TsRestValidationFilter implements ExceptionFilter {
 			});
 		}
 
+		// Les messages des exceptions Nest et des erreurs http-errors "exposées" sont faits pour le client ;
+		// les autres (erreur de fichier de send, avec le chemin du serveur...) sont remplacés par le libellé du statut
+		const isClientSafe = exception instanceof HttpException || exception?.expose === true;
+		const fallbackMessage = isClientSafe
+			? exception?.message
+			: undefined;
+
 		return response.status(status).json({
 			statusCode: status,
 			error: validation?.error ?? "",
-			message: validation?.message ?? exception?.message ?? "Error",
+			message: validation?.message ?? fallbackMessage ?? STATUS_CODES[status] ?? "Error",
 		});
 	}
 }

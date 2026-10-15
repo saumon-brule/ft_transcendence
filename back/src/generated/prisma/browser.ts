@@ -58,6 +58,11 @@ export type AppConfig = Prisma.AppConfigModel
  */
 export type Provider = Prisma.ProviderModel
 /**
+ * Model ProviderApiKey
+ * 
+ */
+export type ProviderApiKey = Prisma.ProviderApiKeyModel
+/**
  * Model ProviderUser
  * 
  */

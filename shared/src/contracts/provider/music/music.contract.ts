@@ -65,6 +65,19 @@ export const musicContract = c.router(
 				404: errorDefaultSchema,
 			},
 		},
+		uploadAudio: {
+			method: "PUT",
+			path: "/:uuid/audio",
+			pathParams: uuidParamSchema,
+			contentType: "multipart/form-data",
+			body: c.type<{ file: File }>(),
+			responses: {
+				204: null,
+				404: errorDefaultSchema,
+				413: errorDefaultSchema,
+				415: errorDefaultSchema,
+			},
+		},
 	},
 	{ pathPrefix: "/music" },
 );

@@ -4,10 +4,11 @@ import {
 	providerIdentitySchema,
 	providerPublicKeySchema,
 } from "./schemas/providers.schema";
+import { error401BaseSchema } from "../../schemas/error401";
 
 const c = initContract();
 
-export const providersContract = c.router(
+export const serverProvidersContract = c.router(
 	{
 		provider: {
 			method: "GET",
@@ -22,5 +23,8 @@ export const providersContract = c.router(
 			responses: { 200: providerPublicKeySchema },
 		},
 	},
-	{ pathPrefix: "/providers" },
+	{
+		pathPrefix: "/providers",
+		commonResponses: { 401: error401BaseSchema },
+	},
 );

@@ -18,7 +18,7 @@ interface UpdateSettings {
 
 @Injectable()
 export class SettingsService {
-	constructor(private readonly prisma: PrismaService) { }
+	constructor(private readonly prisma: PrismaService) {}
 
 	async get() {
 		const provider = await this.prisma.provider.findUniqueOrThrow({ where: { id: 1 }, include });

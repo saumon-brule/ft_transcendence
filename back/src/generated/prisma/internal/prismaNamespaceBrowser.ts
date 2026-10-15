@@ -59,6 +59,7 @@ export const ModelName = {
   UserRole: 'UserRole',
   AppConfig: 'AppConfig',
   Provider: 'Provider',
+  ProviderApiKey: 'ProviderApiKey',
   ProviderUser: 'ProviderUser',
   Playlist: 'Playlist',
   UserPlaylist: 'UserPlaylist',
@@ -175,6 +176,19 @@ export const ProviderScalarFieldEnum = {
 } as const
 
 export type ProviderScalarFieldEnum = (typeof ProviderScalarFieldEnum)[keyof typeof ProviderScalarFieldEnum]
+
+
+export const ProviderApiKeyScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  providerId: 'providerId',
+  keyHash: 'keyHash',
+  lastUsedAt: 'lastUsedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ProviderApiKeyScalarFieldEnum = (typeof ProviderApiKeyScalarFieldEnum)[keyof typeof ProviderApiKeyScalarFieldEnum]
 
 
 export const ProviderUserScalarFieldEnum = {

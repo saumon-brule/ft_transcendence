@@ -217,7 +217,7 @@ export type ProviderGroupByOutputType = {
   _max: ProviderMaxAggregateOutputType | null
 }
 
-export type GetProviderGroupByPayload<T extends ProviderGroupByArgs> = Prisma.PrismaPromise<
+type GetProviderGroupByPayload<T extends ProviderGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ProviderGroupByOutputType, T['by']> &
       {
@@ -246,6 +246,7 @@ export type ProviderWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Provider"> | Date | string
   users?: Prisma.ProviderUserListRelationFilter
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  apiKeys?: Prisma.ProviderApiKeyListRelationFilter
 }
 
 export type ProviderOrderByWithRelationInput = {
@@ -259,6 +260,7 @@ export type ProviderOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   users?: Prisma.ProviderUserOrderByRelationAggregateInput
   owner?: Prisma.UserOrderByWithRelationInput
+  apiKeys?: Prisma.ProviderApiKeyOrderByRelationAggregateInput
 }
 
 export type ProviderWhereUniqueInput = Prisma.AtLeast<{
@@ -275,6 +277,7 @@ export type ProviderWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Provider"> | Date | string
   users?: Prisma.ProviderUserListRelationFilter
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  apiKeys?: Prisma.ProviderApiKeyListRelationFilter
 }, "id" | "uuid" | "name" | "adress">
 
 export type ProviderOrderByWithAggregationInput = {
@@ -316,6 +319,7 @@ export type ProviderCreateInput = {
   updatedAt?: Date | string
   users?: Prisma.ProviderUserCreateNestedManyWithoutProviderInput
   owner: Prisma.UserCreateNestedOneWithoutOwnedProvidersInput
+  apiKeys?: Prisma.ProviderApiKeyCreateNestedManyWithoutProviderInput
 }
 
 export type ProviderUncheckedCreateInput = {
@@ -328,6 +332,7 @@ export type ProviderUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutProviderInput
+  apiKeys?: Prisma.ProviderApiKeyUncheckedCreateNestedManyWithoutProviderInput
 }
 
 export type ProviderUpdateInput = {
@@ -339,6 +344,7 @@ export type ProviderUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.ProviderUserUpdateManyWithoutProviderNestedInput
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProvidersNestedInput
+  apiKeys?: Prisma.ProviderApiKeyUpdateManyWithoutProviderNestedInput
 }
 
 export type ProviderUncheckedUpdateInput = {
@@ -351,6 +357,7 @@ export type ProviderUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.ProviderUserUncheckedUpdateManyWithoutProviderNestedInput
+  apiKeys?: Prisma.ProviderApiKeyUncheckedUpdateManyWithoutProviderNestedInput
 }
 
 export type ProviderCreateManyInput = {
@@ -484,6 +491,20 @@ export type ProviderUncheckedUpdateManyWithoutOwnerNestedInput = {
   deleteMany?: Prisma.ProviderScalarWhereInput | Prisma.ProviderScalarWhereInput[]
 }
 
+export type ProviderCreateNestedOneWithoutApiKeysInput = {
+  create?: Prisma.XOR<Prisma.ProviderCreateWithoutApiKeysInput, Prisma.ProviderUncheckedCreateWithoutApiKeysInput>
+  connectOrCreate?: Prisma.ProviderCreateOrConnectWithoutApiKeysInput
+  connect?: Prisma.ProviderWhereUniqueInput
+}
+
+export type ProviderUpdateOneRequiredWithoutApiKeysNestedInput = {
+  create?: Prisma.XOR<Prisma.ProviderCreateWithoutApiKeysInput, Prisma.ProviderUncheckedCreateWithoutApiKeysInput>
+  connectOrCreate?: Prisma.ProviderCreateOrConnectWithoutApiKeysInput
+  upsert?: Prisma.ProviderUpsertWithoutApiKeysInput
+  connect?: Prisma.ProviderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProviderUpdateToOneWithWhereWithoutApiKeysInput, Prisma.ProviderUpdateWithoutApiKeysInput>, Prisma.ProviderUncheckedUpdateWithoutApiKeysInput>
+}
+
 export type ProviderCreateNestedOneWithoutUsersInput = {
   create?: Prisma.XOR<Prisma.ProviderCreateWithoutUsersInput, Prisma.ProviderUncheckedCreateWithoutUsersInput>
   connectOrCreate?: Prisma.ProviderCreateOrConnectWithoutUsersInput
@@ -506,6 +527,7 @@ export type ProviderCreateWithoutOwnerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.ProviderUserCreateNestedManyWithoutProviderInput
+  apiKeys?: Prisma.ProviderApiKeyCreateNestedManyWithoutProviderInput
 }
 
 export type ProviderUncheckedCreateWithoutOwnerInput = {
@@ -517,6 +539,7 @@ export type ProviderUncheckedCreateWithoutOwnerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutProviderInput
+  apiKeys?: Prisma.ProviderApiKeyUncheckedCreateNestedManyWithoutProviderInput
 }
 
 export type ProviderCreateOrConnectWithoutOwnerInput = {
@@ -559,6 +582,68 @@ export type ProviderScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Provider"> | Date | string
 }
 
+export type ProviderCreateWithoutApiKeysInput = {
+  uuid?: string
+  name: string
+  adress: string
+  publicDisplay?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.ProviderUserCreateNestedManyWithoutProviderInput
+  owner: Prisma.UserCreateNestedOneWithoutOwnedProvidersInput
+}
+
+export type ProviderUncheckedCreateWithoutApiKeysInput = {
+  id?: number
+  uuid?: string
+  name: string
+  adress: string
+  ownerId: number
+  publicDisplay?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutProviderInput
+}
+
+export type ProviderCreateOrConnectWithoutApiKeysInput = {
+  where: Prisma.ProviderWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProviderCreateWithoutApiKeysInput, Prisma.ProviderUncheckedCreateWithoutApiKeysInput>
+}
+
+export type ProviderUpsertWithoutApiKeysInput = {
+  update: Prisma.XOR<Prisma.ProviderUpdateWithoutApiKeysInput, Prisma.ProviderUncheckedUpdateWithoutApiKeysInput>
+  create: Prisma.XOR<Prisma.ProviderCreateWithoutApiKeysInput, Prisma.ProviderUncheckedCreateWithoutApiKeysInput>
+  where?: Prisma.ProviderWhereInput
+}
+
+export type ProviderUpdateToOneWithWhereWithoutApiKeysInput = {
+  where?: Prisma.ProviderWhereInput
+  data: Prisma.XOR<Prisma.ProviderUpdateWithoutApiKeysInput, Prisma.ProviderUncheckedUpdateWithoutApiKeysInput>
+}
+
+export type ProviderUpdateWithoutApiKeysInput = {
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  adress?: Prisma.StringFieldUpdateOperationsInput | string
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.ProviderUserUpdateManyWithoutProviderNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProvidersNestedInput
+}
+
+export type ProviderUncheckedUpdateWithoutApiKeysInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  adress?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.IntFieldUpdateOperationsInput | number
+  publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.ProviderUserUncheckedUpdateManyWithoutProviderNestedInput
+}
+
 export type ProviderCreateWithoutUsersInput = {
   uuid?: string
   name: string
@@ -567,6 +652,7 @@ export type ProviderCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedProvidersInput
+  apiKeys?: Prisma.ProviderApiKeyCreateNestedManyWithoutProviderInput
 }
 
 export type ProviderUncheckedCreateWithoutUsersInput = {
@@ -578,6 +664,7 @@ export type ProviderUncheckedCreateWithoutUsersInput = {
   publicDisplay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  apiKeys?: Prisma.ProviderApiKeyUncheckedCreateNestedManyWithoutProviderInput
 }
 
 export type ProviderCreateOrConnectWithoutUsersInput = {
@@ -604,6 +691,7 @@ export type ProviderUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedProvidersNestedInput
+  apiKeys?: Prisma.ProviderApiKeyUpdateManyWithoutProviderNestedInput
 }
 
 export type ProviderUncheckedUpdateWithoutUsersInput = {
@@ -615,6 +703,7 @@ export type ProviderUncheckedUpdateWithoutUsersInput = {
   publicDisplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  apiKeys?: Prisma.ProviderApiKeyUncheckedUpdateManyWithoutProviderNestedInput
 }
 
 export type ProviderCreateManyOwnerInput = {
@@ -635,6 +724,7 @@ export type ProviderUpdateWithoutOwnerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.ProviderUserUpdateManyWithoutProviderNestedInput
+  apiKeys?: Prisma.ProviderApiKeyUpdateManyWithoutProviderNestedInput
 }
 
 export type ProviderUncheckedUpdateWithoutOwnerInput = {
@@ -646,6 +736,7 @@ export type ProviderUncheckedUpdateWithoutOwnerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.ProviderUserUncheckedUpdateManyWithoutProviderNestedInput
+  apiKeys?: Prisma.ProviderApiKeyUncheckedUpdateManyWithoutProviderNestedInput
 }
 
 export type ProviderUncheckedUpdateManyWithoutOwnerInput = {
@@ -665,10 +756,12 @@ export type ProviderUncheckedUpdateManyWithoutOwnerInput = {
 
 export type ProviderCountOutputType = {
   users: number
+  apiKeys: number
 }
 
 export type ProviderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | ProviderCountOutputTypeCountUsersArgs
+  apiKeys?: boolean | ProviderCountOutputTypeCountApiKeysArgs
 }
 
 /**
@@ -688,6 +781,13 @@ export type ProviderCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.
   where?: Prisma.ProviderUserWhereInput
 }
 
+/**
+ * ProviderCountOutputType without action
+ */
+export type ProviderCountOutputTypeCountApiKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProviderApiKeyWhereInput
+}
+
 
 export type ProviderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -700,6 +800,7 @@ export type ProviderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   users?: boolean | Prisma.Provider$usersArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  apiKeys?: boolean | Prisma.Provider$apiKeysArgs<ExtArgs>
   _count?: boolean | Prisma.ProviderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["provider"]>
 
@@ -742,6 +843,7 @@ export type ProviderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type ProviderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Provider$usersArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  apiKeys?: boolean | Prisma.Provider$apiKeysArgs<ExtArgs>
   _count?: boolean | Prisma.ProviderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProviderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -756,6 +858,7 @@ export type $ProviderPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     users: Prisma.$ProviderUserPayload<ExtArgs>[]
     owner: Prisma.$UserPayload<ExtArgs>
+    apiKeys: Prisma.$ProviderApiKeyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1162,6 +1265,7 @@ export interface Prisma__ProviderClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   users<T extends Prisma.Provider$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Provider$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  apiKeys<T extends Prisma.Provider$apiKeysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Provider$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1395,11 +1499,6 @@ export type ProviderFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Skip the first `n` Providers.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of Providers.
-   */
   distinct?: Prisma.ProviderScalarFieldEnum | Prisma.ProviderScalarFieldEnum[]
 }
 
@@ -1621,6 +1720,30 @@ export type Provider$usersArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.ProviderUserScalarFieldEnum | Prisma.ProviderUserScalarFieldEnum[]
+}
+
+/**
+ * Provider.apiKeys
+ */
+export type Provider$apiKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProviderApiKey
+   */
+  select?: Prisma.ProviderApiKeySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProviderApiKey
+   */
+  omit?: Prisma.ProviderApiKeyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProviderApiKeyInclude<ExtArgs> | null
+  where?: Prisma.ProviderApiKeyWhereInput
+  orderBy?: Prisma.ProviderApiKeyOrderByWithRelationInput | Prisma.ProviderApiKeyOrderByWithRelationInput[]
+  cursor?: Prisma.ProviderApiKeyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProviderApiKeyScalarFieldEnum | Prisma.ProviderApiKeyScalarFieldEnum[]
 }
 
 /**

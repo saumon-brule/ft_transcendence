@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { providerSchema } from "../../providers/schemas/provider.schema";
 
 export const profileSchema = z.object({
 	id: z.number(),
@@ -6,13 +7,6 @@ export const profileSchema = z.object({
 	username: z.string(),
 });
 
-// Surement a bouger plus tard
-export const providerSchema = z.object({
-	uuid: z.string().uuid(),
-	name: z.string(),
-	adress: z.string(),
-	publicDisplay: z.boolean(),
-});
 export const playlistSchema = z.object({
 	uuid: z.string().uuid(),
 	name: z.string(),

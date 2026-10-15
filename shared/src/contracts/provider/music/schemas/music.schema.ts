@@ -2,11 +2,11 @@ import { z } from "zod";
 import { artistItemSchema, musicItemSchema, albumItemSchema } from "../../schemas/items.schema";
 
 export const musicDetailedItemSchema = z.object({
-	uuid: z.string(),
+	uuid: z.string().uuid(),
 	name: z.string(),
 	duration: z.number(),
 	publishedAt: z.coerce.date().nullable(),
-	addedBy: z.string().nullable(),
+	addedBy: z.string().uuid().nullable(),
 	addedAt: z.coerce.date(),
 	artists: z.array(artistItemSchema),
 	album: albumItemSchema.nullable(),
