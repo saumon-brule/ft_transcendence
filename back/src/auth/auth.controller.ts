@@ -207,6 +207,15 @@ export class AuthController {
 	}
 
 	@Throttle({ default: { limit: 20, ttl: 60000 } })
+	@UseGuards(JwtAuthGuard)
+	@TsRestHandler(authContract.getLink42url)
+	public getLink42Url(@CurrentUser() user: AuthUser) {
+		return tsRestHandler(authContract.getLink42url, async () => {
+			return { status: 200, body: { url: await this.authService.get42LinkUrl(user.uuid) } };
+		});
+	}
+
+	@Throttle({ default: { limit: 20, ttl: 60000 } })
 	@TsRestHandler(authContract.auth42)
 	public auth42(
 		@Req() req: Request,
@@ -223,6 +232,30 @@ export class AuthController {
 			this.setRefreshTokenCookie(res, refreshToken);
 
 			return { status: 200, body: { accessToken } };
+		});
+	}
+
+	@Throttle({ default: { limit: 20, ttl: 60000 } })
+	@UseGuards(JwtAuthGuard)
+	@TsRestHandler(authContract.link42)
+	public link42(@CurrentUser() user: AuthUser) {
+		return tsRestHandler(authContract.link42, async ({ body }) => {
+			await this.authService.link42(
+				user.uuid,
+				body.code,
+				body.state,
+			);
+			return { status: 204, body: null };
+		});
+	}
+
+	@Throttle({ default: { limit: 20, ttl: 60000 } })
+	@UseGuards(JwtAuthGuard)
+	@TsRestHandler(authContract.unlink42)
+	public unlink42(@CurrentUser() user: AuthUser) {
+		return tsRestHandler(authContract.unlink42, async () => {
+			await this.authService.unlink42(user.uuid);
+			return { status: 204, body: null };
 		});
 	}
 

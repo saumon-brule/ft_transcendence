@@ -8,6 +8,7 @@ import { requestEmailResetSchema, resetEmailSchema } from "./schemas/email.schem
 import { auth42Schema, auth42UrlSchema } from "./schemas/42login.schema";
 import { errorDefaultSchema } from "../schemas/error-default";
 import { error401AuthSchema } from "../schemas/error401";
+import { error403Schema } from "../schemas/error403";
 import z from "zod";
 
 const c = initContract();
@@ -108,7 +109,15 @@ export const authContract = c.router(
 		},
 		getLogin42url: {
 			method: "GET",
-			path: "/42/url",
+			path: "/42/login-url",
+			responses: {
+				200: auth42UrlSchema,
+				401: z.never(),
+			},
+		},
+		getLink42url: {
+			method: "GET",
+			path: "/42/link-url",
 			responses: {
 				200: auth42UrlSchema,
 				401: z.never(),
@@ -121,6 +130,25 @@ export const authContract = c.router(
 			responses: {
 				200: authResponseSchema,
 				403: z.never(),
+				409: errorDefaultSchema,
+			},
+		},
+		link42: {
+			method: "POST",
+			path: "/42/link",
+			body: auth42Schema,
+			responses: {
+				204: null,
+				409: errorDefaultSchema,
+			},
+		},
+		unlink42: {
+			method: "DELETE",
+			path: "/42/link",
+			responses: {
+				204: null,
+				403: error403Schema,
+				409: errorDefaultSchema,
 			},
 		},
 	},

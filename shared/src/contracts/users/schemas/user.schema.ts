@@ -48,6 +48,8 @@ export const meSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
 	email: z.string().email(),
+	intraId: z.number().nullable(),
+	language: z.string(),
 	listeningPrivate: z.boolean(),
 	createdAt: z.coerce.date(),
 	currentlyListening: musicSchema.nullable(),
@@ -60,7 +62,9 @@ export const meSchema = z.object({
 export type Profile = z.infer<typeof meSchema>;
 
 export const updateMeSchema = z.object({
-	username: z.string().min(3).max(32).optional(),
+	username: z.string().min(3).max(32).
+		optional(),
+	language: z.string().optional(),
 	listeningPrivate: z.boolean().optional(),
 });
 export type UpdateMeDto = z.infer<typeof updateMeSchema>;

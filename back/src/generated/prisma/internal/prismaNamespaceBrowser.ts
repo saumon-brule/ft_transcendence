@@ -89,6 +89,8 @@ export const UserScalarFieldEnum = {
   password: 'password',
   username: 'username',
   emailValidated: 'emailValidated',
+  intraId: 'intraId',
+  language: 'language',
   currentlyListeningId: 'currentlyListeningId',
   listeningUntil: 'listeningUntil',
   listeningPrivate: 'listeningPrivate',
