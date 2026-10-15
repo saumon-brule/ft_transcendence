@@ -15,7 +15,7 @@ export class FriendsController {
 	constructor(
 		private readonly friendsService: FriendsService,
 		private readonly usersService: UsersService,
-	) { }
+	) {}
 
 	@TsRestHandler(friendsContract.getStatus)
 	public getStatus() {

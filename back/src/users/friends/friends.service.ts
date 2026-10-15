@@ -22,14 +22,14 @@ export class FriendsService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly userService: UsersService,
-	) { }
+	) {}
 
 	public async getStatus(userId: number, friendId: number) {
 		const result = await this.prisma.friendRequest.findUnique({
 			where: {
 				userId_friendId: {
-					userId, friendId
-				}
+					userId, friendId,
+				},
 			},
 		});
 		if (!result) throw new NotFoundException();
@@ -78,7 +78,7 @@ export class FriendsService {
 			data: {
 				userId: userId,
 				friendId: targetId,
-				status: "PENDING"
+				status: "PENDING",
 			},
 		});
 		return newRequest;
@@ -88,9 +88,9 @@ export class FriendsService {
 		await this.prisma.friendRequest.delete({
 			where: {
 				userId_friendId: {
-					userId, friendId
-				}
-			}
+					userId, friendId,
+				},
+			},
 		});
 	}
 
@@ -98,7 +98,7 @@ export class FriendsService {
 		await this.prisma.friendRequest.update({
 			where: {
 				userId_friendId: {
-					userId, friendId
+					userId, friendId,
 				},
 				status: "PENDING",
 			},
