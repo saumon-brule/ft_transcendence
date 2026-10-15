@@ -58,6 +58,21 @@ export class FriendsService {
 			: f.user);
 	}
 
+	public async isFriendWith(userUUID1: string, userUUID2: string) {
+		const user1 = await this.userService.getByUUID(userUUID1);
+		const user2 = await this.userService.getByUUID(userUUID2);
+		const relation = await this.prisma.friendRequest.findFirst({
+			where: {
+				status: "ACCEPTED",
+				OR: [
+					{ userId: user1.id, friendId: user2.id },
+					{ userId: user2.id, friendId: user1.id },
+				],
+			},
+		});
+		return !!relation;
+	}
+
 	public async makeRequest(userId: number, targetId: number) {
 		const newRequest = await this.prisma.friendRequest.create({
 			data: {

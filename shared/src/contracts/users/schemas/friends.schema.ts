@@ -14,6 +14,15 @@ export const friendsSchema = z.array(
 	shortUserSchema,
 );
 
+export const isFriendWithResponseSchema = z.object({
+	isFriend: z.boolean(),
+});
+
+export const isFriendWithQuerySchema = z.object({
+	userUuid1: z.string().uuid(),
+	userUuid2: z.string().uuid(),
+});
+
 export const friendUuidParamSchema = z.object({
 	friendUuid: z.string().uuid(),
 });

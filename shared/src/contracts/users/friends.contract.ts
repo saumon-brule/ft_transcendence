@@ -1,5 +1,5 @@
 import { initContract } from "@ts-rest/core";
-import { statusSchema, friendShipBodySchema, friendsSchema, requestBodySchema, friendUuidParamSchema, requesterUuidParamSchema, manageRequestBodySchema } from "./schemas/friends.schema";
+import { statusSchema, friendShipBodySchema, friendsSchema, requestBodySchema, friendUuidParamSchema, requesterUuidParamSchema, manageRequestBodySchema, isFriendWithResponseSchema, isFriendWithQuerySchema } from "./schemas/friends.schema";
 
 const c = initContract();
 
@@ -15,6 +15,12 @@ export const friendsContract = c.router(
 			method: "GET",
 			path: "/",
 			responses: { 200: friendsSchema },
+		},
+		isFriendWith: {
+			method: "GET",
+			path: "/relation",
+			query: isFriendWithQuerySchema,
+			responses: { 200: isFriendWithResponseSchema },
 		},
 		makeRequest: {
 			method: "POST",

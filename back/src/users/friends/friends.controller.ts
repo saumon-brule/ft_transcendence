@@ -34,6 +34,21 @@ export class FriendsController {
 		});
 	}
 
+	@TsRestHandler(friendsContract.isFriendWith)
+	@UseGuards(JwtAuthGuard)
+	public isFriendWith() {
+		return tsRestHandler(friendsContract.isFriendWith, async ({ query }) => {
+			const isFriend = await this.friendsService.isFriendWith(
+				query.userUuid1,
+				query.userUuid2,
+			);
+			return {
+				status: 200,
+				body: { isFriend },
+			};
+		});
+	}
+
 	@TsRestHandler(friendsContract.makeRequest)
 	@UseGuards(JwtAuthGuard)
 	public makeRequest(@CurrentUser() authuser: AuthUser) {
@@ -45,9 +60,16 @@ export class FriendsController {
 		});
 	}
 
-	// @TsRestHandler(friendsContract.removeFriend)
-	// @UseGuards(JwtAuthGuard)
-	// public removeFriend(@CurrentUser() authuser: AuthUser) {}
+	@TsRestHandler(friendsContract.removeFriend)
+	@UseGuards(JwtAuthGuard)
+	public removeFriend(@CurrentUser() authuser: AuthUser) {
+		return tsRestHandler(friendsContract.removeFriend, async ({ params }) => {
+			const user = await this.usersService.getByUUID(authuser.uuid);
+			const friend = await this.usersService.getByUUID(params.friendUuid);
+			await this.friendsService.removeFriend(user.id, friend.id);
+			return { status: 204, body: null };
+		});
+	}
 
 	@TsRestHandler(friendsContract.manageRequests)
 	@UseGuards(JwtAuthGuard)
