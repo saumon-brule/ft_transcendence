@@ -62,7 +62,8 @@ export const meSchema = z.object({
 export type Profile = z.infer<typeof meSchema>;
 
 export const updateMeSchema = z.object({
-	username: z.string().min(3).max(32).optional(),
+	username: z.string().min(3).max(32).
+		optional(),
 	language: z.string().optional(),
 	listeningPrivate: z.boolean().optional(),
 });
