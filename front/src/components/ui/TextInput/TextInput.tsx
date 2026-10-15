@@ -93,7 +93,7 @@ export default function TextInput(props: TextInputProps) {
 	};
 
 	function checkErrors() {
-		console.log(rest)
+		console.log(rest);
 		let error: JSXElement;
 		if (rest.required && !componentRef.htmlElement.value) {
 			error = t(`errors.input.text.${rest.type ?? "text"}.valueMissing`);
