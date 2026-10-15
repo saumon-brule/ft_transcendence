@@ -1,17 +1,16 @@
 import { ChevronDown, LogOut, Search, Settings, X, User } from "lucide-solid";
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
-import { env } from "~/env";
 import Form from "~/components/ui/Form/Form";
 import TextInput from "~/components/ui/TextInput";
 import { authActions } from "~/store/auth.store";
 import type { InputComponentRef } from "~/types/ComponentRef";
 import { useNavigate } from "@solidjs/router";
-import { useProfile } from "~/components/context/ProfileContext";
+import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 
 import "./Header.scss";
 
 export default function Header() {
-	const [me] = useProfile();
+	const meProfileQuery = useMeProfileQuery();
 	const navigate = useNavigate();
 
 	const [isMenuOpen, setIsMenuOpen] = createSignal(false);
@@ -67,9 +66,9 @@ export default function Header() {
 					aria-haspopup="menu"
 					onClick={() => setIsMenuOpen((open) => !open)}
 				>
-					<Show when={me.profile}>
+					<Show when={meProfileQuery.data ? meProfileQuery.data.body : undefined}>
 						{(user) => <>
-							<img class="profile-avatar" src={`${env.VITE_API_URL}/users/${user().uuid}/avatar?v=${me.avatarVersion}`}/>
+							<img class="profile-avatar" src={user().avatarUrl}/>
 							<span class="profile-username">{user().username}</span>
 						</>}
 					</Show>
@@ -78,7 +77,7 @@ export default function Header() {
 
 				<Show when={isMenuOpen()}>
 					<div class="profile-dropdown" role="menu">
-						<Show when={me.profile}>
+						<Show when={meProfileQuery.data ? meProfileQuery.data.body : undefined}>
 							{(user) => <button type="button" role="menuitem" onClick={() => navigate(`/user/${user().uuid}`)}>
 								<User size={17} aria-hidden="true" />
 								<span>Profile</span>

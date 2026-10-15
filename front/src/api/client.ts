@@ -47,6 +47,7 @@ export const client = initQueryClient(appContract, {
 		Authorization: () => `Bearer ${auth.accessToken}`,
 	},
 	api: fetchWithRefresh,
+	validateResponse: true,
 });
 
 export const queryKeys = queryKeyFromContract(appContract);

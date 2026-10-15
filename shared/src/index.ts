@@ -7,6 +7,7 @@ export { appConfigContract } from "./contracts/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/playlists/playlists.contract";
 
 export { loginSchema, type LoginDto } from "./contracts/auth/schemas/login.schema";
+export { requestEmailResetSchema, resetEmailSchema, type RequestEmailResetDto, type ResetEmailDto } from "./contracts/auth/schemas/email.schema";
 export { registerSchema, type RegisterDto } from "./contracts/auth/schemas/register.schema";
 export { resetPasswordSchema, changePasswordSchema, type RequestPasswordResetDto, type ChangePasswordDto } from "./contracts/auth/schemas/password.schema";
 export { userSchema, meSchema, updateMeSchema, type User, type Profile, type UpdateMeDto } from "./contracts/users/schemas/user.schema";

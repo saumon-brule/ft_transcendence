@@ -78,6 +78,7 @@ $sizes: (
 		@if $name == link {
 			&--#{$name} {
 				background-color: transparent;
+				border-radius: 0 !important;
 				padding-inline: 0 !important;
 
 				font-weight: bold;
@@ -97,6 +98,7 @@ $sizes: (
 		}
 		@if $name == text {
 			&--#{$name} {
+				border-radius: 0 !important;
 				background-color: transparent;
 				padding-inline: 0 !important;
 			}

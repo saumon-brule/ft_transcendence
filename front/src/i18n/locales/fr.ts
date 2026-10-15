@@ -13,10 +13,10 @@ export default {
 			},
 		},
 		ftAuthCallback: {
-			mainErrorMessage: "EN: Une erreur imprévue s'est produite :/",
-			subErrorMessage: "EN: Veuillez réessayer plus tard.",
-			mainRefusedMessage: "EN: Vous avez refusé ToT",
-			subRefusedMessage: "EN: Pas cool ...",
+			mainErrorMessage: "Une erreur imprévue s'est produite :/",
+			subErrorMessage: "Veuillez réessayer plus tard.",
+			mainRefusedMessage: "Vous avez refusé ToT",
+			subRefusedMessage: "Pas cool ...",
 		},
 		promptVerifyEmail: {
 			title: "Vérifie ton email",
@@ -56,6 +56,47 @@ export default {
 				confirmNewPassword: "Confirmer le nouveau mot de passe",
 			},
 		},
+		settings: {
+			edit: "modifier",
+			confirm: "confirmer",
+			cancel: "annuler",
+			account: {
+				username: {
+					popUp: {
+						title: "Modifier votre pseudo",
+						placeholder: "Nouveau pseudo",
+						success: "Votre pseudo a bien été modifié",
+						failure: "Votre pseudo n'a pas pu être modifié : {{reason}}",
+						failureNoReason: "Votre pseudo n'a pas pu être modifié",
+					},
+				},
+				password: {
+					popUp: {
+						title: "Modifier votre mot de passe",
+						placeholder: {
+							old: "Ancien mot de passe",
+							new: "Nouveau mot de passe",
+							confirm: "Confirmer mot de passe",
+						},
+						success: "Votre mot de passe a bien été modifié",
+						failure: "Votre mot de passe n'a pas pu être modifié : {{reason}}",
+						failureNoReason: "Votre mot de passe n'a pas pu être modifié",
+					},
+				},
+				email: {
+					popUp: {
+						title: "Modifier votre email",
+						placeholder: {
+							password: "Mot de pass",
+							newEmail: "Nouvel email",
+						},
+						success: "Votre addresse email a bien été modifiée, vous avez reçu un mail de vérification",
+						failure: "Votre addresse email n'a pas pu être modifié : {{reason}}",
+						failureNoReason: "Votre addresse email n'a pas pu être modifié",
+					},
+				},
+			},
+		},
 	},
 	errors: {
 		rateLimit: "Euh... Bro tu vas trop vite là !",
@@ -92,6 +133,9 @@ export default {
 					typeMismatch: "FR: Please enter a valid research",
 				},
 			},
+		},
+		auth: {
+			invalidPassword: "FR: Password is incorrect",
 		},
 		register: {
 			conflictingEmail: "FR: This email is already taken",
