@@ -1,10 +1,10 @@
 import { updateMeSchema } from "@flex/shared";
 import { onMount } from "solid-js";
 import { client } from "~/api/client";
-import Button from "~/components/ui/Button";
-import Form from "~/components/ui/Form/Form";
+import Button from "~/components/inputs/Button";
+import Form from "~/components/inputs/Form/Form";
 import { summonPopUp } from "~/components/ui/Overlay";
-import TextInput from "~/components/ui/TextInput";
+import TextInput from "~/components/inputs/TextInput";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { useTranslation } from "~/i18n/context";
 import { validateFromZod } from "~/utils/validateFromZod";

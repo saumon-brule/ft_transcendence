@@ -1,7 +1,7 @@
 import { ChevronDown, LogOut, Search, Settings, X, User } from "lucide-solid";
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
-import Form from "~/components/ui/Form/Form";
-import TextInput from "~/components/ui/TextInput";
+import Form from "~/components/inputs/Form/Form";
+import TextInput from "~/components/inputs/TextInput";
 import { authActions } from "~/store/auth.store";
 import type { InputComponentRef } from "~/types/ComponentRef";
 import { useNavigate } from "@solidjs/router";

@@ -1,5 +1,5 @@
 import { Show } from "solid-js";
-import Button from "~/components/ui/Button";
+import Button from "~/components/inputs/Button";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import { OverlayControls } from "~/components/ui/Overlay";
 import { onCleanup } from "solid-js";

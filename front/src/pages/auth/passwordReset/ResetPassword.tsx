@@ -1,14 +1,14 @@
 
 import { useTranslation } from "~/i18n/context";
 import "./ResetPassword.scss";
-import Form from "~/components/ui/Form/Form";
-import TextInput from "~/components/ui/TextInput";
+import Form from "~/components/inputs/Form/Form";
+import TextInput from "~/components/inputs/TextInput";
 import { validateFromZod } from "~/utils/validateFromZod";
 import { resetPasswordSchema } from "@flex/shared";
 import { client } from "~/api/client";
 import { useLocation, useNavigate } from "@solidjs/router";
 import { createSignal, onMount, Show } from "solid-js";
-import Button from "~/components/ui/Button";
+import Button from "~/components/inputs/Button";
 import DialogPage from "~/components/ui/DialogPage";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import LinkParticles from "~/components/ui/LinkParticles";
