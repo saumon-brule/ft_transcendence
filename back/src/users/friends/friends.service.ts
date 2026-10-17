@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../../core/prisma/prisma.service";
 import { UsersService } from "../users.service";
 
@@ -23,18 +23,6 @@ export class FriendsService {
 		private readonly prisma: PrismaService,
 		private readonly userService: UsersService,
 	) {}
-
-	public async getStatus(userId: number, friendId: number) {
-		const result = await this.prisma.friendRequest.findUnique({
-			where: {
-				userId_friendId: {
-					userId, friendId,
-				},
-			},
-		});
-		if (!result) throw new NotFoundException();
-		return result.status;
-	}
 
 	public async getFriends(userUUID: string) {
 		const user = await this.userService.getByUUID(userUUID);
@@ -61,19 +49,45 @@ export class FriendsService {
 	public async isFriendWith(userUUID1: string, userUUID2: string) {
 		const user1 = await this.userService.getByUUID(userUUID1);
 		const user2 = await this.userService.getByUUID(userUUID2);
-		const relation = await this.prisma.friendRequest.findFirst({
+		const relations = await this.prisma.friendRequest.findMany({
 			where: {
-				status: "ACCEPTED",
 				OR: [
 					{ userId: user1.id, friendId: user2.id },
 					{ userId: user2.id, friendId: user1.id },
 				],
 			},
+			select: { status: true },
 		});
-		return !!relation;
+		if (relations.some((relation) => relation.status === "ACCEPTED")) {
+			return "YES";
+		}
+		if (relations.some((relation) => relation.status === "PENDING")) {
+			return "PENDING";
+		}
+		return "NO";
 	}
 
 	public async makeRequest(userId: number, targetId: number) {
+		if (userId === targetId) throw new BadRequestException();
+		const pendingRequest = await this.prisma.friendRequest.findUnique({
+			where: {
+				userId_friendId: {
+					userId: targetId,
+					friendId: userId,
+				},
+			},
+		});
+		if (pendingRequest?.status === "PENDING") {
+			return this.prisma.friendRequest.update({
+				where: {
+					userId_friendId: {
+						userId: targetId,
+						friendId: userId,
+					},
+				},
+				data: { status: "ACCEPTED" },
+			});
+		}
 		const newRequest = await this.prisma.friendRequest.create({
 			data: {
 				userId: userId,
@@ -85,13 +99,16 @@ export class FriendsService {
 	}
 
 	public async removeFriend(userId: number, friendId: number) {
-		await this.prisma.friendRequest.delete({
+		const result = await this.prisma.friendRequest.deleteMany({
 			where: {
-				userId_friendId: {
-					userId, friendId,
-				},
+				status: "ACCEPTED",
+				OR: [
+					{ userId, friendId },
+					{ userId: friendId, friendId: userId },
+				],
 			},
 		});
+		if (result.count === 0) throw new NotFoundException();
 	}
 
 	public async manageRequests(userId: number, friendId: number, status: "ACCEPTED" | "DENIED") {

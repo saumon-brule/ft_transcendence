@@ -1,16 +1,10 @@
 import { initContract } from "@ts-rest/core";
-import { statusSchema, friendShipBodySchema, friendsSchema, requestBodySchema, friendUuidParamSchema, requesterUuidParamSchema, manageRequestBodySchema, isFriendWithResponseSchema, isFriendWithQuerySchema } from "./schemas/friends.schema";
+import { friendsSchema, requestBodySchema, friendUuidParamSchema, requesterUuidParamSchema, manageRequestBodySchema, isFriendWithResponseSchema, isFriendWithQuerySchema } from "./schemas/friends.schema";
 
 const c = initContract();
 
 export const friendsContract = c.router(
 	{
-		getStatus: {
-			method: "GET",
-			path: "/status",
-			responses: { 200: statusSchema },
-			query: friendShipBodySchema,
-		},
 		getFriends: {
 			method: "GET",
 			path: "/",

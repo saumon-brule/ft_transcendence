@@ -17,14 +17,6 @@ export class FriendsController {
 		private readonly usersService: UsersService,
 	) {}
 
-	@TsRestHandler(friendsContract.getStatus)
-	public getStatus() {
-		return tsRestHandler(friendsContract.getStatus, async ({ query }) => {
-			const status = await this.friendsService.getStatus(query.userId, query.friendId);
-			return { status: 200, body: { status: status } };
-		});
-	}
-
 	@TsRestHandler(friendsContract.getFriends)
 	@UseGuards(JwtAuthGuard)
 	public getFriends(@CurrentUser() authuser: AuthUser) {
