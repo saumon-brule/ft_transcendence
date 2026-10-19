@@ -10,4 +10,4 @@ import { LoggingModule } from "../core/logging/logging.module";
 	controllers: [UsersController],
 	exports: [UsersService],
 })
-export class UsersModule {}
+export class UsersModule { }

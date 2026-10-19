@@ -238,7 +238,7 @@ export type UserGroupByOutputType = {
   _max: UserMaxAggregateOutputType | null
 }
 
-export type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
+type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<UserGroupByOutputType, T['by']> &
       {
@@ -276,6 +276,8 @@ export type UserWhereInput = {
   playlists?: Prisma.UserPlaylistListRelationFilter
   ownedPlaylists?: Prisma.PlaylistListRelationFilter
   currentlyListening?: Prisma.XOR<Prisma.MusicNullableScalarRelationFilter, Prisma.MusicWhereInput> | null
+  friendsRequests?: Prisma.FriendRequestListRelationFilter
+  friendsReceive?: Prisma.FriendRequestListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -298,6 +300,8 @@ export type UserOrderByWithRelationInput = {
   playlists?: Prisma.UserPlaylistOrderByRelationAggregateInput
   ownedPlaylists?: Prisma.PlaylistOrderByRelationAggregateInput
   currentlyListening?: Prisma.MusicOrderByWithRelationInput
+  friendsRequests?: Prisma.FriendRequestOrderByRelationAggregateInput
+  friendsReceive?: Prisma.FriendRequestOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -323,6 +327,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   playlists?: Prisma.UserPlaylistListRelationFilter
   ownedPlaylists?: Prisma.PlaylistListRelationFilter
   currentlyListening?: Prisma.XOR<Prisma.MusicNullableScalarRelationFilter, Prisma.MusicWhereInput> | null
+  friendsRequests?: Prisma.FriendRequestListRelationFilter
+  friendsReceive?: Prisma.FriendRequestListRelationFilter
 }, "id" | "uuid" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -379,6 +385,8 @@ export type UserCreateInput = {
   playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
   currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -400,6 +408,8 @@ export type UserUncheckedCreateInput = {
   providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
   playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
 }
 
 export type UserUpdateInput = {
@@ -420,6 +430,8 @@ export type UserUpdateInput = {
   playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
   currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -441,6 +453,8 @@ export type UserUncheckedUpdateInput = {
   providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
   playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -587,6 +601,34 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type UserCreateNestedOneWithoutFriendsRequestsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendsRequestsInput, Prisma.UserUncheckedCreateWithoutFriendsRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendsRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutFriendsReceiveInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendsReceiveInput, Prisma.UserUncheckedCreateWithoutFriendsReceiveInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendsReceiveInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFriendsRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendsRequestsInput, Prisma.UserUncheckedCreateWithoutFriendsRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendsRequestsInput
+  upsert?: Prisma.UserUpsertWithoutFriendsRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFriendsRequestsInput, Prisma.UserUpdateWithoutFriendsRequestsInput>, Prisma.UserUncheckedUpdateWithoutFriendsRequestsInput>
+}
+
+export type UserUpdateOneRequiredWithoutFriendsReceiveNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendsReceiveInput, Prisma.UserUncheckedCreateWithoutFriendsReceiveInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendsReceiveInput
+  upsert?: Prisma.UserUpsertWithoutFriendsReceiveInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFriendsReceiveInput, Prisma.UserUpdateWithoutFriendsReceiveInput>, Prisma.UserUncheckedUpdateWithoutFriendsReceiveInput>
+}
+
 export type UserCreateNestedOneWithoutSessionsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsInput
@@ -729,6 +771,210 @@ export type UserUncheckedUpdateManyWithoutCurrentlyListeningNestedInput = {
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
+export type UserCreateWithoutFriendsRequestsInput = {
+  uuid?: string
+  email: string
+  password?: string | null
+  username: string
+  emailValidated?: boolean
+  listeningUntil?: Date | string | null
+  listeningPrivate?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
+  ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
+  currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
+}
+
+export type UserUncheckedCreateWithoutFriendsRequestsInput = {
+  id?: number
+  uuid?: string
+  email: string
+  password?: string | null
+  username: string
+  emailValidated?: boolean
+  currentlyListeningId?: number | null
+  listeningUntil?: Date | string | null
+  listeningPrivate?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
+  ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
+}
+
+export type UserCreateOrConnectWithoutFriendsRequestsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendsRequestsInput, Prisma.UserUncheckedCreateWithoutFriendsRequestsInput>
+}
+
+export type UserCreateWithoutFriendsReceiveInput = {
+  uuid?: string
+  email: string
+  password?: string | null
+  username: string
+  emailValidated?: boolean
+  listeningUntil?: Date | string | null
+  listeningPrivate?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
+  ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
+  currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutFriendsReceiveInput = {
+  id?: number
+  uuid?: string
+  email: string
+  password?: string | null
+  username: string
+  emailValidated?: boolean
+  currentlyListeningId?: number | null
+  listeningUntil?: Date | string | null
+  listeningPrivate?: boolean
+  updatedAt?: Date | string | null
+  createdAt?: Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserRefInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
+  providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
+  playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
+  ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutFriendsReceiveInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendsReceiveInput, Prisma.UserUncheckedCreateWithoutFriendsReceiveInput>
+}
+
+export type UserUpsertWithoutFriendsRequestsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFriendsRequestsInput, Prisma.UserUncheckedUpdateWithoutFriendsRequestsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendsRequestsInput, Prisma.UserUncheckedCreateWithoutFriendsRequestsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFriendsRequestsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFriendsRequestsInput, Prisma.UserUncheckedUpdateWithoutFriendsRequestsInput>
+}
+
+export type UserUpdateWithoutFriendsRequestsInput = {
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
+  ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
+  currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFriendsRequestsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
+  ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
+}
+
+export type UserUpsertWithoutFriendsReceiveInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFriendsReceiveInput, Prisma.UserUncheckedUpdateWithoutFriendsReceiveInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendsReceiveInput, Prisma.UserUncheckedCreateWithoutFriendsReceiveInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFriendsReceiveInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFriendsReceiveInput, Prisma.UserUncheckedUpdateWithoutFriendsReceiveInput>
+}
+
+export type UserUpdateWithoutFriendsReceiveInput = {
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
+  ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
+  currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFriendsReceiveInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  emailValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentlyListeningId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  listeningUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  listeningPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserRefNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
+  providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
+  playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
+  ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutSessionsInput = {
   uuid?: string
   email: string
@@ -746,6 +992,8 @@ export type UserCreateWithoutSessionsInput = {
   playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
   currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -766,6 +1014,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
   playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -801,6 +1051,8 @@ export type UserUpdateWithoutSessionsInput = {
   playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
   currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -821,6 +1073,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
   playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
 }
 
 export type UserCreateWithoutTokensInput = {
@@ -840,6 +1094,8 @@ export type UserCreateWithoutTokensInput = {
   playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
   currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
 }
 
 export type UserUncheckedCreateWithoutTokensInput = {
@@ -860,6 +1116,8 @@ export type UserUncheckedCreateWithoutTokensInput = {
   providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
   playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
 }
 
 export type UserCreateOrConnectWithoutTokensInput = {
@@ -895,6 +1153,8 @@ export type UserUpdateWithoutTokensInput = {
   playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
   currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTokensInput = {
@@ -915,6 +1175,8 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
   playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
 }
 
 export type UserCreateWithoutUserRolesInput = {
@@ -934,6 +1196,8 @@ export type UserCreateWithoutUserRolesInput = {
   playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
   currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
 }
 
 export type UserUncheckedCreateWithoutUserRolesInput = {
@@ -954,6 +1218,8 @@ export type UserUncheckedCreateWithoutUserRolesInput = {
   providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
   playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
 }
 
 export type UserCreateOrConnectWithoutUserRolesInput = {
@@ -989,6 +1255,8 @@ export type UserUpdateWithoutUserRolesInput = {
   playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
   currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserRolesInput = {
@@ -1009,6 +1277,8 @@ export type UserUncheckedUpdateWithoutUserRolesInput = {
   providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
   playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
 }
 
 export type UserCreateWithoutOwnedProvidersInput = {
@@ -1028,6 +1298,8 @@ export type UserCreateWithoutOwnedProvidersInput = {
   playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
   currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
 }
 
 export type UserUncheckedCreateWithoutOwnedProvidersInput = {
@@ -1048,6 +1320,8 @@ export type UserUncheckedCreateWithoutOwnedProvidersInput = {
   providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
   playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
 }
 
 export type UserCreateOrConnectWithoutOwnedProvidersInput = {
@@ -1083,6 +1357,8 @@ export type UserUpdateWithoutOwnedProvidersInput = {
   playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
   currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedProvidersInput = {
@@ -1103,6 +1379,8 @@ export type UserUncheckedUpdateWithoutOwnedProvidersInput = {
   providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
   playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
 }
 
 export type UserCreateWithoutProvidersInput = {
@@ -1122,6 +1400,8 @@ export type UserCreateWithoutProvidersInput = {
   playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
   currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
 }
 
 export type UserUncheckedCreateWithoutProvidersInput = {
@@ -1142,6 +1422,8 @@ export type UserUncheckedCreateWithoutProvidersInput = {
   ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
   playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
 }
 
 export type UserCreateOrConnectWithoutProvidersInput = {
@@ -1177,6 +1459,8 @@ export type UserUpdateWithoutProvidersInput = {
   playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
   currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProvidersInput = {
@@ -1197,6 +1481,8 @@ export type UserUncheckedUpdateWithoutProvidersInput = {
   ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
   playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
 }
 
 export type UserCreateWithoutOwnedPlaylistsInput = {
@@ -1216,6 +1502,8 @@ export type UserCreateWithoutOwnedPlaylistsInput = {
   providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
   playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
   currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
 }
 
 export type UserUncheckedCreateWithoutOwnedPlaylistsInput = {
@@ -1236,6 +1524,8 @@ export type UserUncheckedCreateWithoutOwnedPlaylistsInput = {
   ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
   providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
   playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
 }
 
 export type UserCreateOrConnectWithoutOwnedPlaylistsInput = {
@@ -1271,6 +1561,8 @@ export type UserUpdateWithoutOwnedPlaylistsInput = {
   providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
   playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
   currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedPlaylistsInput = {
@@ -1291,6 +1583,8 @@ export type UserUncheckedUpdateWithoutOwnedPlaylistsInput = {
   ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
   providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
   playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
 }
 
 export type UserCreateWithoutPlaylistsInput = {
@@ -1310,6 +1604,8 @@ export type UserCreateWithoutPlaylistsInput = {
   providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
   currentlyListening?: Prisma.MusicCreateNestedOneWithoutCurrentlyListeningUsersInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
 }
 
 export type UserUncheckedCreateWithoutPlaylistsInput = {
@@ -1330,6 +1626,8 @@ export type UserUncheckedCreateWithoutPlaylistsInput = {
   ownedProviders?: Prisma.ProviderUncheckedCreateNestedManyWithoutOwnerInput
   providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
 }
 
 export type UserCreateOrConnectWithoutPlaylistsInput = {
@@ -1365,6 +1663,8 @@ export type UserUpdateWithoutPlaylistsInput = {
   providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
   currentlyListening?: Prisma.MusicUpdateOneWithoutCurrentlyListeningUsersNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPlaylistsInput = {
@@ -1385,6 +1685,8 @@ export type UserUncheckedUpdateWithoutPlaylistsInput = {
   ownedProviders?: Prisma.ProviderUncheckedUpdateManyWithoutOwnerNestedInput
   providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
 }
 
 export type UserCreateWithoutCurrentlyListeningInput = {
@@ -1404,6 +1706,8 @@ export type UserCreateWithoutCurrentlyListeningInput = {
   providers?: Prisma.ProviderUserCreateNestedManyWithoutUserInput
   playlists?: Prisma.UserPlaylistCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestCreateNestedManyWithoutFriendInput
 }
 
 export type UserUncheckedCreateWithoutCurrentlyListeningInput = {
@@ -1424,6 +1728,8 @@ export type UserUncheckedCreateWithoutCurrentlyListeningInput = {
   providers?: Prisma.ProviderUserUncheckedCreateNestedManyWithoutUserInput
   playlists?: Prisma.UserPlaylistUncheckedCreateNestedManyWithoutUserInput
   ownedPlaylists?: Prisma.PlaylistUncheckedCreateNestedManyWithoutOwnerInput
+  friendsRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutUserInput
+  friendsReceive?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutFriendInput
 }
 
 export type UserCreateOrConnectWithoutCurrentlyListeningInput = {
@@ -1499,6 +1805,8 @@ export type UserUpdateWithoutCurrentlyListeningInput = {
   providers?: Prisma.ProviderUserUpdateManyWithoutUserNestedInput
   playlists?: Prisma.UserPlaylistUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCurrentlyListeningInput = {
@@ -1519,6 +1827,8 @@ export type UserUncheckedUpdateWithoutCurrentlyListeningInput = {
   providers?: Prisma.ProviderUserUncheckedUpdateManyWithoutUserNestedInput
   playlists?: Prisma.UserPlaylistUncheckedUpdateManyWithoutUserNestedInput
   ownedPlaylists?: Prisma.PlaylistUncheckedUpdateManyWithoutOwnerNestedInput
+  friendsRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutUserNestedInput
+  friendsReceive?: Prisma.FriendRequestUncheckedUpdateManyWithoutFriendNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutCurrentlyListeningInput = {
@@ -1547,6 +1857,8 @@ export type UserCountOutputType = {
   providers: number
   playlists: number
   ownedPlaylists: number
+  friendsRequests: number
+  friendsReceive: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1557,6 +1869,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   providers?: boolean | UserCountOutputTypeCountProvidersArgs
   playlists?: boolean | UserCountOutputTypeCountPlaylistsArgs
   ownedPlaylists?: boolean | UserCountOutputTypeCountOwnedPlaylistsArgs
+  friendsRequests?: boolean | UserCountOutputTypeCountFriendsRequestsArgs
+  friendsReceive?: boolean | UserCountOutputTypeCountFriendsReceiveArgs
 }
 
 /**
@@ -1618,6 +1932,20 @@ export type UserCountOutputTypeCountOwnedPlaylistsArgs<ExtArgs extends runtime.T
   where?: Prisma.PlaylistWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFriendsRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FriendRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFriendsReceiveArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FriendRequestWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1639,6 +1967,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   playlists?: boolean | Prisma.User$playlistsArgs<ExtArgs>
   ownedPlaylists?: boolean | Prisma.User$ownedPlaylistsArgs<ExtArgs>
   currentlyListening?: boolean | Prisma.User$currentlyListeningArgs<ExtArgs>
+  friendsRequests?: boolean | Prisma.User$friendsRequestsArgs<ExtArgs>
+  friendsReceive?: boolean | Prisma.User$friendsReceiveArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1696,6 +2026,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   playlists?: boolean | Prisma.User$playlistsArgs<ExtArgs>
   ownedPlaylists?: boolean | Prisma.User$ownedPlaylistsArgs<ExtArgs>
   currentlyListening?: boolean | Prisma.User$currentlyListeningArgs<ExtArgs>
+  friendsRequests?: boolean | Prisma.User$friendsRequestsArgs<ExtArgs>
+  friendsReceive?: boolean | Prisma.User$friendsReceiveArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1716,6 +2048,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     playlists: Prisma.$UserPlaylistPayload<ExtArgs>[]
     ownedPlaylists: Prisma.$PlaylistPayload<ExtArgs>[]
     currentlyListening: Prisma.$MusicPayload<ExtArgs> | null
+    friendsRequests: Prisma.$FriendRequestPayload<ExtArgs>[]
+    friendsReceive: Prisma.$FriendRequestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -2131,6 +2465,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   playlists<T extends Prisma.User$playlistsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$playlistsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPlaylistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ownedPlaylists<T extends Prisma.User$ownedPlaylistsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedPlaylistsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlaylistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   currentlyListening<T extends Prisma.User$currentlyListeningArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$currentlyListeningArgs<ExtArgs>>): Prisma.Prisma__MusicClient<runtime.Types.Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  friendsRequests<T extends Prisma.User$friendsRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friendsRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FriendRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  friendsReceive<T extends Prisma.User$friendsReceiveArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friendsReceiveArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FriendRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2367,11 +2703,6 @@ export type UserFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Skip the first `n` Users.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of Users.
-   */
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
@@ -2756,6 +3087,54 @@ export type User$currentlyListeningArgs<ExtArgs extends runtime.Types.Extensions
    */
   include?: Prisma.MusicInclude<ExtArgs> | null
   where?: Prisma.MusicWhereInput
+}
+
+/**
+ * User.friendsRequests
+ */
+export type User$friendsRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FriendRequest
+   */
+  select?: Prisma.FriendRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FriendRequest
+   */
+  omit?: Prisma.FriendRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FriendRequestInclude<ExtArgs> | null
+  where?: Prisma.FriendRequestWhereInput
+  orderBy?: Prisma.FriendRequestOrderByWithRelationInput | Prisma.FriendRequestOrderByWithRelationInput[]
+  cursor?: Prisma.FriendRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FriendRequestScalarFieldEnum | Prisma.FriendRequestScalarFieldEnum[]
+}
+
+/**
+ * User.friendsReceive
+ */
+export type User$friendsReceiveArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FriendRequest
+   */
+  select?: Prisma.FriendRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FriendRequest
+   */
+  omit?: Prisma.FriendRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FriendRequestInclude<ExtArgs> | null
+  where?: Prisma.FriendRequestWhereInput
+  orderBy?: Prisma.FriendRequestOrderByWithRelationInput | Prisma.FriendRequestOrderByWithRelationInput[]
+  cursor?: Prisma.FriendRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FriendRequestScalarFieldEnum | Prisma.FriendRequestScalarFieldEnum[]
 }
 
 /**

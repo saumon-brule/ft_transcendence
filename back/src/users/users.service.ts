@@ -73,6 +73,19 @@ export class UsersService {
 						},
 					},
 				},
+				friendsRequests: {
+					where: { status: "ACCEPTED" },
+					select: {
+						friend: { select: { uuid: true, username: true } },
+					},
+				},
+				friendsReceive: {
+					where: { status: { in: ["ACCEPTED", "PENDING"] } },
+					select: {
+						status: true,
+						user: { select: { uuid: true, username: true } },
+					},
+				},
 			},
 		});
 		if (!user) {
@@ -82,7 +95,17 @@ export class UsersService {
 			user.currentlyListeningId = null;
 			user.listeningUntil = null;
 		}
-		return { ...user, connectedProviders: user.providers.map((p) => p.provider) };
+		const friends = [
+			...user.friendsRequests.map((request) => request.friend),
+			...user.friendsReceive
+				.filter((request) => request.status === "ACCEPTED")
+				.map((request) => request.user),
+		];
+		const friendRequests = user.friendsReceive
+			.filter((request) => request.status === "PENDING")
+			.map((request) => request.user);
+
+		return { ...user, connectedProviders: user.providers.map((p) => p.provider), friends, friendRequests };
 	}
 
 	public async createFromIntra(
