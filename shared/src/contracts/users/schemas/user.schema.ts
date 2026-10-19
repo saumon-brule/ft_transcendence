@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { friendsSchema } from "./friends.schema";
 
 export const profileSchema = z.object({
 	id: z.number(),
@@ -60,8 +59,8 @@ export const meSchema = z.object({
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
-	friends: friendsSchema,
-	// friendRequests: ,
+	friends: z.array(shortUserSchema),
+	friendRequests: z.array(shortUserSchema),
 });
 
 export const userBasicSchema = z.object({
