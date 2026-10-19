@@ -6,6 +6,7 @@ export { permissionsContract } from "./contracts/server/permissions/permissions.
 export { appConfigContract } from "./contracts/server/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/server/playlists/playlists.contract";
 export { providerContract } from "./contracts/provider/provider.contract";
+export { friendsContract } from "./contracts/server/users/friends.contract";
 
 export { loginSchema, type LoginDto } from "./contracts/server/auth/schemas/login.schema";
 export { registerSchema, type RegisterDto } from "./contracts/server/auth/schemas/register.schema";

@@ -16,6 +16,7 @@ import { LoggingModule } from "./core/logging/logging.module";
 import { AppConfigModule } from "./config/config.module";
 import { PlaylistsModule } from "./playlists/playlists.module";
 import { ProvidersModule } from "./providers/providers.module";
+import { FriendsModule } from "./users/friends/friends.module";
 
 @Module({
 	providers: [
@@ -32,6 +33,7 @@ import { ProvidersModule } from "./providers/providers.module";
 	imports: [
 		PrismaModule,
 		UsersModule,
+		FriendsModule,
 		AuthModule,
 		RolesModule,
 		SessionsModule,
@@ -48,4 +50,4 @@ import { ProvidersModule } from "./providers/providers.module";
 		}),
 	],
 })
-export class AppModule {}
+export class AppModule { }

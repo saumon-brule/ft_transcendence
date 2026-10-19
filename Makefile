@@ -9,6 +9,7 @@ run: init
 
 migrate:
 	@cd back && pnpm prisma migrate dev --name init && cd ..
+	@cd back && pnpm prisma migrate dev --name init && cd ..
 
 .PHONY: run
 
