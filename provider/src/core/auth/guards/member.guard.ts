@@ -1,7 +1,8 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { providerPermissions } from "@flex/shared";
 import { PrismaService } from "../../prisma/prisma.service";
 import type { AuthenticatedRequest } from "../auth.types";
+import { AppForbiddenException } from "../../error/forbidden";
 
 @Injectable()
 export class MemberGuard implements CanActivate {
@@ -17,16 +18,10 @@ export class MemberGuard implements CanActivate {
 		});
 
 		if (!member) {
-			throw new ForbiddenException({
-				code: "NOT_A_MEMBER",
-				message: "You are not a member of this provider",
-			});
+			throw new AppForbiddenException("NOT_A_MEMBER", "You are not a member of this provider");
 		}
 		if (member.revokedAt) {
-			throw new ForbiddenException({
-				code: "MEMBER_REVOKED",
-				message: "Your access to this provider has been revoked",
-			});
+			throw new AppForbiddenException("MEMBER_REVOKED", "Your access to this provider has been revoked");
 		}
 
 		const { ownerId } = await this.prisma.provider.findUniqueOrThrow({

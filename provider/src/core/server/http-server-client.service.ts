@@ -42,7 +42,7 @@ export class HttpServerClientService extends ServerClientService {
 
 	async getIdentity(): Promise<ProviderIdentity> {
 		return this.request("provider identity", async () => {
-			const response = await this.client.providers.provider(this.timeout());
+			const response = await this.client.providersAPI.identity(this.timeout());
 			if (response.status !== 200) this.fail("provider identity", response.status);
 
 			return response.body;
@@ -61,7 +61,7 @@ export class HttpServerClientService extends ServerClientService {
 
 	private fetchPublicKey(): Promise<string> {
 		return this.request("server public key", async () => {
-			const response = await this.client.providers.publicKey(this.timeout());
+			const response = await this.client.providersAPI.publicKey(this.timeout());
 			if (response.status !== 200) this.fail("server public key", response.status);
 
 			this.cachedKey = {

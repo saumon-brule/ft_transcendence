@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { paginationQuerySchema } from "../../../schemas/common.schema";
+import { paginationQuerySchema } from "../../../../schemas/common.schema";
 
 export const requestStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
 

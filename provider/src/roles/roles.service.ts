@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { providerPermissions, type ProviderPermission } from "@flex/shared";
-import { Prisma } from "../generated/client/client";
+import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 
 const include = { permissions: true } satisfies Prisma.RoleInclude;
@@ -43,7 +43,6 @@ export class RolesService {
 			include,
 		});
 
-		// Un rôle qu'on vient de créer ne peut pas déjà être le rôle par défaut
 		return toRole(created, null);
 	}
 

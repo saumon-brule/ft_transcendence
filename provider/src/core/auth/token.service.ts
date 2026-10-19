@@ -1,8 +1,9 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { z } from "zod";
 import { PrismaService } from "../prisma/prisma.service";
 import { ServerClientService } from "../server/server-client.service";
+import { AppUnauthorizedException } from "../error/unauthorized";
 
 const claimsSchema = z.object({ sub: z.string().uuid() });
 
@@ -37,10 +38,7 @@ export class TokenService {
 			});
 			return claimsSchema.parse(payload).sub;
 		} catch {
-			throw new UnauthorizedException({
-				code: "INVALID_TOKEN",
-				message: "Invalid or expired token",
-			});
+			throw new AppUnauthorizedException("INVALID_TOKEN", "Invalid or expired token");
 		}
 	}
 }

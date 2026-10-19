@@ -1,6 +1,6 @@
 import { initContract } from "@ts-rest/core";
 import { providerSettingsSchema, updateProviderSettingsSchema } from "./schemas/settings.schema";
-import { errorDefaultSchema } from "../../schemas/error-default";
+import { commonError404Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -17,7 +17,7 @@ export const settingsContract = c.router(
 			body: updateProviderSettingsSchema,
 			responses: {
 				200: providerSettingsSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 	},

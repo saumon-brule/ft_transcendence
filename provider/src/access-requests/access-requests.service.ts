@@ -1,7 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma } from "../generated/client/client";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { retryOnWriteConflict } from "../core/prisma/write-conflict";
+import { AppConflictException } from "../core/error/conflict";
 
 const include = { decidedBy: true } satisfies Prisma.AccessRequestInclude;
 type AccessRequestRow = Prisma.AccessRequestGetPayload<{ include: typeof include }>;
@@ -52,12 +53,12 @@ export class AccessRequestsService {
 		const created = await retryOnWriteConflict(() => this.prisma.$transaction(async (tx) => {
 			const member = await tx.member.findUnique({ where: { uuid: userUuid } });
 			if (member && !member.revokedAt) {
-				throw new ConflictException("You are already a member of this provider");
+				throw new AppConflictException("ALREADY_MEMBER", "You are already a member of this provider");
 			}
 
 			const pending = await tx.accessRequest.findFirst({ where: { userUuid, status: "PENDING" } });
 			if (pending) {
-				throw new ConflictException("An access request is already pending");
+				throw new AppConflictException("ALREADY_PENDING", "An access request is already pending");
 			}
 
 			if (isPublic) {
@@ -116,7 +117,7 @@ export class AccessRequestsService {
 			const request = await tx.accessRequest.findUnique({ where: { uuid } });
 			if (!request) throw new NotFoundException("Access request not found");
 			if (request.status !== "PENDING") {
-				throw new ConflictException("This access request has already been decided");
+				throw new AppConflictException("ALREADY_DECIDED", "This access request has already been decided");
 			}
 
 			if (decision === "APPROVED") {

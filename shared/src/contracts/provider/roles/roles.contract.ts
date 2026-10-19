@@ -5,8 +5,8 @@ import {
 	providerRoleSchema,
 	updateProviderRoleSchema,
 } from "./schemas/role.schema";
-import { uuidParamSchema } from "../../schemas/common.schema";
-import { errorDefaultSchema } from "../../schemas/error-default";
+import { uuidParamSchema } from "../../../schemas/common.schema";
+import { commonError404Schema, providerError409Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -23,7 +23,7 @@ export const providerRolesContract = c.router(
 			body: createProviderRoleSchema,
 			responses: {
 				201: providerRoleSchema,
-				409: errorDefaultSchema,
+				409: providerError409Schema,
 			},
 		},
 		update: {
@@ -33,8 +33,8 @@ export const providerRolesContract = c.router(
 			body: updateProviderRoleSchema,
 			responses: {
 				200: providerRoleSchema,
-				404: errorDefaultSchema,
-				409: errorDefaultSchema,
+				404: commonError404Schema,
+				409: providerError409Schema,
 			},
 		},
 		remove: {
@@ -43,7 +43,7 @@ export const providerRolesContract = c.router(
 			pathParams: uuidParamSchema,
 			responses: {
 				204: null,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 	},

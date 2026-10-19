@@ -115,30 +115,14 @@ model Provider {
   name          String   @unique
   adress        String   @unique
   ownerId       Int
+  hashedKey     String   @unique
   publicDisplay Boolean  @default(true)
   //note      Int?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  users   ProviderUser[]
-  owner   User             @relation(fields: [ownerId], references: [id])
-  apiKeys ProviderApiKey[]
-}
-
-// Clés avec lesquelles un provider s'authentifie auprès du server (format : flex_<uuid du provider>_<secret>).
-// Seul le hash du secret est stocké : la clé complète n'est montrée qu'une fois, à sa création.
-model ProviderApiKey {
-  id         Int       @id @default(autoincrement())
-  uuid       String    @unique @default(uuid())
-  providerId Int
-  keyHash    String    @unique
-  lastUsedAt DateTime?
-  revokedAt  DateTime?
-  createdAt  DateTime  @default(now())
-
-  provider Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
-
-  @@index([providerId])
+  users ProviderUser[]
+  owner User           @relation(fields: [ownerId], references: [id])
 }
 
 model ProviderUser {

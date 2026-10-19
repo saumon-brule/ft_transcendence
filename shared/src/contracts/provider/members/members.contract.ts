@@ -6,8 +6,8 @@ import {
 	providerMemberSchema,
 	setMemberRolesSchema,
 } from "./schemas/member.schema";
-import { uuidParamSchema } from "../../schemas/common.schema";
-import { errorDefaultSchema } from "../../schemas/error-default";
+import { uuidParamSchema } from "../../../schemas/common.schema";
+import { commonError404Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -31,7 +31,7 @@ export const providerMembersContract = c.router(
 			body: null,
 			responses: {
 				204: null,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		setRoles: {
@@ -41,7 +41,7 @@ export const providerMembersContract = c.router(
 			body: setMemberRolesSchema,
 			responses: {
 				200: providerMemberSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 	},

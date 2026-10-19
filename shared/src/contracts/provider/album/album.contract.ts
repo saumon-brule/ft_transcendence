@@ -5,8 +5,8 @@ import {
 	createAlbumSchema,
 	updateAlbumSchema,
 } from "./schemas/album.schema";
-import { listQuerySchema, uuidParamSchema } from "../../schemas/common.schema";
-import { errorDefaultSchema } from "../../schemas/error-default";
+import { listQuerySchema, uuidParamSchema } from "../../../schemas/common.schema";
+import { commonError404Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -24,7 +24,7 @@ export const albumContract = c.router(
 			pathParams: uuidParamSchema,
 			responses: {
 				200: albumDetailedItemSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		create: {
@@ -33,7 +33,7 @@ export const albumContract = c.router(
 			body: createAlbumSchema,
 			responses: {
 				201: albumDetailedItemSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		update: {
@@ -43,7 +43,7 @@ export const albumContract = c.router(
 			body: updateAlbumSchema,
 			responses: {
 				200: albumDetailedItemSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		remove: {
@@ -52,7 +52,7 @@ export const albumContract = c.router(
 			pathParams: uuidParamSchema,
 			responses: {
 				204: null,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 	},

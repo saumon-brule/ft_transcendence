@@ -1,8 +1,9 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import type { ProviderPermission } from "@flex/shared";
 import { PERMISSION_KEY } from "../auth.constants";
 import type { AuthenticatedRequest } from "../auth.types";
+import { AppForbiddenException } from "../../error/forbidden";
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -13,10 +14,7 @@ export class PermissionGuard implements CanActivate {
 		const member = context.switchToHttp().getRequest<AuthenticatedRequest>().member!;
 
 		if (!member.permissions.includes(required)) {
-			throw new ForbiddenException({
-				code: "INVALID_PERMISSION",
-				message: `Missing permission ${required}`,
-			});
+			throw new AppForbiddenException("INVALID_PERMISSION", `Missing permission ${required}`);
 		}
 		return true;
 	}

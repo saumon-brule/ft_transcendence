@@ -6,8 +6,8 @@ import {
 	musicListResponseSchema,
 	updateMusicSchema,
 } from "./schemas/music.schema";
-import { listQuerySchema, uuidParamSchema } from "../../schemas/common.schema";
-import { errorDefaultSchema } from "../../schemas/error-default";
+import { listQuerySchema, uuidParamSchema } from "../../../schemas/common.schema";
+import { commonError404Schema, commonError413Schema, commonError415Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -25,7 +25,7 @@ export const musicContract = c.router(
 			pathParams: uuidParamSchema,
 			responses: {
 				200: musicDetailedItemSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		create: {
@@ -34,7 +34,7 @@ export const musicContract = c.router(
 			body: createMusicSchema,
 			responses: {
 				201: musicDetailedItemSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		update: {
@@ -44,7 +44,7 @@ export const musicContract = c.router(
 			body: updateMusicSchema,
 			responses: {
 				200: musicDetailedItemSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		remove: {
@@ -53,7 +53,7 @@ export const musicContract = c.router(
 			pathParams: uuidParamSchema,
 			responses: {
 				204: null,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		audioUrl: {
@@ -62,7 +62,7 @@ export const musicContract = c.router(
 			pathParams: uuidParamSchema,
 			responses: {
 				200: audioUrlResponseSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		uploadAudio: {
@@ -73,9 +73,9 @@ export const musicContract = c.router(
 			body: c.type<{ file: File }>(),
 			responses: {
 				204: null,
-				404: errorDefaultSchema,
-				413: errorDefaultSchema,
-				415: errorDefaultSchema,
+				404: commonError404Schema,
+				413: commonError413Schema,
+				415: commonError415Schema,
 			},
 		},
 	},

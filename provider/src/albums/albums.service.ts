@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma } from "../generated/client/client";
+import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { findArtistIds } from "../core/catalog/catalog.lookups";
 import { albumDetailInclude, toAlbumDetail, toAlbumItem } from "../core/catalog/catalog.mappers";

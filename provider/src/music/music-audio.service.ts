@@ -1,11 +1,11 @@
 import {
 	BadRequestException,
-	ForbiddenException,
 	Injectable,
 	NotFoundException,
-	UnauthorizedException,
 	UnsupportedMediaTypeException,
 } from "@nestjs/common";
+import { AppUnauthorizedException } from "../core/error/unauthorized";
+import { AppForbiddenException } from "../core/error/forbidden";
 import { JwtService } from "@nestjs/jwt";
 import { mkdir, rename, rm, stat } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
@@ -18,7 +18,7 @@ import type { UploadedAudio } from "./audio-upload.storage";
 
 export const NO_FILE = "";
 
-const TOKEN_TTL_SECONDS = 3600;
+const TOKEN_TTL_SECONDS = 24 * 3600;
 
 const audioClaimsSchema = z.object({
 	sub: z.string().uuid(),
@@ -80,25 +80,16 @@ export class MusicAudioService {
 			});
 			claims = audioClaimsSchema.parse(payload);
 		} catch {
-			throw new UnauthorizedException({
-				code: "INVALID_TOKEN",
-				message: "Invalid or expired audio link",
-			});
+			throw new AppUnauthorizedException("INVALID_TOKEN", "Invalid or expired audio link");
 		}
 
 		if (claims.music !== musicUuid) {
-			throw new UnauthorizedException({
-				code: "INVALID_TOKEN",
-				message: "This link does not match this music",
-			});
+			throw new AppUnauthorizedException("INVALID_TOKEN", "Invalid or expired audio link");
 		}
 
 		const member = await this.prisma.member.findUnique({ where: { uuid: claims.sub } });
 		if (!member || member.revokedAt) {
-			throw new ForbiddenException({
-				code: "MEMBER_REVOKED",
-				message: "Your access to this provider has been revoked",
-			});
+			throw new AppForbiddenException("MEMBER_REVOKED", "Your access to this provider has been revoked");
 		}
 
 		const music = await this.findMusic(musicUuid);

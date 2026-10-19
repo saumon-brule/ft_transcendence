@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { paginationQuerySchema } from "../../../schemas/common.schema";
+import { paginationQuerySchema } from "../../../../schemas/common.schema";
 import { providerPermissionSchema, providerRoleSummarySchema } from "../../roles/schemas/role.schema";
 
 export const providerMemberSchema = z.object({

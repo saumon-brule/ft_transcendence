@@ -5,8 +5,8 @@ import {
 	accessRequestSchema,
 	decideAccessRequestSchema,
 } from "./schemas/access-request.schema";
-import { uuidParamSchema } from "../../schemas/common.schema";
-import { errorDefaultSchema } from "../../schemas/error-default";
+import { uuidParamSchema } from "../../../schemas/common.schema";
+import { commonError404Schema, providerError409Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -18,7 +18,7 @@ export const accessRequestsContract = c.router(
 			body: null,
 			responses: {
 				201: accessRequestSchema,
-				409: errorDefaultSchema,
+				409: providerError409Schema,
 			},
 		},
 		me: {
@@ -26,7 +26,7 @@ export const accessRequestsContract = c.router(
 			path: "/me",
 			responses: {
 				200: accessRequestSchema,
-				404: errorDefaultSchema,
+				404: commonError404Schema,
 			},
 		},
 		list: {
@@ -42,8 +42,8 @@ export const accessRequestsContract = c.router(
 			body: decideAccessRequestSchema,
 			responses: {
 				200: accessRequestSchema,
-				404: errorDefaultSchema,
-				409: errorDefaultSchema,
+				404: commonError404Schema,
+				409: providerError409Schema,
 			},
 		},
 	},

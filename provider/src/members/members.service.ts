@@ -1,7 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma } from "../generated/client/client";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import type { MemberContext } from "../core/auth/auth.types";
+import { AppForbiddenException } from "../core/error/forbidden";
 
 const include = {
 	roles: { include: { role: true }, orderBy: { role: { name: "asc" } } },
@@ -64,10 +65,7 @@ export class MembersService {
 		]);
 		if (!member) throw new NotFoundException("Member not found");
 		if (member.id === ownerId) {
-			throw new ForbiddenException({
-				code: "FORBIDDEN",
-				message: "The owner cannot be revoked",
-			});
+			throw new AppForbiddenException("FORBIDDEN", "The owner cannot be revoked");
 		}
 		if (member.revokedAt) return;
 

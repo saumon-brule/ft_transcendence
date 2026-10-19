@@ -1,4 +1,4 @@
-import { Prisma } from "../../generated/client/client";
+import { Prisma } from "../../generated/prisma/client";
 
 export const musicItemInclude = {
 	album: true,

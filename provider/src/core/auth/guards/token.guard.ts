@@ -1,6 +1,7 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { TokenService } from "../token.service";
 import type { AuthenticatedRequest } from "../auth.types";
+import { AppUnauthorizedException } from "../../error/unauthorized";
 
 @Injectable()
 export class TokenGuard implements CanActivate {
@@ -11,10 +12,7 @@ export class TokenGuard implements CanActivate {
 		const header = request.headers.authorization;
 
 		if (!header?.startsWith("Bearer ")) {
-			throw new UnauthorizedException({
-				code: "UNAUTHORIZED",
-				message: "Missing bearer token",
-			});
+			throw new AppUnauthorizedException("UNAUTHORIZED", "Missing bearer token");
 		}
 
 		request.auth = { userUuid: await this.tokens.verify(header.slice(7)) };

@@ -1,30 +1,20 @@
 import { initContract } from "@ts-rest/core";
-import {
-	providerApiKeyHeadersSchema,
-	providerIdentitySchema,
-	providerPublicKeySchema,
-} from "./schemas/providers.schema";
-import { error401BaseSchema } from "../../schemas/error401";
+import { createdProviderSchema, createProviderSchema } from "./schemas/provider.schema";
+import { commonError409Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
-export const serverProvidersContract = c.router(
+export const providersContract = c.router(
 	{
-		provider: {
-			method: "GET",
-			path: "/me",
-			headers: providerApiKeyHeadersSchema,
-			responses: { 200: providerIdentitySchema },
-		},
-		publicKey: {
-			method: "GET",
-			path: "/public-key",
-			headers: providerApiKeyHeadersSchema,
-			responses: { 200: providerPublicKeySchema },
+		create: {
+			method: "POST",
+			path: "/",
+			body: createProviderSchema,
+			responses: {
+				201: createdProviderSchema,
+				409: commonError409Schema,
+			},
 		},
 	},
-	{
-		pathPrefix: "/providers",
-		commonResponses: { 401: error401BaseSchema },
-	},
+	{ pathPrefix: "/providers" },
 );

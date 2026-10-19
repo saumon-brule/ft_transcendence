@@ -1,5 +1,5 @@
 import { NotFoundException } from "@nestjs/common";
-import { Prisma } from "../../generated/client/client";
+import { Prisma } from "../../generated/prisma/client";
 
 export async function findArtistIds(db: Prisma.TransactionClient, uuids: string[]) {
 	const unique = [...new Set(uuids)];
