@@ -24,5 +24,5 @@ export { type Permission } from "./core/permissions";
 export { providerPermissions, providerPermissionSchema, type ProviderPermission } from "./contracts/provider/roles/schemas/role.schema";
 
 export * from "./errors/error-codes";
-export { serverBaseError401Schema } from "./errors/error-schemas";
+export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";

@@ -3,7 +3,7 @@ import type { Request } from "express";
 import { AppUnauthorizedException } from "../error/unauthorized";
 import { LogBuilder } from "../logging/log-builder";
 import { WinstonLoggerService } from "../logging/logger.service";
-import { AuthenticatedProvider, ProviderApiKeysService } from "../../providersAPI/provider-api-keys.service";
+import { AuthenticatedProvider, ProviderApiKeysService } from "../../providersAPI/providerAPIKeys.service";
 
 export type ProviderRequest = Request & { provider?: AuthenticatedProvider };
 

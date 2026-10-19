@@ -5,7 +5,7 @@ import { Prisma } from "../generated/prisma/client";
 import { LogBuilder } from "../core/logging/log-builder";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { generateApiKey } from "../providersAPI/provider-api-key";
+import { generateApiKey } from "../providersAPI/providerAPIKey";
 
 function normalizeAddress(address: string) {
 	const url = new URL(address);

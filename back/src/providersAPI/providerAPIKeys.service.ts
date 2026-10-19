@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { parseApiKey } from "./provider-api-key";
+import { parseApiKey } from "./providerAPIKey";
 
 export interface AuthenticatedProvider {
 	id: number;

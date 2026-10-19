@@ -3,8 +3,8 @@ import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { serverContract } from "@flex/shared";
 import { CurrentProvider } from "../core/decorators/current-provider.decorator";
 import { ProviderApiKeyGuard } from "../core/guards/provider-api-key.guard";
-import type { AuthenticatedProvider } from "./provider-api-keys.service";
-import { ProviderSigningKeyService } from "./provider-signing-key.service";
+import type { AuthenticatedProvider } from "./providerAPIKeys.service";
+import { ProviderSigningKeyService } from "./providerSigningKey.service";
 
 @Controller()
 export class ProviderApiController {

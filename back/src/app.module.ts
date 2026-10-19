@@ -1,3 +1,4 @@
+import { ProvidersApiModule } from "./providersAPI/providersAPI.module";
 import { Module } from "@nestjs/common";
 import { ScheduleModule } from "@nestjs/schedule";
 import { PrismaModule } from "./core/prisma/prisma.module";
@@ -31,6 +32,7 @@ import { FriendsModule } from "./users/friends/friends.module";
 		TokensService,
 	],
 	imports: [
+		ProvidersApiModule,
 		PrismaModule,
 		UsersModule,
 		FriendsModule,
