@@ -7,4 +7,4 @@ import { DatabaseBootstrapService } from "./prisma-bootstrap.service";
 	providers: [PrismaService, DatabaseBootstrapService],
 	exports: [PrismaService, DatabaseBootstrapService],
 })
-export class PrismaModule {}
+export class PrismaModule { }

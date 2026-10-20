@@ -1,14 +1,8 @@
+import { CommonCode429 } from "@flex/shared";
 import { HttpException, HttpStatus } from "@nestjs/common";
 
 export class TooManyRequestsException extends HttpException {
-	constructor(message?: string) {
-		super(
-			{
-				statusCode: HttpStatus.TOO_MANY_REQUESTS,
-				error: "Too Many Requests",
-				message: message ?? "Too many requests",
-			},
-			HttpStatus.TOO_MANY_REQUESTS,
-		);
+	constructor(code: CommonCode429 = "RATE_LIMITED", message?: string) {
+		super({ message: message ?? "Too many requests", code }, HttpStatus.TOO_MANY_REQUESTS);
 	}
 }

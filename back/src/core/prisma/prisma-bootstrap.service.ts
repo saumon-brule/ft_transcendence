@@ -2,7 +2,14 @@ import { Injectable, OnModuleInit } from "@nestjs/common";
 import { PrismaService } from "./prisma.service";
 import { PERMISSIONS } from "@flex/shared";
 import * as bcrypt from "bcrypt";
+import { randomUUID } from "node:crypto";
 import { env } from "../env";
+import { generateApiKey } from "../../providersAPI/providerAPIKey";
+
+function providerCredentials() {
+	const uuid = randomUUID();
+	return { uuid, hashedKey: generateApiKey(uuid).keyHash };
+}
 
 const MANAGER_PERMISSIONS = [
 	PERMISSIONS.MEMBERS.MY_PROFILE,
@@ -170,6 +177,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 				adress: "liam-private-provider",
 				ownerId: liamUser.id,
 				publicDisplay: false,
+				...providerCredentials(),
 			},
 		});
 
@@ -185,6 +193,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 				adress: "liam-public-provider",
 				ownerId: liamUser.id,
 				publicDisplay: true,
+				...providerCredentials(),
 			},
 		});
 
@@ -201,7 +210,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			await this.prisma.provider.upsert({
 				where: { name: provider.name },
 				update: { ownerId: liamUser.id, adress: provider.adress },
-				create: { ...provider, ownerId: liamUser.id },
+				create: { ...provider, ownerId: liamUser.id, ...providerCredentials() },
 			});
 		}
 

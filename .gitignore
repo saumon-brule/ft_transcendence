@@ -3,3 +3,5 @@ node_modules
 .env
 dist/
 *.tsbuildinfo
+back/src/generated/prisma/
+provider/src/generated/prisma/
