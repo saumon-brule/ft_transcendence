@@ -11,8 +11,8 @@ import "./Profile.scss";
 
 export default function Profile() {
 	const params = useParams<{ uuid: string }>();
-	const profile = client.users.getUser.createQuery(queryKeys.users.getUser, {
-		params: { uuid: params.uuid },
+	const profile = client.users.getUser.createQuery(() => queryKeys.users.getUser([params.uuid]), {
+		params: { get uuid() { return params.uuid; } },
 	});
 
 	createEffect(() => {
@@ -28,7 +28,7 @@ export default function Profile() {
 			<ProviderSection title="Connected providers" emptyMessage="No connected providers" providers={data.body.connectedProviders} />
 			<ProviderSection title="Owned providers" emptyMessage="No owned providers" providers={data.body.ownedProviders} />
 			<PlaylistSection playlists={data.body.ownedPlaylists} />
-			<FriendsSection />
+			<FriendsSection friends={data.body.friends}/>
 		</>}</Show>
 	</div>;
 }

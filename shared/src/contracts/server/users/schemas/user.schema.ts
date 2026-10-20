@@ -22,6 +22,11 @@ export const musicSchema = z.object({
 	duration: z.number(),
 });
 
+export const shortUserSchema = z.object({
+	uuid: z.string().uuid(),
+	username: z.string(),
+});
+
 export const userSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
@@ -31,14 +36,11 @@ export const userSchema = z.object({
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
+	friends: z.array(shortUserSchema),
 	_count: z.object({
 		ownedProviders: z.number(),
 		ownedPlaylists: z.number(),
 	}),
-});
-export const shortUserSchema = z.object({
-	uuid: z.string().uuid(),
-	username: z.string(),
 });
 
 export type User = z.infer<typeof userSchema>;
