@@ -6,7 +6,6 @@ export interface CurrentUserData {
 }
 
 export interface MemberContext {
-	id: number;
 	uuid: string;
 	isOwner: boolean;
 	permissions: ProviderPermission[];

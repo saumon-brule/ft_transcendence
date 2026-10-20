@@ -9,7 +9,7 @@ import {
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
 } from "../roles/schemas/role.schema";
-import { idParamSchema, uuidParamSchema } from "../../../schemas/common.schema";
+import { uuidParamSchema } from "../../../schemas/common.schema";
 import { commonError404Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
@@ -38,20 +38,20 @@ export const usersContract = c.router(
 		},
 		getUserRoles: {
 			method: "GET",
-			path: "/:id/roles",
-			pathParams: idParamSchema,
+			path: "/:uuid/roles",
+			pathParams: uuidParamSchema,
 			responses: { 200: rolesListResponseSchema },
 		},
 		getUserRolesDetailed: {
 			method: "GET",
-			path: "/:id/roles/detailed",
-			pathParams: idParamSchema,
+			path: "/:uuid/roles/detailed",
+			pathParams: uuidParamSchema,
 			responses: { 200: rolesListDetailedResponseSchema },
 		},
 		addUserRole: {
 			method: "POST",
-			path: "/:id/roles",
-			pathParams: idParamSchema,
+			path: "/:uuid/roles",
+			pathParams: uuidParamSchema,
 			body: addRoleUserSchema,
 			responses: {
 				204: null,
@@ -60,7 +60,7 @@ export const usersContract = c.router(
 		},
 		removeUserRole: {
 			method: "DELETE",
-			path: "/:id/roles/:roleId",
+			path: "/:uuid/roles/:roleId",
 			pathParams: DeleteRoleParamSchema,
 			responses: { 204: null },
 		},

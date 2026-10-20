@@ -14,14 +14,14 @@ enum Visibility {
 }
 
 model Provider {
-  id            Int        @id @default(1)
-  uuid          String     @unique
-  visibility    Visibility @default(PRIVATE)
-  ownerId       Int        @unique
-  defaultRoleId Int?       @unique
+  id              Int        @id @default(1)
+  uuid            String     @unique
+  visibility      Visibility @default(PRIVATE)
+  ownerUuid       String     @unique
+  defaultRoleUuid String?    @unique
 
-  owner       Member @relation(fields: [ownerId], references: [id], onDelete: Restrict)
-  defaultRole Role?  @relation(fields: [defaultRoleId], references: [id], onDelete: SetNull)
+  owner       Member @relation(fields: [ownerUuid], references: [uuid], onDelete: Restrict)
+  defaultRole Role?  @relation(fields: [defaultRoleUuid], references: [uuid], onDelete: SetNull)
 }
 
 enum RequestStatus {
@@ -31,33 +31,33 @@ enum RequestStatus {
 }
 
 model AccessRequest {
-  id          Int           @id @default(autoincrement())
-  uuid        String        @unique @default(uuid())
-  userUuid    String
-  status      RequestStatus @default(PENDING)
-  decidedById Int?
-  decidedAt   DateTime?
-  updatedAt   DateTime      @updatedAt
-  createdAt   DateTime      @default(now())
+  id            Int           @id @default(autoincrement())
+  uuid          String        @unique @default(uuid())
+  userUuid      String
+  status        RequestStatus @default(PENDING)
+  decidedByUuid String?
+  decidedAt     DateTime?
+  updatedAt     DateTime      @updatedAt
+  createdAt     DateTime      @default(now())
 
-  decidedBy Member? @relation(fields: [decidedById], references: [id], onDelete: SetNull)
+  decidedBy Member? @relation(fields: [decidedByUuid], references: [uuid], onDelete: SetNull)
 
-  @@index([decidedById])
+  @@index([decidedByUuid])
   @@index([status, createdAt])
   @@index([userUuid])
   @@index([uuid])
 }
 
 model Member {
-  id          Int       @id @default(autoincrement())
-  uuid        String    @unique
-  revokedAt   DateTime?
-  revokedById Int?
-  updatedAt   DateTime  @updatedAt
-  createdAt   DateTime  @default(now())
+  id            Int       @id @default(autoincrement())
+  uuid          String    @unique
+  revokedAt     DateTime?
+  revokedByUuid String?
+  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime  @default(now())
 
   isOwner               Provider?
-  revokedBy             Member?         @relation("RevokedBy", fields: [revokedById], references: [id], onDelete: SetNull)
+  revokedBy             Member?         @relation("RevokedBy", fields: [revokedByUuid], references: [uuid], onDelete: SetNull)
   roles                 MemberRole[]
   rolesCreated          Role[]
   musicAdded            Music[]
@@ -66,38 +66,38 @@ model Member {
   accessRequestsManaged AccessRequest[]
   revokedMembers        Member[]        @relation("RevokedBy")
 
-  @@index([revokedById])
+  @@index([revokedByUuid])
   @@index([uuid])
 }
 
 model MemberRole {
-  id        Int      @id @default(autoincrement())
-  memberId  Int
-  roleId    Int
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  memberUuid String
+  roleUuid   String
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
 
-  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberUuid], references: [uuid], onDelete: Cascade)
+  role   Role   @relation(fields: [roleUuid], references: [uuid], onDelete: Cascade)
 
-  @@unique([memberId, roleId])
-  @@index([roleId, memberId])
+  @@unique([memberUuid, roleUuid])
+  @@index([roleUuid, memberUuid])
 }
 
 model Role {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  uuid      String   @unique @default(uuid())
-  addedById Int?
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  uuid        String   @unique @default(uuid())
+  addedByUuid String?
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
 
   isDefault   Provider?
-  addedBy     Member?          @relation(fields: [addedById], references: [id], onDelete: SetNull)
+  addedBy     Member?          @relation(fields: [addedByUuid], references: [uuid], onDelete: SetNull)
   permissions RolePermission[]
   members     MemberRole[]
 
-  @@index([addedById])
+  @@index([addedByUuid])
 }
 
 enum Permission {
@@ -108,15 +108,15 @@ enum Permission {
 
 model RolePermission {
   id         Int        @id @default(autoincrement())
-  roleId     Int
+  roleUuid   String
   permission Permission
   updatedAt  DateTime   @updatedAt
   createdAt  DateTime   @default(now())
 
-  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleUuid], references: [uuid], onDelete: Cascade)
 
-  @@unique([roleId, permission])
-  @@index([permission, roleId])
+  @@unique([roleUuid, permission])
+  @@index([permission, roleUuid])
 }
 
 model Music {
@@ -126,65 +126,65 @@ model Music {
   coverPath   String?
   name        String
   duration    Int
-  albumId     Int?
+  albumUuid   String?
   publishedAt DateTime?
-  addedById   Int?
+  addedByUuid String?
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
 
-  addedBy Member?       @relation(fields: [addedById], references: [id], onDelete: SetNull)
-  album   Album?        @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  addedBy Member?       @relation(fields: [addedByUuid], references: [uuid], onDelete: SetNull)
+  album   Album?        @relation(fields: [albumUuid], references: [uuid], onDelete: SetNull)
   artists MusicArtist[]
 
-  @@index([addedById])
-  @@index([albumId])
+  @@index([addedByUuid])
+  @@index([albumUuid])
   @@index([uuid])
 }
 
 model MusicArtist {
-  id        Int      @id @default(autoincrement())
-  musicId   Int
-  artistId  Int
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  musicUuid  String
+  artistUuid String
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
 
-  music  Music  @relation(fields: [musicId], references: [id], onDelete: Cascade)
-  artist Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  music  Music  @relation(fields: [musicUuid], references: [uuid], onDelete: Cascade)
+  artist Artist @relation(fields: [artistUuid], references: [uuid], onDelete: Cascade)
 
-  @@unique([musicId, artistId])
-  @@index([artistId, musicId])
+  @@unique([musicUuid, artistUuid])
+  @@index([artistUuid, musicUuid])
 }
 
 model Artist {
-  id        Int      @id @default(autoincrement())
-  uuid      String   @unique @default(uuid())
-  name      String
-  coverPath String?
-  biography String?
-  addedById Int?
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  uuid        String   @unique @default(uuid())
+  name        String
+  coverPath   String?
+  biography   String?
+  addedByUuid String?
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
 
-  addedBy Member?       @relation(fields: [addedById], references: [id], onDelete: SetNull)
+  addedBy Member?       @relation(fields: [addedByUuid], references: [uuid], onDelete: SetNull)
   music   MusicArtist[]
   albums  AlbumArtist[]
 
-  @@index([addedById])
+  @@index([addedByUuid])
   @@index([uuid])
 }
 
 model AlbumArtist {
-  id        Int      @id @default(autoincrement())
-  albumId   Int
-  artistId  Int
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  albumUuid  String
+  artistUuid String
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
 
-  album  Album  @relation(fields: [albumId], references: [id], onDelete: Cascade)
-  artist Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  album  Album  @relation(fields: [albumUuid], references: [uuid], onDelete: Cascade)
+  artist Artist @relation(fields: [artistUuid], references: [uuid], onDelete: Cascade)
 
-  @@unique([albumId, artistId])
-  @@index([artistId, albumId])
+  @@unique([albumUuid, artistUuid])
+  @@index([artistUuid, albumUuid])
 }
 
 model Album {
@@ -193,14 +193,14 @@ model Album {
   name        String
   coverPath   String?
   publishedAt DateTime?
-  addedById   Int?
+  addedByUuid String?
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
 
-  addedBy Member?       @relation(fields: [addedById], references: [id], onDelete: SetNull)
+  addedBy Member?       @relation(fields: [addedByUuid], references: [uuid], onDelete: SetNull)
   musics  Music[]
   artists AlbumArtist[]
 
-  @@index([addedById])
+  @@index([addedByUuid])
   @@index([uuid])
 }

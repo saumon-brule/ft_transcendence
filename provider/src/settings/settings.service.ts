@@ -32,14 +32,14 @@ export class SettingsService {
 
 			if (dto.defaultRoleUuid !== undefined) {
 				if (dto.defaultRoleUuid === null) {
-					data.defaultRoleId = null;
+					data.defaultRoleUuid = null;
 				} else {
 					const role = await tx.role.findUnique({
 						where: { uuid: dto.defaultRoleUuid },
 						select: { id: true },
 					});
 					if (!role) throw new NotFoundException("Role not found");
-					data.defaultRoleId = role.id;
+					data.defaultRoleUuid = dto.defaultRoleUuid;
 				}
 			}
 

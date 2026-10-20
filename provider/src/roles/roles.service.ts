@@ -6,10 +6,10 @@ import { PrismaService } from "../core/prisma/prisma.service";
 const include = { permissions: true } satisfies Prisma.RoleInclude;
 type RoleRow = Prisma.RoleGetPayload<{ include: typeof include }>;
 
-const toRole = (role: RoleRow, defaultRoleId: number | null) => ({
+const toRole = (role: RoleRow, defaultRoleUuid: string | null) => ({
 	uuid: role.uuid,
 	name: role.name,
-	isDefault: role.id === defaultRoleId,
+	isDefault: role.uuid === defaultRoleUuid,
 	permissions: providerPermissions.filter((permission) => role.permissions.some((link) => link.permission === permission)),
 });
 
@@ -25,19 +25,19 @@ export class RolesService {
 	constructor(private readonly prisma: PrismaService) {}
 
 	async list() {
-		const [{ defaultRoleId }, roles] = await Promise.all([
+		const [{ defaultRoleUuid }, roles] = await Promise.all([
 			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } }),
 			this.prisma.role.findMany({ include, orderBy: [{ name: "asc" }, { id: "asc" }] }),
 		]);
 
-		return { roles: roles.map((role) => toRole(role, defaultRoleId)) };
+		return { roles: roles.map((role) => toRole(role, defaultRoleUuid)) };
 	}
 
-	async create(dto: CreateRole, actorId: number) {
+	async create(dto: CreateRole, actorUuid: string) {
 		const created = await this.prisma.role.create({
 			data: {
 				name: dto.name,
-				addedById: actorId,
+				addedByUuid: actorUuid,
 				permissions: { create: [...new Set(dto.permissions)].map((permission) => ({ permission })) },
 			},
 			include,
@@ -52,21 +52,21 @@ export class RolesService {
 			if (!role) throw new NotFoundException("Role not found");
 
 			if (dto.name !== undefined) {
-				await tx.role.update({ where: { id: role.id }, data: { name: dto.name } });
+				await tx.role.update({ where: { uuid }, data: { name: dto.name } });
 			}
 
 			if (dto.permissions !== undefined) {
-				await tx.rolePermission.deleteMany({ where: { roleId: role.id } });
+				await tx.rolePermission.deleteMany({ where: { roleUuid: uuid } });
 				await tx.rolePermission.createMany({
-					data: [...new Set(dto.permissions)].map((permission) => ({ roleId: role.id, permission })),
+					data: [...new Set(dto.permissions)].map((permission) => ({ roleUuid: uuid, permission })),
 				});
 			}
 
-			const [{ defaultRoleId }, updated] = await Promise.all([
+			const [{ defaultRoleUuid }, updated] = await Promise.all([
 				tx.provider.findUniqueOrThrow({ where: { id: 1 } }),
-				tx.role.findUniqueOrThrow({ where: { id: role.id }, include }),
+				tx.role.findUniqueOrThrow({ where: { uuid }, include }),
 			]);
-			return toRole(updated, defaultRoleId);
+			return toRole(updated, defaultRoleUuid);
 		});
 	}
 

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { findAlbumId, findArtistIds } from "../core/catalog/catalog.lookups";
+import { findAlbumUuid, findArtistUuids } from "../core/catalog/catalog.lookups";
 import { musicDetailInclude, musicItemInclude, toMusicDetail, toMusicItem } from "../core/catalog/catalog.mappers";
 import { MusicAudioService, NO_FILE } from "./music-audio.service";
 
@@ -57,11 +57,11 @@ export class MusicService {
 		return toMusicDetail(music);
 	}
 
-	create(dto: CreateMusic, actorId: number) {
+	create(dto: CreateMusic, actorUuid: string) {
 		return this.prisma.$transaction(async (tx) => {
-			const artistIds = await findArtistIds(tx, dto.artistUuids);
-			const albumId = dto.albumUuid
-				? await findAlbumId(tx, dto.albumUuid)
+			const artistUuids = await findArtistUuids(tx, dto.artistUuids);
+			const albumUuid = dto.albumUuid
+				? await findAlbumUuid(tx, dto.albumUuid)
 				: null;
 
 			const created = await tx.music.create({
@@ -70,9 +70,9 @@ export class MusicService {
 					duration: dto.duration,
 					publishedAt: dto.publishedAt ?? null,
 					path: NO_FILE,
-					albumId,
-					addedById: actorId,
-					artists: { create: artistIds.map((artistId) => ({ artistId })) },
+					albumUuid,
+					addedByUuid: actorUuid,
+					artists: { create: artistUuids.map((artistUuid) => ({ artistUuid })) },
 				},
 				include: musicDetailInclude,
 			});
@@ -90,21 +90,21 @@ export class MusicService {
 			if (dto.duration !== undefined) data.duration = dto.duration;
 			if (dto.publishedAt !== undefined) data.publishedAt = dto.publishedAt;
 			if (dto.albumUuid !== undefined) {
-				data.albumId = dto.albumUuid === null
+				data.albumUuid = dto.albumUuid === null
 					? null
-					: await findAlbumId(tx, dto.albumUuid);
+					: await findAlbumUuid(tx, dto.albumUuid);
 			}
 
 			if (dto.artistUuids !== undefined) {
-				const artistIds = await findArtistIds(tx, dto.artistUuids);
-				await tx.musicArtist.deleteMany({ where: { musicId: music.id } });
+				const artistUuids = await findArtistUuids(tx, dto.artistUuids);
+				await tx.musicArtist.deleteMany({ where: { musicUuid: uuid } });
 				await tx.musicArtist.createMany({
-					data: artistIds.map((artistId) => ({ musicId: music.id, artistId })),
+					data: artistUuids.map((artistUuid) => ({ musicUuid: uuid, artistUuid })),
 				});
 			}
 
 			const updated = await tx.music.update({
-				where: { id: music.id },
+				where: { uuid },
 				data,
 				include: musicDetailInclude,
 			});

@@ -44,7 +44,7 @@ export class MusicController {
 	create(@CurrentMember() member: MemberContext) {
 		return tsRestHandler(providerContract.music.create, async ({ body }) => ({
 			status: 201,
-			body: await this.musicService.create(body, member.id),
+			body: await this.musicService.create(body, member.uuid),
 		}));
 	}
 

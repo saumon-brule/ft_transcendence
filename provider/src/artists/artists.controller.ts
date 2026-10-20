@@ -32,7 +32,7 @@ export class ArtistsController {
 	create(@CurrentMember() member: MemberContext) {
 		return tsRestHandler(providerContract.artist.create, async ({ body }) => ({
 			status: 201,
-			body: await this.artistsService.create(body, member.id),
+			body: await this.artistsService.create(body, member.uuid),
 		}));
 	}
 

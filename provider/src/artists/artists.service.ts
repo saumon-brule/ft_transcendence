@@ -48,9 +48,9 @@ export class ArtistsService {
 		return toArtistDetail(artist);
 	}
 
-	async create(dto: CreateArtist, actorId: number) {
+	async create(dto: CreateArtist, actorUuid: string) {
 		const created = await this.prisma.artist.create({
-			data: { name: dto.name, biography: dto.biography ?? null, addedById: actorId },
+			data: { name: dto.name, biography: dto.biography ?? null, addedByUuid: actorUuid },
 			include: artistDetailInclude,
 		});
 		return toArtistDetail(created);
