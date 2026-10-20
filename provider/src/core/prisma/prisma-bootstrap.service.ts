@@ -26,15 +26,15 @@ export class PrismaBootstrapService implements OnModuleInit {
 		}
 
 		await this.prisma.$transaction(async (tx) => {
-			const owner = await tx.member.upsert({
+			await tx.member.upsert({
 				create: { uuid: identity.ownerUuid },
-				update: { revokedAt: null, revokedById: null },
+				update: { revokedAt: null, revokedByUuid: null },
 				where: { uuid: identity.ownerUuid },
 			});
 
 			await tx.provider.upsert({
-				create: { id: 1, uuid: identity.uuid, ownerId: owner.id },
-				update: { uuid: identity.uuid, ownerId: owner.id },
+				create: { id: 1, uuid: identity.uuid, ownerUuid: identity.ownerUuid },
+				update: { uuid: identity.uuid, ownerUuid: identity.ownerUuid },
 				where: { id: 1 },
 			});
 		});

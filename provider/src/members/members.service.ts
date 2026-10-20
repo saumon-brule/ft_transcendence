@@ -9,9 +9,9 @@ const include = {
 } satisfies Prisma.MemberInclude;
 type MemberRow = Prisma.MemberGetPayload<{ include: typeof include }>;
 
-const toMember = (member: MemberRow, ownerId: number) => ({
+const toMember = (member: MemberRow, ownerUuid: string) => ({
 	uuid: member.uuid,
-	isOwner: member.id === ownerId,
+	isOwner: member.uuid === ownerUuid,
 	revokedAt: member.revokedAt,
 	createdAt: member.createdAt,
 	roles: member.roles.map((link) => ({ uuid: link.role.uuid, name: link.role.name })),
@@ -43,7 +43,7 @@ export class MembersService {
 				? { not: null }
 				: null };
 
-		const [{ ownerId }, rows, total] = await Promise.all([
+		const [{ ownerUuid }, rows, total] = await Promise.all([
 			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } }),
 			this.prisma.member.findMany({
 				where,
@@ -55,25 +55,25 @@ export class MembersService {
 			this.prisma.member.count({ where }),
 		]);
 
-		return { members: rows.map((row) => toMember(row, ownerId)), total };
+		return { members: rows.map((row) => toMember(row, ownerUuid)), total };
 	}
 
-	async revoke(uuid: string, actorId: number) {
-		const [{ ownerId }, member] = await Promise.all([
+	async revoke(uuid: string, actorUuid: string) {
+		const [{ ownerUuid }, member] = await Promise.all([
 			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } }),
 			this.prisma.member.findUnique({ where: { uuid } }),
 		]);
 		if (!member) throw new NotFoundException("Member not found");
-		if (member.id === ownerId) {
+		if (uuid === ownerUuid) {
 			throw new AppForbiddenException("FORBIDDEN", "The owner cannot be revoked");
 		}
 		if (member.revokedAt) return;
 
 		await this.prisma.$transaction([
-			this.prisma.memberRole.deleteMany({ where: { memberId: member.id } }),
+			this.prisma.memberRole.deleteMany({ where: { memberUuid: uuid } }),
 			this.prisma.member.update({
-				where: { id: member.id },
-				data: { revokedAt: new Date(), revokedById: actorId },
+				where: { uuid },
+				data: { revokedAt: new Date(), revokedByUuid: actorUuid },
 			}),
 		]);
 	}
@@ -84,22 +84,19 @@ export class MembersService {
 			if (!member || member.revokedAt) throw new NotFoundException("Member not found");
 
 			const unique = [...new Set(roleUuids)];
-			const roles = await tx.role.findMany({
-				where: { uuid: { in: unique } },
-				select: { id: true },
-			});
-			if (roles.length !== unique.length) throw new NotFoundException("Role not found");
+			const found = await tx.role.count({ where: { uuid: { in: unique } } });
+			if (found !== unique.length) throw new NotFoundException("Role not found");
 
-			await tx.memberRole.deleteMany({ where: { memberId: member.id } });
+			await tx.memberRole.deleteMany({ where: { memberUuid: uuid } });
 			await tx.memberRole.createMany({
-				data: roles.map((role) => ({ memberId: member.id, roleId: role.id })),
+				data: unique.map((roleUuid) => ({ memberUuid: uuid, roleUuid })),
 			});
 
-			const [{ ownerId }, updated] = await Promise.all([
+			const [{ ownerUuid }, updated] = await Promise.all([
 				tx.provider.findUniqueOrThrow({ where: { id: 1 } }),
-				tx.member.findUniqueOrThrow({ where: { id: member.id }, include }),
+				tx.member.findUniqueOrThrow({ where: { uuid }, include }),
 			]);
-			return toMember(updated, ownerId);
+			return toMember(updated, ownerUuid);
 		});
 	}
 }

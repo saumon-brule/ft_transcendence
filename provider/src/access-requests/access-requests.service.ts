@@ -26,17 +26,17 @@ interface ListQuery {
 export class AccessRequestsService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	private async grantMembership(tx: Prisma.TransactionClient, userUuid: string, defaultRoleId: number | null) {
-		const member = await tx.member.upsert({
+	private async grantMembership(tx: Prisma.TransactionClient, userUuid: string, defaultRoleUuid: string | null) {
+		await tx.member.upsert({
 			where: { uuid: userUuid },
 			create: { uuid: userUuid },
-			update: { revokedAt: null, revokedById: null },
+			update: { revokedAt: null, revokedByUuid: null },
 		});
 
-		if (defaultRoleId !== null) {
+		if (defaultRoleUuid !== null) {
 			await tx.memberRole.upsert({
-				where: { memberId_roleId: { memberId: member.id, roleId: defaultRoleId } },
-				create: { memberId: member.id, roleId: defaultRoleId },
+				where: { memberUuid_roleUuid: { memberUuid: userUuid, roleUuid: defaultRoleUuid } },
+				create: { memberUuid: userUuid, roleUuid: defaultRoleUuid },
 				update: {},
 			});
 		}
@@ -62,7 +62,7 @@ export class AccessRequestsService {
 			}
 
 			if (isPublic) {
-				await this.grantMembership(tx, userUuid, provider.defaultRoleId);
+				await this.grantMembership(tx, userUuid, provider.defaultRoleUuid);
 			}
 
 			return tx.accessRequest.create({
@@ -112,7 +112,7 @@ export class AccessRequestsService {
 		return { accessRequests: rows.map(toAccessRequest), total };
 	}
 
-	decide(uuid: string, decision: "APPROVED" | "REJECTED", actorId: number) {
+	decide(uuid: string, decision: "APPROVED" | "REJECTED", actorUuid: string) {
 		return retryOnWriteConflict(() => this.prisma.$transaction(async (tx) => {
 			const request = await tx.accessRequest.findUnique({ where: { uuid } });
 			if (!request) throw new NotFoundException("Access request not found");
@@ -122,12 +122,12 @@ export class AccessRequestsService {
 
 			if (decision === "APPROVED") {
 				const provider = await tx.provider.findUniqueOrThrow({ where: { id: 1 } });
-				await this.grantMembership(tx, request.userUuid, provider.defaultRoleId);
+				await this.grantMembership(tx, request.userUuid, provider.defaultRoleUuid);
 			}
 
 			const updated = await tx.accessRequest.update({
-				where: { id: request.id },
-				data: { status: decision, decidedById: actorId, decidedAt: new Date() },
+				where: { uuid },
+				data: { status: decision, decidedByUuid: actorUuid, decidedAt: new Date() },
 				include,
 			});
 			return toAccessRequest(updated);

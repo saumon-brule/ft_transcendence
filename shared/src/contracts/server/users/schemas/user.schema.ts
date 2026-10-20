@@ -68,6 +68,6 @@ export const addRoleUserSchema = z.object({
 });
 
 export const DeleteRoleParamSchema = z.object({
-	id: z.string().transform(Number),
+	uuid: z.string().uuid(),
 	roleId: z.string().transform(Number),
 });

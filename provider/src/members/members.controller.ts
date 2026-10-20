@@ -31,7 +31,7 @@ export class MembersController {
 	@RequirePermission("MANAGE_MEMBERS")
 	revoke(@CurrentMember() member: MemberContext) {
 		return tsRestHandler(providerContract.members.revoke, async ({ params }) => {
-			await this.membersService.revoke(params.uuid, member.id);
+			await this.membersService.revoke(params.uuid, member.uuid);
 			return { status: 204, body: null };
 		});
 	}

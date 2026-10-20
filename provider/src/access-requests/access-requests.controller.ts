@@ -41,7 +41,7 @@ export class AccessRequestsController {
 	decide(@CurrentMember() member: MemberContext) {
 		return tsRestHandler(providerContract.accessRequests.decide, async ({ params, body }) => ({
 			status: 200,
-			body: await this.accessRequestsService.decide(params.uuid, body.decision, member.id),
+			body: await this.accessRequestsService.decide(params.uuid, body.decision, member.uuid),
 		}));
 	}
 }

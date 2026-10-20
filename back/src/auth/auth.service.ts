@@ -66,7 +66,7 @@ export class AuthService {
 			throw new InternalServerErrorException("An error occured while creating the user");
 		}
 
-		this.logger.log(LogBuilder.auth.registration(dto.email, insertedUser.id));
+		this.logger.log(LogBuilder.auth.registration(dto.email, insertedUser.uuid));
 
 		await this.sendEmailValidation(insertedUser);
 
@@ -109,7 +109,7 @@ export class AuthService {
 			throw new AppUnauthorizedException("INVALID_CREDENTIALS", "Invalid credentials");
 		}
 
-		this.logger.log(LogBuilder.auth.login(dto.email, existing.id));
+		this.logger.log(LogBuilder.auth.login(dto.email, existing.uuid));
 
 		return {
 			accessToken: await this.generateAccessToken(existing.uuid, existing.emailValidated),
@@ -150,17 +150,6 @@ export class AuthService {
 	private async generateAccessToken(userUUID: string, emailValidated: boolean) {
 		return this.jwtService.signAsync(
 			createJwtPayload(userUUID, emailValidated),
-			{
-				secret: env.JWT_SECRET,
-				expiresIn: "15m",
-			},
-		);
-	}
-
-	private async generateAccessTokenId(userId: number) {
-		const user = await this.users.getById(userId);
-		return this.jwtService.signAsync(
-			createJwtPayload(user.uuid, user.emailValidated),
 			{
 				secret: env.JWT_SECRET,
 				expiresIn: "15m",
@@ -213,7 +202,7 @@ export class AuthService {
 
 		await this.mailService.sendEmail([user.email], "Confirm your email - Flex", "confirm-email", {
 			username: user.username,
-			token: await this.tokensService.createConfirmEmailToken(user.id),
+			token: await this.tokensService.createConfirmEmailToken(user.uuid),
 			baseFrontUrl: env.BASE_FRONT_URL,
 			emailConfirmationPath,
 			year: new Date().getFullYear(),
@@ -226,7 +215,7 @@ export class AuthService {
 			"EMAIL_VERIFICATION",
 		);
 
-		await this.users.verifyEmail(payload.userId);
+		await this.users.verifyEmail(payload.userUUID);
 	}
 
 	public async askNewConfirmationEmail(userUUID: string) {
@@ -240,7 +229,7 @@ export class AuthService {
 			"Reset your password - Flex",
 			"reset-password",
 			{
-				token: await this.tokensService.createResetPasswordToken(user.id),
+				token: await this.tokensService.createResetPasswordToken(user.uuid),
 				baseFrontUrl: env.BASE_FRONT_URL,
 				year: new Date().getFullYear(),
 			},
@@ -263,8 +252,8 @@ export class AuthService {
 			"PASSWORD_RESET",
 		);
 
-		await this.users.setPassword(payload.userId, password);
-		this.logger.log(LogBuilder.auth.passwordChanged(payload.userId));
+		await this.users.setPassword(payload.userUUID, password);
+		this.logger.log(LogBuilder.auth.passwordChanged(payload.userUUID));
 	}
 
 	public async changePassword(
@@ -292,8 +281,8 @@ export class AuthService {
 			throw new AppForbiddenException("FORBIDDEN", "Invalid password");
 		}
 
-		await this.users.setPassword(existing.id, newPassword);
-		this.logger.log(LogBuilder.auth.passwordChanged(existing.id));
+		await this.users.setPassword(existing.uuid, newPassword);
+		this.logger.log(LogBuilder.auth.passwordChanged(existing.uuid));
 	}
 
 	public async logout(userUUID: string, jti: UUID | undefined) {
@@ -314,7 +303,7 @@ export class AuthService {
 			"reset-email",
 			{
 				token: await this.tokensService.createResetEmailToken(
-					user.id,
+					user.uuid,
 					newEmail,
 				),
 				baseFrontUrl: env.BASE_FRONT_URL,
@@ -343,7 +332,7 @@ export class AuthService {
 
 	public async resetEmail(token: string) {
 		const payload = await this.tokensService.isValidToken(token, "EMAIL_RESET");
-		await this.users.setEmail(payload.userId, payload.data.newEmail);
+		await this.users.setEmail(payload.userUUID, payload.data.newEmail);
 	}
 
 	public async get42LoginUrl() {

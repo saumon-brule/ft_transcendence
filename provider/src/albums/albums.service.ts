@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { findArtistIds } from "../core/catalog/catalog.lookups";
+import { findArtistUuids } from "../core/catalog/catalog.lookups";
 import { albumDetailInclude, toAlbumDetail, toAlbumItem } from "../core/catalog/catalog.mappers";
 
 interface ListQuery {
@@ -50,16 +50,16 @@ export class AlbumsService {
 		return toAlbumDetail(album);
 	}
 
-	create(dto: CreateAlbum, actorId: number) {
+	create(dto: CreateAlbum, actorUuid: string) {
 		return this.prisma.$transaction(async (tx) => {
-			const artistIds = await findArtistIds(tx, dto.artistUuids);
+			const artistUuids = await findArtistUuids(tx, dto.artistUuids);
 
 			const created = await tx.album.create({
 				data: {
 					name: dto.name,
 					publishedAt: dto.publishedAt ?? null,
-					addedById: actorId,
-					artists: { create: artistIds.map((artistId) => ({ artistId })) },
+					addedByUuid: actorUuid,
+					artists: { create: artistUuids.map((artistUuid) => ({ artistUuid })) },
 				},
 				include: albumDetailInclude,
 			});
@@ -77,15 +77,15 @@ export class AlbumsService {
 			if (dto.publishedAt !== undefined) data.publishedAt = dto.publishedAt;
 
 			if (dto.artistUuids !== undefined) {
-				const artistIds = await findArtistIds(tx, dto.artistUuids);
-				await tx.albumArtist.deleteMany({ where: { albumId: album.id } });
+				const artistUuids = await findArtistUuids(tx, dto.artistUuids);
+				await tx.albumArtist.deleteMany({ where: { albumUuid: uuid } });
 				await tx.albumArtist.createMany({
-					data: artistIds.map((artistId) => ({ albumId: album.id, artistId })),
+					data: artistUuids.map((artistUuid) => ({ albumUuid: uuid, artistUuid })),
 				});
 			}
 
 			const updated = await tx.album.update({
-				where: { id: album.id },
+				where: { uuid },
 				data,
 				include: albumDetailInclude,
 			});

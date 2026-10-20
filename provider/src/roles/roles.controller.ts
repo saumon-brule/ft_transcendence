@@ -23,7 +23,7 @@ export class RolesController {
 	create(@CurrentMember() member: MemberContext) {
 		return tsRestHandler(providerContract.roles.create, async ({ body }) => ({
 			status: 201,
-			body: await this.rolesService.create(body, member.id),
+			body: await this.rolesService.create(body, member.uuid),
 		}));
 	}
 

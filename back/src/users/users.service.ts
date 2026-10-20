@@ -35,14 +35,6 @@ export class UsersService {
 		return this.prisma.user.findUnique({ where: { email: email } });
 	}
 
-	public async getById(id: number): Promise<User> {
-		const user = await this.prisma.user.findUnique({ where: { id: id } });
-		if (!user) {
-			throw new NotFoundException("Cannot load the user profile");
-		}
-		return user;
-	}
-
 	public async getByUUID(uuid: string): Promise<User> {
 		const user = await this.prisma.user.findUnique({ where: { uuid: uuid } });
 		if (!user) {
@@ -92,7 +84,7 @@ export class UsersService {
 			throw new NotFoundException("Cannot load the user profile");
 		}
 		if (user.listeningPrivate) {
-			user.currentlyListeningId = null;
+			user.currentlyListeningUUID = null;
 			user.listeningUntil = null;
 		}
 		const friends = [
@@ -116,7 +108,7 @@ export class UsersService {
 			data: { email, username: login, emailValidated: true },
 		});
 
-		await this.setDefaultUserRoles(newUser.id);
+		await this.setDefaultUserRoles(newUser.uuid);
 
 		return newUser;
 	}
@@ -130,24 +122,24 @@ export class UsersService {
 			data: { email, password: await bcrypt.hash(password, 10), username },
 		});
 
-		await this.setDefaultUserRoles(newUser.id);
+		await this.setDefaultUserRoles(newUser.uuid);
 
 		return newUser;
 	}
 
-	private async setDefaultUserRoles(userId: number) {
+	private async setDefaultUserRoles(userUUID: string) {
 		const defaultRoles = await this.roles.getDefaultRoles();
 		await this.prisma.userRole.createMany({
 			data: defaultRoles.map((role) => ({
 				roleId: role.id,
-				userId,
+				userUUID,
 			})),
 		});
 	}
 
-	public async getUserRoles(userId: number) {
+	public async getUserRoles(userUUID: string) {
 		const userRoles = await this.prisma.userRole.findMany({
-			where: { userId },
+			where: { userUUID },
 			include: {
 				roleRef: true,
 			},
@@ -155,9 +147,9 @@ export class UsersService {
 		return userRoles.map((role) => role.roleRef);
 	}
 
-	public async getUserRolesDetailed(userId: number) {
+	public async getUserRolesDetailed(userUUID: string) {
 		const userRoles = await this.prisma.userRole.findMany({
-			where: { userId },
+			where: { userUUID },
 			include: {
 				roleRef: {
 					include: {
@@ -178,28 +170,28 @@ export class UsersService {
 		});
 	}
 
-	public async addRoleToUser(userId: number, roleId: number) {
+	public async addRoleToUser(userUUID: string, roleId: number) {
 		await this.prisma.userRole.create({
 			data: {
-				userId: userId,
+				userUUID: userUUID,
 				roleId: roleId,
 			},
 		});
 	}
 
-	public async removeRoleFromUser(userId: number, roleId: number) {
+	public async removeRoleFromUser(userUUID: string, roleId: number) {
 		await this.prisma.userRole.deleteMany({
 			where: {
-				userId: userId,
+				userUUID: userUUID,
 				roleId: roleId,
 			},
 		});
 	}
 
-	public async doUserBypassPermission(userId: number) {
+	public async doUserBypassPermission(userUUID: string) {
 		const userSuperRole = await this.prisma.userRole.findFirst({
 			where: {
-				userId: userId,
+				userUUID: userUUID,
 				roleRef: { superRole: true },
 			},
 		});
@@ -210,12 +202,11 @@ export class UsersService {
 		userUUID: string,
 		permission: Permission,
 	) {
-		const userId = (await this.getByUUID(userUUID)).id;
-		if (await this.doUserBypassPermission(userId)) return true;
+		if (await this.doUserBypassPermission(userUUID)) return true;
 
 		const userPerm = await this.prisma.userRole.findFirst({
 			where: {
-				userId: userId,
+				userUUID: userUUID,
 				roleRef: {
 					rolePermissions: {
 						some: { permission },
@@ -226,23 +217,23 @@ export class UsersService {
 		return userPerm !== null;
 	}
 
-	public async verifyEmail(userId: number) {
+	public async verifyEmail(userUUID: string) {
 		await this.prisma.user.update({
-			where: { id: userId },
+			where: { uuid: userUUID },
 			data: { emailValidated: true },
 		});
 	}
 
-	public async setPassword(userId: number, password: string) {
+	public async setPassword(userUUID: string, password: string) {
 		await this.prisma.user.update({
-			where: { id: userId },
+			where: { uuid: userUUID },
 			data: { password: await bcrypt.hash(password, 10) },
 		});
 	}
 
-	public async setEmail(userId: number, email: string) {
+	public async setEmail(userUUID: string, email: string) {
 		await this.prisma.user.update({
-			where: { id: userId },
+			where: { uuid: userUUID },
 			data: { email },
 		});
 	}

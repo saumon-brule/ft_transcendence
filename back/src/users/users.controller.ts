@@ -103,7 +103,7 @@ export class UsersController {
 	@RequirePermission(PERMISSIONS.MEMBERS.GET_ROLES)
 	public getUserRoles() {
 		return tsRestHandler(usersContract.getUserRoles, async ({ params }) => {
-			const users = await this.usersService.getUserRoles(params.id);
+			const users = await this.usersService.getUserRoles(params.uuid);
 			return { status: 200, body: rolesListResponseSchema.parse(users) };
 		});
 	}
@@ -112,7 +112,7 @@ export class UsersController {
 	@RequirePermission(PERMISSIONS.MEMBERS.GET_ROLES_DETAILED)
 	public getUserRolesDetailed() {
 		return tsRestHandler(usersContract.getUserRolesDetailed, async ({ params }) => {
-			const user = await this.usersService.getUserRolesDetailed(params.id);
+			const user = await this.usersService.getUserRolesDetailed(params.uuid);
 			return { status: 200, body: rolesListDetailedResponseSchema.parse(user) };
 		});
 	}
@@ -123,7 +123,7 @@ export class UsersController {
 		return tsRestHandler(
 			usersContract.addUserRole,
 			async ({ params, body }) => {
-				await this.usersService.addRoleToUser(params.id, body.roleId);
+				await this.usersService.addRoleToUser(params.uuid, body.roleId);
 				return { status: 204, body: null };
 			},
 		);
@@ -136,7 +136,7 @@ export class UsersController {
 			usersContract.removeUserRole,
 			async ({ params }) => {
 				await this.usersService.removeRoleFromUser(
-					params.id,
+					params.uuid,
 					params.roleId,
 				);
 				return { status: 204, body: null };

@@ -24,15 +24,14 @@ export class MemberGuard implements CanActivate {
 			throw new AppForbiddenException("MEMBER_REVOKED", "Your access to this provider has been revoked");
 		}
 
-		const { ownerId } = await this.prisma.provider.findUniqueOrThrow({
+		const { ownerUuid } = await this.prisma.provider.findUniqueOrThrow({
 			where: { id: 1 },
-			select: { ownerId: true },
+			select: { ownerUuid: true },
 		});
-		const isOwner = ownerId === member.id;
+		const isOwner = ownerUuid === member.uuid;
 		const granted = new Set(member.roles.flatMap((r) => r.role.permissions.map((p) => p.permission)));
 
 		request.member = {
-			id: member.id,
 			uuid: member.uuid,
 			isOwner,
 			permissions: providerPermissions.filter((p) => isOwner || granted.has(p)),
