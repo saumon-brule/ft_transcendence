@@ -72,6 +72,19 @@ export class LogBuilder {
 		}),
 	};
 
+	static provider = {
+		created: (providerUuid: string, ownerUuid: string) => ({
+			action: "PROVIDER_CREATED",
+			providerUuid,
+			ownerUuid,
+		}),
+		apiKeyRejected: (reason: string, ip?: string) => ({
+			action: "PROVIDER_API_KEY_REJECTED",
+			reason,
+			ip,
+		}),
+	};
+
 	static user = {
 		unverifiedCleaned: (deletedCount: number) => ({
 			action: "UNVERIFIED_MEMBERS_CLEANUP",
