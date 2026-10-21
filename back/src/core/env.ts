@@ -2,7 +2,6 @@ import z from "zod";
 
 const EnvSchema = z.object({
 	DATABASE_URL: z.string(),
-	PROVIDER_TOKEN_PRIVATE_KEY: z.string().optional(),
 	JWT_SECRET: z.string(),
 	JWT_REFRESH_SECRET: z.string(),
 	API42_CLIENT_UID: z.string(),
@@ -15,10 +14,7 @@ const EnvSchema = z.object({
 	PORT: z.string().transform(Number).optional(),
 	BASE_URL: z.string(),
 	BASE_FRONT_URL: z.string(),
-}).refine(
-	(env) => env.NODE_ENV !== "prod" || Boolean(env.PROVIDER_TOKEN_PRIVATE_KEY),
-	{ message: "Required when NODE_ENV=prod", path: ["PROVIDER_TOKEN_PRIVATE_KEY"] },
-);
+});
 
 const result = EnvSchema.safeParse(process.env);
 
