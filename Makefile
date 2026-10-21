@@ -11,6 +11,9 @@ migrate:
 	@cd back && pnpm prisma migrate dev --name init && cd ..
 	@cd provider && pnpm prisma migrate dev --name init && cd ..
 
-.PHONY: run
+genkey:
+	@openssl genrsa -out back/provider.pem 2048
+
+.PHONY: run init migrate genkey
 
 
