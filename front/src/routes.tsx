@@ -16,10 +16,10 @@ import FtAuthCallback from "./pages/ftCallback/FtAuthCallback";
 import ResetPassword from "./pages/auth/passwordReset/ResetPassword";
 import RequestPasswordReset from "./pages/auth/passwordReset/RequestPasswordReset";
 import Profile from "./pages/Profile";
-import Settings from "./pages/Settings";
 import AppContainer from "./components/ui/RoutedLayout/AppContainer";
 import ChangeEmailValidation from "./pages/auth/changeEmail/ChangeEmailValidation";
 import SidebarRoute from "./components/ui/RoutedLayout/SidebarRoute";
+import SettingsRoutes from "./pages/Settings/SettingsRoutes";
 
 export const AppRouter = () => {
 	return <Router >
@@ -45,7 +45,7 @@ export const AppRouter = () => {
 						<Route path="/home" component={Home} />
 						<Route path="/user/:uuid" component={Profile} />
 					</Route>
-					<Route path="/settings" component={Settings} />
+					<SettingsRoutes/>
 				</Route>
 			</Route>
 		</Route>
