@@ -50,6 +50,7 @@ export const meSchema = z.object({
 	email: z.string().email(),
 	intraId: z.number().nullable(),
 	language: z.string(),
+	hasPassword: z.boolean(),
 	listeningPrivate: z.boolean(),
 	createdAt: z.coerce.date(),
 	currentlyListening: musicSchema.nullable(),

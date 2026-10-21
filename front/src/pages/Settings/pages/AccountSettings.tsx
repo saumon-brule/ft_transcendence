@@ -5,8 +5,36 @@ import { summonPasswordEditPopUp } from "./editionPopUps/passwordPopUp";
 import { summonUsernameEditPopUp } from "./editionPopUps/usernamePopUp";
 import { summonEmailEditPopUp } from "./editionPopUps/emailPopUp";
 import { OverlayControls } from "~/components/ui/Overlay";
+import { client } from "~/api/client";
+import { useTranslation } from "~/i18n/context";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+
+import "./AccountSettings.scss";
+
 export default function AccountSettings() {
+	const { t } = useTranslation();
+
 	const profileQuery = useMeProfileQuery();
+	const requestEmailResetMutation = client.auth.requestPasswordReset.createMutation();
+
+
+	function requestSetPassword(e: MouseEvent) {
+		e.preventDefault();
+		if (!profileQuery.data?.body.email) return;
+		requestEmailResetMutation.mutate(
+			{ body: { email: profileQuery.data.body.email } },
+			{
+				onSuccess: () => {
+					summonSuccessToast(() => <>{t("pages.settings.account.password.passwordSetEmailSent")}<b>{profileQuery.data.body.email}</b></>);
+				},
+				onError: (err) => {
+					if (err.status !== 429) {
+						summonErrorToast(() => t("pages.settings.account.password.passwordSetEmailError"));
+					}
+				},
+			},
+		);
+	}
 
 	let usernameEditPopUpControls: OverlayControls | null = null;
 	let passwordEditPopUpControls: OverlayControls | null = null;
@@ -18,43 +46,42 @@ export default function AccountSettings() {
 		emailEditPopUpControls?.close();
 	});
 
-
-	return <>
-		<h1>Account</h1>
+	return <main class="account-settings">
+		<h1>{t("pages.settings.account.title")}</h1>
 		<Show when={profileQuery.data ? profileQuery.data.body : undefined}>
 			{(user) => <div class="settings-content">
 				<div class="setting-field">
 					<div class="setting-field-title">
-						<h3>Username</h3>
+						<h3>{t("pages.settings.account.username.title")}</h3>
 						<Button variant="link" onClick={(e) => {
 							e.preventDefault();
 							usernameEditPopUpControls = summonUsernameEditPopUp(() => usernameEditPopUpControls = null);
-						}} >edit</Button>
+						}} >{t("pages.settings.edit")}</Button>
 					</div>
 					<div class="setting-field-value">{user().username}</div>
 				</div>
-				<Show when={/* authMethod === INTRA_OAUTH */ true}>
-					<div class="setting-field">
-						<div class="setting-field-title">
-							<h3>Password<span class="secondary-info">set</span></h3>
-							<Button variant="link" onClick={(e) => {
-								e.preventDefault();
-								passwordEditPopUpControls = summonPasswordEditPopUp(() => passwordEditPopUpControls = null);
-							}} >edit</Button>
-						</div>
-					</div>
-				</Show>
 				<div class="setting-field">
 					<div class="setting-field-title">
-						<h3>Email</h3>
+						<h3>{t("pages.settings.account.password.title")}<span class="secondary-info">{user().hasPassword ? t("pages.settings.account.password.set") : t("pages.settings.account.password.unset")}</span></h3>
+						<Button variant="link" onClick={user().hasPassword
+							? (e) => {
+								e.preventDefault();
+								passwordEditPopUpControls = summonPasswordEditPopUp(() => passwordEditPopUpControls = null);
+							}
+							: requestSetPassword} >{user().hasPassword ? t("pages.settings.edit") : t("pages.settings.set")}</Button>
+					</div>
+				</div>
+				<div class="setting-field">
+					<div class="setting-field-title">
+						<h3>{t("pages.settings.account.email.title")}</h3>
 						<Button variant="link" onClick={(e) => {
 							e.preventDefault();
 							emailEditPopUpControls = summonEmailEditPopUp(() => emailEditPopUpControls = null);
-						}} >edit</Button>
+						}} >{t("pages.settings.edit")}</Button>
 					</div>
 					<div class="setting-field-value">{user().email}</div>
 				</div>
 			</div>}
 		</Show>
-	</>;
+	</main>;
 }

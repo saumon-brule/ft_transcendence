@@ -86,7 +86,7 @@ export class UsersService {
 			user.currentlyListeningId = null;
 			user.listeningUntil = null;
 		}
-		return { ...user, connectedProviders: user.providers.map((p) => p.provider) };
+		return { ...user, hasPassword: !!user.password, connectedProviders: user.providers.map((p) => p.provider) };
 	}
 
 	public async createFromIntra(

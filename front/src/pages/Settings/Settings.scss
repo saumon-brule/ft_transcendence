@@ -1,42 +1,37 @@
 #settings {
-	margin-inline: auto;
-	padding: 40px;
-	max-width: 720px;
+	display: flex;
+	justify-content: center;
 
-	h1 {
-		font-size: 2.25rem;
-		font-weight: 600;
-		line-height: 1.25;
-	}
-
-	.setting-field {
+	.settings-layout {
 		width: 100%;
-		padding: 2rem 0 2rem 2px;
-		.setting-field-title {
-			display: flex;
-			justify-content: space-between;
-			h3 {
-				font-size: 1rem;
-				width: 100%;
-				font-weight: 600;
+		max-width: 1536px;
+		min-width: 320px;
+		padding-top: 4rem;
+		padding-inline: 4rem;
+		display: flex;
+		flex-direction: row;
+		gap: 1.5rem;
 
-				& > .secondary-info {
-					margin-left: 0.5rem;
-					color: var(--text-secondary);
+		.settings-nav {
+			min-width: 280px;
+			height: 100%;
+			li {
+				line-height: 1.5;
+				scroll-snap-align: center;
+
+				a {
+					&:is(.active, :hover) {
+						color: var(--link-hover);
+					}
+
+					padding: 0.5rem;
+					display: inline-block;
+					font-weight: 600;
+					color: var(--text-main);
+					transition: color 0.1s linear;
 				}
 			}
-			button {
-				padding: 0;
-			}
 		}
-	}
-
-	.setting-field:not(:last-of-type) {
-		border-bottom: 1px solid var(--background-overlay);
-	}
-
-	.setting-field-value {
-		font-weight: 400;
 	}
 }
 

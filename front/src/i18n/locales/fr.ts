@@ -58,10 +58,13 @@ export default {
 		},
 		settings: {
 			edit: "modifier",
+			set: "définir",
 			confirm: "confirmer",
 			cancel: "annuler",
 			account: {
+				title: "Compte",
 				username: {
+					title: "Pseudo",
 					popUp: {
 						title: "Modifier votre pseudo",
 						placeholder: "Nouveau pseudo",
@@ -71,6 +74,11 @@ export default {
 					},
 				},
 				password: {
+					title: "Mot de passe",
+					set: "défini",
+					unset: "non défini",
+					passwordSetEmailSent: "Un email vous a été envoyé pour définir votre mot de passe sur ",
+					passwordSetEmailError: "Nous n'avons pas pu envoyer d'email pour définir votre mot de passe :(",
 					popUp: {
 						title: "Modifier votre mot de passe",
 						placeholder: {
@@ -84,6 +92,7 @@ export default {
 					},
 				},
 				email: {
+					title: "Email",
 					popUp: {
 						title: "Modifier votre email",
 						placeholder: {

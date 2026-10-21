@@ -56,10 +56,13 @@ export default {
 		},
 		settings: {
 			edit: "edit",
+			set: "set",
 			confirm: "confirm",
 			cancel: "cancel",
 			account: {
+				title: "Account",
 				username: {
+					title: "Username",
 					popUp: {
 						title: "Edit username",
 						placeholder: "New username",
@@ -69,6 +72,11 @@ export default {
 					},
 				},
 				password: {
+					title: "Password",
+					set: "set",
+					unset: "unset",
+					passwordSetEmailSent: "An email was sent to set your password on ",
+					passwordSetEmailError: "We couldn't send email to set your password",
 					popUp: {
 						title: "Edit password",
 						placeholder: {
@@ -82,6 +90,7 @@ export default {
 					},
 				},
 				email: {
+					title: "Email",
 					popUp: {
 						title: "Edit email",
 						placeholder: {

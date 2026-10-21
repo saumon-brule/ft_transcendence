@@ -6,8 +6,7 @@ import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import Toggle from "~/components/inputs/Toggle/Toggle";
-import { summonSuccessToast } from "~/components/ui/Toaster";
-import { env } from "~/env";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { useTranslation } from "~/i18n/context";
 import { validateFromZod } from "~/utils/validateFromZod";
 
@@ -17,18 +16,18 @@ export default function ProfileSettings() {
 	const profileQuery = useMeProfileQuery();
 	const updatePictureMutation = client.users.uploadAvatar.createMutation();
 	const { t } = useTranslation();
-	const [listeningPrivate, setListeningPrivate] = createSignal(false);
-// 	const [draft, setDraft] = createSignal<Profile | undefined>(undefined);
-//
-// 	const serverProfile = () => profileQuery.data?.status === 200 ? profileQuery.data.body : undefined;
-// 	const profile = () => draft() ?? serverProfile();
-// 	const isDirty = () => draft() !== undefined;
-//
-// 	function updateField<K extends keyof Profile>(key: K, value: Profile[K]) {
-// 		const base = profile();
-// 		if (!base) return;
-// 		setDraft({ ...base, [key]: value });
-// 	}
+	// const [listeningPrivate, setListeningPrivate] = createSignal(false);
+	// 	const [draft, setDraft] = createSignal<Profile | undefined>(undefined);
+	//
+	// 	const serverProfile = () => profileQuery.data?.status === 200 ? profileQuery.data.body : undefined;
+	// 	const profile = () => draft() ?? serverProfile();
+	// 	const isDirty = () => draft() !== undefined;
+	//
+	// 	function updateField<K extends keyof Profile>(key: K, value: Profile[K]) {
+	// 		const base = profile();
+	// 		if (!base) return;
+	// 		setDraft({ ...base, [key]: value });
+	// 	}
 
 	const updatePicture: OnChangeEventHandler = (e) => {
 		const file = e.target.files?.[0];
@@ -37,7 +36,7 @@ export default function ProfileSettings() {
 			body: { avatar: file },
 		}, {
 			onSuccess: () => {
-				summonSuccessToast(() => t("pages.settings.profile.profilePictureUpdated"));
+				summonSuccessToast(() => (t("pages.settings.profile.profilePictureUpdated"), "test"));
 			},
 			onError: () => summonErrorToast(() => t("pages.settings.profile.profilePictureUpdateFail")),
 		});
@@ -53,7 +52,7 @@ export default function ProfileSettings() {
 					</label>
 					<input type="file" id="avatar-upload" accept="image/*" onChange={updatePicture} />
 				</div>
-				<Form onSubmit={updateProfile}>
+				{/* <Form onSubmit={updateProfile}>
 					<TextInput
 						ref={(e) => usernameInput = e.htmlElement}
 						validator={(e) => validateFromZod(updateMeSchema.shape.username, e.value)}
@@ -68,7 +67,7 @@ export default function ProfileSettings() {
 					<Button type="submit" disabled={updateProfileMutation.status === "loading"}>
 						Save
 					</Button>
-				</Form>
+				</Form>*/}
 			</div>}
 		</Show>
 	</>;
