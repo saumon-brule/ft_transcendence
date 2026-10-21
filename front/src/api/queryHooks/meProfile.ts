@@ -2,6 +2,7 @@ import { env } from "~/env";
 import { client, queryKeys } from "../client";
 
 export const useMeProfileQuery = () => client.users.me.createQuery(queryKeys.users.me, {}, {
+
 	select: (data) => ({
 		...data,
 		body: {
