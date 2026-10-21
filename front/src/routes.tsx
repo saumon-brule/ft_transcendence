@@ -17,8 +17,9 @@ import ResetPassword from "./pages/auth/passwordReset/ResetPassword";
 import RequestPasswordReset from "./pages/auth/passwordReset/RequestPasswordReset";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
-import AppContainer from "./components/AppContainer";
+import AppContainer from "./components/ui/RoutedLayout/AppContainer";
 import ChangeEmailValidation from "./pages/auth/changeEmail/ChangeEmailValidation";
+import SidebarRoute from "./components/ui/RoutedLayout/SidebarRoute";
 
 export const AppRouter = () => {
 	return <Router >
@@ -40,8 +41,10 @@ export const AppRouter = () => {
 			</Route>
 			<Route path="/" component={VerifiedEmailGuard}>
 				<Route path="/" component={AppContainer}>
-					<Route path="/home" component={Home} />
-					<Route path="/user/:uuid" component={Profile} />
+					<Route path="/" component={SidebarRoute}>
+						<Route path="/home" component={Home} />
+						<Route path="/user/:uuid" component={Profile} />
+					</Route>
 					<Route path="/settings" component={Settings} />
 				</Route>
 			</Route>

@@ -1,0 +1,12 @@
+#app-body {
+	display: flex;
+	flex: 1;
+	overflow: hidden;
+
+	main {
+		overflow: auto;
+		overscroll-behavior: contain;
+		width: 100%;
+	}
+	overscroll-behavior: none;
+}
