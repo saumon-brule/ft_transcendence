@@ -1,16 +1,16 @@
 import { createEffect, createSignal, onMount, Show } from "solid-js";
 import { A } from "@solidjs/router";
-import { providerContract, type User } from "@flex/shared";
-import { initQueryClient } from "@ts-rest/solid-query";
+import { type User } from "@flex/shared";
 import Button from "~/components/inputs/Button";
 import "./ProviderCard.scss";
-import { queryKeyFromContract } from "~/api/utils/queryKeys";
 import { summonEditProviderPopUp } from "./popUps/editProviderPopUp";
 import { summonDeleteProviderPopUp } from "./popUps/deleteProviderPopUp";
 import { client } from "~/api/client";
 import { summonProviderKeyPopUp } from "./popUps/providerKeyPopUp";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { getProviderClient } from "~/api/providerClients";
+import { createMemo } from "solid-js";
+import { createQuery } from "@tanstack/solid-query";
 
 export type ProviderStatus = "pinging" | "online" | "offline";
 
@@ -21,8 +21,15 @@ type ProviderCardProps = {
 
 export default function ProviderCard(props: ProviderCardProps) {
 	const [status, setStatus] = createSignal<ProviderStatus>("pinging");
-	const { client: providerClient, keys: providerQueryKeys } = getProviderClient(props.provider.address);
-	const health = providerClient.info.health.createQuery(providerQueryKeys.info.health, () => ({}));
+	const provider = createMemo(() => getProviderClient(props.provider.address));
+	const health = createQuery({
+		queryKey: () => provider().keys.info.health(),
+		queryFn: async () => {
+			const res = await provider().client.info.health.query();
+			if (res.status !== 200) throw new Error(`Provider health check failed with status ${res.status}`);
+			return res;
+		},
+	});
 
 	createEffect(() => {
 		if (health.isSuccess) {
