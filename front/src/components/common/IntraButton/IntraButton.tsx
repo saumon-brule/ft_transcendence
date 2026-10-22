@@ -1,7 +1,7 @@
 import { createSignal, splitProps } from "solid-js";
 import { client } from "~/api/client";
-import Button from "~/components/ui/Button";
-import { ButtonProps } from "~/components/ui/Button/Button";
+import Button from "~/components/inputs/Button";
+import { ButtonProps } from "~/components/inputs/Button/Button";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { useTranslation } from "~/i18n/context";
 import { encodeOauthState } from "~/utils/encodeOauthState";
@@ -21,7 +21,7 @@ export default function IntraButton(props: IntraButtonProps) {
 	const messageListener = (event: MessageEvent<MessageEventData>) => {
 		if (event.origin !== window.location.origin) return;
 		if (event.data?.type === "ft-oauth-error") {
-			summonErrorToast(<div>{t("pages.ftAuthCallback.mainErrorMessage")}<br />{t("pages.ftAuthCallback.subErrorMessage")}</div>);
+			summonErrorToast(() => <div>{t("pages.ftAuthCallback.mainErrorMessage")}<br />{t("pages.ftAuthCallback.subErrorMessage")}</div>);
 		}
 		cleanup();
 	};
@@ -52,7 +52,7 @@ export default function IntraButton(props: IntraButtonProps) {
 				window.addEventListener("message", messageListener);
 			}
 		} else {
-			summonErrorToast(t("errors.unknownFallback"));
+			summonErrorToast(() => t("errors.unknownFallback"));
 		}
 	}
 

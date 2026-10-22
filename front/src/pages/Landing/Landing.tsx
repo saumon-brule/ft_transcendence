@@ -1,7 +1,7 @@
 import { A, useNavigate } from "@solidjs/router";
 import { onCleanup, onMount, Show } from "solid-js";
 import { isLoggedIn } from "~/store/auth.store";
-import Button from "~/components/ui/Button";
+import Button from "~/components/inputs/Button";
 import FlexLogo from "~/components/common/logo/FlexLogo";
 
 import "./Landing.scss";

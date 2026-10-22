@@ -1,0 +1,63 @@
+#settings {
+	display: flex;
+	justify-content: center;
+
+	.settings-layout {
+		width: 100%;
+		max-width: 1536px;
+		min-width: 320px;
+		padding-top: 4rem;
+		padding-inline: 4rem;
+		display: flex;
+		flex-direction: row;
+		gap: 1.5rem;
+
+		.settings-nav {
+			min-width: 280px;
+			height: 100%;
+			li {
+				line-height: 1.5;
+				scroll-snap-align: center;
+
+				a {
+					&:is(.active, :hover) {
+						color: var(--link-hover);
+					}
+
+					padding: 0.5rem;
+					display: inline-block;
+					font-weight: 600;
+					color: var(--text-main);
+					transition: color 0.1s linear;
+				}
+			}
+		}
+	}
+}
+
+.edition-pop-up {
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+
+		.pop-up-inputs {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			gap: 0.5rem;
+
+			& > .invalid-message {
+				margin: 0;
+				color: var(--input-invalid);
+			}
+		}
+
+		.pop-up-buttons {
+			display: flex;
+			width: 100%;
+			justify-content: right;
+			gap: 1rem;
+		}
+	}
+}

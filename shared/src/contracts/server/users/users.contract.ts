@@ -3,12 +3,14 @@ import {
 	addRoleUserSchema,
 	DeleteRoleParamSchema,
 	meSchema,
+	updateMeSchema,
 	userSchema,
 } from "./schemas/user.schema";
 import {
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
 } from "../roles/schemas/role.schema";
+import z from "zod";
 import { uuidParamSchema } from "../../../schemas/common.schema";
 import { commonError404Schema } from "../../../errors/error-schemas";
 
@@ -19,6 +21,12 @@ export const usersContract = c.router(
 		me: {
 			method: "GET",
 			path: "/me",
+			responses: { 200: meSchema },
+		},
+		updateMe: {
+			method: "PATCH",
+			path: "/me",
+			body: updateMeSchema,
 			responses: { 200: meSchema },
 		},
 		getUser: {
@@ -32,8 +40,13 @@ export const usersContract = c.router(
 			path: "/me/avatar",
 			contentType: "multipart/form-data",
 			body: c.type<{ avatar: File }>(),
+			// responses: {
+			// 	204: null,
+			// },
 			responses: {
-				204: null,
+				200: z.object({
+					avatarPath: z.string(),
+				}),
 			},
 		},
 		getUserRoles: {

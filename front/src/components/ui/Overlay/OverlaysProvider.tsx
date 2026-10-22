@@ -1,8 +1,12 @@
 import { ParentComponent, JSXElement, createRoot, createSignal, For, createEffect, createMemo, onCleanup } from "solid-js";
-import "./OverlaysProvider.scss";
 import { TransitionGroup } from "solid-transition-group";
+import "./OverlaysProvider.scss";
 
-export type SummonPopUp = () => void;
+export interface OverlayControls {
+	close: () => void;
+}
+
+export type OverlayContent = JSXElement | ((controls: OverlayControls) => JSXElement);
 
 export interface SummonOverlayOptions {
 	customClass?: string;
@@ -12,9 +16,9 @@ export interface SummonOverlayOptions {
 
 export interface Overlay {
 	id: number;
-	element: JSXElement;
+	element: OverlayContent;
 	options: SummonOverlayOptions;
-	remove: () => void;
+	controls: OverlayControls;
 }
 
 const { overlays, setOverlays } = createRoot(() => {
@@ -24,31 +28,38 @@ const { overlays, setOverlays } = createRoot(() => {
 
 let overlayId = 0;
 
-export function summonOverlay(content: JSXElement, options: SummonOverlayOptions = {}): Overlay {
+export function summonOverlay(content: OverlayContent, options: SummonOverlayOptions = {}): OverlayControls {
 	const thisOverlayId = overlayId++;
 
-	function removeOverlay() {
-		if (options?.onClose) options.onClose();
+	function closeOverlay() {
+		if (!overlays().some((overlay) => overlay.id === thisOverlayId)) return;
 		setOverlays((prev) => prev.filter((overlay) => overlay.id !== thisOverlayId));
+		options.onClose?.();
 	}
 
 	const newOverlay: Overlay = {
 		id: thisOverlayId,
 		element: content,
 		options,
-		remove: removeOverlay,
+		controls: {
+			close: closeOverlay,
+		},
 	};
 
 	setOverlays((prev) => [...prev, newOverlay]);
 
-	return newOverlay;
+	return newOverlay.controls;
 }
 
-export function summonPopUp(content: JSXElement, options: SummonOverlayOptions = {}): Overlay {
+export function summonPopUp(content: OverlayContent, options: SummonOverlayOptions = {}): OverlayControls {
 	return summonOverlay(content, {
 		...options,
 		customClass: options.customClass ? options.customClass + " pop-up" : "pop-up",
 	});
+}
+
+export function getRenderedOverlayContent(content: OverlayContent, controls: OverlayControls): JSXElement {
+	return typeof content === "function" ? content(controls) : content;
 }
 
 export const OverlayProvider: ParentComponent = (props) => {
@@ -60,7 +71,7 @@ export const OverlayProvider: ParentComponent = (props) => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
 				const currentOverlays = overlays();
-				currentOverlays[currentOverlays.length - 1].remove();
+				currentOverlays[currentOverlays.length - 1].controls.close();
 			}
 		};
 
@@ -72,16 +83,18 @@ export const OverlayProvider: ParentComponent = (props) => {
 		<div id="overlay-container" class={hasOverlays() ? " visible" : ""} onClick={(e) => {
 			if (e.target !== e.currentTarget) return;
 			const currentOverlays = overlays();
-			currentOverlays[currentOverlays.length - 1].remove();
+			currentOverlays[currentOverlays.length - 1].controls.close();
 		}} >
 			<TransitionGroup name="overlay-wrapper" onExit={(_, done) => setTimeout(done, 200)}>
 				<For each={overlays()}>
 					{(overlay) => <div class={`overlay ${overlay.options.customClass ?? ""}`}>
-						{overlay.element}
+						{getRenderedOverlayContent(overlay.element, overlay.controls)}
 					</div>}
 				</For>
 			</TransitionGroup>
 		</div>
-		{props.children}
+		<div style={{ display: "contents" }} inert={hasOverlays()}>
+			{props.children}
+		</div>
 	</>;
 };

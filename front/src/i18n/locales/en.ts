@@ -54,6 +54,58 @@ export default {
 				confirmNewPassword: "Confirm password",
 			},
 		},
+		settings: {
+			accountLink: "Account",
+			profileLink: "Profile",
+			edit: "edit",
+			set: "set",
+			confirm: "confirm",
+			cancel: "cancel",
+			account: {
+				title: "Account",
+				username: {
+					title: "Username",
+					popUp: {
+						title: "Edit username",
+						placeholder: "New username",
+						success: "Username was successfully changed",
+						failure: "Username couldn't be changed : {{reason}}",
+						failureNoReason: "Username couldn't be changed",
+					},
+				},
+				password: {
+					title: "Password",
+					set: "set",
+					unset: "unset",
+					passwordSetEmailSent: "An email was sent to set your password on ",
+					passwordSetEmailError: "We couldn't send email to set your password",
+					popUp: {
+						title: "Edit password",
+						placeholder: {
+							old: "Old password",
+							new: "New password",
+							confirm: "Confirm new password",
+						},
+						success: "Password was successfully changed",
+						failure: "Password couldn't be changed : {{reason}}",
+						failureNoReason: "Username couldn't be changed",
+					},
+				},
+				email: {
+					title: "Email",
+					popUp: {
+						title: "Edit email",
+						placeholder: {
+							password: "Password",
+							newEmail: "New email",
+						},
+						success: "Email was successfully changed, you received a confirmation email",
+						failure: "Email couldn't be changed : {{reason}}",
+						failureNoReason: "Email couldn't be changed",
+					},
+				},
+			},
+		},
 	},
 	errors: {
 		rateLimit: "You are being rate limited",
@@ -90,6 +142,9 @@ export default {
 					typeMismatch: "Please enter a valid research",
 				},
 			},
+		},
+		auth: {
+			invalidPassword: "Password is incorrect",
 		},
 		register: {
 			conflictingEmail: "This email is already taken",

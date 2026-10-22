@@ -1,13 +1,13 @@
 import { A } from "@solidjs/router";
-import Button from "../../components/ui/Button";
-import TextInput from "~/components/ui/TextInput";
+import Button from "~/components/inputs/Button";
+import TextInput from "~/components/inputs/TextInput";
 import { client } from "~/api/client";
 import { createSignal, JSXElement, Show } from "solid-js";
 import { authActions } from "~/store/auth.store";
 import { loginSchema } from "@flex/shared";
 import { useTranslation } from "~/i18n/context";
 import "./LoginForm.scss";
-import Form from "~/components/ui/Form/Form";
+import Form from "~/components/inputs/Form/Form";
 import { validateFromZod } from "~/utils/validateFromZod";
 import IntraButton from "~/components/common/IntraButton/IntraButton";
 import Logo42 from "~/components/graphics/icons/Logo42";

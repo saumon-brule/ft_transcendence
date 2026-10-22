@@ -1,6 +1,8 @@
 init:
 	@mkdir -p /tmp/flex-db
 	@docker compose up -d --wait
+	@mkdir -p ./back/uploads/avatars
+	@mkdir -p ./back/uploads/playlists
 	@cd back && pnpm prisma generate && pnpm prisma migrate dev --name init && cd ..
 	@cd provider && pnpm prisma generate && pnpm prisma migrate dev --name init && cd ..
 

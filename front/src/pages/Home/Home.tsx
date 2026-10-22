@@ -1,7 +1,7 @@
 import { useNavigate } from "@solidjs/router";
 import { Show } from "solid-js";
 import { client, queryKeys } from "~/api/client";
-import Button from "~/components/ui/Button";
+import Button from "~/components/inputs/Button";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { authActions } from "~/store/auth.store";
 

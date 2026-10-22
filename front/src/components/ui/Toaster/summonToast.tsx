@@ -1,9 +1,9 @@
-import { summonRawToast, Toast } from "./Toaster";
+import { getRenderedToastContent, summonRawToast } from "./Toaster";
 import "./Toast.scss";
 
 type ToastVariant = "success" | "info" | "warning" | "error";
 
 
-export function summonToast(type: ToastVariant, ...[content, options]: Parameters<typeof summonRawToast>): Toast {
-	return summonRawToast(<div class={`default-toast--${type}`}>{content}</div>, options);
+export function summonToast(type: ToastVariant, ...[content, options]: Parameters<typeof summonRawToast>) {
+	return summonRawToast((controls) => <div class={`default-toast--${type}`}>{getRenderedToastContent(content, controls)}</div>, options);
 }

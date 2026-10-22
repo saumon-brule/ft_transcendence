@@ -1,16 +1,17 @@
-import { ChevronDown, LogOut, Search, Settings, X } from "lucide-solid";
+import { ChevronDown, LogOut, Search, Settings, X, User } from "lucide-solid";
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
-import { client, queryKeys } from "~/api/client";
-import { env } from "~/env";
-import Form from "~/components/ui/Form/Form";
-import TextInput from "~/components/ui/TextInput";
+import Form from "~/components/inputs/Form/Form";
+import TextInput from "~/components/inputs/TextInput";
 import { authActions } from "~/store/auth.store";
 import type { InputComponentRef } from "~/types/ComponentRef";
+import { useNavigate } from "@solidjs/router";
+import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 
 import "./Header.scss";
 
 export default function Header() {
-	const me = client.users.me.createQuery(queryKeys.users.me, () => ({})); // Faudrait peut etre le mettre dans le store ça nan ?
+	const meProfileQuery = useMeProfileQuery();
+	const navigate = useNavigate();
 
 	const [isMenuOpen, setIsMenuOpen] = createSignal(false);
 	const [searchValue, setSearchValue] = createSignal("");
@@ -65,19 +66,24 @@ export default function Header() {
 					aria-haspopup="menu"
 					onClick={() => setIsMenuOpen((open) => !open)}
 				>
-					<Show when={me.data?.body}>
-						{(user) => <img
-							class="profile-avatar"
-							src={`${env.VITE_API_URL}/users/${user().uuid}/avatar`}
-						/>}
+					<Show when={meProfileQuery.data ? meProfileQuery.data.body : undefined}>
+						{(user) => <>
+							<img class="profile-avatar" src={user().avatarUrl}/>
+							<span class="profile-username">{user().username}</span>
+						</>}
 					</Show>
-					<span class="profile-username">{me.data?.body.username}</span>
 					<ChevronDown class="profile-chevron" size={16} aria-hidden="true" />
 				</button>
 
 				<Show when={isMenuOpen()}>
 					<div class="profile-dropdown" role="menu">
-						<button type="button" role="menuitem" onClick={() => setIsMenuOpen(false)}>
+						<Show when={meProfileQuery.data ? meProfileQuery.data.body : undefined}>
+							{(user) => <button type="button" role="menuitem" onClick={() => navigate(`/user/${user().uuid}`)}>
+								<User size={17} aria-hidden="true" />
+								<span>Profile</span>
+							</button>}
+						</Show>
+						<button type="button" role="menuitem" onClick={() => navigate("/settings")}>
 							<Settings size={17} aria-hidden="true" />
 							<span>Settings</span>
 						</button>

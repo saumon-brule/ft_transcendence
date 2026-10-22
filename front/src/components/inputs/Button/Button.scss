@@ -23,6 +23,11 @@ $variants: (
 		col: var(--button-danger-text),
 	),
 	text: (),
+	link: (
+		col: var(--button-link),
+		col-hov: var(--button-link-hover),
+		col-dis: var(--button-link-disabled),
+	),
 );
 
 $sizes: (
@@ -70,8 +75,30 @@ $sizes: (
 	}
 
 	@each $name, $values in $variants {
+		@if $name == link {
+			&--#{$name} {
+				background-color: transparent;
+				border-radius: 0 !important;
+				padding-inline: 0 !important;
+
+				font-weight: bold;
+				transition: color 0.2s;
+				color: map.get($values, col);
+				cursor: pointer;
+			}
+
+			&--#{$name}:is(:hover, :active, :focus-visible) {
+				color: map.get($values, col-hov);
+			}
+
+			&--#{$name}:disabled {
+				color: map.get($values, col-dis);
+				cursor: default;
+			}
+		}
 		@if $name == text {
 			&--#{$name} {
+				border-radius: 0 !important;
 				background-color: transparent;
 				padding-inline: 0 !important;
 			}
@@ -84,7 +111,7 @@ $sizes: (
 				cursor: default;
 			}
 		}
-		@if $name != text {
+		@if $name != text and $name != link{
 			&--#{$name} {
 				background: map.get($values, bg);
 				color: map.get($values, col);

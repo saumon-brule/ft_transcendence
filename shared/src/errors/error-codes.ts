@@ -41,6 +41,8 @@ export const serverCode403 = [
 	...commonCode403,
 	"EMAIL_NOT_VERIFIED",
 	"ALREADY_LOGGED_IN",
+	"INVALID_PASSWORD",
+	"INTRA_ONLY_ACCOUNT",
 ] as const;
 export type ServerCode403 = (typeof serverCode403)[number];
 

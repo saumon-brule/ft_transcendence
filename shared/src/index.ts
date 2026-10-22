@@ -9,14 +9,15 @@ export { providerContract } from "./contracts/provider/provider.contract";
 export { friendsContract } from "./contracts/server/users/friends.contract";
 
 export { loginSchema, type LoginDto } from "./contracts/server/auth/schemas/login.schema";
+export { requestEmailResetSchema, resetEmailSchema, type RequestEmailResetDto, type ResetEmailDto } from "./contracts/server/auth/schemas/email.schema";
 export { registerSchema, type RegisterDto } from "./contracts/server/auth/schemas/register.schema";
 export { resetPasswordSchema, changePasswordSchema, type RequestPasswordResetDto, type ChangePasswordDto } from "./contracts/server/auth/schemas/password.schema";
-export { userSchema, meSchema, type User } from "./contracts/server/users/schemas/user.schema";
+export { userSchema, meSchema, updateMeSchema, type User, type Profile, type UpdateMeDto } from "./contracts/server/users/schemas/user.schema";
 export { createProviderSchema, type CreateProviderDto } from "./contracts/server/providers/schemas/provider.schema";
 export { createRoleSchema, roleUsersResponseSchema, roleResponseSchema, rolesListDetailedResponseSchema, rolesListResponseSchema } from "./contracts/server/roles/schemas/role.schema";
 export { getAppVariables } from "./contracts/server/appConfig/schemas/app-config.schema";
 
-export { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath } from "./core/constants";
+export { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath, ftIntraLinkCallbackPath, changeEmailConfirmationPath } from "./core/constants";
 export { createJwtPayload, type JwtPayload } from "./core/jwt.payload";
 export { PERMISSIONS } from "./core/permissions";
 export { type Permission } from "./core/permissions";

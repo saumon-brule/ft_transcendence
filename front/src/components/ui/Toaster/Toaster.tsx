@@ -2,7 +2,13 @@ import { createRoot, createSignal, For, JSXElement } from "solid-js";
 import { TransitionGroup } from "solid-transition-group";
 import "./Toaster.scss";
 
-const DEFAULT_TTL = 3000;
+const DEFAULT_TTL = 300000;
+
+export interface ToastControls {
+	remove: () => void;
+}
+
+export type ToastContent = JSXElement | ((controls: ToastControls) => JSXElement);
 
 export interface SummonToastOptions {
 	customClass?: string;
@@ -13,8 +19,8 @@ export interface SummonToastOptions {
 
 export interface Toast {
 	id: number;
-	element: JSXElement;
-	remove: () => void;
+	element: ToastContent;
+	controls: ToastControls;
 }
 
 const { toasts, setToasts } = createRoot(() => {
@@ -24,7 +30,7 @@ const { toasts, setToasts } = createRoot(() => {
 
 let toastId = 0;
 
-export function summonRawToast(content: JSXElement, options?: SummonToastOptions): Toast {
+export function summonRawToast(content: ToastContent, options?: SummonToastOptions): ToastControls {
 	const ttl = options?.ttl ?? DEFAULT_TTL;
 	const thisToastId = toastId++;
 
@@ -37,22 +43,30 @@ export function summonRawToast(content: JSXElement, options?: SummonToastOptions
 	const newToast = {
 		id: thisToastId,
 		element: content,
-		remove: () => {
-			clearTimeout(deleteTimeoutId);
-			removeToast();
+		controls: {
+			remove: () => {
+				clearTimeout(deleteTimeoutId);
+				removeToast();
+			},
 		},
 	};
 
 	setToasts((prev) => [...prev, newToast]);
 
-	return newToast;
+	return newToast.controls;
+}
+
+export function getRenderedToastContent(content: ToastContent, controls: ToastControls): JSXElement {
+	return typeof content === "function" ? content(controls) : content;
 }
 
 export function ToasterProvider(props: { children: JSXElement }) {
 	return <>
 		<div id="toast-container" class="">
 			<TransitionGroup name="toast-wrapper" onExit={(_, done) => setTimeout(done, 1000)}>
-				<For each={toasts()}>{(toast) => <div onClick={toast.remove}>{toast.element}</div>}</For>
+				<For each={toasts()}>{(toast) => <div onClick={toast.controls.remove}>
+					{getRenderedToastContent(toast.element, toast.controls)}
+				</div>}</For>
 			</TransitionGroup>
 		</div>
 		{props.children}

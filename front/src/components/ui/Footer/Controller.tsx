@@ -1,5 +1,5 @@
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
-import Button from "../Button";
+import Button from "~/components/inputs/Button";
 import MusicTimer from "~/components/common/MusicTimer/MusicTimer";
 import { Pause, Play, SkipBack, SkipForward, Square } from "lucide-solid";
 import { createSignal, onCleanup } from "solid-js";

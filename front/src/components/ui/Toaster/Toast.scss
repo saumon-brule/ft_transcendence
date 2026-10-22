@@ -9,9 +9,12 @@ $variants: (
 );
 
 .default-toast {
-	cursor: pointer;
 	@each $variant, $col in $variants {
 		&--#{$variant} {
+			max-width: 300px;
+			cursor: pointer;
+			overflow: clip;
+			overflow-clip-margin: content-box;
 			border-radius: 0.5rem;
 			padding: 0.5rem;
 			backdrop-filter: blur(12px) saturate(180%);

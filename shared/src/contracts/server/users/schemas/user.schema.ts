@@ -30,9 +30,9 @@ export const shortUserSchema = z.object({
 export const userSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
-	createdAt: z.date(),
+	createdAt: z.coerce.date(),
 	currentlyListening: musicSchema.nullable(),
-	listeningUntil: z.date().nullable(),
+	listeningUntil: z.coerce.date().nullable(),
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
@@ -49,15 +49,29 @@ export const meSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
 	email: z.string().email(),
-	createdAt: z.date(),
+	intraId: z.number().nullable(),
+	language: z.string(),
+	hasPassword: z.boolean(),
+	listeningPrivate: z.boolean(),
+	createdAt: z.coerce.date(),
 	currentlyListening: musicSchema.nullable(),
-	listeningUntil: z.date().nullable(),
+	listeningUntil: z.coerce.date().nullable(),
+	avatarUpdatedAt: z.coerce.date(),
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
 	friends: z.array(shortUserSchema),
 	friendRequests: z.array(shortUserSchema),
 });
+export type Profile = z.infer<typeof meSchema>;
+
+export const updateMeSchema = z.object({
+	username: z.string().min(3).max(32).
+		optional(),
+	language: z.string().optional(),
+	listeningPrivate: z.boolean().optional(),
+});
+export type UpdateMeDto = z.infer<typeof updateMeSchema>;
 
 export const userBasicSchema = z.object({
 	id: z.number(),

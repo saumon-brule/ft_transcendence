@@ -2,20 +2,22 @@
 	position: fixed;
 	display: flex;
 	flex-direction: column;
+	align-items: flex-end;
 	top: 0;
 	right: 0;
-	padding: 0.5rem;
+	margin: 0.5rem;
 	z-index: 999;
+	width: 300px;
+	pointer-events: none;
 
 	& > div {
 		overflow: hidden;
 		display: grid;
+		justify-content: flex-end;
 		grid-template-rows: 1fr;
 		margin-bottom: 0.5rem;
-
-		& > * {
-			overflow: hidden;
-		}
+		max-width: 100%;
+		pointer-events: all;
 	}
 
 	.toast-wrapper-enter {

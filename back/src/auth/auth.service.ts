@@ -4,7 +4,7 @@ import {
 	InternalServerErrorException,
 } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
-import { emailConfirmationPath, ftIntraAuthCallbackPath, RegisterDto } from "@flex/shared";
+import { emailConfirmationPath, ftIntraAuthCallbackPath, ftIntraLinkCallbackPath, RegisterDto } from "@flex/shared";
 import * as bcrypt from "bcrypt";
 import { LoginDto } from "@flex/shared";
 import { JwtService } from "@nestjs/jwt";
@@ -27,6 +27,7 @@ const TokenResponseSchema = z.object({
 });
 
 const Me42ResponseSchema = z.object({
+	id: z.number(),
 	login: z.string(),
 	email: z.string(),
 });
@@ -278,7 +279,7 @@ export class AuthService {
 
 		if (!(await bcrypt.compare(oldPassword, existing.password))) {
 			// Seule erreur a gerer coté front car les autres ne devraient pas pouvoir arriver
-			throw new AppForbiddenException("FORBIDDEN", "Invalid password");
+			throw new AppForbiddenException("INVALID_PASSWORD", "Invalid password");
 		}
 
 		await this.users.setPassword(existing.uuid, newPassword);
@@ -298,7 +299,7 @@ export class AuthService {
 
 	private async sendChangeEmail(user: User, newEmail: string) {
 		await this.mailService.sendEmail(
-			[user.email],
+			[newEmail],
 			"Change your email - Flex",
 			"reset-email",
 			{
@@ -324,7 +325,12 @@ export class AuthService {
 		}
 
 		if (!user.password || !(await bcrypt.compare(password, user.password))) {
-			throw new AppForbiddenException("FORBIDDEN", "Invalid password");
+			throw new AppForbiddenException("INVALID_PASSWORD", "Invalid password");
+		}
+
+		const existingEmail = await this.users.getByEmail(newEmail);
+		if (existingEmail) {
+			throw new ConflictException("Email already used");
 		}
 
 		await this.sendChangeEmail(user, newEmail);
@@ -348,6 +354,20 @@ export class AuthService {
 		return url;
 	}
 
+	public async get42LinkUrl(userUUID: string) {
+		const api42_client_uid = await this.appConfig.get("42api-uid");
+
+		if (!api42_client_uid) {
+			throw new InternalServerErrorException("API 42 credentials are not set");
+		}
+
+		const user = await this.users.getByUUID(userUUID);
+		const state = await this.tokensService.create42LinkStateToken(user.uuid);
+
+		const url = `https://api.intra.42.fr/oauth/authorize?client_id=${api42_client_uid}&redirect_uri=${env.BASE_FRONT_URL}${ftIntraLinkCallbackPath}&response_type=code&scope=public&state=${state}`;
+		return url;
+	}
+
 	public async auth42(
 		code: string,
 		state: string,
@@ -362,12 +382,18 @@ export class AuthService {
 			throw new AppUnauthorizedException("UNAUTHORIZED", "Failed to retrieve user data from 42");
 		}
 
-		let user = await this.users.getByEmail(userData.email);
+		let user = await this.users.getByIntraId(userData.id);
 
 		if (!user) {
+			const existingEmail = await this.users.getByEmail(userData.email);
+			if (existingEmail) {
+				throw new ConflictException("Email already used. You must link your intra account to your existing account in the settings.");
+			}
+
 			user = await this.users.createFromIntra(
 				userData.email,
 				userData.login,
+				userData.id,
 			);
 		}
 
@@ -383,6 +409,48 @@ export class AuthService {
 				ipAddress ?? "unknown",
 			),
 		};
+	}
+
+	public async link42(
+		userUUID: string,
+		code: string,
+		state: string,
+	) {
+		const tokenInfo = await this.tokensService.isValidToken(state, "STATE_42LINK");
+		const me = await this.users.getByUUID(userUUID);
+		if (me.uuid !== tokenInfo.userUUID) {
+			throw new AppForbiddenException("FORBIDDEN", "You are not allowed to link this account");
+		}
+		if (me.intraId) {
+			throw new ConflictException("This account is already linked to an intra account");
+		}
+
+		const userData = await this.get42UserInfo(code, env.BASE_FRONT_URL + ftIntraLinkCallbackPath);
+
+		if (!userData || !userData.login) {
+			throw new AppUnauthorizedException("UNAUTHORIZED", "Failed to retrieve user data from 42");
+		}
+
+		const user = await this.users.getByIntraId(userData.id);
+		if (user) {
+			throw new ConflictException("This intra account is already linked to another account");
+		}
+
+		await this.users.linkIntraAccount(userUUID, userData.id);
+	}
+
+	public async unlink42(userUUID: string) {
+		const user = await this.users.getByUUID(userUUID);
+
+		if (!user.intraId) {
+			throw new ConflictException("This account is not linked to an intra account");
+		}
+
+		if (!user.password) {
+			throw new AppForbiddenException("INTRA_ONLY_ACCOUNT", "You must set a password before unlinking your intra account");
+		}
+
+		await this.users.unlinkIntraAccount(userUUID);
 	}
 
 	private async get42UserInfo(code: string, redirectUri: string) {

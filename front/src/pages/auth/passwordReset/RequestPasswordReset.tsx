@@ -1,10 +1,10 @@
 
 import { useTranslation } from "~/i18n/context";
-import TextInput from "~/components/ui/TextInput";
+import TextInput from "~/components/inputs/TextInput";
 import { authContract } from "@flex/shared";
 import { validateFromZod } from "~/utils/validateFromZod";
-import Button from "~/components/ui/Button";
-import Form from "~/components/ui/Form/Form";
+import Button from "~/components/inputs/Button";
+import Form from "~/components/inputs/Form/Form";
 import { client } from "~/api/client";
 import { createEffect, Match, Show, Switch } from "solid-js";
 import "./RequestPasswordReset.scss";
@@ -32,7 +32,7 @@ export default function RequestPasswordReset() {
 
 	createEffect(() => {
 		if (requestPasswordReset.isSuccess) {
-			summonSuccessToast(t("pages.requestPasswordReset.success"));
+			summonSuccessToast(() => t("pages.requestPasswordReset.success"));
 		}
 	});
 

@@ -14,7 +14,7 @@ const fetchWithRefresh: ApiFetcher = async (args) => {
 	const response = await tsRestFetchApi(args);
 
 	if (response.status === 429) {
-		summonWarningToast(t("errors.rateLimit"));
+		summonWarningToast(() => t("errors.rateLimit"));
 	}
 
 	if (response.status !== 401
@@ -47,6 +47,7 @@ export const client = initQueryClient(appContract, {
 		Authorization: () => `Bearer ${auth.accessToken}`,
 	},
 	api: fetchWithRefresh,
+	validateResponse: true,
 });
 
 export const queryKeys = queryKeyFromContract(appContract);

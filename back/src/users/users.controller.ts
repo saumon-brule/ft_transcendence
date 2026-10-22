@@ -48,6 +48,15 @@ export class UsersController {
 		});
 	}
 
+	@TsRestHandler(usersContract.updateMe)
+	@UseGuards(JwtAuthGuardWithoutEmailVerif)
+	public updateMe(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(usersContract.updateMe, async ({ body }) => {
+			const user = await this.usersService.updateMe(authUser.uuid, body);
+			return { status: 200, body: meSchema.parse(user) };
+		});
+	}
+
 	@TsRestHandler(usersContract.getUser)
 	@UseGuards(JwtAuthGuard)
 	public getUser() {
@@ -76,6 +85,8 @@ export class UsersController {
 				.resize(256, 256, { fit: "cover" })
 				.webp({ quality: 80 })
 				.toFile(filepath);
+
+			await this.usersService.updateAvatarTimestamp(authUser.uuid);
 
 			return { status: 204, body: null };
 		});
