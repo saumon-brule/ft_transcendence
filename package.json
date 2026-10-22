@@ -4,7 +4,8 @@
 		"dev:shared": "pnpm --filter @flex/shared run dev",
 		"dev:front": "pnpm --filter @flex/front run dev",
 		"dev:back": "pnpm --filter @flex/back run start:dev",
-		"dev": "concurrently -n back,provider,front -c blue,green,red \"pnpm --filter @flex/back start:dev\" \"pnpm --filter @flex/provider start:dev\" \"wait-on tcp:localhost:3001 && pnpm --filter @flex/front start\"",
+		"dev:provider": "pnpm --filter @flex/provider run start:dev",
+		"dev": "concurrently -n back,front -c blue,red \"pnpm --filter @flex/back start:dev\" \"wait-on tcp:localhost:3001 && pnpm --filter @flex/front start\"",
 		"lint": "concurrently -n back,provider,front,shared -c blue,green,red,yellow \"pnpm --filter @flex/back run lint\" \"pnpm --filter @flex/provider run lint\" \"pnpm --filter @flex/front run lint\" \"pnpm --filter @flex/shared run lint\"",
 		"check": "concurrently -n back,provider,front,shared -c blue,green,red,yellow \"pnpm --filter @flex/back run check\" \"pnpm --filter @flex/provider run check\" \"pnpm --filter @flex/front run check\" \"pnpm --filter @flex/shared run check\"",
 		"build": "pnpm --filter @flex/shared run build && concurrently -n back,provider,front -c blue,green,red \"pnpm --filter @flex/back build\" \"pnpm --filter @flex/provider build\" \"pnpm --filter @flex/front build\""

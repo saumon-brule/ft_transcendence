@@ -20,6 +20,7 @@ import AppContainer from "./components/ui/RoutedLayout/AppContainer";
 import ChangeEmailValidation from "./pages/auth/changeEmail/ChangeEmailValidation";
 import SidebarRoute from "./components/ui/RoutedLayout/SidebarRoute";
 import SettingsRoutes from "./pages/Settings/SettingsRoutes";
+import Providers from "./pages/Providers";
 
 export const AppRouter = () => {
 	return <Router >
@@ -44,6 +45,7 @@ export const AppRouter = () => {
 					<Route path="/" component={SidebarRoute}>
 						<Route path="/home" component={Home} />
 						<Route path="/user/:uuid" component={Profile} />
+						<Route path="/providers" component={Providers} />
 					</Route>
 					<SettingsRoutes/>
 				</Route>

@@ -13,7 +13,7 @@ export { requestEmailResetSchema, resetEmailSchema, type RequestEmailResetDto, t
 export { registerSchema, type RegisterDto } from "./contracts/server/auth/schemas/register.schema";
 export { resetPasswordSchema, changePasswordSchema, type RequestPasswordResetDto, type ChangePasswordDto } from "./contracts/server/auth/schemas/password.schema";
 export { userSchema, meSchema, updateMeSchema, type User, type Profile, type UpdateMeDto } from "./contracts/server/users/schemas/user.schema";
-export { createProviderSchema, type CreateProviderDto } from "./contracts/server/providers/schemas/provider.schema";
+export { createProviderSchema, editProviderSchema, type CreateProviderDto, type Provider } from "./contracts/server/providers/schemas/provider.schema";
 export { createRoleSchema, roleUsersResponseSchema, roleResponseSchema, rolesListDetailedResponseSchema, rolesListResponseSchema } from "./contracts/server/roles/schemas/role.schema";
 export { getAppVariables } from "./contracts/server/appConfig/schemas/app-config.schema";
 
@@ -27,3 +27,5 @@ export { providerPermissions, providerPermissionSchema, type ProviderPermission 
 export * from "./errors/error-codes";
 export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
+
+export { type HealthResponseDto } from "./contracts/provider/info/schemas/info.schema";

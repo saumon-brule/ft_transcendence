@@ -3,11 +3,16 @@ import { z } from "zod";
 export const providerSchema = z.object({
 	uuid: z.string().uuid(),
 	name: z.string(),
-	adress: z.string(),
+	address: z.string(),
 	publicDisplay: z.boolean(),
 });
+export type Provider = z.infer<typeof providerSchema>;
 
 export const createdProviderSchema = providerSchema.extend({
+	apiKey: z.string(),
+});
+
+export const regenerateKeyProviderSchema = z.object({
 	apiKey: z.string(),
 });
 
@@ -15,7 +20,8 @@ function isPlainHttpUrl(value: string) {
 	try {
 		const url = new URL(value);
 		const isHttps = url.protocol === "https:";
-		return isHttps && !url.username && !url.password;
+		const isHttp = url.protocol === "http:";
+		return (isHttps || isHttp) && !url.username && !url.password;
 	} catch {
 		return false;
 	}
@@ -24,8 +30,10 @@ function isPlainHttpUrl(value: string) {
 export const createProviderSchema = z.object({
 	name: z.string().trim().min(1).
 		max(50),
-	adress: z.string().trim().max(255).
+	address: z.string().trim().max(255).
 		refine(isPlainHttpUrl, { message: "The address must be an https:// URL, without credentials" }),
 	publicDisplay: z.boolean().default(true),
 });
 export type CreateProviderDto = z.infer<typeof createProviderSchema>;
+
+export const editProviderSchema = createProviderSchema.partial();
