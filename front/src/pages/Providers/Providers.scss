@@ -1,0 +1,16 @@
+#providers-page {
+	.providers-header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		padding: 20px 40px;
+
+
+		button {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+	}
+}

@@ -27,3 +27,5 @@ export { providerPermissions, providerPermissionSchema, type ProviderPermission 
 export * from "./errors/error-codes";
 export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
+
+export { type HealthResponseDto } from "./contracts/provider/info/schemas/info.schema";

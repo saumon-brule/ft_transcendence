@@ -136,7 +136,7 @@ model Provider {
     id            Int      @id @default(autoincrement())
     uuid          String   @unique @default(uuid())
     name          String   @unique
-    adress        String   @unique
+    address       String   @unique
     ownerUUID     String
     hashedKey     String   @unique
     publicDisplay Boolean  @default(true)

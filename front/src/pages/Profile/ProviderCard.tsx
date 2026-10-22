@@ -29,7 +29,7 @@ export default function ProviderCard(props: ProviderCardProps) {
 	return <A class="provider-card" href={`/provider/${props.provider.uuid}`}>
 		<div class="provider-info">
 			<h4>{props.provider.name}</h4>
-			<p>{props.provider.adress}</p>
+			<p>{props.provider.address}</p>
 		</div>
 		<div class={`provider-status ${status()}`}>
 			<span class="provider-status-dot" aria-hidden="true" />

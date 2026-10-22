@@ -28,7 +28,7 @@ export class ProvidersService {
 				data: {
 					uuid,
 					name: dto.name,
-					adress: normalizeAddress(dto.adress),
+					address: normalizeAddress(dto.address),
 					publicDisplay: dto.publicDisplay,
 					owner: { connect: { uuid: ownerUuid } },
 					hashedKey: keyHash,
@@ -39,7 +39,7 @@ export class ProvidersService {
 						},
 					},
 				},
-				select: { uuid: true, name: true, adress: true, publicDisplay: true },
+				select: { uuid: true, name: true, address: true, publicDisplay: true },
 			});
 
 			this.logger.log(LogBuilder.provider.created(provider.uuid, ownerUuid));

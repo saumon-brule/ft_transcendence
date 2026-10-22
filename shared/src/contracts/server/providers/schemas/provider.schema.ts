@@ -3,7 +3,7 @@ import { z } from "zod";
 export const providerSchema = z.object({
 	uuid: z.string().uuid(),
 	name: z.string(),
-	adress: z.string(),
+	address: z.string(),
 	publicDisplay: z.boolean(),
 });
 
@@ -24,7 +24,7 @@ function isPlainHttpUrl(value: string) {
 export const createProviderSchema = z.object({
 	name: z.string().trim().min(1).
 		max(50),
-	adress: z.string().trim().max(255).
+	address: z.string().trim().max(255).
 		refine(isPlainHttpUrl, { message: "The address must be an https:// URL, without credentials" }),
 	publicDisplay: z.boolean().default(true),
 });
