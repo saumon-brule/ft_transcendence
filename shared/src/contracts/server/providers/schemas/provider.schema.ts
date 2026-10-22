@@ -20,7 +20,8 @@ function isPlainHttpUrl(value: string) {
 	try {
 		const url = new URL(value);
 		const isHttps = url.protocol === "https:";
-		return isHttps && !url.username && !url.password;
+		const isHttp = url.protocol === "http:";
+		return (isHttps || isHttp) && !url.username && !url.password;
 	} catch {
 		return false;
 	}

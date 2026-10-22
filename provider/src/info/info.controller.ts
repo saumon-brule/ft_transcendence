@@ -18,8 +18,8 @@ export class InfoController {
 	@TsRestHandler(providerContract.info.health)
 	health() {
 		return tsRestHandler(providerContract.info.health, () => Promise.resolve({
-			status: 204 as const,
-			body: {},
+			status: 200,
+			body: { status: "ok" },
 		}));
 	}
 }

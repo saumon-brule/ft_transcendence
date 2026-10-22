@@ -11,6 +11,7 @@ async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
 	app.set("trust proxy", 1);
+	app.enableCors();
 	app.useGlobalFilters(new TsRestValidationFilter());
 
 	if (env.NODE_ENV === "dev") {

@@ -10,6 +10,7 @@ import { summonDeleteProviderPopUp } from "./popUps/deleteProviderPopUp";
 import { client } from "~/api/client";
 import { summonProviderKeyPopUp } from "./popUps/providerKeyPopUp";
 import { summonErrorToast } from "~/components/ui/Toaster";
+import { getProviderClient } from "~/api/providerClients";
 
 export type ProviderStatus = "pinging" | "online" | "offline";
 
@@ -20,13 +21,7 @@ type ProviderCardProps = {
 
 export default function ProviderCard(props: ProviderCardProps) {
 	const [status, setStatus] = createSignal<ProviderStatus>("pinging");
-	const providerClient = initQueryClient(providerContract, {
-		baseUrl: props.provider.address,
-		baseHeaders: {
-			Authorization: () => "Bearer ",
-		},
-	});
-	const providerQueryKeys = queryKeyFromContract(providerContract);
+	const { client: providerClient, keys: providerQueryKeys } = getProviderClient(props.provider.address);
 	const health = providerClient.info.health.createQuery(providerQueryKeys.info.health, () => ({}));
 
 	createEffect(() => {
