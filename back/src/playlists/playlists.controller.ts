@@ -31,16 +31,18 @@ import { ASSET_DIR, COVER_DIR, MAX_SIZE } from "../core/utils/constants";
 
 @Controller()
 export class PlaylistsController {
-	constructor(private readonly playlistsService: PlaylistsService) {}
+	constructor(private readonly playlistsService: PlaylistsService) { }
 
 	@UseInterceptors(FileInterceptor("cover"))
 	@TsRestHandler(playlistsContract.uploadCover)
 	@UseGuards(JwtAuthGuard)
 	public uploadCover(
-		@UploadedFile(new ParseFilePipe({ validators: [
-			new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp)$/ }),
-			new MaxFileSizeValidator({ maxSize: MAX_SIZE }),
-		] }))
+		@UploadedFile(new ParseFilePipe({
+			validators: [
+				new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp)$/ }),
+				new MaxFileSizeValidator({ maxSize: MAX_SIZE }),
+			]
+		}))
 		file: Express.Multer.File,
 		@CurrentUser() authUser: AuthUser,
 	) {

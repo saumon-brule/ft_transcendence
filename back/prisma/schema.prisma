@@ -199,6 +199,8 @@ model PlaylistMusic {
 
     playlist Playlist @relation(fields: [playlistUUID], references: [uuid])
     music    Music    @relation(fields: [musicUUID], references: [uuid])
+
+    @@unique([playlistUUID, musicUUID])
 }
 
 model Music {
