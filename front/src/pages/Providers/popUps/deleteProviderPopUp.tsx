@@ -44,7 +44,7 @@ export const summonDeleteProviderPopUp = (providerUUID: string, onClose?: () => 
 		</div>
 		<div class="pop-up-buttons">
 			<Button type="button" onClick={popUpControls.close} variant="text" size="md">Cancel</Button>
-			<Button type="submit" size="md" disabled={deleteProviderMutation.isPending}>Delete</Button>
+			<Button type="submit" size="md" variant="danger" disabled={deleteProviderMutation.isPending}>Delete</Button>
 		</div>
 	</Form>;
 }, { customClass: "provider-pop-up", onClose });
