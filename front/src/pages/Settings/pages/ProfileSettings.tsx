@@ -1,16 +1,16 @@
-import { Profile, updateMeSchema } from "@flex/shared";
-import { createEffect, createSignal, JSX, Show } from "solid-js";
-import { client } from "~/api/client";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
-import Button from "~/components/inputs/Button";
-import Form from "~/components/inputs/Form/Form";
-import TextInput from "~/components/inputs/TextInput";
-import Toggle from "~/components/inputs/Toggle/Toggle";
-import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
-import { useTranslation } from "~/i18n/context";
-import { validateFromZod } from "~/utils/validateFromZod";
+// import { Profile, updateMeSchema } from "@flex/shared";
+// import { createEffect, createSignal, JSX, Show } from "solid-js";
+// import { client } from "~/api/client";
+// import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+// import Button from "~/components/inputs/Button";
+// import Form from "~/components/inputs/Form/Form";
+// import TextInput from "~/components/inputs/TextInput";
+// import Toggle from "~/components/inputs/Toggle/Toggle";
+// import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+// import { useTranslation } from "~/i18n/context";
+// import { validateFromZod } from "~/utils/validateFromZod";
 
-type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;
+// type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;
 
 export default function ProfileSettings() {
 // 	const profileQuery = useMeProfileQuery();
