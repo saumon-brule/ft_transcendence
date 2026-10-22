@@ -1,20 +1,20 @@
 
 export class LogBuilder {
 	static auth = {
-		registration: (email: string, userId?: number) => ({
+		registration: (email: string, userUUID?: string) => ({
 			action: "AUTH_REGISTRATION",
 			email,
-			userId,
+			userUUID,
 		}),
 		registrationFailed: (email: string, reason: string) => ({
 			action: "AUTH_REGISTRATION_FAILED",
 			email,
 			reason,
 		}),
-		login: (email: string, userId: number) => ({
+		login: (email: string, userUUID: string) => ({
 			action: "AUTH_LOGIN",
 			email,
-			userId,
+			userUUID,
 		}),
 		loginFailed: (email: string, reason: string) => ({
 			action: "AUTH_LOGIN_FAILED",
@@ -25,9 +25,9 @@ export class LogBuilder {
 			action: "AUTH_LOGOUT",
 			userUUID,
 		}),
-		passwordChanged: (userId: number) => ({
+		passwordChanged: (userUUID: string) => ({
 			action: "PASSWORD_CHANGED",
-			userId,
+			userUUID,
 		}),
 		passwordResetRequested: (email: string) => ({
 			action: "PASSWORD_RESET_REQUESTED",
@@ -51,15 +51,15 @@ export class LogBuilder {
 	};
 
 	static token = {
-		created: (purpose: string, userId?: number) => ({
+		created: (purpose: string, userUUID?: string) => ({
 			action: "TOKEN_CREATED",
 			purpose,
-			userId,
+			userUUID,
 		}),
-		validated: (purpose: string, userId?: number) => ({
+		validated: (purpose: string, userUUID?: string) => ({
 			action: "TOKEN_VALIDATED",
 			purpose,
-			userId,
+			userUUID,
 		}),
 		validationFailed: (purpose: string, reason: string) => ({
 			action: "TOKEN_VALIDATION_FAILED",
@@ -69,6 +69,19 @@ export class LogBuilder {
 		cleanupCompleted: (deletedCount: number) => ({
 			action: "TOKENS_CLEANUP_COMPLETED",
 			deletedCount,
+		}),
+	};
+
+	static provider = {
+		created: (providerUuid: string, ownerUuid: string) => ({
+			action: "PROVIDER_CREATED",
+			providerUuid,
+			ownerUuid,
+		}),
+		apiKeyRejected: (reason: string, ip?: string) => ({
+			action: "PROVIDER_API_KEY_REJECTED",
+			reason,
+			ip,
 		}),
 	};
 

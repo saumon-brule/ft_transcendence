@@ -14,6 +14,7 @@ export default function Profile() {
 	const params = useParams<{ uuid: string }>();
 	const profile = useUserProfileQuery(params.uuid);
 
+
 	createEffect(() => {
 		if (profile.isError) {
 			navigate("/home"); // !:! A remettre mais desact car chiant en dev
@@ -27,7 +28,7 @@ export default function Profile() {
 			<ProviderSection title="Connected providers" emptyMessage="No connected providers" providers={data.body.connectedProviders} />
 			<ProviderSection title="Owned providers" emptyMessage="No owned providers" providers={data.body.ownedProviders} />
 			<PlaylistSection playlists={data.body.ownedPlaylists} />
-			<FriendsSection />
+			<FriendsSection friends={data.body.friends}/>
 		</>}</Show>
 	</div>;
 }

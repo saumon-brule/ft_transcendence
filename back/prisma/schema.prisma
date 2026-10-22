@@ -1,194 +1,215 @@
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/generated/prisma"
-  moduleFormat = "cjs"
+    provider     = "prisma-client"
+    output       = "../src/generated/prisma"
+    moduleFormat = "cjs"
 }
 
 datasource db {
-  provider = "postgresql"
+    provider = "postgresql"
 }
 
 // ─── Auth & Users ───────────────────────────────────────────────────────────
 
 model User {
-  id                   Int       @id @default(autoincrement())
-  uuid                 String    @unique @default(uuid())
-  email                String    @unique
-  password             String?
-  username             String
-  emailValidated       Boolean   @default(false)
-  intraId              Int?      @unique
-  language             String?   @default("en")
-  currentlyListeningId Int?
-  listeningUntil       DateTime?
-  listeningPrivate     Boolean   @default(false)
-  avatarUpdatedAt      DateTime  @default(now())
-  updatedAt            DateTime? @updatedAt
-  createdAt            DateTime? @default(now())
+    id                     Int       @id @default(autoincrement())
+    uuid                   String    @unique @default(uuid())
+    email                  String    @unique
+    password               String?
+    username               String
+    emailValidated         Boolean   @default(false)
+    intraId                Int?      @unique
+    language               String?   @default("en")
+    currentlyListeningUUID String?
+    listeningUntil         DateTime?
+    listeningPrivate       Boolean   @default(false)
+    avatarUpdatedAt        DateTime  @default(now())
+    updatedAt              DateTime? @updatedAt
+    createdAt              DateTime? @default(now())
 
-  userRoles          UserRole[]
-  sessions           Session[]
-  tokens             Token[]
-  ownedProviders     Provider[]
-  providers          ProviderUser[]
-  playlists          UserPlaylist[]
-  ownedPlaylists     Playlist[]
-  currentlyListening Music?         @relation(fields: [currentlyListeningId], references: [id])
+    userRoles          UserRole[]
+    sessions           Session[]
+    tokens             Token[]
+    ownedProviders     Provider[]
+    providers          ProviderUser[]
+    playlists          UserPlaylist[]
+    ownedPlaylists     Playlist[]
+    currentlyListening Music?          @relation(fields: [currentlyListeningUUID], references: [uuid])
+    friendsRequests    FriendRequest[] @relation("Requester")
+    friendsReceive     FriendRequest[] @relation("Receiver")
+}
+
+enum FriendStatus {
+    ACCEPTED
+    DENIED
+    PENDING
+}
+
+model FriendRequest {
+    id         Int          @id @default(autoincrement())
+    userUUID   String       @map("user_uuid")
+    friendUUID String       @map("friend_uuid")
+    status     FriendStatus @map("status")
+
+    user   User @relation("Requester", fields: [userUUID], references: [uuid])
+    friend User @relation("Receiver", fields: [friendUUID], references: [uuid])
+
+    @@unique([userUUID, friendUUID])
 }
 
 model Session {
-  id        Int      @id @default(autoincrement())
-  userUUID  String
-  jti       String
-  userAgent String?
-  ipAddress String?
-  createdAt DateTime @default(now())
-  expiresAt DateTime
+    id        Int      @id @default(autoincrement())
+    userUUID  String
+    jti       String
+    userAgent String?
+    ipAddress String?
+    createdAt DateTime @default(now())
+    expiresAt DateTime
 
-  user User @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+    user User @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
 
-  @@unique([userUUID, jti])
+    @@unique([userUUID, jti])
 }
 
 enum TokenPurpose {
-  EMAIL_VERIFICATION
-  EMAIL_RESET
-  PASSWORD_RESET
-  STATE_42AUTH
-  STATE_42LINK
+    EMAIL_VERIFICATION
+    EMAIL_RESET
+    PASSWORD_RESET
+    STATE_42AUTH
+    STATE_42LINK
 }
 
 model Token {
-  id        Int          @id @default(autoincrement())
-  token     String       @unique
-  purpose   TokenPurpose
-  userId    Int?
-  data      Json?
-  expiresAt DateTime
-  createdAt DateTime     @default(now())
+    id        Int          @id @default(autoincrement())
+    token     String       @unique
+    purpose   TokenPurpose
+    userUUID  String?
+    data      Json?
+    expiresAt DateTime
+    createdAt DateTime     @default(now())
 
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user User? @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
 }
 
 // ─── Roles & Permissions ──────────────────────────────────────────────────────
 
 model Role {
-  id           Int     @id @default(autoincrement())
-  name         String  @unique
-  superRole    Boolean @default(false)
-  defaultRole  Boolean @default(false)
-  displayColor String?
+    id           Int     @id @default(autoincrement())
+    name         String  @unique
+    superRole    Boolean @default(false)
+    defaultRole  Boolean @default(false)
+    displayColor String?
 
-  rolePermissions RolePermission[]
-  userRoles       UserRole[]
+    rolePermissions RolePermission[]
+    userRoles       UserRole[]
 }
 
 model RolePermission {
-  id         Int    @id @default(autoincrement())
-  roleId     Int
-  permission String
+    id         Int    @id @default(autoincrement())
+    roleId     Int
+    permission String
 
-  roleRef Role @relation(fields: [roleId], references: [id])
+    roleRef Role @relation(fields: [roleId], references: [id])
 
-  @@unique([roleId, permission])
+    @@unique([roleId, permission])
 }
 
 model UserRole {
-  id     Int @id @default(autoincrement())
-  userId Int
-  roleId Int
+    id       Int    @id @default(autoincrement())
+    userUUID String
+    roleId   Int
 
-  userRef User @relation(fields: [userId], references: [id])
-  roleRef Role @relation(fields: [roleId], references: [id])
+    userRef User @relation(fields: [userUUID], references: [uuid])
+    roleRef Role @relation(fields: [roleId], references: [id])
 
-  @@unique([userId, roleId])
+    @@unique([userUUID, roleId])
 }
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
 
 model AppConfig {
-  key       String   @id
-  value     String
-  updatedAt DateTime @updatedAt
+    key       String   @id
+    value     String
+    updatedAt DateTime @updatedAt
 }
 
 model Provider {
-  id            Int      @id @default(autoincrement())
-  uuid          String   @unique @default(uuid())
-  name          String   @unique
-  adress        String   @unique
-  ownerId       Int
-  publicDisplay Boolean  @default(true)
-  //note      Int?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+    id            Int      @id @default(autoincrement())
+    uuid          String   @unique @default(uuid())
+    name          String   @unique
+    adress        String   @unique
+    ownerUUID     String
+    hashedKey     String   @unique
+    publicDisplay Boolean  @default(true)
+    //note      Int?
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
 
-  users ProviderUser[]
-  owner User           @relation(fields: [ownerId], references: [id])
+    users ProviderUser[]
+    owner User           @relation(fields: [ownerUUID], references: [uuid])
 }
 
 model ProviderUser {
-  id            Int      @id @default(autoincrement())
-  providerId    Int
-  userId        Int
-  publicDisplay Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+    id            Int      @id @default(autoincrement())
+    providerUUID  String
+    userUUID      String
+    publicDisplay Boolean  @default(true)
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
 
-  provider Provider @relation(fields: [providerId], references: [id])
-  user     User     @relation(fields: [userId], references: [id])
+    provider Provider @relation(fields: [providerUUID], references: [uuid])
+    user     User     @relation(fields: [userUUID], references: [uuid])
 
-  @@unique([providerId, userId])
+    @@unique([providerUUID, userUUID])
 }
 
 model Playlist {
-  id        Int      @id @default(autoincrement())
-  uuid      String   @unique @default(uuid())
-  name      String
-  ownerId   Int
-  private   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    id        Int      @id @default(autoincrement())
+    uuid      String   @unique @default(uuid())
+    name      String
+    ownerUUID String
+    private   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  userPlaylists UserPlaylist[]
-  musics        PlaylistMusic[]
-  owner         User            @relation(fields: [ownerId], references: [id])
+    userPlaylists UserPlaylist[]
+    musics        PlaylistMusic[]
+    owner         User            @relation(fields: [ownerUUID], references: [uuid])
 }
 
 model UserPlaylist {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  playlistId Int
-  // role ? (contributor, viewer)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+    id           Int      @id @default(autoincrement())
+    userUUID     String
+    playlistUUID String
+    // role ? (contributor, viewer)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
 
-  user     User     @relation(fields: [userId], references: [id])
-  playlist Playlist @relation(fields: [playlistId], references: [id])
+    user     User     @relation(fields: [userUUID], references: [uuid])
+    playlist Playlist @relation(fields: [playlistUUID], references: [uuid])
 
-  @@unique([userId, playlistId])
+    @@unique([userUUID, playlistUUID])
 }
 
 model PlaylistMusic {
-  id         Int      @id @default(autoincrement())
-  playlistId Int
-  musicId    Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+    id           Int      @id @default(autoincrement())
+    playlistUUID String
+    musicUUID    String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
 
-  playlist Playlist @relation(fields: [playlistId], references: [id])
-  music    Music    @relation(fields: [musicId], references: [id])
+    playlist Playlist @relation(fields: [playlistUUID], references: [uuid])
+    music    Music    @relation(fields: [musicUUID], references: [uuid])
 }
 
 model Music {
-  id        Int      @id @default(autoincrement())
-  uuid      String   @unique @default(uuid())
-  title     String
-  artist    String
-  duration  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    id        Int      @id @default(autoincrement())
+    uuid      String   @unique @default(uuid())
+    title     String
+    artist    String
+    duration  Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  playlistMusics          PlaylistMusic[]
-  currentlyListeningUsers User[]
+    playlistMusics          PlaylistMusic[]
+    currentlyListeningUsers User[]
 }

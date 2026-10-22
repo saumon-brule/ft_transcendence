@@ -2,7 +2,14 @@ import { Injectable, OnModuleInit } from "@nestjs/common";
 import { PrismaService } from "./prisma.service";
 import { PERMISSIONS } from "@flex/shared";
 import * as bcrypt from "bcrypt";
+import { randomUUID } from "node:crypto";
 import { env } from "../env";
+import { generateApiKey } from "../../providersAPI/providerAPIKey";
+
+function providerCredentials() {
+	const uuid = randomUUID();
+	return { uuid, hashedKey: generateApiKey(uuid).keyHash };
+}
 
 const MANAGER_PERMISSIONS = [
 	PERMISSIONS.MEMBERS.MY_PROFILE,
@@ -134,26 +141,26 @@ export class DatabaseBootstrapService implements OnModuleInit {
 
 		await this.prisma.userRole.upsert({
 			where: {
-				userId_roleId: { userId: liamUser.id, roleId: bigboss.id },
+				userUUID_roleId: { userUUID: liamUser.uuid, roleId: bigboss.id },
 			},
 			update: {},
-			create: { userId: liamUser.id, roleId: bigboss.id },
+			create: { userUUID: liamUser.uuid, roleId: bigboss.id },
 		});
 
 		await this.prisma.userRole.upsert({
 			where: {
-				userId_roleId: { userId: chantalUser.id, roleId: manager.id },
+				userUUID_roleId: { userUUID: chantalUser.uuid, roleId: manager.id },
 			},
 			update: {},
-			create: { userId: chantalUser.id, roleId: manager.id },
+			create: { userUUID: chantalUser.uuid, roleId: manager.id },
 		});
 
 		await this.prisma.userRole.upsert({
 			where: {
-				userId_roleId: { userId: machinUser.id, roleId: user.id },
+				userUUID_roleId: { userUUID: machinUser.uuid, roleId: user.id },
 			},
 			update: {},
-			create: { userId: machinUser.id, roleId: user.id },
+			create: { userUUID: machinUser.uuid, roleId: user.id },
 		});
 
 		console.log("Roles asignated : liam→bigboss, chantal→manager, machin→user");
@@ -161,30 +168,32 @@ export class DatabaseBootstrapService implements OnModuleInit {
 		const privateProvider = await this.prisma.provider.upsert({
 			where: { name: "Liam's Private Provider" },
 			update: {
-				ownerId: liamUser.id,
+				ownerUUID: liamUser.uuid,
 				adress: "liam-private-provider",
 				publicDisplay: false,
 			},
 			create: {
 				name: "Liam's Private Provider",
 				adress: "liam-private-provider",
-				ownerId: liamUser.id,
+				ownerUUID: liamUser.uuid,
 				publicDisplay: false,
+				...providerCredentials(),
 			},
 		});
 
 		const publicProvider = await this.prisma.provider.upsert({
 			where: { name: "Liam's Public Provider" },
 			update: {
-				ownerId: liamUser.id,
+				ownerUUID: liamUser.uuid,
 				adress: "liam-public-provider",
 				publicDisplay: true,
 			},
 			create: {
 				name: "Liam's Public Provider",
 				adress: "liam-public-provider",
-				ownerId: liamUser.id,
+				ownerUUID: liamUser.uuid,
 				publicDisplay: true,
+				...providerCredentials(),
 			},
 		});
 
@@ -200,37 +209,37 @@ export class DatabaseBootstrapService implements OnModuleInit {
 		for (const provider of additionalProviders) {
 			await this.prisma.provider.upsert({
 				where: { name: provider.name },
-				update: { ownerId: liamUser.id, adress: provider.adress },
-				create: { ...provider, ownerId: liamUser.id },
+				update: { ownerUUID: liamUser.uuid, adress: provider.adress },
+				create: { ...provider, ownerUUID: liamUser.uuid, ...providerCredentials() },
 			});
 		}
 
 		await this.prisma.providerUser.upsert({
 			where: {
-				providerId_userId: {
-					providerId: privateProvider.id,
-					userId: liamUser.id,
+				providerUUID_userUUID: {
+					providerUUID: privateProvider.uuid,
+					userUUID: liamUser.uuid,
 				},
 			},
 			update: { publicDisplay: false },
 			create: {
-				providerId: privateProvider.id,
-				userId: liamUser.id,
+				providerUUID: privateProvider.uuid,
+				userUUID: liamUser.uuid,
 				publicDisplay: false,
 			},
 		});
 
 		await this.prisma.providerUser.upsert({
 			where: {
-				providerId_userId: {
-					providerId: publicProvider.id,
-					userId: liamUser.id,
+				providerUUID_userUUID: {
+					providerUUID: publicProvider.uuid,
+					userUUID: liamUser.uuid,
 				},
 			},
 			update: { publicDisplay: true },
 			create: {
-				providerId: publicProvider.id,
-				userId: liamUser.id,
+				providerUUID: publicProvider.uuid,
+				userUUID: liamUser.uuid,
 				publicDisplay: true,
 			},
 		});
@@ -242,7 +251,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			{ title: "Blue Hour", artist: "Lumen Coast", duration: 201 },
 			{ title: "Last Signal", artist: "Northbound", duration: 227 },
 		];
-		const musics: { id: number }[] = [];
+		const musics: { uuid: string }[] = [];
 		for (const data of musicData) {
 			const existingMusic = await this.prisma.music.findFirst({
 				where: { title: data.title, artist: data.artist },
@@ -253,14 +262,14 @@ export class DatabaseBootstrapService implements OnModuleInit {
 		}
 
 		const privatePlaylist = await this.prisma.playlist.findFirst({
-			where: { ownerId: liamUser.id, name: "Liam's Private Playlist" },
+			where: { ownerUUID: liamUser.uuid, name: "Liam's Private Playlist" },
 		});
 		let liamPrivatePlaylist = privatePlaylist;
 		if (!liamPrivatePlaylist) {
 			liamPrivatePlaylist = await this.prisma.playlist.create({
 				data: {
 					name: "Liam's Private Playlist",
-					ownerId: liamUser.id,
+					ownerUUID: liamUser.uuid,
 					private: true,
 				},
 			});
@@ -271,14 +280,14 @@ export class DatabaseBootstrapService implements OnModuleInit {
 		});
 
 		const publicPlaylist = await this.prisma.playlist.findFirst({
-			where: { ownerId: liamUser.id, name: "Liam's Public Playlist" },
+			where: { ownerUUID: liamUser.uuid, name: "Liam's Public Playlist" },
 		});
 		let liamPublicPlaylist = publicPlaylist;
 		if (!liamPublicPlaylist) {
 			liamPublicPlaylist = await this.prisma.playlist.create({
 				data: {
 					name: "Liam's Public Playlist",
-					ownerId: liamUser.id,
+					ownerUUID: liamUser.uuid,
 					private: false,
 				},
 			});
@@ -290,50 +299,50 @@ export class DatabaseBootstrapService implements OnModuleInit {
 
 		await this.prisma.userPlaylist.upsert({
 			where: {
-				userId_playlistId: {
-					userId: liamUser.id,
-					playlistId: liamPrivatePlaylist.id,
+				userUUID_playlistUUID: {
+					userUUID: liamUser.uuid,
+					playlistUUID: liamPrivatePlaylist.uuid,
 				},
 			},
 			update: {},
 			create: {
-				userId: liamUser.id,
-				playlistId: liamPrivatePlaylist.id,
+				userUUID: liamUser.uuid,
+				playlistUUID: liamPrivatePlaylist.uuid,
 			},
 		});
 		await this.prisma.userPlaylist.upsert({
 			where: {
-				userId_playlistId: {
-					userId: liamUser.id,
-					playlistId: liamPublicPlaylist.id,
+				userUUID_playlistUUID: {
+					userUUID: liamUser.uuid,
+					playlistUUID: liamPublicPlaylist.uuid,
 				},
 			},
 			update: {},
 			create: {
-				userId: liamUser.id,
-				playlistId: liamPublicPlaylist.id,
+				userUUID: liamUser.uuid,
+				playlistUUID: liamPublicPlaylist.uuid,
 			},
 		});
 
-		const addMusicToPlaylist = async (playlistId: number, musicId: number) => {
+		const addMusicToPlaylist = async (playlistUUID: string, musicUUID: string) => {
 			const existingLink = await this.prisma.playlistMusic.findFirst({
-				where: { playlistId, musicId },
+				where: { playlistUUID, musicUUID },
 			});
 			if (!existingLink) {
-				await this.prisma.playlistMusic.create({ data: { playlistId, musicId } });
+				await this.prisma.playlistMusic.create({ data: { playlistUUID, musicUUID } });
 			}
 		};
 		for (const music of musics.slice(0, 2)) {
-			await addMusicToPlaylist(liamPrivatePlaylist.id, music.id);
+			await addMusicToPlaylist(liamPrivatePlaylist.uuid, music.uuid);
 		}
 		for (const music of musics.slice(2)) {
-			await addMusicToPlaylist(liamPublicPlaylist.id, music.id);
+			await addMusicToPlaylist(liamPublicPlaylist.uuid, music.uuid);
 		}
 
 		await this.prisma.user.update({
-			where: { id: liamUser.id },
+			where: { uuid: liamUser.uuid },
 			data: {
-				currentlyListeningId: musics[0].id,
+				currentlyListeningUUID: musics[0].uuid,
 				listeningUntil: new Date(Date.now() + 5 * 60 * 1000),
 				listeningPrivate: false,
 			},

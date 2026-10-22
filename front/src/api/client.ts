@@ -5,7 +5,7 @@ import { ApiFetcher, tsRestFetchApi } from "@ts-rest/core";
 import { env } from "~/env";
 import { doRefresh } from "./doRefresh";
 import z from "zod";
-import { error401Schema } from "@flex/shared";
+import { serverBaseError401Schema } from "@flex/shared";
 import { summonWarningToast } from "~/components/ui/Toaster";
 import { t } from "~/i18n/context";
 import { queryKeyFromContract } from "./utils/queryKeys";
@@ -20,7 +20,7 @@ const fetchWithRefresh: ApiFetcher = async (args) => {
 	if (response.status !== 401
 		|| !response.body
 		|| (response.body
-			&& (response.body as z.infer<typeof error401Schema>).code !== "INVALID_TOKEN")
+			&& (response.body as z.infer<typeof serverBaseError401Schema>).code !== "INVALID_TOKEN")
 	) return response;
 
 	const accessToken = await doRefresh();

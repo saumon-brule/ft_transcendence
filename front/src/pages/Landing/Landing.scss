@@ -1,11 +1,16 @@
 @use "../../styles/variables" as vars;
 
 #landing-page {
+	scroll-behavior: smooth;
+
 	& > header {
 		display: flex;
 		justify-content: space-between;
 		padding: 1rem;
 		background-color: var(--background-surface);
+		position: fixed;
+		width: 100%;
+		z-index: 10;
 
 		.logo {
 			padding: 0.4rem;
@@ -23,14 +28,34 @@
 
 	.hero-banner {
 		height: 100vh;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
 		h1 {
-			position: relative;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, -50%);
 			font-family: vars.$font-stack-fancy;
-			font-size: 16rem;
+			font-size: 14rem;
 			width: fit-content;
+			font-weight: 500;
+		}
+
+		p {
+			font-size: 2rem;
+			font-weight: 800;
+		}
+
+		.hero-cta {
+			margin-top: 2rem;
+			display: flex;
+			gap: 1rem;
+			align-items: center;
+			justify-content: center;
+
+			a, button {
+				font-size: 1.2rem;
+			}
 		}
 	}
 
@@ -46,23 +71,29 @@
 	.section-container {
 		display: flex;
 		flex-direction: column;
-		padding: 35vh;
-		gap: 70vh;
 
 		.appearing-section {
+			background-color: var(--background-page);
 			position: relative;
 			opacity: 0;
 			transform: translateY(-25px);
 			transition:
 				opacity 1s ease-out 200ms,
 				transform 2s ease-out 200ms;
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 2rem;
 
 			h2 {
 				text-align: center;
+				font-weight: 500;
 			}
 		}
 
-		& > .visible {
+		.visible {
 			opacity: 1;
 			transform: translateY(0);
 		}
@@ -70,6 +101,194 @@
 		h2 {
 			font-family: vars.$font-stack-fancy;
 			font-size: 8rem;
+			line-height: 8rem;
 		}
+
+		.bottom-sections {
+			background-color: var(--background-page);
+		}
+
+
+		.whats-flex {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			gap: 4rem;
+
+			.title-section {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 1rem;
+				width: 50%;
+				
+
+				p {
+					margin-top: 1rem;
+					font-size: 1.5rem;
+				}
+			}
+
+			.content-section {
+				width: 50%;
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+
+				.content {
+					h3 {
+						font-family: vars.$font-stack-fancy;
+						font-size: 2rem;
+						font-weight: 300;
+					}
+					p {
+						font-size: 1.2rem;
+					}
+				}
+				
+				.separator {
+					height: 1px;
+					background-color: var(--background-overlay);
+					margin: 1rem 0;
+				}
+			}
+		}
+
+		.get-started {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			gap: 4rem;
+
+			.title-section {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 1rem;
+				width: 50%;
+				
+
+				p {
+					margin-top: 1rem;
+					font-size: 1.5rem;
+				}
+			}
+
+			.content-section {
+				width: 50%;
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+
+				.content {
+					h3 {
+						font-family: vars.$font-stack-fancy;
+						font-size: 2rem;
+						font-weight: 300;
+					}
+					p {
+						font-size: 1.2rem;
+					}
+					code {
+						display: block;
+						width: 100%;
+						box-sizing: border-box;
+						margin: 1rem 0;
+						padding: 1rem 1.25rem;
+						background-color: var(--background-card);
+						border: 1px solid var(--background-overlay);
+						border-radius: 0.5rem;
+						font-size: 0.95rem;
+						line-height: 1.6;
+						white-space: pre;
+						overflow-x: auto;
+					}
+				}
+
+				.separator {
+					height: 1px;
+					background-color: var(--background-overlay);
+					margin: 1rem 0;
+				}
+			}
+		}
+
+		.contribute {
+			h2 {
+				margin-bottom: 3rem;
+			}
+			p {
+				font-size: 1.5rem;
+			}
+		}
+
+		@media (max-width: 1184px) {
+			.appearing-section {
+				flex-direction: column;
+				padding: 4rem;
+
+				.title-section {
+					width: 100%;
+				}
+				.content-section {
+					width: 100%;
+				}
+			}
+		}
+
+		@media (max-width: 600px) {
+			.appearing-section {
+				padding: 2rem;
+
+				.title-section {
+					h2 {
+						font-size: 5rem;
+						line-height: 5rem;
+					}
+					p  {
+						font-size: 1.25rem;
+					}
+				}
+				.content-section > .content {
+					h3 {
+						font-size: 1.5rem;
+					}
+					p {
+						font-size: 1rem;
+					}
+				}
+
+				h2 {
+					font-size: 5rem;
+					line-height: 5rem;
+				}
+				.mobile-center {
+					font-size: 1.25rem;
+					text-align: center;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 600px) {
+		.hero-banner {
+			h1 {
+				font-size: 8rem;
+				line-height: 10rem;
+			}
+			p {
+				font-size: 1.25rem;
+			}
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#landing-page {
+		scroll-behavior: auto;
 	}
 }

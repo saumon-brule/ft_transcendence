@@ -55,6 +55,8 @@ export default {
 			},
 		},
 		settings: {
+			accountLink: "Account",
+			profileLink: "Profile",
 			edit: "edit",
 			set: "set",
 			confirm: "confirm",
