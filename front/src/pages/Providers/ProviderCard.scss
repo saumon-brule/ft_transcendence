@@ -17,27 +17,41 @@
 		background-color: var(--background-overlay);
 	}
 
-	.provider-info {
-		min-width: 0;
-
-		h4,
-		p {
-			margin: 0;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
+	.provider-details {
+		.provider-info {
+			min-width: 0;
+	
+			h4,
+			p {
+				margin: 0;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+	
+			h4 {
+				font-size: 16px;
+			}
+	
+			p {
+				margin-top: 6px;
+				color: var(--text-secondary);
+				font-size: 14px;
+			}
 		}
 
-		h4 {
-			font-size: 16px;
-		}
-
-		p {
+		.provider-actions {
+			display: flex;
+			align-items: center;
+			gap: 12px;
 			margin-top: 6px;
-			color: var(--text-secondary);
-			font-size: 14px;
+
+			button {
+				padding: 0;
+			}
 		}
 	}
+
 
 	.provider-status {
 		display: inline-flex;

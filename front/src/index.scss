@@ -64,6 +64,15 @@ a:focus-visible {
 	text-decoration: underline;
 }
 
+a.white-variant {
+	font-weight: normal;
+	color: var(--text-primary);
+}
+
+a.white-variant:hover {
+	text-decoration: underline;
+}
+
 p {
 	margin: 0;
 }
@@ -85,4 +94,19 @@ ul {
 
 .page {
 	width: 100%;
+}
+
+code {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 1rem 0;
+	padding: 1rem 1.25rem;
+	background-color: var(--background-card);
+	border: 1px solid var(--background-overlay);
+	border-radius: 0.5rem;
+	font-size: 0.95rem;
+	line-height: 1.6;
+	white-space: pre;
+	overflow-x: auto;
 }

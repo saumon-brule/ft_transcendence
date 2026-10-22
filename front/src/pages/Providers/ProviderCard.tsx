@@ -1,10 +1,15 @@
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { createEffect, createSignal, onMount, Show } from "solid-js";
 import { A } from "@solidjs/router";
-import { HealthResponseDto, providerContract, type User } from "@flex/shared";
+import { providerContract, type User } from "@flex/shared";
 import { initQueryClient } from "@ts-rest/solid-query";
-
+import Button from "~/components/inputs/Button";
 import "./ProviderCard.scss";
 import { queryKeyFromContract } from "~/api/utils/queryKeys";
+import { summonEditProviderPopUp } from "./popUps/editProviderPopUp";
+import { summonDeleteProviderPopUp } from "./popUps/deleteProviderPopUp";
+import { client } from "~/api/client";
+import { summonProviderKeyPopUp } from "./popUps/providerKeyPopUp";
+import { summonErrorToast } from "~/components/ui/Toaster";
 
 export type ProviderStatus = "pinging" | "online" | "offline";
 
@@ -33,16 +38,24 @@ export default function ProviderCard(props: ProviderCardProps) {
 	});
 
 	onMount(() => {
-		// const delay = 300 + Math.floor(Math.random() * 600);
-		// const timeout = window.setTimeout(() => {
-		// 	setStatus(Math.random() < 0.7 ? "online" : "offline");
-		// }, delay);
 
-
-		// console.log(health);
-
-		// onCleanup(() => window.clearTimeout(timeout));
 	});
+
+	const regenerateKeyMutation = client.providers.regenerateKey.createMutation();
+
+	function regenerateKey(uuid: string) {
+		regenerateKeyMutation.mutate(
+			{ params: { uuid } },
+			{
+				onSuccess: (data) => {
+					summonProviderKeyPopUp(data.body.apiKey);
+				},
+				onError: () => {
+					summonErrorToast("Failed to regenerate provider key");
+				},
+			},
+		);
+	}
 
 	const statusLabel = () => {
 		if (status() === "online") return "Online";
@@ -51,9 +64,18 @@ export default function ProviderCard(props: ProviderCardProps) {
 	};
 
 	return <div class="provider-card">
-		<div class="provider-info">
-			<h4>{props.provider.name}</h4>
-			<p>{props.provider.address}</p>
+		<div class="provider-details">
+			<div class="provider-info">
+				<h4><A href={`/provider/${props.provider.uuid}`}>
+					{props.provider.name}
+				</A></h4>
+				<p>{props.provider.address}</p>
+			</div>
+			<Show when={props.mine}><div class="provider-actions">
+				<Button type="button" onClick={() => summonEditProviderPopUp(props.provider)} variant="text" size="md">Edit</Button>
+				<Button type="button" onClick={() => regenerateKey(props.provider.uuid)} variant="text" size="md">Regenerate Key</Button>
+				<Button type="button" onClick={() => summonDeleteProviderPopUp(props.provider.uuid)} variant="text" size="md">Delete</Button>
+			</div></Show>
 		</div>
 		<div class={`provider-status ${status()}`}>
 			<span class="provider-status-dot" aria-hidden="true" />

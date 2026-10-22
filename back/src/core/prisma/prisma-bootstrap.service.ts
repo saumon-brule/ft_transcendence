@@ -197,13 +197,13 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			},
 		});
 
-		const additionalProviders = [
-			{ name: "Liam's Provider 3", address: "https://liam-provider-3" },
-			{ name: "Liam's Provider 4", address: "https://liam-provider-4" },
-			{ name: "Liam's Provider 5", address: "https://liam-provider-5" },
-			{ name: "Liam's Provider 6", address: "https://liam-provider-6" },
-			{ name: "Liam's Provider 7", address: "https://liam-provider-7" },
-			{ name: "Liam's Provider 8", address: "https://liam-provider-8" },
+		const additionalProviders: { name: string; address: string }[] = [
+			// { name: "Liam's Provider 3", address: "https://liam-provider-3" },
+			// { name: "Liam's Provider 4", address: "https://liam-provider-4" },
+			// { name: "Liam's Provider 5", address: "https://liam-provider-5" },
+			// { name: "Liam's Provider 6", address: "https://liam-provider-6" },
+			// { name: "Liam's Provider 7", address: "https://liam-provider-7" },
+			// { name: "Liam's Provider 8", address: "https://liam-provider-8" },
 		];
 
 		for (const provider of additionalProviders) {

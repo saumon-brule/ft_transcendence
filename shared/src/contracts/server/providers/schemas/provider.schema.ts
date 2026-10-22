@@ -6,8 +6,13 @@ export const providerSchema = z.object({
 	address: z.string(),
 	publicDisplay: z.boolean(),
 });
+export type Provider = z.infer<typeof providerSchema>;
 
 export const createdProviderSchema = providerSchema.extend({
+	apiKey: z.string(),
+});
+
+export const regenerateKeyProviderSchema = z.object({
 	apiKey: z.string(),
 });
 
@@ -29,3 +34,5 @@ export const createProviderSchema = z.object({
 	publicDisplay: z.boolean().default(true),
 });
 export type CreateProviderDto = z.infer<typeof createProviderSchema>;
+
+export const editProviderSchema = createProviderSchema.partial();

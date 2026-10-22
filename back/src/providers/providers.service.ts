@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
 import type { CreateProviderDto } from "@flex/shared";
 import { Prisma } from "../generated/prisma/client";
@@ -19,7 +19,7 @@ export class ProvidersService {
 		private readonly logger: WinstonLoggerService,
 	) {}
 
-	async create(ownerUuid: string, dto: CreateProviderDto) {
+	async create(ownerUUID: string, dto: CreateProviderDto) {
 		const uuid = randomUUID();
 		const { key, keyHash } = generateApiKey(uuid);
 
@@ -30,19 +30,19 @@ export class ProvidersService {
 					name: dto.name,
 					address: normalizeAddress(dto.address),
 					publicDisplay: dto.publicDisplay,
-					owner: { connect: { uuid: ownerUuid } },
+					owner: { connect: { uuid: ownerUUID } },
 					hashedKey: keyHash,
 					users: {
 						create: {
 							publicDisplay: dto.publicDisplay,
-							user: { connect: { uuid: ownerUuid } },
+							user: { connect: { uuid: ownerUUID } },
 						},
 					},
 				},
 				select: { uuid: true, name: true, address: true, publicDisplay: true },
 			});
 
-			this.logger.log(LogBuilder.provider.created(provider.uuid, ownerUuid));
+			this.logger.log(LogBuilder.provider.created(provider.uuid, ownerUUID));
 			return { ...provider, apiKey: key };
 		} catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
@@ -51,4 +51,54 @@ export class ProvidersService {
 			throw error;
 		}
 	}
+
+	async edit(ownerUUID: string, uuid: string, dto: Partial<CreateProviderDto>) {
+		const provider = await this.prisma.provider.findUnique({ where: { uuid, ownerUUID: ownerUUID } });
+
+		if (!provider) {
+			throw new NotFoundException("Provider not found or you do not have permission to edit it");
+		}
+
+		const updatedProvider = await this.prisma.provider.update({
+			where: { uuid: provider.uuid },
+			data: {
+				name: dto.name ?? provider.name,
+				address: dto.address
+					? normalizeAddress(dto.address)
+					: provider.address,
+				publicDisplay: dto.publicDisplay ?? provider.publicDisplay,
+			},
+			select: { uuid: true, name: true, address: true, publicDisplay: true },
+		});
+
+		return updatedProvider;
+	}
+
+	async delete(ownerUUID: string, uuid: string) {
+		const provider = await this.prisma.provider.findUnique({ where: { uuid, ownerUUID: ownerUUID } });
+
+		if (!provider) {
+			throw new NotFoundException("Provider not found or you do not have permission to delete it");
+		}
+
+		await this.prisma.provider.delete({ where: { uuid: provider.uuid } });
+	}
+
+	async regenerateKey(ownerUUID: string, uuid: string) {
+		const provider = await this.prisma.provider.findUnique({ where: { uuid, ownerUUID: ownerUUID } });
+
+		if (!provider) {
+			throw new NotFoundException("Provider not found or you do not have permission to edit it");
+		}
+
+		const { key, keyHash } = generateApiKey(provider.uuid);
+
+		await this.prisma.provider.update({
+			where: { uuid: provider.uuid },
+			data: { hashedKey: keyHash },
+		});
+
+		return { apiKey: key };
+	}
+
 }
