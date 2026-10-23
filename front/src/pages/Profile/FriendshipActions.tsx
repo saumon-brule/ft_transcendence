@@ -1,5 +1,5 @@
 import { createMemo, Match, Switch } from "solid-js";
-import { appContract } from "@flex/shared";
+import { appContract, type FriendRelation, type FriendRequestAnswer, type ShortUser } from "@flex/shared";
 import { type ClientInferResponses } from "@ts-rest/core";
 import { queryClient } from "~/App";
 import { client, queryKeys } from "~/api/client";
@@ -8,7 +8,6 @@ import Button from "~/components/inputs/Button";
 import { summonErrorToast } from "~/components/ui/Toaster";
 
 type FriendshipStatus = "loading" | "friends" | "incoming" | "outgoing" | "none";
-type ShortUser = { uuid: string; username: string };
 type MeResponse = ClientInferResponses<typeof appContract.users.me, 200>;
 type UserResponse = ClientInferResponses<typeof appContract.users.getUser, 200>;
 type RelationResponse = ClientInferResponses<typeof appContract.friends.isFriendWith, 200>;
@@ -41,9 +40,9 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 		|| removeFriendMutation.isPending
 		|| manageRequestMutation.isPending;
 
-	function setRelation(isFriend: RelationResponse["body"]["isFriend"]) {
+	function setRelation(targetUuid: string, isFriend: FriendRelation) {
 		queryClient.setQueryData<RelationResponse>(
-			queryKeys.friends.isFriendWith([props.targetUuid]),
+			queryKeys.friends.isFriendWith([targetUuid]),
 			(old) => old && { ...old, body: { isFriend } },
 		);
 	}
@@ -55,8 +54,7 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 		);
 	}
 
-	function updateTargetFriends(update: (friends: ShortUser[]) => ShortUser[]) {
-		const targetUuid = props.targetUuid;
+	function updateTargetFriends(targetUuid: string, update: (friends: ShortUser[]) => ShortUser[]) {
 		queryClient.setQueryData<UserResponse>(
 			queryKeys.users.getUser([targetUuid]),
 			(old) => old && { ...old, body: { ...old.body, friends: update(old.body.friends) } },
@@ -64,45 +62,49 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 	}
 
 	function sendRequest() {
+		const targetUuid = props.targetUuid;
 		makeRequestMutation.mutate(
-			{ body: { targetUuid: props.targetUuid } },
+			{ body: { targetUuid } },
 			{
-				onSuccess: () => setRelation("PENDING"),
+				onSuccess: () => setRelation(targetUuid, "PENDING"),
 				onError: () => summonErrorToast("Failed to send friend request"),
 			},
 		);
 	}
 
 	function removeFriend() {
+		const targetUuid = props.targetUuid;
+		const meUuid = props.meUuid;
 		removeFriendMutation.mutate(
-			{ params: { friendUuid: props.targetUuid } },
+			{ params: { friendUuid: targetUuid } },
 			{
 				onSuccess: () => {
-					setRelation("NO");
-					updateMe((body) => ({ friends: body.friends.filter((f) => f.uuid !== props.targetUuid) }));
-					updateTargetFriends((friends) => friends.filter((f) => f.uuid !== props.meUuid));
+					setRelation(targetUuid, "NO");
+					updateMe((body) => ({ friends: body.friends.filter((f) => f.uuid !== targetUuid) }));
+					updateTargetFriends(targetUuid, (friends) => friends.filter((f) => f.uuid !== meUuid));
 				},
 				onError: () => summonErrorToast("Failed to remove friend"),
 			},
 		);
 	}
 
-	function answerRequest(answer: "ACCEPTED" | "DENIED") {
+	function answerRequest(answer: FriendRequestAnswer) {
+		const targetUuid = props.targetUuid;
 		manageRequestMutation.mutate(
-			{ params: { requesterUuid: props.targetUuid }, body: { status: answer } },
+			{ params: { requesterUuid: targetUuid }, body: { status: answer } },
 			{
 				onSuccess: () => {
-					setRelation(answer === "ACCEPTED" ? "YES" : "NO");
+					setRelation(targetUuid, answer === "ACCEPTED" ? "YES" : "NO");
 
 					if (answer === "DENIED") return;
 
-					const requester = me.data?.body.friendRequests.find((f) => f.uuid === props.targetUuid);
+					const requester = me.data?.body.friendRequests.find((f) => f.uuid === targetUuid);
 					updateMe((body) => ({
-						friendRequests: body.friendRequests.filter((f) => f.uuid !== props.targetUuid),
+						friendRequests: body.friendRequests.filter((f) => f.uuid !== targetUuid),
 						friends: requester ? [...body.friends, requester] : body.friends,
 					}));
 					if (me.data) {
-						updateTargetFriends((friends) => [...friends, { uuid: me.data.body.uuid, username: me.data.body.username }]);
+						updateTargetFriends(targetUuid, (friends) => [...friends, { uuid: me.data.body.uuid, username: me.data.body.username }]);
 					}
 				},
 				onError: () => summonErrorToast("Failed to answer friend request"),

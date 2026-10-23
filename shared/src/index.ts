@@ -7,12 +7,13 @@ export { appConfigContract } from "./contracts/server/appConfig/app-config.contr
 export { playlistsContract } from "./contracts/server/playlists/playlists.contract";
 export { providerContract } from "./contracts/provider/provider.contract";
 export { friendsContract } from "./contracts/server/users/friends.contract";
+export { type FriendRelation, type FriendRequestAnswer } from "./contracts/server/users/schemas/friends.schema";
 
 export { loginSchema, type LoginDto } from "./contracts/server/auth/schemas/login.schema";
 export { requestEmailResetSchema, resetEmailSchema, type RequestEmailResetDto, type ResetEmailDto } from "./contracts/server/auth/schemas/email.schema";
 export { registerSchema, type RegisterDto } from "./contracts/server/auth/schemas/register.schema";
 export { resetPasswordSchema, changePasswordSchema, type RequestPasswordResetDto, type ChangePasswordDto } from "./contracts/server/auth/schemas/password.schema";
-export { userSchema, meSchema, updateMeSchema, type User, type Profile, type UpdateMeDto } from "./contracts/server/users/schemas/user.schema";
+export { userSchema, meSchema, updateMeSchema, type User, type ShortUser, type Profile, type UpdateMeDto } from "./contracts/server/users/schemas/user.schema";
 export { createProviderSchema, editProviderSchema, type CreateProviderDto, type Provider } from "./contracts/server/providers/schemas/provider.schema";
 export { createRoleSchema, roleUsersResponseSchema, roleResponseSchema, rolesListDetailedResponseSchema, rolesListResponseSchema } from "./contracts/server/roles/schemas/role.schema";
 export { getAppVariables } from "./contracts/server/appConfig/schemas/app-config.schema";
