@@ -1,11 +1,12 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
-import type { CreateProviderDto } from "@flex/shared";
+import type { CreateProviderDto, ProviderTokenScope } from "@flex/shared";
 import { Prisma } from "../generated/prisma/client";
 import { LogBuilder } from "../core/logging/log-builder";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { generateApiKey } from "../providersAPI/providerAPIKey";
+import { ProviderSigningKeyService } from "../providersAPI/providerSigningKey.service";
 
 function normalizeAddress(address: string) {
 	const url = new URL(address);
@@ -17,6 +18,7 @@ export class ProvidersService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly logger: WinstonLoggerService,
+		private readonly signingKey: ProviderSigningKeyService,
 	) {}
 
 	async create(ownerUUID: string, dto: CreateProviderDto) {
@@ -101,4 +103,21 @@ export class ProvidersService {
 		return { apiKey: key };
 	}
 
+	issueAccessToken(userUUID: string, uuid: string) {
+		return this.issueToken(userUUID, uuid, "access");
+	}
+
+	issueRequestAccessToken(userUUID: string, uuid: string) {
+		return this.issueToken(userUUID, uuid, "request-access");
+	}
+
+	private async issueToken(userUUID: string, uuid: string, scope: ProviderTokenScope) {
+		const provider = await this.prisma.provider.findUnique({ where: { uuid }, select: { uuid: true } });
+
+		if (!provider) {
+			throw new NotFoundException("Provider not found");
+		}
+
+		return this.signingKey.signUserToken(userUUID, provider.uuid, scope);
+	}
 }

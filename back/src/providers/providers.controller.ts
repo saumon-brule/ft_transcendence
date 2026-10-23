@@ -46,4 +46,24 @@ export class ProvidersController {
 			return { status: 200, body: provider };
 		});
 	}
+
+	@Throttle({ default: { limit: 30, ttl: 60000 } })
+	@UseGuards(JwtAuthGuard)
+	@TsRestHandler(serverContract.providers.accessToken)
+	public accessToken(@CurrentUser() user: AuthUser) {
+		return tsRestHandler(serverContract.providers.accessToken, async ({ params }) => {
+			const token = await this.providersService.issueAccessToken(user.uuid, params.uuid);
+			return { status: 200, body: token };
+		});
+	}
+
+	@Throttle({ default: { limit: 30, ttl: 60000 } })
+	@UseGuards(JwtAuthGuard)
+	@TsRestHandler(serverContract.providers.requestAccessToken)
+	public requestAccessToken(@CurrentUser() user: AuthUser) {
+		return tsRestHandler(serverContract.providers.requestAccessToken, async ({ params }) => {
+			const token = await this.providersService.issueRequestAccessToken(user.uuid, params.uuid);
+			return { status: 200, body: token };
+		});
+	}
 }
