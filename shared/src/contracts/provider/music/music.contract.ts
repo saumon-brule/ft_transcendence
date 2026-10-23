@@ -1,6 +1,5 @@
 import { initContract } from "@ts-rest/core";
 import {
-	audioUrlResponseSchema,
 	createMusicSchema,
 	musicDetailedItemSchema,
 	musicListResponseSchema,
@@ -56,15 +55,6 @@ export const musicContract = c.router(
 				404: commonError404Schema,
 			},
 		},
-		audioUrl: {
-			method: "GET",
-			path: "/:uuid/audio-url",
-			pathParams: uuidParamSchema,
-			responses: {
-				200: audioUrlResponseSchema,
-				404: commonError404Schema,
-			},
-		},
 		uploadAudio: {
 			method: "PUT",
 			path: "/:uuid/audio",
@@ -76,6 +66,28 @@ export const musicContract = c.router(
 				404: commonError404Schema,
 				413: commonError413Schema,
 				415: commonError415Schema,
+			},
+		},
+		uploadCover: {
+			method: "PUT",
+			path: "/:uuid/cover",
+			pathParams: uuidParamSchema,
+			contentType: "multipart/form-data",
+			body: c.type<{ file: File }>(),
+			responses: {
+				204: null,
+				404: commonError404Schema,
+				413: commonError413Schema,
+				415: commonError415Schema,
+			},
+		},
+		removeCover: {
+			method: "DELETE",
+			path: "/:uuid/cover",
+			pathParams: uuidParamSchema,
+			responses: {
+				204: null,
+				404: commonError404Schema,
 			},
 		},
 	},

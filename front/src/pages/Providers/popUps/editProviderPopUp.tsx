@@ -1,4 +1,4 @@
-import { appContract, editProviderSchema, Provider } from "@flex/shared";
+import { serverContract, editProviderSchema, Provider } from "@flex/shared";
 import { type ClientInferResponses } from "@ts-rest/core";
 import { onMount } from "solid-js";
 import { queryClient } from "~/App";
@@ -29,7 +29,7 @@ export const summonEditProviderPopUp = (provider: Provider, onClose?: () => void
 			{
 				onSuccess: (data) => {
 					const provider = data.body;
-					queryClient.setQueryData<ClientInferResponses<typeof appContract.users.me, 200>>(
+					queryClient.setQueryData<ClientInferResponses<typeof serverContract.users.me, 200>>(
 						queryKeys.users.me(),
 						(old) => old && {
 							...old,

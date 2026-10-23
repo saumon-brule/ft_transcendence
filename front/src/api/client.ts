@@ -1,5 +1,5 @@
 import { initQueryClient } from "@ts-rest/solid-query";
-import { appContract } from "@flex/shared";
+import { serverContract } from "@flex/shared";
 import { auth, authActions } from "../store/auth.store";
 import { ApiFetcher, tsRestFetchApi } from "@ts-rest/core";
 import { env } from "~/env";
@@ -41,7 +41,7 @@ const fetchWithRefresh: ApiFetcher = async (args) => {
 	});
 };
 
-export const client = initQueryClient(appContract, {
+export const client = initQueryClient(serverContract, {
 	baseUrl: env.VITE_API_URL,
 	baseHeaders: {
 		Authorization: () => `Bearer ${auth.accessToken}`,
@@ -50,4 +50,4 @@ export const client = initQueryClient(appContract, {
 	validateResponse: true,
 });
 
-export const queryKeys = queryKeyFromContract(appContract);
+export const queryKeys = queryKeyFromContract(serverContract);

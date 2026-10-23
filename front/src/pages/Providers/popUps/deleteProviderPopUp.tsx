@@ -1,4 +1,4 @@
-import { appContract } from "@flex/shared";
+import { serverContract } from "@flex/shared";
 import { type ClientInferResponses } from "@ts-rest/core";
 import { queryClient } from "~/App";
 import { client, queryKeys } from "~/api/client";
@@ -17,7 +17,7 @@ export const summonDeleteProviderPopUp = (providerUUID: string, onClose?: () => 
 			{ params: { uuid: providerUUID } },
 			{
 				onSuccess: () => {
-					queryClient.setQueryData<ClientInferResponses<typeof appContract.users.me, 200>>(
+					queryClient.setQueryData<ClientInferResponses<typeof serverContract.users.me, 200>>(
 						queryKeys.users.me(),
 						(old) => old && {
 							...old,
