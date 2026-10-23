@@ -4,7 +4,7 @@ import { PERMISSIONS } from "@flex/shared";
 import * as bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
 import { env } from "../env";
-import { generateApiKey } from "../../providersAPI/providerAPIKey";
+import { generateApiKey } from "../../providersAPI/providersAPIKey";
 
 function providerCredentials() {
 	const uuid = randomUUID();
