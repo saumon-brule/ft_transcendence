@@ -9,6 +9,7 @@ import { InfoModule } from "./info/info.module";
 import { MemberModule } from "./member/member.module";
 import { MusicModule } from "./music/music.module";
 import { RoleModule } from "./role/role.module";
+import { SearchModule } from "./search/search.module";
 import { SettingModule } from "./setting/setting.module";
 
 @Module({
@@ -24,6 +25,7 @@ import { SettingModule } from "./setting/setting.module";
 		MusicModule,
 		ArtistModule,
 		AlbumModule,
+		SearchModule,
 	],
 })
 export class AppModule {}

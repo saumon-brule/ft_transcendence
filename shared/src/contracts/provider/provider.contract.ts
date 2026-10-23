@@ -8,6 +8,7 @@ import { musicContract } from "./music/music.contract";
 import { artistContract } from "./artist/artist.contract";
 import { albumContract } from "./album/album.contract";
 import { mediaContract } from "./media/media.contract";
+import { searchContract } from "./search/search.contract";
 import { commonError400Schema, commonError429Schema, providerError401Schema, providerError403Schema } from "../../errors/error-schemas";
 
 const c = initContract();
@@ -23,6 +24,7 @@ export const providerContract = c.router(
 		artist: artistContract,
 		album: albumContract,
 		media: mediaContract,
+		search: searchContract,
 	},
 	{
 		commonResponses: {
