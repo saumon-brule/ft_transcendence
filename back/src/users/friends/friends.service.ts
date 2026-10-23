@@ -65,8 +65,16 @@ export class FriendsService {
 				data: { status: "ACCEPTED" },
 			});
 		}
-		return this.prisma.friendRequest.create({
-			data: {
+		return this.prisma.friendRequest.upsert({
+			where: {
+				userUUID_friendUUID: {
+					userUUID: userUUID,
+					friendUUID: targetUUID,
+				},
+				status: "DENIED",
+			},
+			update: { status: "PENDING" },
+			create: {
 				userUUID: userUUID,
 				friendUUID: targetUUID,
 				status: "PENDING",
