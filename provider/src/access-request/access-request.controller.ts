@@ -10,7 +10,7 @@ export class AccessRequestController {
 	constructor(private readonly accessRequestService: AccessRequestService) {}
 
 	@TsRestHandler(providerContract.accessRequest.create)
-	@Authenticated()
+	@Authenticated("request-access", "access")
 	create(@CurrentUser() user: CurrentUserData) {
 		return tsRestHandler(providerContract.accessRequest.create, async () => ({
 			status: 201,
@@ -19,7 +19,7 @@ export class AccessRequestController {
 	}
 
 	@TsRestHandler(providerContract.accessRequest.me)
-	@Authenticated()
+	@Authenticated("request-access", "access")
 	getMine(@CurrentUser() user: CurrentUserData) {
 		return tsRestHandler(providerContract.accessRequest.me, async () => ({
 			status: 200,

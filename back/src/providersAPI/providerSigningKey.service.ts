@@ -1,4 +1,6 @@
 import { Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { createProviderJwtPayload, type ProviderTokenScope } from "@flex/shared";
 import { createPrivateKey, createPublicKey, generateKeyPairSync, KeyObject } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { env } from "../core/env";
@@ -6,13 +8,17 @@ import { PROVIDER_KEY_PATH } from "../core/utils/constants";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 
 const MIN_MODULUS_BITS = 2048;
+const TOKEN_TTL_SECONDS: Record<ProviderTokenScope, number> = {
+	"access": 15 * 60,
+	"request-access": 10 * 60,
+};
 
 @Injectable()
 export class ProviderSigningKeyService {
 	private readonly privateKey: KeyObject;
 	private readonly publicKeyPem: string;
 
-	constructor(logger: WinstonLoggerService) {
+	constructor(logger: WinstonLoggerService, private readonly jwt: JwtService) {
 		this.privateKey = existsSync(PROVIDER_KEY_PATH)
 			? this.loadPrivateKey(readFileSync(PROVIDER_KEY_PATH, "utf8"))
 			: this.generateEphemeralKey(logger);
@@ -24,6 +30,19 @@ export class ProviderSigningKeyService {
 
 	getPublicKeyPem() {
 		return this.publicKeyPem;
+	}
+
+	async signUserToken(userUuid: string, providerUuid: string, scope: ProviderTokenScope) {
+		const expiresIn = TOKEN_TTL_SECONDS[scope];
+		const token = await this.jwt.signAsync(createProviderJwtPayload(scope), {
+			privateKey: this.privateKey,
+			algorithm: "RS256",
+			subject: userUuid,
+			audience: providerUuid,
+			expiresIn,
+		});
+
+		return { token, expiresAt: new Date(Date.now() + expiresIn * 1000) };
 	}
 
 	private loadPrivateKey(pem: string) {
