@@ -1,8 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import type { ProviderTokenScope } from "@flex/shared";
 import { TokenService } from "../token.service";
-import { SCOPES_KEY } from "../auth.constants";
 import type { AuthenticatedRequest } from "../auth.types";
 import { AppUnauthorizedException } from "../../error/unauthorized";
 
@@ -10,7 +7,6 @@ import { AppUnauthorizedException } from "../../error/unauthorized";
 export class TokenGuard implements CanActivate {
 	constructor(
 		private readonly tokens: TokenService,
-		private readonly reflector: Reflector,
 	) {}
 
 	async canActivate(context: ExecutionContext) {
@@ -21,17 +17,9 @@ export class TokenGuard implements CanActivate {
 			throw new AppUnauthorizedException("UNAUTHORIZED", "Missing bearer token");
 		}
 
-		const auth = await this.tokens.verify(header.slice(7));
-		const allowed = this.reflector.getAllAndOverride<ProviderTokenScope[] | undefined>(
-			SCOPES_KEY,
-			[context.getHandler(), context.getClass()],
-		);
+		const auth = await this.tokens.verifyAccess(header.slice(7));
 
-		const scopes = allowed?.length
-			? allowed
-			: ["access"];
-
-		if (!scopes.includes(auth.scope)) {
+		if (auth.scope !== "access") {
 			throw new AppUnauthorizedException("INVALID_TOKEN", "This token cannot be used here");
 		}
 

@@ -4,6 +4,10 @@ import { paginationQuerySchema } from "../../../../schemas/common.schema";
 export const requestStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
 
 export const accessRequestSchema = z.object({
+	token: z.string(),
+});
+
+export const accessRequestStatusSchema = z.object({
 	uuid: z.string().uuid(),
 	userUuid: z.string().uuid(),
 	status: requestStatusSchema,
@@ -17,7 +21,7 @@ export const accessRequestListQuerySchema = paginationQuerySchema.extend({
 });
 
 export const accessRequestListResponseSchema = z.object({
-	accessRequests: z.array(accessRequestSchema),
+	accessRequests: z.array(accessRequestStatusSchema),
 	total: z.number(),
 });
 

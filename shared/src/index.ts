@@ -18,7 +18,7 @@ export { createRoleSchema, roleUsersResponseSchema, roleResponseSchema, rolesLis
 export { getAppVariables } from "./contracts/server/appConfig/schemas/app-config.schema";
 
 export { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath, ftIntraLinkCallbackPath, changeEmailConfirmationPath } from "./core/constants";
-export { createJwtPayload, createProviderJwtPayload, providerTokenScopes, type JwtPayload, type ProviderJwtPayload, type ProviderTokenScope } from "./core/jwt.payload";
+export { createJwtPayload, type JwtPayload } from "./core/jwt.payload";
 export { PERMISSIONS } from "./core/permissions";
 export { type Permission } from "./core/permissions";
 

@@ -1,19 +1,13 @@
 import { applyDecorators, createParamDecorator, ExecutionContext, SetMetadata, UseGuards } from "@nestjs/common";
-import type { ProviderPermission, ProviderTokenScope } from "@flex/shared";
-import { PERMISSION_KEY, SCOPES_KEY } from "./auth.constants";
+import type { ProviderPermission } from "@flex/shared";
+import { PERMISSION_KEY } from "./auth.constants";
 import { MemberGuard } from "./guards/member.guard";
 import { OwnerGuard } from "./guards/owner.guard";
 import { PermissionGuard } from "./guards/permission.guard";
 import { TokenGuard } from "./guards/token.guard";
 import type { AuthenticatedRequest } from "./auth.types";
 
-// Routes accept "access" tokens unless a decorator lists other scopes.
-export const TokenScopes = (...scopes: ProviderTokenScope[]) => SetMetadata(SCOPES_KEY, scopes);
-
-export const Authenticated = (...scopes: ProviderTokenScope[]) => applyDecorators(
-	TokenScopes(...scopes),
-	UseGuards(TokenGuard),
-);
+export const Authenticated = () => UseGuards(TokenGuard);
 
 export const MemberOnly = () => UseGuards(TokenGuard, MemberGuard);
 

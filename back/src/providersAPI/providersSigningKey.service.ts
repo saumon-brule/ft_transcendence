@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { createProviderJwtPayload, type ProviderTokenScope } from "@flex/shared";
 import { createPrivateKey, createPublicKey, generateKeyPairSync, KeyObject } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { env } from "../core/env";
@@ -8,10 +7,8 @@ import { PROVIDER_KEY_PATH } from "../core/utils/constants";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 
 const MIN_MODULUS_BITS = 2048;
-const TOKEN_TTL_SECONDS: Record<ProviderTokenScope, number> = {
-	"access": 15 * 60,
-	"request-access": 10 * 60,
-};
+const ACCESS_TOKEN_TTL = 60 * 60;
+const ACCESS_REQUEST_TOKEN_TTL = 5 * 60;
 
 @Injectable()
 export class ProviderSigningKeyService {
@@ -32,15 +29,27 @@ export class ProviderSigningKeyService {
 		return this.publicKeyPem;
 	}
 
-	async signUserToken(userUuid: string, providerUuid: string, scope: ProviderTokenScope) {
-		const expiresIn = TOKEN_TTL_SECONDS[scope];
-		const token = await this.jwt.signAsync(createProviderJwtPayload(scope), {
+	async signUserAccessRequestToken(userUuid: string, providerUuid: string) {
+		const expiresIn = ACCESS_TOKEN_TTL;
+		const token = await Promise.resolve(this.jwt.signAsync({ scope: "access-request" }, {
 			privateKey: this.privateKey,
 			algorithm: "RS256",
 			subject: userUuid,
 			audience: providerUuid,
 			expiresIn,
-		});
+		}));
+
+		return { token, expiresAt: new Date(Date.now() + expiresIn * 1000) };
+	}
+
+	async signUserAccessToken(userUuid: string) {
+		const expiresIn = ACCESS_REQUEST_TOKEN_TTL;
+		const token = await Promise.resolve(this.jwt.signAsync({ scope: "access" }, {
+			privateKey: this.privateKey,
+			algorithm: "RS256",
+			subject: userUuid,
+			expiresIn,
+		}));
 
 		return { token, expiresAt: new Date(Date.now() + expiresIn * 1000) };
 	}

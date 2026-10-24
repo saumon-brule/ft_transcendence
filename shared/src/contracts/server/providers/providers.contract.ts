@@ -49,8 +49,7 @@ export const providersContract = c.router(
 		},
 		accessToken: {
 			method: "POST",
-			path: "/:uuid/access-token",
-			pathParams: uuidParamSchema,
+			path: "/access-token",
 			body: null,
 			responses: {
 				200: providerTokenSchema,

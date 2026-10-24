@@ -1,9 +1,8 @@
 import type { Request } from "express";
-import type { ProviderPermission, ProviderTokenScope } from "@flex/shared";
+import type { ProviderPermission } from "@flex/shared";
 
 export interface CurrentUserData {
 	userUuid: string;
-	scope: ProviderTokenScope;
 }
 
 export interface MemberContext {

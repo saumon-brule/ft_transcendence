@@ -3,6 +3,7 @@ import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { retryOnWriteConflict } from "../core/prisma/write-conflict";
 import { AppConflictException } from "../core/error/conflict";
+import { TokenService } from "../core/auth/token.service";
 
 const include = { decidedBy: true } satisfies Prisma.AccessRequestInclude;
 type AccessRequestRow = Prisma.AccessRequestGetPayload<{ include: typeof include }>;
@@ -24,7 +25,10 @@ interface ListQuery {
 
 @Injectable()
 export class AccessRequestService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly tokenService: TokenService,
+	) {}
 
 	private async grantMembership(tx: Prisma.TransactionClient, userUuid: string, defaultRoleUuid: string | null) {
 		await tx.member.upsert({
@@ -42,7 +46,7 @@ export class AccessRequestService {
 		}
 	}
 
-	async create(userUuid: string) {
+	async create(token: string) {
 		const provider = await this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } });
 		const isPublic = provider.visibility === "PUBLIC";
 
@@ -50,24 +54,25 @@ export class AccessRequestService {
 		//	if TransactionWriteConflict happens during transaction that can appear because of
 		//	isolationLevel: Serializable
 		//	else for any other error throw it normally
+		const auth = await this.tokenService.verifyAccessRequest(token);
 		const created = await retryOnWriteConflict(() => this.prisma.$transaction(async (tx) => {
-			const member = await tx.member.findUnique({ where: { uuid: userUuid } });
+			const member = await tx.member.findUnique({ where: { uuid: auth.userUuid } });
 			if (member && !member.revokedAt) {
 				throw new AppConflictException("ALREADY_MEMBER", "You are already a member of this provider");
 			}
 
-			const pending = await tx.accessRequest.findFirst({ where: { userUuid, status: "PENDING" } });
+			const pending = await tx.accessRequest.findFirst({ where: { uuid: auth.userUuid, status: "PENDING" } });
 			if (pending) {
 				throw new AppConflictException("ALREADY_PENDING", "An access request is already pending");
 			}
 
 			if (isPublic) {
-				await this.grantMembership(tx, userUuid, provider.defaultRoleUuid);
+				await this.grantMembership(tx, auth.userUuid, provider.defaultRoleUuid);
 			}
 
 			return tx.accessRequest.create({
 				data: {
-					userUuid,
+					userUuid: auth.userUuid,
 					status: isPublic
 						? "APPROVED"
 						: "PENDING",

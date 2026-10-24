@@ -9,7 +9,7 @@ const EnvSchema = z.object({
 	MEDIA_DIR: z.string().default("media"),
 	PORT: z.coerce.number().int().positive()
 		.max(65535)
-		.default(3000),
+		.default(3002),
 });
 
 const result = EnvSchema.safeParse(process.env);

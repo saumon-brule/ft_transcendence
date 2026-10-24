@@ -51,8 +51,8 @@ export class ProvidersController {
 	@UseGuards(JwtAuthGuard)
 	@TsRestHandler(serverContract.providers.accessToken)
 	public accessToken(@CurrentUser() user: AuthUser) {
-		return tsRestHandler(serverContract.providers.accessToken, async ({ params }) => {
-			const token = await this.providersService.issueAccessToken(user.uuid, params.uuid);
+		return tsRestHandler(serverContract.providers.accessToken, async () => {
+			const token = await this.providersService.issueAccessToken(user.uuid);
 			return { status: 200, body: token };
 		});
 	}
