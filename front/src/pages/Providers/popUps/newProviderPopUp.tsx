@@ -31,12 +31,12 @@ export const summonNewProviderPopUp = (onClose?: () => void) => summonPopUp((pop
 						queryKeys.users.me(),
 						(old) => old && { ...old, body: { ...old.body, ownedProviders: [...old.body.ownedProviders, provider] } },
 					);
-					summonSuccessToast("Provider created successfully");
+					summonSuccessToast(() => "Provider created successfully");
 					popUpControls.close();
 					summonProviderKeyPopUp(apiKey);
 				},
 				onError: () => {
-					summonErrorToast("Failed to create provider");
+					summonErrorToast(() => "Failed to create provider");
 				},
 			},
 		);

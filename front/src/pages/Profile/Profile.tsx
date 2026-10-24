@@ -18,7 +18,7 @@ export default function Profile() {
 	createEffect(() => {
 		if (profile.isError) {
 			navigate("/home"); // !:! A remettre mais desact car chiant en dev
-			summonErrorToast("Unknown user");
+			summonErrorToast(() => "Unknown user");
 		}
 	});
 

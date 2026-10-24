@@ -67,7 +67,7 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 			{ body: { targetUuid } },
 			{
 				onSuccess: () => setRelation(targetUuid, "PENDING"),
-				onError: () => summonErrorToast("Failed to send friend request"),
+				onError: () => summonErrorToast(() => "Failed to send friend request"),
 			},
 		);
 	}
@@ -83,7 +83,7 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 					updateMe((body) => ({ friends: body.friends.filter((f) => f.uuid !== targetUuid) }));
 					updateTargetFriends(targetUuid, (friends) => friends.filter((f) => f.uuid !== meUuid));
 				},
-				onError: () => summonErrorToast("Failed to remove friend"),
+				onError: () => summonErrorToast(() => "Failed to remove friend"),
 			},
 		);
 	}
@@ -107,7 +107,7 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 						updateTargetFriends(targetUuid, (friends) => [...friends, { uuid: me.data.body.uuid, username: me.data.body.username }]);
 					}
 				},
-				onError: () => summonErrorToast("Failed to answer friend request"),
+				onError: () => summonErrorToast(() => "Failed to answer friend request"),
 			},
 		);
 	}
