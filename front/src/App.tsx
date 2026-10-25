@@ -16,8 +16,8 @@ export const queryClient = new QueryClient({
 });
 
 const App: Component = () => {
-	return <I18nProvider>
-		<QueryClientProvider client={queryClient}>
+	return <QueryClientProvider client={queryClient}>
+		<I18nProvider>
 			<ToasterProvider>
 				<OverlayProvider>
 					<Show when={initialized()} fallback={<LoadingSplash/>}>
@@ -25,8 +25,8 @@ const App: Component = () => {
 					</Show>
 				</OverlayProvider>
 			</ToasterProvider>
-		</QueryClientProvider>
-	</I18nProvider>;
+		</I18nProvider>
+	</QueryClientProvider>;
 };
 
 export default App;

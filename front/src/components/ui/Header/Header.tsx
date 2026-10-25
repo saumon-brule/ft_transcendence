@@ -3,7 +3,7 @@ import { createSignal, onCleanup, onMount, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import { authActions } from "~/store/auth.store";
-import type { InputComponentRef } from "~/types/ComponentRef";
+import type { FormEmbeddedComponentRef } from "~/types/ComponentRef";
 import { useNavigate } from "@solidjs/router";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 
@@ -15,7 +15,7 @@ export default function Header() {
 
 	const [isMenuOpen, setIsMenuOpen] = createSignal(false);
 	const [searchValue, setSearchValue] = createSignal("");
-	let searchInput!: InputComponentRef;
+	let searchInput!: FormEmbeddedComponentRef;
 	let profileMenu!: HTMLDivElement;
 
 	function handleDocumentClick(event: MouseEvent) {

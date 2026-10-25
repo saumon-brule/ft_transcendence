@@ -106,6 +106,17 @@ export default {
 						failureNoReason: "Votre addresse email n'a pas pu être modifié",
 					},
 				},
+				language: {
+					title: "Langue",
+					english: "English",
+					french: "Français",
+				},
+			},
+			profile: {
+				title: "Profile",
+				profilePictureUpdated: "Votre photo de profile a bien été modifiée",
+				profilePictureUpdateToolarge: "La taille max d'une photo de profile est de 10Mo",
+				profilePictureUpdateFail: "Nous n'avons pas pu modifier votre photo de profile",
 			},
 		},
 	},

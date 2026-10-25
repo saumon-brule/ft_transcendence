@@ -9,7 +9,7 @@ const EnvSchema = z.object({
 	NODE_ENV: z.enum(["dev", "prod"]),
 	PORT: z.coerce.number().int().positive()
 		.max(65535)
-		.default(3000),
+		.default(3002),
 	MUSIC_DIR: z.string().default("music"),
 });
 

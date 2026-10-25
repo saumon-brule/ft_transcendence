@@ -1,6 +1,6 @@
-import { updateMeSchema } from "@flex/shared";
+import { appContract, updateMeSchema } from "@flex/shared";
 import { onMount } from "solid-js";
-import { client } from "~/api/client";
+import { client, queryKeys } from "~/api/client";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import { summonPopUp } from "~/components/ui/Overlay";
@@ -8,6 +8,10 @@ import TextInput from "~/components/inputs/TextInput";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { useTranslation } from "~/i18n/context";
 import { validateFromZod } from "~/utils/validateFromZod";
+import { queryClient } from "~/App";
+import { ClientInferResponses } from "@ts-rest/core";
+
+type UserMeResponse = ClientInferResponses<typeof appContract.users.me, 200>;
 
 export const summonUsernameEditPopUp = (onClose: () => void) => summonPopUp((popUpControls) => {
 	const { t } = useTranslation();
@@ -19,11 +23,21 @@ export const summonUsernameEditPopUp = (onClose: () => void) => summonPopUp((pop
 	function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
 
+		const newUsername = newUsernameInput.value;
+
 		updateMeMutation.mutate(
-			{ body: { username: newUsernameInput.value } },
+			{ body: { username: newUsername } },
 			{
 				onSuccess: () => {
 					summonSuccessToast(() => t("pages.settings.account.username.popUp.success"));
+					queryClient.setQueryData<UserMeResponse>(queryKeys.users.me(), (old) => {
+						if (!old) return old;
+						return {
+							...old,
+							body: { ...old.body, username: newUsername },
+						};
+					});
+
 					popUpControls.close();
 				},
 				onError: (e) => {
