@@ -1,6 +1,6 @@
 import { ParentComponent, JSXElement, createRoot, createSignal, For, createEffect, createMemo, onCleanup } from "solid-js";
 import { TransitionGroup } from "solid-transition-group";
-import "./OverlaysProvider.scss";
+import "./Overlays.scss";
 
 export interface OverlayControls {
 	close: () => void;
@@ -62,7 +62,7 @@ export function getRenderedOverlayContent(content: OverlayContent, controls: Ove
 	return typeof content === "function" ? content(controls) : content;
 }
 
-export const OverlayProvider: ParentComponent = (props) => {
+export const OverlayRoot: ParentComponent = (props) => {
 	const hasOverlays = createMemo(() => overlays().length > 0);
 
 	createEffect(() => {
