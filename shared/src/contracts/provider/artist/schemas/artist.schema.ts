@@ -7,6 +7,7 @@ export const artistDetailedItemSchema = z.object({
 	addedBy: z.string().uuid().nullable(),
 	addedAt: z.coerce.date(),
 	biography: z.string().nullable(),
+	hasAvatar: z.boolean(),
 	musics: z.array(musicItemSchema),
 	albums: z.array(albumItemSchema),
 });

@@ -5,7 +5,8 @@ import { Prisma } from "../generated/prisma/client";
 import { LogBuilder } from "../core/logging/log-builder";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { generateApiKey } from "../providersAPI/providerAPIKey";
+import { generateApiKey } from "../providersAPI/providersAPIKey";
+import { ProviderSigningKeyService } from "../providersAPI/providersSigningKey.service";
 
 function normalizeAddress(address: string) {
 	const url = new URL(address);
@@ -17,6 +18,7 @@ export class ProvidersService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly logger: WinstonLoggerService,
+		private readonly signingKey: ProviderSigningKeyService,
 	) {}
 
 	async create(ownerUUID: string, dto: CreateProviderDto) {
@@ -101,4 +103,17 @@ export class ProvidersService {
 		return { apiKey: key };
 	}
 
+	async issueAccessToken(userUUID: string) {
+		return this.signingKey.signUserAccessToken(userUUID);
+	}
+
+	async issueRequestAccessToken(userUUID: string, uuid: string) {
+		const provider = await this.prisma.provider.findUnique({ where: { uuid }, select: { uuid: true } });
+
+		if (!provider) {
+			throw new NotFoundException("Provider not found");
+		}
+
+		return this.signingKey.signUserAccessRequestToken(userUUID, provider.uuid);
+	}
 }

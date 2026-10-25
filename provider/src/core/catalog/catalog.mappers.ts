@@ -30,15 +30,17 @@ export type MusicDetailRow = Prisma.MusicGetPayload<{ include: typeof musicDetai
 export type ArtistDetailRow = Prisma.ArtistGetPayload<{ include: typeof artistDetailInclude }>;
 export type AlbumDetailRow = Prisma.AlbumGetPayload<{ include: typeof albumDetailInclude }>;
 
-export const toArtistItem = (artist: { uuid: string; name: string }) => ({
+export const toArtistItem = (artist: { uuid: string; name: string; hasAvatar: boolean }) => ({
 	uuid: artist.uuid,
 	name: artist.name,
+	hasAvatar: artist.hasAvatar,
 });
 
-export const toAlbumItem = (album: { uuid: string; name: string; publishedAt: Date | null }) => ({
+export const toAlbumItem = (album: { uuid: string; name: string; publishedAt: Date | null; hasCover: boolean }) => ({
 	uuid: album.uuid,
 	name: album.name,
 	publishedAt: album.publishedAt,
+	hasCover: album.hasCover,
 });
 
 export const toMusicItem = (music: MusicItemRow) => ({
@@ -46,6 +48,7 @@ export const toMusicItem = (music: MusicItemRow) => ({
 	name: music.name,
 	duration: music.duration,
 	publishedAt: music.publishedAt,
+	hasCover: music.hasCover,
 	artists: music.artists.map((link) => toArtistItem(link.artist)),
 	album: music.album
 		? toAlbumItem(music.album)
@@ -64,6 +67,7 @@ export const toArtistDetail = (artist: ArtistDetailRow) => ({
 	addedBy: artist.addedBy?.uuid ?? null,
 	addedAt: artist.createdAt,
 	biography: artist.biography,
+	hasAvatar: artist.hasAvatar,
 	musics: artist.music.map((link) => toMusicItem(link.music)),
 	albums: artist.albums.map((link) => toAlbumItem(link.album)),
 });
@@ -74,6 +78,7 @@ export const toAlbumDetail = (album: AlbumDetailRow) => ({
 	addedBy: album.addedBy?.uuid ?? null,
 	addedAt: album.createdAt,
 	publishedAt: album.publishedAt,
+	hasCover: album.hasCover,
 	musics: album.musics.map(toMusicItem),
 	artists: album.artists.map((link) => toArtistItem(link.artist)),
 });

@@ -12,7 +12,7 @@ import { friendsContract } from "./users/friends.contract";
 
 const c = initContract();
 
-export const appContract = c.router(
+export const serverContract = c.router(
 	{
 		auth: authContract,
 		users: usersContract,

@@ -33,7 +33,7 @@ async function bootstrap() {
 			security: [{ bearerAuth: [] }],
 		});
 
-		SwaggerModule.setup("api", app, provider_document, {
+		SwaggerModule.setup("swagger", app, provider_document, {
 			swaggerOptions: { persistAuthorization: true },
 		});
 	}

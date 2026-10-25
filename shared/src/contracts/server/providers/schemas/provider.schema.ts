@@ -37,3 +37,8 @@ export const createProviderSchema = z.object({
 export type CreateProviderDto = z.infer<typeof createProviderSchema>;
 
 export const editProviderSchema = createProviderSchema.partial();
+
+export const providerTokenSchema = z.object({
+	token: z.string(),
+	expiresAt: z.coerce.date(),
+});

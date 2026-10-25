@@ -12,7 +12,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\" --fix",
-		"check": "tsc --noEmit && eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\""
+    "check": "tsc --noEmit && eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\""
   },
   "dependencies": {
     "@flex/shared": "workspace:*",
@@ -28,6 +28,7 @@
     "@ts-rest/open-api": "^3.52.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.3.1",
+    "image-size": "^2.0.4",
     "multer": "^2.4.0",
     "music-metadata": "^12.2.0",
     "pg": "^8.20.0",

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { visibilitySchema } from "../../settings/schemas/settings.schema";
+import { visibilitySchema } from "../../setting/schemas/setting.schema";
 
 export const providerPublicInfoSchema = z.object({
 	uuid: z.string().uuid(),

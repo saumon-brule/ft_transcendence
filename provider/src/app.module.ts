@@ -2,14 +2,15 @@ import { Module } from "@nestjs/common";
 import { TsRestModule } from "@ts-rest/nest";
 import { AuthModule } from "./core/auth/auth.module";
 import { PrismaModule } from "./core/prisma/prisma.module";
-import { AccessRequestsModule } from "./access-requests/access-requests.module";
-import { AlbumsModule } from "./albums/albums.module";
-import { ArtistsModule } from "./artists/artists.module";
+import { AccessRequestModule } from "./access-request/access-request.module";
+import { AlbumModule } from "./album/album.module";
+import { ArtistModule } from "./artist/artist.module";
 import { InfoModule } from "./info/info.module";
-import { MembersModule } from "./members/members.module";
+import { MemberModule } from "./member/member.module";
 import { MusicModule } from "./music/music.module";
-import { RolesModule } from "./roles/roles.module";
-import { SettingsModule } from "./settings/settings.module";
+import { RoleModule } from "./role/role.module";
+import { SearchModule } from "./search/search.module";
+import { SettingModule } from "./setting/setting.module";
 
 @Module({
 	imports: [
@@ -17,13 +18,14 @@ import { SettingsModule } from "./settings/settings.module";
 		PrismaModule,
 		AuthModule,
 		InfoModule,
-		AccessRequestsModule,
-		MembersModule,
-		RolesModule,
-		SettingsModule,
+		AccessRequestModule,
+		MemberModule,
+		RoleModule,
+		SettingModule,
 		MusicModule,
-		ArtistsModule,
-		AlbumsModule,
+		ArtistModule,
+		AlbumModule,
+		SearchModule,
 	],
 })
 export class AppModule {}

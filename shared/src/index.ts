@@ -1,4 +1,4 @@
-export { appContract, appContract as serverContract } from "./contracts/server/server.contract";
+export { serverContract } from "./contracts/server/server.contract";
 export { authContract } from "./contracts/server/auth/auth.contract";
 export { usersContract } from "./contracts/server/users/users.contract";
 export { rolesContract } from "./contracts/server/roles/roles.contract";
@@ -22,8 +22,9 @@ export { createJwtPayload, type JwtPayload } from "./core/jwt.payload";
 export { PERMISSIONS } from "./core/permissions";
 export { type Permission } from "./core/permissions";
 
-export { providerPermissions, providerPermissionSchema, type ProviderPermission } from "./contracts/provider/roles/schemas/role.schema";
+export { providerPermissions, providerPermissionSchema, type ProviderPermission } from "./contracts/provider/role/schemas/role.schema";
 
+export { MEDIA_TYPES, MEDIA_ROUTES, buildMediaUrl, type MediaType } from "./contracts/provider/media/media-routes";
 export * from "./errors/error-codes";
 export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
