@@ -36,7 +36,7 @@ const fetchWithRefresh: ApiFetcher = async (args) => {
 		...args,
 		headers: {
 			...args.headers,
-			Authorization: `Bearer ${accessToken}`,
+			authorization: `Bearer ${accessToken}`,
 		},
 	});
 };
