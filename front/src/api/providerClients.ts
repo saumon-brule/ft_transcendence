@@ -1,9 +1,12 @@
 import { initQueryClient } from "@ts-rest/solid-query";
-import { providerContract } from "@flex/shared";
+import { providerContract, providerError401Schema } from "@flex/shared";
 import { ApiFetcher, tsRestFetchApi } from "@ts-rest/core";
 import { summonWarningToast } from "~/components/ui/Toaster";
 import { t } from "~/i18n/context";
 import { queryKeyFromContract } from "./utils/queryKeys";
+import { z } from "zod";
+import { doproviderRefresh } from "./doRefresh";
+import { providerToken, authActions } from "~/store/auth.store";
 
 const fetchWithRefresh: ApiFetcher = async (args) => {
 	const response = await tsRestFetchApi(args);
@@ -12,30 +15,27 @@ const fetchWithRefresh: ApiFetcher = async (args) => {
 		summonWarningToast(() => t("errors.rateLimit"));
 	}
 
-	return response;
+	if (response.status !== 401
+		|| !response.body
+		|| (response.body
+			&& (response.body as z.infer<typeof providerError401Schema>).code !== "INVALID_TOKEN")
+	) return response;
 
-	// if (response.status !== 401
-	// 	|| !response.body
-	// 	|| (response.body
-	// 		&& (response.body as z.infer<typeof serverBaseError401Schema>).code !== "INVALID_TOKEN")
-	// ) return response;
+	const accessToken = await doproviderRefresh();
 
-	// const accessToken = await doRefresh();
+	console.log(accessToken);
 
-	// if (accessToken === null) {
-	// 	authActions.logout();
-	// 	return response;
-	// }
+	authActions.setProviderToken(accessToken);
 
-	// authActions.login(accessToken);
-
-	// pas encore les trucs back pour la gestion du tocken donc pour l'instant c'est du comment
+	if (accessToken === null) {
+		return response;
+	}
 
 	return tsRestFetchApi({
 		...args,
 		headers: {
 			...args.headers,
-			// Authorization: `Bearer ${}`,
+			authorization: `Bearer ${accessToken}`,
 		},
 	});
 };
@@ -44,7 +44,7 @@ const createProviderClient = (providerUrl: string) => ({
 	client: initQueryClient(providerContract, {
 		baseUrl: providerUrl,
 		baseHeaders: {
-			Authorization: () => `Bearer ${"Le futur super token"}`,
+			Authorization: () => `Bearer ${providerToken.token}`,
 		},
 		api: fetchWithRefresh,
 		validateResponse: true,
