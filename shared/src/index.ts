@@ -5,6 +5,7 @@ export { rolesContract } from "./contracts/server/roles/roles.contract";
 export { permissionsContract } from "./contracts/server/permissions/permissions.contract";
 export { appConfigContract } from "./contracts/server/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/server/playlists/playlists.contract";
+export { providersContract } from "./contracts/server/providers/providers.contract";
 export { providerContract } from "./contracts/provider/provider.contract";
 export { friendsContract } from "./contracts/server/users/friends.contract";
 
