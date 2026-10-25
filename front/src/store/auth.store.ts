@@ -96,8 +96,7 @@ async function initialize() {
 
 	if (storedProvider) {
 		setProviderToken(storedProvider);
-		setInitialized(true);
-	} else {
+	} else if (isLoggedIn()) {
 		try {
 			const token = await doproviderRefresh();
 			if (token !== null) setProviderToken(token);

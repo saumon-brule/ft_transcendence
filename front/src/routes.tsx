@@ -21,6 +21,7 @@ import ChangeEmailValidation from "./pages/auth/changeEmail/ChangeEmailValidatio
 import SidebarRoute from "./components/ui/RoutedLayout/SidebarRoute";
 import SettingsRoutes from "./pages/Settings/SettingsRoutes";
 import Providers from "./pages/Providers";
+import Provider from "./pages/Provider";
 
 export const AppRouter = () => {
 	return <Router >
@@ -46,6 +47,7 @@ export const AppRouter = () => {
 						<Route path="/home" component={Home} />
 						<Route path="/user/:uuid" component={Profile} />
 						<Route path="/providers" component={Providers} />
+						<Route path="/provider/:uuid" component={Provider} />
 					</Route>
 					<SettingsRoutes/>
 				</Route>

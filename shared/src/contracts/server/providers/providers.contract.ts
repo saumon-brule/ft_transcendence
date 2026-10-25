@@ -16,6 +16,15 @@ export const providersContract = c.router(
 				409: commonError409Schema,
 			},
 		},
+		get: {
+			method: "GET",
+			path: "/:uuid",
+			pathParams: uuidParamSchema,
+			responses: {
+				200: providerSchema,
+				404: commonError404Schema,
+			},
+		},
 		edit: {
 			method: "PATCH",
 			path: "/:uuid",
