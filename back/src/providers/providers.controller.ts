@@ -4,11 +4,15 @@ import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { serverContract } from "@flex/shared";
 import { type AuthUser, CurrentUser } from "../core/decorators/current-user.decorator";
 import { JwtAuthGuard } from "../core/guards/jwt-auth.guard";
+import { ProviderAccessRequestsService } from "../providersAPI/providersAccessRequests.service";
 import { ProvidersService } from "./providers.service";
 
 @Controller()
 export class ProvidersController {
-	constructor(private readonly providersService: ProvidersService) {}
+	constructor(
+		private readonly providersService: ProvidersService,
+		private readonly accessRequests: ProviderAccessRequestsService,
+	) {}
 
 	@Throttle({ default: { limit: 10, ttl: 60000 } })
 	@UseGuards(JwtAuthGuard)
@@ -59,11 +63,11 @@ export class ProvidersController {
 
 	@Throttle({ default: { limit: 30, ttl: 60000 } })
 	@UseGuards(JwtAuthGuard)
-	@TsRestHandler(serverContract.providers.requestAccessToken)
-	public requestAccessToken(@CurrentUser() user: AuthUser) {
-		return tsRestHandler(serverContract.providers.requestAccessToken, async ({ params }) => {
-			const token = await this.providersService.issueRequestAccessToken(user.uuid, params.uuid);
-			return { status: 200, body: token };
+	@TsRestHandler(serverContract.providers.requestAccess)
+	public requestAccess(@CurrentUser() user: AuthUser) {
+		return tsRestHandler(serverContract.providers.requestAccess, async ({ params }) => {
+			const request = await this.accessRequests.request(user.uuid, params.uuid);
+			return { status: 200, body: request };
 		});
 	}
 }

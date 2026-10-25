@@ -3,10 +3,6 @@ import { paginationQuerySchema } from "../../../../schemas/common.schema";
 
 export const requestStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
 
-export const accessRequestSchema = z.object({
-	token: z.string(),
-});
-
 export const accessRequestStatusSchema = z.object({
 	uuid: z.string().uuid(),
 	userUuid: z.string().uuid(),

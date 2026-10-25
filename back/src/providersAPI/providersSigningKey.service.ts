@@ -8,7 +8,6 @@ import { WinstonLoggerService } from "../core/logging/logger.service";
 
 const MIN_MODULUS_BITS = 2048;
 const ACCESS_TOKEN_TTL = 60 * 60;
-const ACCESS_REQUEST_TOKEN_TTL = 5 * 60;
 
 @Injectable()
 export class ProviderSigningKeyService {
@@ -29,21 +28,8 @@ export class ProviderSigningKeyService {
 		return this.publicKeyPem;
 	}
 
-	async signUserAccessRequestToken(userUuid: string, providerUuid: string) {
-		const expiresIn = ACCESS_TOKEN_TTL;
-		const token = await Promise.resolve(this.jwt.signAsync({ scope: "access-request" }, {
-			privateKey: this.privateKey,
-			algorithm: "RS256",
-			subject: userUuid,
-			audience: providerUuid,
-			expiresIn,
-		}));
-
-		return { token, expiresAt: new Date(Date.now() + expiresIn * 1000) };
-	}
-
 	async signUserAccessToken(userUuid: string) {
-		const expiresIn = ACCESS_REQUEST_TOKEN_TTL;
+		const expiresIn = ACCESS_TOKEN_TTL;
 		const token = await Promise.resolve(this.jwt.signAsync({ scope: "access" }, {
 			privateKey: this.privateKey,
 			algorithm: "RS256",

@@ -3,7 +3,9 @@ import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { retryOnWriteConflict } from "../core/prisma/write-conflict";
 import { AppConflictException } from "../core/error/conflict";
-import { TokenService } from "../core/auth/token.service";
+import { ServerClientService } from "../core/server/server-client.service";
+
+const TRANSACTION = { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: 15_000, maxWait: 5_000 };
 
 const include = { decidedBy: true } satisfies Prisma.AccessRequestInclude;
 type AccessRequestRow = Prisma.AccessRequestGetPayload<{ include: typeof include }>;
@@ -27,7 +29,7 @@ interface ListQuery {
 export class AccessRequestService {
 	constructor(
 		private readonly prisma: PrismaService,
-		private readonly tokenService: TokenService,
+		private readonly server: ServerClientService,
 	) {}
 
 	private async grantMembership(tx: Prisma.TransactionClient, userUuid: string, defaultRoleUuid: string | null) {
@@ -46,33 +48,37 @@ export class AccessRequestService {
 		}
 	}
 
-	async create(token: string) {
+	async create(userUuid: string) {
 		const provider = await this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } });
 		const isPublic = provider.visibility === "PUBLIC";
+
+		if (await this.server.getAccessRequestStatus(userUuid) !== "PENDING") {
+			throw new NotFoundException("No pending access request registered on the server for this provider");
+		}
 
 		//	retryOnWriteConflict retry 4 times the function passed in parameter catching error
 		//	if TransactionWriteConflict happens during transaction that can appear because of
 		//	isolationLevel: Serializable
 		//	else for any other error throw it normally
-		const auth = await this.tokenService.verifyAccessRequest(token);
 		const created = await retryOnWriteConflict(() => this.prisma.$transaction(async (tx) => {
-			const member = await tx.member.findUnique({ where: { uuid: auth.userUuid } });
+			const member = await tx.member.findUnique({ where: { uuid: userUuid } });
 			if (member && !member.revokedAt) {
 				throw new AppConflictException("ALREADY_MEMBER", "You are already a member of this provider");
 			}
 
-			const pending = await tx.accessRequest.findFirst({ where: { uuid: auth.userUuid, status: "PENDING" } });
+			const pending = await tx.accessRequest.findFirst({ where: { userUuid, status: "PENDING" } });
 			if (pending) {
 				throw new AppConflictException("ALREADY_PENDING", "An access request is already pending");
 			}
 
 			if (isPublic) {
-				await this.grantMembership(tx, auth.userUuid, provider.defaultRoleUuid);
+				await this.server.decideAccessRequest(userUuid, "APPROVED");
+				await this.grantMembership(tx, userUuid, provider.defaultRoleUuid);
 			}
 
 			return tx.accessRequest.create({
 				data: {
-					userUuid: auth.userUuid,
+					userUuid,
 					status: isPublic
 						? "APPROVED"
 						: "PENDING",
@@ -82,7 +88,7 @@ export class AccessRequestService {
 				},
 				include,
 			});
-		}, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable }));
+		}, TRANSACTION));
 
 		return toAccessRequest(created);
 	}
@@ -125,6 +131,8 @@ export class AccessRequestService {
 				throw new AppConflictException("ALREADY_DECIDED", "This access request has already been decided");
 			}
 
+			await this.server.decideAccessRequest(request.userUuid, decision);
+
 			if (decision === "APPROVED") {
 				const provider = await tx.provider.findUniqueOrThrow({ where: { id: 1 } });
 				await this.grantMembership(tx, request.userUuid, provider.defaultRoleUuid);
@@ -136,6 +144,6 @@ export class AccessRequestService {
 				include,
 			});
 			return toAccessRequest(updated);
-		}, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable }));
+		}, TRANSACTION));
 	}
 }

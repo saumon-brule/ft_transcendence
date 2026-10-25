@@ -1,7 +1,8 @@
-import { HttpException, Injectable, Logger, ServiceUnavailableException } from "@nestjs/common";
+import { HttpException, Injectable, Logger, NotFoundException, ServiceUnavailableException } from "@nestjs/common";
 import { initClient } from "@ts-rest/core";
 import { serverContract } from "@flex/shared";
 import { env } from "../env";
+import { AppConflictException } from "../error/conflict";
 
 export interface ProviderIdentity {
 	uuid: string;
@@ -76,6 +77,29 @@ export class ServerClientService {
 			};
 			this.logger.log("Fetched the server public key");
 			return this.cachedKey.value;
+		});
+	}
+
+	async getAccessRequestStatus(userUuid: string) {
+		return this.request("access request lookup", async () => {
+			const response = await this.client.providersAPI.accessRequest({ params: { userUuid }, ...this.timeout() });
+			if (response.status === 404) return null;
+			if (response.status !== 200) this.fail("access request lookup", response.status);
+
+			return response.body.status;
+		});
+	}
+
+	async decideAccessRequest(userUuid: string, decision: "APPROVED" | "REJECTED") {
+		await this.request("access request decision", async () => {
+			const response = await this.client.providersAPI.decideAccessRequest({
+				params: { userUuid },
+				body: { decision },
+				...this.timeout(),
+			});
+			if (response.status === 404) throw new NotFoundException("The server does not know this access request");
+			if (response.status === 409) throw new AppConflictException("ALREADY_DECIDED", "This access request has already been decided");
+			if (response.status !== 200) this.fail("access request decision", response.status);
 		});
 	}
 }
