@@ -54,6 +54,25 @@ export class ProvidersService {
 		}
 	}
 
+	async get(uuid: string) {
+		const provider = await this.prisma.provider.findUnique({
+			where: { uuid },
+			select: {
+				uuid: true,
+				name: true,
+				address: true,
+				publicDisplay: true,
+				owner: { select: { uuid: true, username: true } },
+			},
+		});
+
+		if (!provider) {
+			throw new NotFoundException("Provider not found");
+		}
+
+		return provider;
+	}
+
 	async edit(ownerUUID: string, uuid: string, dto: Partial<CreateProviderDto>) {
 		const provider = await this.prisma.provider.findUnique({ where: { uuid, ownerUUID: ownerUUID } });
 

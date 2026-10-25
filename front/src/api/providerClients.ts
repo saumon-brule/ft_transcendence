@@ -23,8 +23,6 @@ const fetchWithRefresh: ApiFetcher = async (args) => {
 
 	const accessToken = await doproviderRefresh();
 
-	console.log(accessToken);
-
 	authActions.setProviderToken(accessToken);
 
 	if (accessToken === null) {
@@ -50,6 +48,7 @@ const createProviderClient = (providerUrl: string) => ({
 		validateResponse: true,
 	}),
 	keys: queryKeyFromContract(providerContract, ["provider", providerUrl]),
+	mediaToken: { token: "", expiresAt: new Date(0) },
 });
 
 type ProviderClient = ReturnType<typeof createProviderClient>;
@@ -69,3 +68,20 @@ export const removeProviderClient = (providerUrl: string) => {
 	providerClientsMap.delete(providerUrl);
 };
 
+export const refreshProviderMediaToken = (providerUrl: string) => {
+	const providerClient = getProviderClient(providerUrl);
+	return providerClient.client.media.token.query()
+		.then((r) => {
+			if (r.status === 200) {
+				providerClient.mediaToken = { token: r.body.token, expiresAt: r.body.expiresAt };
+				return true;
+			} else {
+				console.error(`Failed to refresh media token for provider ${providerUrl}: ${r.status}`);
+				return false;
+			}
+		})
+		.catch((err) => {
+			console.error(`Error refreshing media token for provider ${providerUrl}:`, err);
+			return false;
+		});
+};
