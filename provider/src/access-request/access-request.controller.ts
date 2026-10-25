@@ -11,10 +11,10 @@ export class AccessRequestController {
 
 	@TsRestHandler(providerContract.accessRequest.create)
 	@Authenticated()
-	create() {
-		return tsRestHandler(providerContract.accessRequest.create, async ({ body }) => ({
+	create(@CurrentUser() user: CurrentUserData) {
+		return tsRestHandler(providerContract.accessRequest.create, async () => ({
 			status: 201,
-			body: await this.accessRequestService.create(body.token),
+			body: await this.accessRequestService.create(user.userUuid),
 		}));
 	}
 
