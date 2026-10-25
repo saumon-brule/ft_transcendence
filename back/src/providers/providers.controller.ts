@@ -25,6 +25,15 @@ export class ProvidersController {
 	}
 
 	@UseGuards(JwtAuthGuard)
+	@TsRestHandler(serverContract.providers.get)
+	public get() {
+		return tsRestHandler(serverContract.providers.get, async ({ params }) => {
+			const provider = await this.providersService.get(params.uuid);
+			return { status: 200, body: provider };
+		});
+	}
+
+	@UseGuards(JwtAuthGuard)
 	@TsRestHandler(serverContract.providers.edit)
 	public edit(@CurrentUser() user: AuthUser) {
 		return tsRestHandler(serverContract.providers.edit, async ({ params, body }) => {

@@ -8,7 +8,7 @@ export const MEDIA_ROUTES = {
 	"artistAvatar": "/artist/:uuid/avatar",
 } as const satisfies Record<MediaType, string>;
 
-export function buildMediaUrl(baseUrl: string, type: MediaType, uuid: string, token: string) {
+export function buildMediaUrl(type: MediaType, uuid: string, token: string) {
 	const path = MEDIA_ROUTES[type].replace(":uuid", uuid);
-	return `${baseUrl.replace(/\/+$/, "")}${path}?token=${encodeURIComponent(token)}`;
+	return `${path}?token=${encodeURIComponent(token)}`;
 }
