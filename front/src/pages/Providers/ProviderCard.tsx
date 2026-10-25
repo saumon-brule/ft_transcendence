@@ -53,7 +53,7 @@ export default function ProviderCard(props: ProviderCardProps) {
 					summonProviderKeyPopUp(data.body.apiKey);
 				},
 				onError: () => {
-					summonErrorToast("Failed to regenerate provider key");
+					summonErrorToast(() => "Failed to regenerate provider key");
 				},
 			},
 		);

@@ -27,11 +27,11 @@ export const summonDeleteProviderPopUp = (providerUUID: string, onClose?: () => 
 							},
 						},
 					);
-					summonSuccessToast("Provider deleted successfully");
+					summonSuccessToast(() => "Provider deleted successfully");
 					popUpControls.close();
 				},
 				onError: () => {
-					summonErrorToast("Failed to delete provider");
+					summonErrorToast(() => "Failed to delete provider");
 				},
 			},
 		);

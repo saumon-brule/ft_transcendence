@@ -2,6 +2,8 @@ import { Show } from "solid-js";
 import type { User } from "@flex/shared";
 import MusicBars from "~/components/graphics/icons/MusicBars";
 import { env } from "~/env";
+import { auth } from "~/store/auth.store";
+import FriendshipActions from "./FriendshipActions";
 
 function toDate(value: Date | string): Date {
 	return value instanceof Date ? value : new Date(value);
@@ -23,5 +25,8 @@ export default function ProfileHeader(props: { profile: User }) {
 				<div class="listening"><MusicBars />Listening to « {props.profile.currentlyListening!.title} » - {props.profile.currentlyListening!.artist}</div>
 			</Show>
 		</div>
+		<Show when={auth.accessToken !== null && auth.jwtPayload.sub !== props.profile.uuid && auth.jwtPayload.sub} keyed>
+			{(meUuid) => <FriendshipActions meUuid={meUuid} targetUuid={props.profile.uuid} />}
+		</Show>
 	</header>;
 }

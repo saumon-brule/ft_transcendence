@@ -39,11 +39,11 @@ export const summonEditProviderPopUp = (provider: Provider, onClose?: () => void
 							},
 						},
 					);
-					summonSuccessToast("Provider updated successfully");
+					summonSuccessToast(() => "Provider updated successfully");
 					popUpControls.close();
 				},
 				onError: () => {
-					summonErrorToast("Failed to update provider");
+					summonErrorToast(() => "Failed to update provider");
 				},
 			},
 		);
