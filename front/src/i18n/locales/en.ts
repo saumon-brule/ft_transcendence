@@ -104,6 +104,17 @@ export default {
 						failureNoReason: "Email couldn't be changed",
 					},
 				},
+				language: {
+					title: "Language",
+					english: "English",
+					french: "Français",
+				},
+			},
+			profile: {
+				title: "Profile",
+				profilePictureUpdated: "Your profile picture was successfully updated",
+				profilePictureUpdateToolarge: "Max profile picture size is 10MB",
+				profilePictureUpdateFail: "We coulnd't update your profile picture",
 			},
 		},
 	},
@@ -112,6 +123,9 @@ export default {
 		unavailableFtApi: "We are not currently able to reach 42's API",
 		unknownFallback: "An error occurred, please try again later",
 		input: {
+			select: {
+				valueMissing: "Please select a value",
+			},
 			text: {
 				tooShort: "Input too short",
 				tooLong: "Input too long",

@@ -2,6 +2,7 @@ import { useNavigate, RouteSectionProps, useLocation } from "@solidjs/router";
 import { createContext, createEffect, Show, useContext } from "solid-js";
 import { auth, AuthenticatedState } from "~/store/auth.store";
 import { getAuthTarget } from "~/utils/getAuthTarget";
+import ProfileGate from "./ProfileGate";
 
 const AuthenticatedContext = createContext<AuthenticatedState>();
 
@@ -21,7 +22,9 @@ export default function AuthGuard(props: RouteSectionProps) {
 
 	return <Show when={auth.accessToken !== null && auth} keyed>
 		{(auth) => <AuthenticatedContext.Provider value={auth}>
-			{props.children}
+			<ProfileGate>
+				{props.children}
+			</ProfileGate>
 		</AuthenticatedContext.Provider>}
 	</Show>;
 }

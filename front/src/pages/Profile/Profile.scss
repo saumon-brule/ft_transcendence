@@ -1,4 +1,4 @@
-#user-profile {	
+#user-profile {
 	.profile-header {
 		display: flex;
 		align-items: center;
@@ -134,7 +134,7 @@
 			justify-content: space-between;
 			gap: 16px;
 			transition: background-color .2s ease;
-			
+
 			&:hover {
 				background-color: var(--background-overlay);
 			}

@@ -51,7 +51,7 @@ export const meSchema = z.object({
 	username: z.string(),
 	email: z.string().email(),
 	intraId: z.number().nullable(),
-	language: z.string(),
+	language: z.enum(["en", "fr"]),
 	hasPassword: z.boolean(),
 	listeningPrivate: z.boolean(),
 	createdAt: z.coerce.date(),
@@ -63,6 +63,10 @@ export const meSchema = z.object({
 	ownedPlaylists: z.array(playlistSchema),
 	friends: z.array(shortUserSchema),
 	friendRequests: z.array(shortUserSchema),
+	_count: z.object({
+		ownedProviders: z.number(),
+		ownedPlaylists: z.number(),
+	}),
 });
 export type Profile = z.infer<typeof meSchema>;
 
