@@ -66,6 +66,8 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	}
 
 	const handleKeyDown = (e: KeyboardEvent) => {
+		console.log(e);
+		if ((e.target as HTMLElement).matches("input, textarea, select") || (e.target as HTMLElement).isContentEditable) return;
 		if (e.key === " ") {
 			e.preventDefault();
 			toggle();
