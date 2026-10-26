@@ -85,3 +85,18 @@ export const refreshProviderMediaToken = (providerUrl: string) => {
 			return false;
 		});
 };
+
+export const getMediaToken = (providerUrl: string) => {
+	const providerClient = getProviderClient(providerUrl);
+	if (!providerClient.mediaToken.token || providerClient.mediaToken.expiresAt < new Date()) {
+		return refreshProviderMediaToken(providerUrl).then((success) => {
+			if (success) {
+				return providerClient.mediaToken.token;
+			} else {
+				return null;
+			}
+		});
+	} else {
+		return Promise.resolve(providerClient.mediaToken.token);
+	}
+};
