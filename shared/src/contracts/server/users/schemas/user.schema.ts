@@ -26,6 +26,7 @@ export const shortUserSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
 });
+export type ShortUser = z.infer<typeof shortUserSchema>;
 
 export const userSchema = z.object({
 	uuid: z.string().uuid(),

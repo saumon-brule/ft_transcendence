@@ -1,0 +1,52 @@
+#providers-page {
+	width: 100%;
+	padding: 20px 40px;
+
+	.providers-header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 20px;
+
+		button {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+	}
+
+	.providers-list {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+}
+.provider-pop-up {
+	min-width: 40%;
+
+	form, .provider-pop-up-container {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+
+		.pop-up-inputs {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			gap: 0.5rem;
+
+			code {
+				margin-top: 0.5rem;
+				margin-bottom: 0rem;
+			}
+		}
+
+		.pop-up-buttons {
+			display: flex;
+			width: 100%;
+			justify-content: right;
+			gap: 1rem;
+		}
+	}
+}

@@ -5,7 +5,9 @@ import { AppUnauthorizedException } from "../../error/unauthorized";
 
 @Injectable()
 export class TokenGuard implements CanActivate {
-	constructor(private readonly tokens: TokenService) {}
+	constructor(
+		private readonly tokens: TokenService,
+	) {}
 
 	async canActivate(context: ExecutionContext) {
 		const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
@@ -15,7 +17,13 @@ export class TokenGuard implements CanActivate {
 			throw new AppUnauthorizedException("UNAUTHORIZED", "Missing bearer token");
 		}
 
-		request.auth = { userUuid: await this.tokens.verify(header.slice(7)) };
+		const auth = await this.tokens.verifyAccess(header.slice(7));
+
+		if (auth.scope !== "access") {
+			throw new AppUnauthorizedException("INVALID_TOKEN", "This token cannot be used here");
+		}
+
+		request.auth = auth;
 		return true;
 	}
 }

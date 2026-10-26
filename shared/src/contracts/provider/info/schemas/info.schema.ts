@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { visibilitySchema } from "../../settings/schemas/settings.schema";
+import { visibilitySchema } from "../../setting/schemas/setting.schema";
 
 export const providerPublicInfoSchema = z.object({
 	uuid: z.string().uuid(),
@@ -9,3 +9,4 @@ export const providerPublicInfoSchema = z.object({
 export const healthResponseSchema = z.object({
 	status: z.literal("ok"),
 });
+export type HealthResponseDto = z.infer<typeof healthResponseSchema>;

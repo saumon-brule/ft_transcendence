@@ -6,7 +6,7 @@ import {
 	updateArtistSchema,
 } from "./schemas/artist.schema";
 import { listQuerySchema, uuidParamSchema } from "../../../schemas/common.schema";
-import { commonError404Schema } from "../../../errors/error-schemas";
+import { commonError404Schema, commonError413Schema, commonError415Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -52,6 +52,28 @@ export const artistContract = c.router(
 				404: commonError404Schema,
 			},
 		},
+		uploadAvatar: {
+			method: "PUT",
+			path: "/:uuid/avatar",
+			pathParams: uuidParamSchema,
+			contentType: "multipart/form-data",
+			body: c.type<{ file: File }>(),
+			responses: {
+				204: null,
+				404: commonError404Schema,
+				413: commonError413Schema,
+				415: commonError415Schema,
+			},
+		},
+		removeAvatar: {
+			method: "DELETE",
+			path: "/:uuid/avatar",
+			pathParams: uuidParamSchema,
+			responses: {
+				204: null,
+				404: commonError404Schema,
+			},
+		},
 	},
-	{ pathPrefix: "/artists" },
+	{ pathPrefix: "/artist" },
 );

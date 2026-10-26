@@ -1,6 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { appContract } from "@flex/shared";
+import { serverContract } from "@flex/shared";
 import { SwaggerModule } from "@nestjs/swagger";
 import { generateOpenApi } from "@ts-rest/open-api";
 import cookieParser from "cookie-parser";
@@ -18,7 +18,7 @@ async function bootstrap() {
 	app.useGlobalFilters(new TsRestValidationFilter());
 
 	if (env.NODE_ENV === "dev") {
-		const document = generateOpenApi(appContract, {
+		const document = generateOpenApi(serverContract, {
 			info: {
 				title: "Flex API",
 				version: "1.0.0",

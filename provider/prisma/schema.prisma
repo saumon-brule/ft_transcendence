@@ -122,8 +122,8 @@ model RolePermission {
 model Music {
   id          Int       @id @default(autoincrement())
   uuid        String    @unique @default(uuid())
-  path        String
-  coverPath   String?
+  hasAudio    Boolean   @default(false)
+  hasCover    Boolean   @default(false)
   name        String
   duration    Int
   albumUuid   String?
@@ -159,7 +159,7 @@ model Artist {
   id          Int      @id @default(autoincrement())
   uuid        String   @unique @default(uuid())
   name        String
-  coverPath   String?
+  hasAvatar   Boolean  @default(false)
   biography   String?
   addedByUuid String?
   updatedAt   DateTime @updatedAt
@@ -191,7 +191,7 @@ model Album {
   id          Int       @id @default(autoincrement())
   uuid        String    @unique @default(uuid())
   name        String
-  coverPath   String?
+  hasCover    Boolean   @default(false)
   publishedAt DateTime?
   addedByUuid String?
   updatedAt   DateTime  @updatedAt
