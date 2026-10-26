@@ -2,7 +2,7 @@ import { createRoot, createSignal, For, JSXElement } from "solid-js";
 import { TransitionGroup } from "solid-transition-group";
 import "./Toaster.scss";
 
-const DEFAULT_TTL = 300000;
+const DEFAULT_TTL = 3000;
 
 export interface ToastControls {
 	remove: () => void;
