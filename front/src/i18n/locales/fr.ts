@@ -125,6 +125,9 @@ export default {
 		unavailableFtApi: "We are not currently able to reach 42's API",
 		unknownFallback: "Une erreur s'est produite, réessayez plus tard",
 		input: {
+			select: {
+				valueMissing: "Veuillez sélectionner une option",
+			},
 			text: {
 				tooShort: "FR: Input too short",
 				tooLong: "FR: Input too long",

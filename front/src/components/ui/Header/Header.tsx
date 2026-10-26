@@ -15,7 +15,7 @@ export default function Header() {
 
 	const [isMenuOpen, setIsMenuOpen] = createSignal(false);
 	const [searchValue, setSearchValue] = createSignal("");
-	let searchInput!: FormEmbeddedComponentRef;
+	let searchInput!: FormEmbeddedComponentRef<HTMLInputElement>;
 	let profileMenu!: HTMLDivElement;
 
 	function handleDocumentClick(event: MouseEvent) {
