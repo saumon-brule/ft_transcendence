@@ -10,6 +10,7 @@ import "./ProfileSettings.scss";
 import { OverlayControls } from "~/components/ui/Overlay";
 import { summonUsernameEditPopUp } from "./editionPopUps/usernamePopUp";
 import MusicBars from "~/components/graphics/icons/MusicBars";
+import { MAX_SIZE } from "@flex/shared";
 
 type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;
 
@@ -37,6 +38,10 @@ export default function ProfileSettings() {
 	const updatePicture: OnChangeEventHandler = (e) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
+		if (file.size > MAX_SIZE) {
+			summonErrorToast(() => t("pages.settings.profile.profilePictureUpdateToolarge"));
+			return;
+		}
 		updatePictureMutation.mutate({
 			body: { avatar: file },
 		}, {

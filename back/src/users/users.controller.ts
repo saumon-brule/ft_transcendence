@@ -21,6 +21,7 @@ import {
 	usersContract,
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
+	MAX_SIZE,
 } from "@flex/shared";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { RequirePermission } from "../core/decorators/require-permission.decorator";
@@ -32,7 +33,7 @@ import type { Express } from "express";
 import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
 import { createReadStream, existsSync } from "node:fs";
-import { ASSET_DIR, AVATAR_DIR, MAX_SIZE } from "../core/utils/constants";
+import { ASSET_DIR, AVATAR_DIR } from "../core/utils/constants";
 
 @Controller()
 export class UsersController {
