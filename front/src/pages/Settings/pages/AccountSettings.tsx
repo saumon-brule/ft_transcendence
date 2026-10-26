@@ -22,14 +22,14 @@ export default function AccountSettings() {
 	const [isLanguageChanging, setIsLanguageChanging] = createSignal(false);
 
 	const profileQuery = useMeProfileQuery();
-	const requestEmailResetMutation = client.auth.requestPasswordReset.createMutation();
+	const requestPasswordResetMutation = client.auth.requestPasswordReset.createMutation();
 	const updateMeMutation = client.users.updateMe.createMutation();
 
 
 	function requestSetPassword(e: MouseEvent) {
 		e.preventDefault();
 		if (!profileQuery.data?.body.email) return;
-		requestEmailResetMutation.mutate(
+		requestPasswordResetMutation.mutate(
 			{ body: { email: profileQuery.data.body.email } },
 			{
 				onSuccess: () => {
@@ -87,7 +87,7 @@ export default function AccountSettings() {
 				<div class="setting-field">
 					<div class="setting-field-title">
 						<h3>{t("pages.settings.account.password.title")}<span class="secondary-info">{user().hasPassword ? t("pages.settings.account.password.set") : t("pages.settings.account.password.unset")}</span></h3>
-						<Button variant="link" onClick={user().hasPassword
+						<Button variant="link" disabled={requestPasswordResetMutation.isPending} onClick={user().hasPassword
 							? (e) => {
 								e.preventDefault();
 								passwordEditPopUpControls = summonPasswordEditPopUp(() => passwordEditPopUpControls = null);
