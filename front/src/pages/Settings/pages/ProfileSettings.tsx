@@ -1,5 +1,5 @@
 
-import { createSignal, JSX, onCleanup, Show } from "solid-js";
+import { /* createSignal,*/ JSX, onCleanup, Show } from "solid-js";
 import { client } from "~/api/client";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import Button from "~/components/inputs/Button";
@@ -22,7 +22,7 @@ export default function ProfileSettings() {
 	const profileQuery = useMeProfileQuery();
 	const updatePictureMutation = client.users.uploadAvatar.createMutation();
 	const { t } = useTranslation();
-	const [listeningPrivate, setListeningPrivate] = createSignal(false);
+	// const [listeningPrivate, setListeningPrivate] = createSignal(false);
 	// const [draft, setDraft] = createSignal<ReturnType<typeof serverProfile> | undefined>(undefined);
 
 	// 	const serverProfile = () => profileQuery.data?.status === 200 ? profileQuery.data.body : undefined;

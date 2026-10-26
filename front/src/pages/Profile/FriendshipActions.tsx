@@ -1,5 +1,5 @@
 import { createMemo, Match, Switch } from "solid-js";
-import { appContract, type FriendRelation, type FriendRequestAnswer, type ShortUser } from "@flex/shared";
+import { serverContract, type FriendRelation, type FriendRequestAnswer, type ShortUser } from "@flex/shared";
 import { type ClientInferResponses } from "@ts-rest/core";
 import { queryClient } from "~/App";
 import { client, queryKeys } from "~/api/client";
@@ -8,9 +8,9 @@ import Button from "~/components/inputs/Button";
 import { summonErrorToast } from "~/components/ui/Toaster";
 
 type FriendshipStatus = "loading" | "friends" | "incoming" | "outgoing" | "none";
-type MeResponse = ClientInferResponses<typeof appContract.users.me, 200>;
-type UserResponse = ClientInferResponses<typeof appContract.users.getUser, 200>;
-type RelationResponse = ClientInferResponses<typeof appContract.friends.isFriendWith, 200>;
+type MeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
+type UserResponse = ClientInferResponses<typeof serverContract.users.getUser, 200>;
+type RelationResponse = ClientInferResponses<typeof serverContract.friends.isFriendWith, 200>;
 
 type FriendshipActionsProps = {
 	meUuid: string;

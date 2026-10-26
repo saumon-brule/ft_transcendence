@@ -1,4 +1,4 @@
-import { appContract, updateMeSchema } from "@flex/shared";
+import { serverContract, updateMeSchema } from "@flex/shared";
 import { onMount } from "solid-js";
 import { client, queryKeys } from "~/api/client";
 import Button from "~/components/inputs/Button";
@@ -11,7 +11,7 @@ import { validateFromZod } from "~/utils/validateFromZod";
 import { queryClient } from "~/App";
 import { ClientInferResponses } from "@ts-rest/core";
 
-type UserMeResponse = ClientInferResponses<typeof appContract.users.me, 200>;
+type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
 
 export const summonUsernameEditPopUp = (onClose: () => void) => summonPopUp((popUpControls) => {
 	const { t } = useTranslation();

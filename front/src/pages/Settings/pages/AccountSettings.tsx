@@ -10,12 +10,12 @@ import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import Select from "~/components/inputs/Select/Select";
 import { queryClient } from "~/App";
 import { ClientInferResponses } from "@ts-rest/core";
-import { appContract } from "@flex/shared";
+import { serverContract } from "@flex/shared";
 
 import "./AccountSettings.scss";
 
 type SelectChangeHandler = JSX.EventHandler<HTMLSelectElement, Event>;
-type UserMeResponse = ClientInferResponses<typeof appContract.users.me, 200>;
+type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
 
 export default function AccountSettings() {
 	const { t } = useTranslation();
