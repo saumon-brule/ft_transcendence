@@ -5,7 +5,6 @@ import {
 	UploadedFile,
 	ParseFilePipe,
 	FileTypeValidator,
-	MaxFileSizeValidator,
 	Get,
 	StreamableFile,
 	Param,
@@ -66,13 +65,14 @@ export class UsersController {
 		});
 	}
 
-	@UseInterceptors(FileInterceptor("avatar"))
+	@UseInterceptors(FileInterceptor("avatar", {
+		limits: { fileSize: MAX_SIZE },
+	}))
 	@TsRestHandler(usersContract.uploadAvatar)
 	@UseGuards(JwtAuthGuard)
 	public uploadAvatar(
 		@UploadedFile(new ParseFilePipe({ validators: [
 			new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp|gif)$/ }),
-			new MaxFileSizeValidator({ maxSize: MAX_SIZE }),
 		] }))
 		file: Express.Multer.File,
 		@CurrentUser() authUser: AuthUser,
