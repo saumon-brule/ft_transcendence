@@ -1,0 +1,124 @@
+$hide-published-below: 900px;
+$hide-album-below: 700px;
+$compact-below: 520px;
+
+.music-section {
+	container-type: inline-size;
+
+	.data {
+		width: 100%;
+		table-layout: fixed;
+		border-spacing: 0;
+
+		th, td {
+			padding: 8px;
+			text-align: left;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+
+		.col-title { width: 35%; }
+		.col-actions { width: 5%; }
+		.col-artists { width: 20%; }
+		.col-album { width: 20%; }
+		.col-published { width: 10%; }
+		.col-duration { width: 10%; }
+
+		tbody {
+			tr {
+				td:first-child {
+					border-top-left-radius: 8px;
+					border-bottom-left-radius: 8px;
+				}
+				td:last-child {
+					border-top-right-radius: 8px;
+					border-bottom-right-radius: 8px;
+				}
+
+				&:hover td {
+					background: var(--background-overlay);
+				}
+			}
+		}
+
+		.music-title {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			min-width: 0;
+
+			img {
+				flex-shrink: 0;
+				width: 40px;
+				height: 40px;
+				object-fit: cover;
+				border-radius: 4px;
+			}
+		}
+
+		.music-title-text {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+
+			span {
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+		}
+
+		.music-title-artists {
+			display: none;
+			font-size: 0.85em;
+			color: var(--text-secondary);
+		}
+	}
+
+	@container (max-width: #{$hide-published-below}) {
+		.data .col-published { display: none; }
+	}
+
+	@container (max-width: #{$hide-album-below}) {
+		.data .col-album { display: none; }
+	}
+
+	@container (max-width: #{$compact-below}) {
+		.data {
+			display: block;
+
+			thead, .col-artists { display: none; }
+
+			tbody {
+				display: block;
+
+				tr {
+					display: grid;
+					grid-template-columns: minmax(0, 1fr) auto auto;
+					grid-template-areas: "title duration actions";
+					align-items: center;
+					border-radius: 8px;
+
+					td {
+						border-radius: 0;
+						background: none;
+					}
+
+					&:hover {
+						background: var(--background-overlay);
+
+						td { background: none; }
+					}
+				}
+			}
+
+			.col-title, .col-duration, .col-actions { width: auto; }
+			.col-title { grid-area: title; }
+			.col-duration { grid-area: duration; }
+			.col-actions { grid-area: actions; }
+
+			.music-title-artists { display: block; }
+		}
+	}
+}

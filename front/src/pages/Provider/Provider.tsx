@@ -5,7 +5,7 @@ import { client, queryKeys } from "~/api/client";
 import "./Provider.scss";
 import { useProviderInfoQuery } from "~/api/queryHooks/providerInfo";
 import ProviderHeader from "./ProviderHeader";
-import MusicSection from "./MusicSection";
+import MusicSection from "../../components/ui/MusicSection/MusicSection";
 
 export default function Provider() {
 	const navigate = useNavigate();
