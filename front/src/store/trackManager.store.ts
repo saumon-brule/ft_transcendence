@@ -92,11 +92,11 @@ export function useTrackManager() {
 		}
 
 		setTrackManager(produce((manager) => {
-			if (manager.current != null) {
+			if (manager.current != null && !manager.current.temporary) {
 				if (manager.history.length >= MAX_HISTORY_SIZE) manager.history.shift();
-				if (!manager.current.temporary) manager.history.push(manager.current);
-				manager.current = track ?? null;
+				manager.history.push(manager.current);
 			}
+			manager.current = track ?? null;
 		}));
 	}
 
