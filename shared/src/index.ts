@@ -26,7 +26,7 @@ export { type Permission } from "./core/permissions";
 
 export { providerPermissions, providerPermissionSchema, type ProviderPermission } from "./contracts/provider/role/schemas/role.schema";
 
-export { MEDIA_TYPES, MEDIA_ROUTES, buildMediaUrl, type MediaType } from "./contracts/provider/media/media-routes";
+export { MEDIA_ROUTES, buildMediaUrl, type MediaType } from "./contracts/provider/media/media-routes";
 export * from "./errors/error-codes";
 export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
