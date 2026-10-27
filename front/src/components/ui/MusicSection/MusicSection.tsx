@@ -3,11 +3,10 @@ import type { ProviderDataDto } from "@flex/shared";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import { getMediaToken, getProviderClient } from "~/api/providerClients";
 import { Music } from "~/class/Music";
-import { buildMediaUrl } from "@flex/shared";
-import { summonErrorToast } from "~/components/ui/Toaster";
 import "./MusicSection.scss";
 import { A } from "@solidjs/router";
 import Button from "~/components/inputs/Button";
+import { ProviderInfo } from "~/api/queryHooks/providerInfo";
 
 function ArtistsLinks(props: { music: ProviderDataDto["music"]["musics"][number]; providerUUID: string }) {
 	return <>{props.music.artists.length === 0
@@ -19,15 +18,21 @@ function ArtistsLinks(props: { music: ProviderDataDto["music"]["musics"][number]
 	}</>;
 }
 
-export default function MusicSection(props: { music: ProviderDataDto["music"]; providerURL: string; providerUUID: string }) {
+export type MusicSectionProps = {
+	music: ProviderInfo["music"];
+	providerUrl: string;
+	providerUuid: string;
+};
+
+export default function MusicSection(props: MusicSectionProps) {
 	const audioManager = useAudioManagerContext();
-	const [mediaToken, { refetch }] = createResource(() => props.providerURL, getMediaToken);
+	const [mediaToken, { refetch }] = createResource(() => props.providerUrl, getMediaToken);
 
 	let refreshTimer: ReturnType<typeof setTimeout> | undefined;
 	createEffect(() => {
 		if (!mediaToken()) return;
 		clearTimeout(refreshTimer);
-		const expiresAt = getProviderClient(props.providerURL).mediaToken.expiresAt;
+		const expiresAt = getProviderClient(props.providerUrl).mediaToken.expiresAt;
 		const delay = expiresAt.getTime() - Date.now() - 30_000;
 		refreshTimer = setTimeout(() => void refetch(), Math.max(delay, 0));
 	});
@@ -44,37 +49,27 @@ export default function MusicSection(props: { music: ProviderDataDto["music"]; p
 		return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 	}
 
-	async function getMusic(music: ProviderDataDto["music"]["musics"][number]) {
-		const token = await getMediaToken(props.providerURL);
-		if (!token) {
-			summonErrorToast("Failed to get media token for provider");
-			throw new Error("Failed to get media token for provider");
-		}
-		return new Music("", buildMediaUrl(props.providerURL, "audio", music.uuid, token));
+	function playMusic(music: Music) {
+		audioManager.setCurrentTrack(music);
+		audioManager.play();
 	}
 
-	async function playMusic(music: ProviderDataDto["music"]["musics"][number]) {
-		try {
-			const mus = await getMusic(music);
-			audioManager.setCurrentTrack(mus);
-			audioManager.play();
-		} catch (_e) {}
+	function addToQueue(music: Music) {
+		audioManager.pushTrackToQueue(music);
 	}
 
-	async function addToQueue(music: ProviderDataDto["music"]["musics"][number]) {
-		try {
-			const mus = await getMusic(music);
-			audioManager.pushTrackToQueue(mus);
-		} catch (_e) {}
-	}
-
-	function getCover(music: ProviderDataDto["music"]["musics"][number]) {
+	function getCover(music: Music): string {
 		const token = mediaToken();
-		if (music.hasCover && token) {
-			return buildMediaUrl(props.providerURL, "musicCover", music.uuid, token);
-		}
+		if (token && music.hasCover) return music.coverUrl(token);
 		return "/assets/images/default_cover.png";
 	}
+
+	// function getCover(music: ProviderDataDto["music"]["musics"][number]) {
+	// 	const token = mediaToken();
+	// 	if (music.hasCover && token) {
+	// 		return buildMediaUrl(props.providerURL, "musicCover", music.uuid, token);
+	// 	}
+	// }
 
 	return <div class="music-section">
 		<table class="data">
@@ -95,13 +90,13 @@ export default function MusicSection(props: { music: ProviderDataDto["music"]; p
 							<img src={getCover(music)} alt={music.name} />
 							<div class="music-title-text">
 								<span><Button variant="text" onClick={() => void playMusic(music)}>{music.name}</Button></span>
-								<span class="music-title-artists"><ArtistsLinks music={music} providerUUID={props.providerUUID} /></span>
+								<span class="music-title-artists"><ArtistsLinks music={music} providerUUID={props.providerUuid} /></span>
 							</div>
 						</div>
 					</td>
 					<td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td>
-					<td class="col-artists"><ArtistsLinks music={music} providerUUID={props.providerUUID} /></td>
-					<td class="col-album">{music.album ? <A href={`/provider/${props.providerUUID}/album/${music.album.uuid}`} class="white-variant">{music.album.name}</A> : "-"}</td>
+					<td class="col-artists"><ArtistsLinks music={music} providerUUID={props.providerUuid} /></td>
+					<td class="col-album">{music.album ? <A href={`/provider/${props.providerUuid}/album/${music.album.uuid}`} class="white-variant">{music.album.name}</A> : "-"}</td>
 					<td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString() : "-"}</td>
 					<td class="col-duration">{formatDuration(music.duration)}</td>
 				</tr>}</For>
