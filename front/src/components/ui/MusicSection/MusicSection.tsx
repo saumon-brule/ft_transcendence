@@ -6,8 +6,20 @@ import { Music } from "~/class/Music";
 import { buildMediaUrl } from "@flex/shared";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import "./MusicSection.scss";
+import { A } from "@solidjs/router";
+import Button from "~/components/inputs/Button";
 
-export default function MusicSection(props: { music: ProviderDataDto["music"]; providerURL: string }) {
+function ArtistsLinks(props: { music: ProviderDataDto["music"]["musics"][number]; providerUUID: string }) {
+	return <>{props.music.artists.length === 0
+		? "-"
+		: <For each={props.music.artists}>{(artist, index) => <>
+			<A href={`/provider/${props.providerUUID}/artist/${artist.uuid}`} class="white-variant">{artist.name}</A>
+			{index() < props.music.artists.length - 1 ? ", " : ""}
+		</>}</For>
+	}</>;
+}
+
+export default function MusicSection(props: { music: ProviderDataDto["music"]; providerURL: string; providerUUID: string }) {
 	const audioManager = useAudioManagerContext();
 	const [mediaToken, { refetch }] = createResource(() => props.providerURL, getMediaToken);
 
@@ -32,23 +44,28 @@ export default function MusicSection(props: { music: ProviderDataDto["music"]; p
 		return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 	}
 
-	function formatArtists(music: ProviderDataDto["music"]["musics"][number]): string {
-		return music.artists.map((artist) => artist.name).join(", ");
-	}
-
-	async function playMusic(music: ProviderDataDto["music"]["musics"][number]) {
-		console.log(`Playing music: ${music.name} from provider: ${props.providerURL}`);
-
+	async function getMusic(music: ProviderDataDto["music"]["musics"][number]) {
 		const token = await getMediaToken(props.providerURL);
 		if (!token) {
 			summonErrorToast("Failed to get media token for provider");
-			return;
+			throw new Error("Failed to get media token for provider");
 		}
+		return new Music("", buildMediaUrl(props.providerURL, "audio", music.uuid, token));
+	}
 
-		const mus = new Music("", buildMediaUrl(props.providerURL, "audio", music.uuid, token));
-		console.log(mus.url());
-		audioManager.pushTrackToQueue(mus);
-		audioManager.play();
+	async function playMusic(music: ProviderDataDto["music"]["musics"][number]) {
+		try {
+			const mus = await getMusic(music);
+			audioManager.setCurrentTrack(mus);
+			audioManager.play();
+		} catch (_e) {}
+	}
+
+	async function addToQueue(music: ProviderDataDto["music"]["musics"][number]) {
+		try {
+			const mus = await getMusic(music);
+			audioManager.pushTrackToQueue(mus);
+		} catch (_e) {}
 	}
 
 	function getCover(music: ProviderDataDto["music"]["musics"][number]) {
@@ -77,14 +94,14 @@ export default function MusicSection(props: { music: ProviderDataDto["music"]; p
 						<div class="music-title">
 							<img src={getCover(music)} alt={music.name} />
 							<div class="music-title-text">
-								<span>{music.name}</span>
-								<span class="music-title-artists">{formatArtists(music)}</span>
+								<span><Button variant="text" onClick={() => void playMusic(music)}>{music.name}</Button></span>
+								<span class="music-title-artists"><ArtistsLinks music={music} providerUUID={props.providerUUID} /></span>
 							</div>
 						</div>
 					</td>
-					<td class="col-actions"><button onClick={() => void playMusic(music)}>Play</button></td>
-					<td class="col-artists">{formatArtists(music)}</td>
-					<td class="col-album">{music.album ? music.album.name : "-"}</td>
+					<td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td>
+					<td class="col-artists"><ArtistsLinks music={music} providerUUID={props.providerUUID} /></td>
+					<td class="col-album">{music.album ? <A href={`/provider/${props.providerUUID}/album/${music.album.uuid}`} class="white-variant">{music.album.name}</A> : "-"}</td>
 					<td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString() : "-"}</td>
 					<td class="col-duration">{formatDuration(music.duration)}</td>
 				</tr>}</For>

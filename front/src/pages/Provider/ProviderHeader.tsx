@@ -1,9 +1,4 @@
-import { For, Show } from "solid-js";
 import type { ProviderDataDto, Provider } from "@flex/shared";
-
-function toDate(value: Date | string): Date {
-	return value instanceof Date ? value : new Date(value);
-}
 
 export default function ProviderHeader(props: { provider: ProviderDataDto; providerBack: Provider }) {
 	return <header class="provider-header">

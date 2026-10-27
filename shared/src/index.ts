@@ -31,3 +31,4 @@ export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
 
 export { type HealthResponseDto, type ProviderDataDto } from "./contracts/provider/info/schemas/info.schema";
+export { type ArtistDetailedItemDto } from "./contracts/provider/artist/schemas/artist.schema";
