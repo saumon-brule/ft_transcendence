@@ -55,20 +55,20 @@ type ProviderClient = ReturnType<typeof createProviderClient>;
 
 const providerClientsMap = new Map<string, ProviderClient>();
 
-export const getProviderClient = (providerUrl: string): ProviderClient => {
+export function getProviderClient(providerUrl: string): ProviderClient {
 	let providerClient = providerClientsMap.get(providerUrl);
 	if (!providerClient) {
 		providerClient = createProviderClient(providerUrl);
 		providerClientsMap.set(providerUrl, providerClient);
 	}
 	return providerClient;
-};
+}
 
-export const removeProviderClient = (providerUrl: string) => {
+export function removeProviderClient(providerUrl: string) {
 	providerClientsMap.delete(providerUrl);
-};
+}
 
-export const refreshProviderMediaToken = (providerUrl: string) => {
+export function refreshProviderMediaToken(providerUrl: string) {
 	const providerClient = getProviderClient(providerUrl);
 	return providerClient.client.media.token.query()
 		.then((r) => {

@@ -4,6 +4,7 @@ import { Music } from "~/class/Music";
 import { PushTrackToQueueFn, SetCurrentTrackFn, useTrackManager } from "~/store/trackManager.store";
 import { setupMediaSession } from "./mediaSession";
 import { Track } from "~/class/Track";
+import { summonErrorToast } from "../ui/Toaster";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
 
@@ -88,14 +89,22 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 
 	onMount(() => {
 		audio.addEventListener("loadedmetadata", (() => audio.currentTime = trackManager.manager.progression), { once: true });
-		audio.src = trackManager.manager.current?.music.url().href ?? "";
+		audio.src = "";
+		// audio.src = trackManager.manager.current?.music.url().href ?? "";
 	});
 
 	createEffect(() => {
 		const currentTrack = trackManager.manager.current;
 		if (currentTrack !== null) {
-			audio.src = currentTrack.music.url().href;
-			if (untrack(isPlaying)) play();
+			currentTrack.music.audioUrl()
+				.then((url) => {
+					audio.src = url;
+					if (untrack(isPlaying)) play();
+				})
+				.catch((e) => {
+					console.error(e);
+					summonErrorToast(() => "This music is not avaible right now :(");
+				});
 		} else {
 			audio.pause();
 			audio.src = "";
