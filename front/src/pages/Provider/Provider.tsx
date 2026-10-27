@@ -28,7 +28,7 @@ export default function Provider() {
 			<ProviderHeader provider={data.info} providerBack={data.back} />
 			<section>
 				<h2>Musiques</h2>
-				<MusicSection music={data.info.music} providerURL={data.back.address} />
+				<MusicSection music={data.info.music} providerURL={data.back.address} providerUUID={params.uuid} />
 			</section>
 		</>}</Show>
 	</div>;

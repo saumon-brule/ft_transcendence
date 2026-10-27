@@ -10,18 +10,24 @@ export const musicDetailInclude = {
 	addedBy: true,
 } satisfies Prisma.MusicInclude;
 
+// Les details d'artiste/album ne renvoient que la premiere page de musiques, le reste passe par la pagination
+export const DETAIL_MUSIC_LIMIT = 20;
+
 export const artistDetailInclude = {
 	addedBy: true,
 	music: {
 		include: { music: { include: musicItemInclude } },
 		orderBy: { music: { name: "asc" } },
+		take: DETAIL_MUSIC_LIMIT,
 	},
+	_count: { select: { music: true } },
 	albums: { include: { album: true }, orderBy: { album: { name: "asc" } } },
 } satisfies Prisma.ArtistInclude;
 
 export const albumDetailInclude = {
 	addedBy: true,
-	musics: { include: musicItemInclude, orderBy: { name: "asc" } },
+	musics: { include: musicItemInclude, orderBy: { name: "asc" }, take: DETAIL_MUSIC_LIMIT },
+	_count: { select: { musics: true } },
 	artists: { include: { artist: true }, orderBy: { artist: { name: "asc" } } },
 } satisfies Prisma.AlbumInclude;
 
@@ -68,7 +74,7 @@ export const toArtistDetail = (artist: ArtistDetailRow) => ({
 	addedAt: artist.createdAt,
 	biography: artist.biography,
 	hasAvatar: artist.hasAvatar,
-	musics: artist.music.map((link) => toMusicItem(link.music)),
+	music: { musics: artist.music.map((link) => toMusicItem(link.music)), total: artist._count.music },
 	albums: artist.albums.map((link) => toAlbumItem(link.album)),
 });
 
@@ -79,6 +85,6 @@ export const toAlbumDetail = (album: AlbumDetailRow) => ({
 	addedAt: album.createdAt,
 	publishedAt: album.publishedAt,
 	hasCover: album.hasCover,
-	musics: album.musics.map(toMusicItem),
+	music: { musics: album.musics.map(toMusicItem), total: album._count.musics },
 	artists: album.artists.map((link) => toArtistItem(link.artist)),
 });
