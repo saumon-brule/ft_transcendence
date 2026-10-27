@@ -1,6 +1,7 @@
 import { createMemo } from "solid-js";
 import { createQuery } from "@tanstack/solid-query";
 import { getProviderClient } from "../providerClients";
+import { Music } from "~/class/Music";
 
 export const useProviderInfoQuery = (providerUrl: () => string) => {
 	const provider = createMemo(() => getProviderClient(providerUrl()));
@@ -12,8 +13,20 @@ export const useProviderInfoQuery = (providerUrl: () => string) => {
 			if (res.status !== 200) throw new Error(`Provider info failed with status ${res.status}`);
 			return res;
 		},
+		select: (response) => ({
+			...response,
+			body: {
+				...response.body,
+				music: {
+					...response.body.music,
+					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl())),
+				},
+			},
+		}),
 	});
 };
+
+export type ProviderInfo = Exclude<ReturnType<typeof useProviderInfoQuery>["data"], undefined>["body"];
 
 export const useProviderArtistQuery = (providerUrl: () => string, artistUUID: () => string) => {
 	const provider = createMemo(() => getProviderClient(providerUrl()));

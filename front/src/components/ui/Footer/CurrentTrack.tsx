@@ -8,7 +8,9 @@ export default function CurrentTrack() {
 
 	return <div class="current-track">
 		<Show when={audioManager.currentMusic} keyed>
-			{(currentMusic) => currentMusic.path}
+			{(currentMusic) => <p>
+				{currentMusic.name}
+			</p>}
 		</Show>
 	</div>;
 }

@@ -2,10 +2,10 @@ import { useParams, useNavigate } from "@solidjs/router";
 import { createEffect, createMemo, Show } from "solid-js";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { client, queryKeys } from "~/api/client";
-import "./Provider.scss";
 import { useProviderInfoQuery } from "~/api/queryHooks/providerInfo";
 import ProviderHeader from "./ProviderHeader";
 import MusicSection from "../../components/ui/MusicSection/MusicSection";
+import "./Provider.scss";
 
 export default function Provider() {
 	const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function Provider() {
 			<ProviderHeader provider={data.info} providerBack={data.back} />
 			<section>
 				<h2>Musiques</h2>
-				<MusicSection music={data.info.music} providerURL={data.back.address} providerUUID={params.uuid} />
+				<MusicSection music={data.info.music} providerUrl={data.back.address} providerUuid={params.uuid} />
 			</section>
 		</>}</Show>
 	</div>;

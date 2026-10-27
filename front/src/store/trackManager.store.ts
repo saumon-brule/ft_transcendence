@@ -26,21 +26,22 @@ const defaultTrackManagerState = {
 };
 
 function loadLocalTrackManagerState(): TrackManagerState {
-	let data: unknown;
-	try {
-		const item = localStorage.getItem("track-state");
-		if (!item) return defaultTrackManagerState;
-		data = JSON.parse(item);
-	} catch (e: unknown) {
-		console.error(e);
-		return defaultTrackManagerState;
-	}
-	const result = trackManagerStateSchema.safeParse(data);
-	if (result.success) {
-		return result.data;
-	} else {
-		return defaultTrackManagerState;
-	}
+	return defaultTrackManagerState;
+	// let data: unknown;
+	// try {
+	// 	const item = localStorage.getItem("track-state");
+	// 	if (!item) return defaultTrackManagerState;
+	// 	data = JSON.parse(item);
+	// } catch (e: unknown) {
+	// 	console.error(e);
+	// 	return defaultTrackManagerState;
+	// }
+	// const result = trackManagerStateSchema.safeParse(data);
+	// if (result.success) {
+	// 	return result.data;
+	// } else {
+	// 	return defaultTrackManagerState;
+	// }
 }
 
 export function useTrackManager() {
