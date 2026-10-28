@@ -84,7 +84,7 @@ export function refreshProviderMediaToken(providerUrl: string) {
 			console.error(`Error refreshing media token for provider ${providerUrl}:`, err);
 			return false;
 		});
-};
+}
 
 export const getMediaToken = (providerUrl: string) => {
 	const providerClient = getProviderClient(providerUrl);

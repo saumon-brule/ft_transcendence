@@ -28,7 +28,7 @@ export default function ProviderArtist() {
 			<ProviderArtistHeader artist={data.info} providerBack={data.back} />
 			<section>
 				<h2>Musiques</h2>
-				<MusicSection music={data.info.music} providerURL={data.back.address} providerUUID={params.uuid} />
+				<MusicSection music={data.info.music} providerUrl={data.back.address} providerUuid={params.uuid} />
 			</section>
 		</>}</Show>
 	</div>;
