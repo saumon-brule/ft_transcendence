@@ -4,6 +4,7 @@ import { PrismaService } from "../core/prisma/prisma.service";
 import { findAlbumUuid, findArtistUuids } from "../core/catalog/catalog.lookups";
 import { musicDetailInclude, musicItemInclude, toMusicDetail, toMusicItem } from "../core/catalog/catalog.mappers";
 import { MediaService } from "../media/media.service";
+import { SearchService } from "../search/search.service";
 
 interface ListQuery {
 	limit: number;
@@ -26,22 +27,26 @@ export class MusicService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly media: MediaService,
+		private readonly search: SearchService,
 	) {}
 
 	async list({ limit, offset, search }: ListQuery) {
-		const where: Prisma.MusicWhereInput = search
-			? { name: { contains: search, mode: "insensitive" } }
-			: {};
+		if (search) {
+			const { rows, total } = await this.search.page("Music", search, { limit, offset }, (ids) => this.prisma.music.findMany({
+				where: { id: { in: ids } },
+				include: musicItemInclude,
+			}));
+			return { musics: rows.map(toMusicItem), total };
+		}
 
 		const [rows, total] = await this.prisma.$transaction([
 			this.prisma.music.findMany({
-				where,
 				include: musicItemInclude,
 				orderBy: [{ name: "asc" }, { id: "asc" }],
 				take: limit,
 				skip: offset,
 			}),
-			this.prisma.music.count({ where }),
+			this.prisma.music.count(),
 		]);
 
 		return { musics: rows.map(toMusicItem), total };
