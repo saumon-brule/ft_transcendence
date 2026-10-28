@@ -28,10 +28,11 @@ import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
 import { createReadStream, existsSync } from "node:fs";
 import { ASSET_DIR, COVER_DIR, MAX_SIZE } from "../core/utils/constants";
+import { AppForbiddenException } from "../core/error/forbidden";
 
 @Controller()
 export class PlaylistsController {
-	constructor(private readonly playlistsService: PlaylistsService) { }
+	constructor(private readonly playlistsService: PlaylistsService) {}
 
 	@UseInterceptors(FileInterceptor("cover"))
 	@TsRestHandler(playlistsContract.uploadCover)
@@ -41,7 +42,7 @@ export class PlaylistsController {
 			validators: [
 				new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp)$/ }),
 				new MaxFileSizeValidator({ maxSize: MAX_SIZE }),
-			]
+			],
 		}))
 		file: Express.Multer.File,
 		@CurrentUser() authUser: AuthUser,
@@ -81,5 +82,82 @@ export class PlaylistsController {
 			type: "image/webp",
 			disposition: "inline",
 		});
+	}
+
+	private async assertPlaylistOwner(uuid: string, ownerUUID: string) {
+		const playlist = await this.playlistsService.getPlaylistByUUID(uuid);
+
+		if (playlist.owner.uuid !== ownerUUID) {
+			throw new AppForbiddenException(
+				"FORBIDDEN",
+				"You are not the owner of this playlist",
+			);
+		}
+	}
+
+	@TsRestHandler(playlistsContract.createPlaylist)
+	@UseGuards(JwtAuthGuard)
+	public createPlaylist(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(playlistsContract.createPlaylist, async ({ body }) => {
+			const playlist = await this.playlistsService.createPlaylist(
+				body.name,
+				authUser.uuid,
+				body.private,
+			);
+
+			return {
+				status: 201,
+				body: {
+					uuid: playlist.uuid,
+					name: playlist.name,
+					private: playlist.private,
+				},
+			};
+		});
+	}
+
+	@TsRestHandler(playlistsContract.addMusicToPlaylist)
+	@UseGuards(JwtAuthGuard)
+	public addMusicToPlaylist(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(
+			playlistsContract.addMusicToPlaylist, async ({ params }) => {
+				await this.assertPlaylistOwner(params.uuid, authUser.uuid);
+				await this.playlistsService.addMusicToPlaylist(
+					params.uuid,
+					params.musicUUID,
+				);
+
+				return { status: 204, body: null };
+			},
+		);
+	}
+
+	@TsRestHandler(playlistsContract.removeMusicFromPlaylist)
+	@UseGuards(JwtAuthGuard)
+	public removeMusicFromPlaylist(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(
+			playlistsContract.removeMusicFromPlaylist, async ({ params }) => {
+				await this.assertPlaylistOwner(params.uuid, authUser.uuid);
+				await this.playlistsService.removeMusicFromPlaylist(
+					params.uuid,
+					params.musicUUID,
+				);
+
+				return { status: 204, body: null };
+			},
+		);
+	}
+
+	@TsRestHandler(playlistsContract.deletePlaylist)
+	@UseGuards(JwtAuthGuard)
+	public deletePlaylist(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(
+			playlistsContract.deletePlaylist, async ({ params }) => {
+				await this.assertPlaylistOwner(params.uuid, authUser.uuid);
+				await this.playlistsService.deletePlaylist(params.uuid);
+
+				return { status: 204, body: null };
+			},
+		);
 	}
 }

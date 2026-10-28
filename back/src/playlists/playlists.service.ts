@@ -71,9 +71,9 @@ export class PlaylistsService {
 
 	public async deletePlaylist(uuid: string) {
 		const result = await this.prisma.playlist.deleteMany({
-			where: { uuid: uuid }
+			where: { uuid: uuid },
 		});
-		if (result.count === 0) throw new NotFoundException();
+		if (result.count === 0) throw new NotFoundException("Playlist Not Found");
 	}
 
 	// public async setPlaylistCover(uuid: string, coverUUID: string) {
