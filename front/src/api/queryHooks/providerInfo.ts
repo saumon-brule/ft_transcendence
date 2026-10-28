@@ -38,5 +38,15 @@ export const useProviderArtistQuery = (providerUrl: () => string, artistUUID: ()
 			if (res.status !== 200) throw new Error(`Provider artist failed with status ${res.status}`);
 			return res;
 		},
+		select: (response) => ({
+			...response,
+			body: {
+				...response.body,
+				music: {
+					...response.body.music,
+					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl())),
+				},
+			},
+		}),
 	});
 };

@@ -1,5 +1,4 @@
-import { buildMediaUrl, ProviderDataDto } from "@flex/shared";
-import { ProviderDataMusicDto } from "node_modules/@flex/shared/src/contracts/provider/info/schemas/info.schema";
+import { buildMediaUrl, musicItemSchema, type ProviderDataMusicDto } from "@flex/shared";
 import z from "zod";
 import { getMediaToken } from "~/api/providerClients";
 import { summonErrorToast } from "~/components/ui/Toaster";
@@ -41,5 +40,7 @@ export class Music {
 		return music;
 	}
 
-	public static zodSchema = z.null();
+	public static zodSchema = musicItemSchema.extend({
+		providerUrl: z.string(),
+	}).transform(({ providerUrl, ...music }): Music => Music.fromRawObject(music, providerUrl));
 }

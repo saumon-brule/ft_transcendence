@@ -6,8 +6,7 @@ import { Track } from "~/class/Track";
 
 const MAX_HISTORY_SIZE = 64;
 
-
-const trackManagerStateSchema = z.object({
+const _trackManagerStateSchema = z.object({
 	current: Track.zodSchema.nullable(),
 	queue: z.array(Track.zodSchema),
 	history: z.array(Track.zodSchema).max(MAX_HISTORY_SIZE).catch(() => []),
@@ -15,7 +14,7 @@ const trackManagerStateSchema = z.object({
 	activePlaylist: z.array(Track.zodSchema).nullable(),
 });
 
-type TrackManagerState = z.infer<typeof trackManagerStateSchema>;
+type TrackManagerState = z.infer<typeof _trackManagerStateSchema>;
 
 const defaultTrackManagerState = {
 	current: null,
