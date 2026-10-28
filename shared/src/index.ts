@@ -30,5 +30,6 @@ export * from "./errors/error-codes";
 export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
 
-export { type HealthResponseDto, type ProviderDataDto } from "./contracts/provider/info/schemas/info.schema";
+export { type HealthResponseDto, type ProviderDataDto, type ProviderDataMusicDto } from "./contracts/provider/info/schemas/info.schema";
+export { musicItemSchema } from "./contracts/provider/schemas/items.schema";
 export { type ArtistDetailedItemDto } from "./contracts/provider/artist/schemas/artist.schema";
