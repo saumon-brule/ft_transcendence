@@ -1,10 +1,11 @@
 import { Module } from "@nestjs/common";
 import { MediaModule } from "../media/media.module";
+import { SearchModule } from "../search/search.module";
 import { ArtistController } from "./artist.controller";
 import { ArtistService } from "./artist.service";
 
 @Module({
-	imports: [MediaModule],
+	imports: [MediaModule, SearchModule],
 	controllers: [ArtistController],
 	providers: [ArtistService],
 })

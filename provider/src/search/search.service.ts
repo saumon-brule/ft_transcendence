@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { musicItemInclude, toAlbumItem, toArtistItem, toMusicItem } from "../core/catalog/catalog.mappers";
 
@@ -7,48 +8,94 @@ interface SearchQuery {
 	limit: number;
 }
 
-const CANDIDATE_LIMIT = 200;
+interface Page {
+	limit: number;
+	offset: number;
+}
 
-const normalize = (value: string) => value
-	.normalize("NFD")
-	.replace(/\p{Diacritic}/gu, "")
-	.toLowerCase();
+export type SearchTable = "Music" | "Artist" | "Album";
 
-// Lower is more relevant: exact, prefix, word prefix, then any other match.
-const rank = (name: string, term: string) => {
-	const text = normalize(name);
-	if (text === term) return 0;
-	if (text.startsWith(term)) return 1;
-	if (text.split(/[^\p{L}\p{N}]+/u).some((word) => word.startsWith(term))) return 2;
-	return 3;
+interface SearchField {
+	column: Prisma.Sql;
+	boost: number;
+}
+
+const field = (column: string, boost: number): SearchField => ({ column: Prisma.raw(`"${column}"`), boost });
+
+const TABLES: Record<SearchTable, { from: Prisma.Sql; fields: SearchField[] }> = {
+	Music: { from: Prisma.raw("\"Music\""), fields: [field("name", 3), field("searchArtists", 2), field("searchAlbum", 1)] },
+	Artist: { from: Prisma.raw("\"Artist\""), fields: [field("name", 1)] },
+	Album: { from: Prisma.raw("\"Album\""), fields: [field("name", 3), field("searchArtists", 2)] },
 };
+
+const MIN_FUZZY_LENGTH = 3;
+
+const tokensOf = (value: string) => value.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
 
 @Injectable()
 export class SearchService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async search({ query, limit }: SearchQuery) {
-		const term = normalize(query);
-		const where = { name: { contains: query, mode: "insensitive" as const } };
-		const take = CANDIDATE_LIMIT;
-		const orderBy = [{ name: "asc" as const }, { id: "asc" as const }];
+	private async rank(table: SearchTable, rawTerm: string, { limit, offset }: Page) {
+		const tokens = tokensOf(rawTerm);
+		if (tokens.length === 0) return { ids: [], total: 0 };
 
-		const [musics, artists, albums] = await Promise.all([
-			this.prisma.music.findMany({ where, include: musicItemInclude, orderBy, take }),
-			this.prisma.artist.findMany({ where, orderBy, take }),
-			this.prisma.album.findMany({ where, orderBy, take }),
+		const exact = tokens.join(" ");
+		const fuzzy = tokens.filter((token) => token.length >= MIN_FUZZY_LENGTH).join(" ");
+		const { from, fields } = TABLES[table];
+
+		const where = Prisma.join(fields.flatMap(({ column, boost }) => {
+			const weight = Prisma.raw(String(boost));
+			return [
+				Prisma.sql`${column} ||| ${exact}::pdb.boost(${weight})`,
+				...fuzzy === ""
+					? []
+					: [Prisma.sql`${column} ||| ${fuzzy}::pdb.fuzzy(1, t, t)::pdb.boost(${weight})`],
+			];
+		}), " OR ");
+
+		const [, rows, [{ total }]] = await this.prisma.$transaction([
+			this.prisma.$queryRaw`SELECT set_config('paradedb.planner_warnings', 'off', true)`,
+			this.prisma.$queryRaw<{ id: number }[]>(Prisma.sql`
+				SELECT "id" FROM ${from}
+				WHERE ${where}
+				ORDER BY pdb.score("id") DESC, "id" ASC
+				LIMIT ${limit}::int OFFSET ${offset}::int
+			`),
+			this.prisma.$queryRaw<{ total: number }[]>(Prisma.sql`
+				SELECT count(*)::int AS "total" FROM ${from} WHERE ${where}
+			`),
 		]);
 
-		const best = <T extends { name: string }>(rows: T[]) => rows
-			.map((row) => ({ row, score: rank(row.name, term) }))
-			.sort((a, b) => a.score - b.score || a.row.name.length - b.row.name.length)
-			.slice(0, limit)
-			.map(({ row }) => row);
+		return { ids: rows.map((row) => row.id), total };
+	}
+
+	async page<T extends { id: number }>(
+		table: SearchTable,
+		term: string,
+		page: Page,
+		load: (ids: number[]) => Promise<T[]>,
+	) {
+		const { ids, total } = await this.rank(table, term, page);
+		if (ids.length === 0) return { rows: [] as T[], total };
+
+		const loaded = new Map((await load(ids)).map((row) => [row.id, row]));
+		return { rows: ids.flatMap((id) => loaded.get(id) ?? []), total };
+	}
+
+	async search({ query, limit }: SearchQuery) {
+		const page = { limit, offset: 0 };
+
+		const [musics, artists, albums] = await Promise.all([
+			this.page("Music", query, page, (ids) => this.prisma.music.findMany({ where: { id: { in: ids } }, include: musicItemInclude })),
+			this.page("Artist", query, page, (ids) => this.prisma.artist.findMany({ where: { id: { in: ids } } })),
+			this.page("Album", query, page, (ids) => this.prisma.album.findMany({ where: { id: { in: ids } } })),
+		]);
 
 		return {
-			musics: best(musics).map(toMusicItem),
-			artists: best(artists).map(toArtistItem),
-			albums: best(albums).map(toAlbumItem),
+			musics: musics.rows.map(toMusicItem),
+			artists: artists.rows.map(toArtistItem),
+			albums: albums.rows.map(toAlbumItem),
 		};
 	}
 }

@@ -3,6 +3,7 @@ import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { artistDetailInclude, toArtistDetail, toArtistItem } from "../core/catalog/catalog.mappers";
 import { MediaService } from "../media/media.service";
+import { SearchService } from "../search/search.service";
 
 interface ListQuery {
 	limit: number;
@@ -22,21 +23,24 @@ export class ArtistService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly media: MediaService,
+		private readonly search: SearchService,
 	) {}
 
 	async list({ limit, offset, search }: ListQuery) {
-		const where: Prisma.ArtistWhereInput = search
-			? { name: { contains: search, mode: "insensitive" } }
-			: {};
+		if (search) {
+			const { rows, total } = await this.search.page("Artist", search, { limit, offset }, (ids) => this.prisma.artist.findMany({
+				where: { id: { in: ids } },
+			}));
+			return { artists: rows.map(toArtistItem), total };
+		}
 
 		const [rows, total] = await this.prisma.$transaction([
 			this.prisma.artist.findMany({
-				where,
 				orderBy: [{ name: "asc" }, { id: "asc" }],
 				take: limit,
 				skip: offset,
 			}),
-			this.prisma.artist.count({ where }),
+			this.prisma.artist.count(),
 		]);
 
 		return { artists: rows.map(toArtistItem), total };
