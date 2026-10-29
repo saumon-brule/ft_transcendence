@@ -4,6 +4,7 @@ import { PrismaService } from "../core/prisma/prisma.service";
 import { findArtistUuids } from "../core/catalog/catalog.lookups";
 import { albumDetailInclude, toAlbumDetail, toAlbumItem } from "../core/catalog/catalog.mappers";
 import { MediaService } from "../media/media.service";
+import { SearchService } from "../search/search.service";
 
 interface ListQuery {
 	limit: number;
@@ -24,21 +25,24 @@ export class AlbumService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly media: MediaService,
+		private readonly search: SearchService,
 	) {}
 
 	async list({ limit, offset, search }: ListQuery) {
-		const where: Prisma.AlbumWhereInput = search
-			? { name: { contains: search, mode: "insensitive" } }
-			: {};
+		if (search) {
+			const { rows, total } = await this.search.page("Album", search, { limit, offset }, (ids) => this.prisma.album.findMany({
+				where: { id: { in: ids } },
+			}));
+			return { albums: rows.map(toAlbumItem), total };
+		}
 
 		const [rows, total] = await this.prisma.$transaction([
 			this.prisma.album.findMany({
-				where,
 				orderBy: [{ name: "asc" }, { id: "asc" }],
 				take: limit,
 				skip: offset,
 			}),
-			this.prisma.album.count({ where }),
+			this.prisma.album.count(),
 		]);
 
 		return { albums: rows.map(toAlbumItem), total };
