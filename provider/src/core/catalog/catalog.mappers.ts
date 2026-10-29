@@ -1,7 +1,11 @@
 import { Prisma } from "../../generated/prisma/client";
 
+export const albumItemInclude = {
+	artists: { include: { artist: true }, orderBy: { artist: { name: "asc" } } },
+} satisfies Prisma.AlbumInclude;
+
 export const musicItemInclude = {
-	album: true,
+	album: { include: albumItemInclude },
 	artists: { include: { artist: true }, orderBy: { artist: { name: "asc" } } },
 } satisfies Prisma.MusicInclude;
 
@@ -20,8 +24,8 @@ export const artistDetailInclude = {
 		orderBy: { music: { name: "asc" } },
 		take: DETAIL_MUSIC_LIMIT,
 	},
-	_count: { select: { music: true } },
-	albums: { include: { album: true }, orderBy: { album: { name: "asc" } } },
+	_count: { select: { music: true, albums: true } },
+	albums: { include: { album: { include: albumItemInclude } }, orderBy: { album: { name: "asc" } } },
 } satisfies Prisma.ArtistInclude;
 
 export const albumDetailInclude = {
@@ -31,6 +35,7 @@ export const albumDetailInclude = {
 	artists: { include: { artist: true }, orderBy: { artist: { name: "asc" } } },
 } satisfies Prisma.AlbumInclude;
 
+export type AlbumItemRow = Prisma.AlbumGetPayload<{ include: typeof albumItemInclude }>;
 export type MusicItemRow = Prisma.MusicGetPayload<{ include: typeof musicItemInclude }>;
 export type MusicDetailRow = Prisma.MusicGetPayload<{ include: typeof musicDetailInclude }>;
 export type ArtistDetailRow = Prisma.ArtistGetPayload<{ include: typeof artistDetailInclude }>;
@@ -42,11 +47,12 @@ export const toArtistItem = (artist: { uuid: string; name: string; hasAvatar: bo
 	hasAvatar: artist.hasAvatar,
 });
 
-export const toAlbumItem = (album: { uuid: string; name: string; publishedAt: Date | null; hasCover: boolean }) => ({
+export const toAlbumItem = (album: AlbumItemRow) => ({
 	uuid: album.uuid,
 	name: album.name,
 	publishedAt: album.publishedAt,
 	hasCover: album.hasCover,
+	artists: album.artists.map((link) => toArtistItem(link.artist)),
 });
 
 export const toMusicItem = (music: MusicItemRow) => ({
@@ -75,7 +81,7 @@ export const toArtistDetail = (artist: ArtistDetailRow) => ({
 	biography: artist.biography,
 	hasAvatar: artist.hasAvatar,
 	music: { musics: artist.music.map((link) => toMusicItem(link.music)), total: artist._count.music },
-	albums: artist.albums.map((link) => toAlbumItem(link.album)),
+	album: { albums: artist.albums.map((link) => toAlbumItem(link.album)), total: artist._count.albums },
 });
 
 export const toAlbumDetail = (album: AlbumDetailRow) => ({
