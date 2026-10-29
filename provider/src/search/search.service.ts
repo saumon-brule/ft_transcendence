@@ -53,6 +53,14 @@ export class SearchService {
 					: [Prisma.sql`${column} ||| ${fuzzy}::pdb.fuzzy(1, t, t)::pdb.boost(${weight})`],
 			];
 		}), " OR ");
+		/* something like this fuck
+		WHERE "name"          ||| $1::pdb.boost(3)
+  		OR    "name"          ||| $2::pdb.fuzzy(1, t, t)::pdb.boost(3)
+  		OR    "searchArtists" ||| $3::pdb.boost(2)
+  		OR    "searchArtists" ||| $4::pdb.fuzzy(1, t, t)::pdb.boost(2)
+  		OR    "searchAlbum"   ||| $5::pdb.boost(1)
+  		OR    "searchAlbum"   ||| $6::pdb.fuzzy(1, t, t)::pdb.boost(1)
+		*/
 
 		const [, rows, [{ total }]] = await this.prisma.$transaction([
 			this.prisma.$queryRaw`SELECT set_config('paradedb.planner_warnings', 'off', true)`,
