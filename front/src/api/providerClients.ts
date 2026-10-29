@@ -1,3 +1,4 @@
+import { createResource } from "solid-js";
 import { initQueryClient } from "@ts-rest/solid-query";
 import { providerContract, providerError401Schema } from "@flex/shared";
 import { ApiFetcher, tsRestFetchApi } from "@ts-rest/core";
@@ -86,17 +87,28 @@ export function refreshProviderMediaToken(providerUrl: string) {
 		});
 }
 
+const MEDIA_TOKEN_MIN_VALIDITY = 30_000;
+const pendingMediaTokens = new Map<string, Promise<string | null>>();
+
 export const getMediaToken = (providerUrl: string) => {
 	const providerClient = getProviderClient(providerUrl);
-	if (!providerClient.mediaToken.token || providerClient.mediaToken.expiresAt < new Date()) {
-		return refreshProviderMediaToken(providerUrl).then((success) => {
-			if (success) {
-				return providerClient.mediaToken.token;
-			} else {
-				return null;
-			}
-		});
-	} else {
-		return Promise.resolve(providerClient.mediaToken.token);
+	const { token, expiresAt } = providerClient.mediaToken;
+	if (token && expiresAt.getTime() - Date.now() > MEDIA_TOKEN_MIN_VALIDITY) {
+		return Promise.resolve(token);
 	}
+
+	let pending = pendingMediaTokens.get(providerUrl);
+	if (!pending) {
+		pending = refreshProviderMediaToken(providerUrl)
+			.then((success) => success ? providerClient.mediaToken.token : null)
+			.finally(() => pendingMediaTokens.delete(providerUrl));
+		pendingMediaTokens.set(providerUrl, pending);
+	}
+	return pending;
 };
+
+// No more refresh because it is only used when called and never called to be used later
+export function useMediaToken(providerUrl: () => string) {
+	const [mediaToken] = createResource(providerUrl, getMediaToken);
+	return mediaToken;
+}

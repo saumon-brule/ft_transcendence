@@ -12,7 +12,7 @@ export default function ProviderAlbum() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string; albumUUID: string }>();
 	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { uuid: params.uuid } });
-	const album = useProviderAlbumQuery(() => providerBack.data?.body.address ?? "", () => params.albumUUID);
+	const album = useProviderAlbumQuery(() => providerBack.data?.body.address ?? "", () => params.uuid, () => params.albumUUID);
 	const data = createMemo(() => album.data && providerBack.data
 		? { info: album.data.body, back: providerBack.data.body }
 		: undefined);
@@ -33,7 +33,7 @@ export default function ProviderAlbum() {
 			<ProviderAlbumHeader album={data.info} providerBack={data.back} />
 			<section>
 				<h2>Musiques</h2>
-				<MusicSection music={data.info.music} providerUrl={data.back.address} providerUuid={params.uuid} hiddenColumns={["album"]} />
+				<MusicSection music={data.info.music} hiddenColumns={["album"]} />
 			</section>
 			<section>
 				<h2>Artists</h2>

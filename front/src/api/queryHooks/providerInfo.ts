@@ -3,7 +3,7 @@ import { createQuery } from "@tanstack/solid-query";
 import { getProviderClient } from "../providerClients";
 import { Music } from "~/class/Music";
 
-export const useProviderInfoQuery = (providerUrl: () => string) => {
+export const useProviderInfoQuery = (providerUrl: () => string, providerUuid: () => string) => {
 	const provider = createMemo(() => getProviderClient(providerUrl()));
 	return createQuery({
 		queryKey: () => provider().keys.info.all(),
@@ -19,7 +19,7 @@ export const useProviderInfoQuery = (providerUrl: () => string) => {
 				...response.body,
 				music: {
 					...response.body.music,
-					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl())),
+					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl(), providerUuid())),
 				},
 			},
 		}),
@@ -28,7 +28,7 @@ export const useProviderInfoQuery = (providerUrl: () => string) => {
 
 export type ProviderInfo = Exclude<ReturnType<typeof useProviderInfoQuery>["data"], undefined>["body"];
 
-export const useProviderArtistQuery = (providerUrl: () => string, artistUUID: () => string) => {
+export const useProviderArtistQuery = (providerUrl: () => string, providerUuid: () => string, artistUUID: () => string) => {
 	const provider = createMemo(() => getProviderClient(providerUrl()));
 	return createQuery({
 		queryKey: () => provider().keys.artist.get([artistUUID()]),
@@ -44,14 +44,15 @@ export const useProviderArtistQuery = (providerUrl: () => string, artistUUID: ()
 				...response.body,
 				music: {
 					...response.body.music,
-					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl())),
+					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl(), providerUuid())),
 				},
 			},
 		}),
 	});
 };
 
-export const useProviderAlbumQuery = (providerUrl: () => string, albumUUID: () => string) => {
+
+export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: () => string, albumUUID: () => string) => {
 	const provider = createMemo(() => getProviderClient(providerUrl()));
 	return createQuery({
 		queryKey: () => provider().keys.album.get([albumUUID()]),
@@ -67,7 +68,7 @@ export const useProviderAlbumQuery = (providerUrl: () => string, albumUUID: () =
 				...response.body,
 				music: {
 					...response.body.music,
-					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl())),
+					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl(), providerUuid())),
 				},
 			},
 		}),

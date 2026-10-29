@@ -12,7 +12,7 @@ export default function ProviderArtist() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string; artistUUID: string }>();
 	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { uuid: params.uuid } });
-	const artist = useProviderArtistQuery(() => providerBack.data?.body.address ?? "", () => params.artistUUID);
+	const artist = useProviderArtistQuery(() => providerBack.data?.body.address ?? "", () => params.uuid, () => params.artistUUID);
 	const data = createMemo(() => artist.data && providerBack.data
 		? { info: artist.data.body, back: providerBack.data.body }
 		: undefined);
@@ -33,7 +33,7 @@ export default function ProviderArtist() {
 			<ProviderArtistHeader artist={data.info} providerBack={data.back} />
 			<section>
 				<h2>Musiques</h2>
-				<MusicSection music={data.info.music} providerUrl={data.back.address} providerUuid={params.uuid} hiddenColumns={["artists"]} />
+				<MusicSection music={data.info.music} hiddenColumns={["artists"]} />
 			</section>
 			<section>
 				<h2>Albums</h2>
