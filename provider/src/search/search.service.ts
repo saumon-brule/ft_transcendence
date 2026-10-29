@@ -29,6 +29,7 @@ const TABLES: Record<SearchTable, { from: Prisma.Sql; fields: SearchField[] }> =
 };
 
 const MIN_FUZZY_LENGTH = 3;
+const MIN_RELATIVE_SCORE = 0.2;
 
 const tokensOf = (value: string) => value.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
 
@@ -62,16 +63,23 @@ export class SearchService {
   		OR    "searchAlbum"   ||| $6::pdb.fuzzy(1, t, t)::pdb.boost(1)
 		*/
 
+		const matches = Prisma.sql`(
+			SELECT "id", pdb.score("id") AS "score", max(pdb.score("id")) OVER () AS "best"
+			FROM ${from}
+			WHERE ${where}
+		) AS "matches"`;
+		const relevant = Prisma.sql`"score" >= "best" * ${Prisma.raw(String(MIN_RELATIVE_SCORE))}`;
+
 		const [, rows, [{ total }]] = await this.prisma.$transaction([
 			this.prisma.$queryRaw`SELECT set_config('paradedb.planner_warnings', 'off', true)`,
 			this.prisma.$queryRaw<{ id: number }[]>(Prisma.sql`
-				SELECT "id" FROM ${from}
-				WHERE ${where}
-				ORDER BY pdb.score("id") DESC, "id" ASC
+				SELECT "id" FROM ${matches}
+				WHERE ${relevant}
+				ORDER BY "score" DESC, "id" ASC
 				LIMIT ${limit}::int OFFSET ${offset}::int
 			`),
 			this.prisma.$queryRaw<{ total: number }[]>(Prisma.sql`
-				SELECT count(*)::int AS "total" FROM ${from} WHERE ${where}
+				SELECT count(*)::int AS "total" FROM ${matches} WHERE ${relevant}
 			`),
 		]);
 
