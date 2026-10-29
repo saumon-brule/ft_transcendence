@@ -2,7 +2,7 @@ import { Controller } from "@nestjs/common";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { providerContract } from "@flex/shared";
 import { InfoService } from "./info.service";
-import { Authenticated } from "../core/auth/auth.decorators";
+import { Authenticated, MemberOnly } from "../core/auth/auth.decorators";
 
 @Controller()
 export class InfoController {
@@ -14,6 +14,15 @@ export class InfoController {
 		return tsRestHandler(providerContract.info.info, async () => ({
 			status: 200,
 			body: await this.infoService.get(),
+		}));
+	}
+
+	@TsRestHandler(providerContract.info.all)
+	@MemberOnly()
+	all() {
+		return tsRestHandler(providerContract.info.all, async () => ({
+			status: 200,
+			body: await this.infoService.all(),
 		}));
 	}
 

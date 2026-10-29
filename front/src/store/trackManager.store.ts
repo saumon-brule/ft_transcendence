@@ -6,8 +6,7 @@ import { Track } from "~/class/Track";
 
 const MAX_HISTORY_SIZE = 64;
 
-
-const trackManagerStateSchema = z.object({
+const _trackManagerStateSchema = z.object({
 	current: Track.zodSchema.nullable(),
 	queue: z.array(Track.zodSchema),
 	history: z.array(Track.zodSchema).max(MAX_HISTORY_SIZE).catch(() => []),
@@ -15,7 +14,7 @@ const trackManagerStateSchema = z.object({
 	activePlaylist: z.array(Track.zodSchema).nullable(),
 });
 
-type TrackManagerState = z.infer<typeof trackManagerStateSchema>;
+type TrackManagerState = z.infer<typeof _trackManagerStateSchema>;
 
 const defaultTrackManagerState = {
 	current: null,
@@ -26,21 +25,22 @@ const defaultTrackManagerState = {
 };
 
 function loadLocalTrackManagerState(): TrackManagerState {
-	let data: unknown;
-	try {
-		const item = localStorage.getItem("track-state");
-		if (!item) return defaultTrackManagerState;
-		data = JSON.parse(item);
-	} catch (e: unknown) {
-		console.error(e);
-		return defaultTrackManagerState;
-	}
-	const result = trackManagerStateSchema.safeParse(data);
-	if (result.success) {
-		return result.data;
-	} else {
-		return defaultTrackManagerState;
-	}
+	return defaultTrackManagerState;
+	// let data: unknown;
+	// try {
+	// 	const item = localStorage.getItem("track-state");
+	// 	if (!item) return defaultTrackManagerState;
+	// 	data = JSON.parse(item);
+	// } catch (e: unknown) {
+	// 	console.error(e);
+	// 	return defaultTrackManagerState;
+	// }
+	// const result = trackManagerStateSchema.safeParse(data);
+	// if (result.success) {
+	// 	return result.data;
+	// } else {
+	// 	return defaultTrackManagerState;
+	// }
 }
 
 export function useTrackManager() {
@@ -92,11 +92,11 @@ export function useTrackManager() {
 		}
 
 		setTrackManager(produce((manager) => {
-			if (manager.current != null) {
+			if (manager.current != null && !manager.current.temporary) {
 				if (manager.history.length >= MAX_HISTORY_SIZE) manager.history.shift();
-				if (!manager.current.temporary) manager.history.push(manager.current);
-				manager.current = track ?? null;
+				manager.history.push(manager.current);
 			}
+			manager.current = track ?? null;
 		}));
 	}
 

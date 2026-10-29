@@ -5,6 +5,7 @@ export { rolesContract } from "./contracts/server/roles/roles.contract";
 export { permissionsContract } from "./contracts/server/permissions/permissions.contract";
 export { appConfigContract } from "./contracts/server/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/server/playlists/playlists.contract";
+export { providersContract } from "./contracts/server/providers/providers.contract";
 export { providerContract } from "./contracts/provider/provider.contract";
 export { friendsContract } from "./contracts/server/users/friends.contract";
 export { type FriendRelation, type FriendRequestAnswer } from "./contracts/server/users/schemas/friends.schema";
@@ -25,9 +26,12 @@ export { type Permission } from "./core/permissions";
 
 export { providerPermissions, providerPermissionSchema, type ProviderPermission } from "./contracts/provider/role/schemas/role.schema";
 
-export { MEDIA_TYPES, MEDIA_ROUTES, buildMediaUrl, type MediaType } from "./contracts/provider/media/media-routes";
+export { MEDIA_ROUTES, buildMediaUrl, type MediaType } from "./contracts/provider/media/media-routes";
 export * from "./errors/error-codes";
 export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
 
-export { type HealthResponseDto } from "./contracts/provider/info/schemas/info.schema";
+export { type HealthResponseDto, type ProviderDataDto, type ProviderDataMusicDto } from "./contracts/provider/info/schemas/info.schema";
+export { musicItemSchema } from "./contracts/provider/schemas/items.schema";
+export { type ArtistDetailedItemDto } from "./contracts/provider/artist/schemas/artist.schema";
+export { type AlbumDetailedItemDto } from "./contracts/provider/album/schemas/album.schema";
