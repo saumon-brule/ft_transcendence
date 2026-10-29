@@ -1,1 +1,1 @@
-export * from "./OverlaysProvider";
+export * from "./Overlays";

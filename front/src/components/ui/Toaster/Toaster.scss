@@ -18,6 +18,10 @@
 		margin-bottom: 0.5rem;
 		max-width: 100%;
 		pointer-events: all;
+
+		& > * {
+			overflow: hidden;
+		}
 	}
 
 	.toast-wrapper-enter {

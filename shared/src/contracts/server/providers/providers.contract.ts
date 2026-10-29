@@ -1,5 +1,5 @@
 import { initContract } from "@ts-rest/core";
-import { createdProviderSchema, createProviderSchema, editProviderSchema, providerSchema, providerTokenSchema, regenerateKeyProviderSchema } from "./schemas/provider.schema";
+import { accessRequestStatusSchema, createdProviderSchema, createProviderSchema, editProviderSchema, providerSchema, providerTokenSchema, regenerateKeyProviderSchema } from "./schemas/provider.schema";
 import { commonError404Schema, commonError409Schema } from "../../../errors/error-schemas";
 import { uuidParamSchema } from "../../../schemas/common.schema";
 
@@ -56,14 +56,15 @@ export const providersContract = c.router(
 				404: commonError404Schema,
 			},
 		},
-		requestAccessToken: {
+		requestAccess: {
 			method: "POST",
-			path: "/:uuid/request-access-token",
+			path: "/:uuid/access-request",
 			pathParams: uuidParamSchema,
 			body: null,
 			responses: {
-				200: providerTokenSchema,
+				200: accessRequestStatusSchema,
 				404: commonError404Schema,
+				409: commonError409Schema,
 			},
 		},
 	},

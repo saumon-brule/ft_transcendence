@@ -2,7 +2,7 @@ import { createSignal, JSX, Show, splitProps, createUniqueId, JSXElement, onClea
 
 import "./TextInput.scss";
 import { Translator, useTranslation } from "~/i18n/context";
-import { InputComponentRef } from "~/types/ComponentRef";
+import { FormEmbeddedComponentRef } from "~/types/ComponentRef";
 import { useFormContext } from "../Form/Form";
 
 type TextInputTypes = "text" | "email" | "password" | "tel" | "url" | "search";
@@ -21,7 +21,7 @@ interface TextInputComponentProps {
 	 * @see {@link TextInputComponentProps.validator} To provide validation checks that will be run
 	 * by `ref.checkValidity` */
 	type?: TextInputTypes;
-	ref?: InputComponentRef | ((ref: InputComponentRef) => void);
+	ref?: FormEmbeddedComponentRef<HTMLInputElement> | ((ref: FormEmbeddedComponentRef<HTMLInputElement>) => void);
 	/** `validate` is the callback used by {@link InputComponentRefProperty.checkValidity} to validate input value.
 	 * The JSXElement returned by the callback will be displayed if truish
 	 */
@@ -71,7 +71,7 @@ export default function TextInput(props: TextInputProps) {
 		"ref",
 	]);
 
-	let componentRef!: InputComponentRef;
+	let componentRef!: FormEmbeddedComponentRef<HTMLInputElement>;
 
 	onCleanup(() => formContext.unregister(componentRef));
 

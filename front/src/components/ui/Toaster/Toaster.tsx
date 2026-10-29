@@ -2,7 +2,7 @@ import { createRoot, createSignal, For, JSXElement } from "solid-js";
 import { TransitionGroup } from "solid-transition-group";
 import "./Toaster.scss";
 
-const DEFAULT_TTL = 300000;
+const DEFAULT_TTL = 3000;
 
 export interface ToastControls {
 	remove: () => void;
@@ -60,15 +60,12 @@ export function getRenderedToastContent(content: ToastContent, controls: ToastCo
 	return typeof content === "function" ? content(controls) : content;
 }
 
-export function ToasterProvider(props: { children: JSXElement }) {
-	return <>
-		<div id="toast-container" class="">
-			<TransitionGroup name="toast-wrapper" onExit={(_, done) => setTimeout(done, 1000)}>
-				<For each={toasts()}>{(toast) => <div onClick={toast.controls.remove}>
-					{getRenderedToastContent(toast.element, toast.controls)}
-				</div>}</For>
-			</TransitionGroup>
-		</div>
-		{props.children}
-	</>;
+export function ToasterAnchor() {
+	return <div id="toast-container" class="">
+		<TransitionGroup name="toast-wrapper" onExit={(_, done) => setTimeout(done, 1000)}>
+			<For each={toasts()}>{(toast) => <div onClick={toast.controls.remove}>
+				{getRenderedToastContent(toast.element, toast.controls)}
+			</div>}</For>
+		</TransitionGroup>
+	</div>;
 }

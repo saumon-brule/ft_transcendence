@@ -17,6 +17,7 @@ import {
 	CurrentUser,
 } from "../core/decorators/current-user.decorator";
 import {
+	MAX_SIZE,
 	playlistsContract,
 } from "@flex/shared";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
@@ -27,7 +28,7 @@ import type { Express } from "express";
 import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
 import { createReadStream, existsSync } from "node:fs";
-import { ASSET_DIR, COVER_DIR, MAX_SIZE } from "../core/utils/constants";
+import { ASSET_DIR, COVER_DIR } from "../core/utils/constants";
 
 @Controller()
 export class PlaylistsController {

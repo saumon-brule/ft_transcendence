@@ -31,6 +31,7 @@ model User {
     tokens             Token[]
     ownedProviders     Provider[]
     providers          ProviderUser[]
+    providerAccessRequests ProviderAccessRequest[]
     playlists          UserPlaylist[]
     ownedPlaylists     Playlist[]
     currentlyListening Music?          @relation(fields: [currentlyListeningUUID], references: [uuid], onDelete: SetNull)
@@ -145,6 +146,7 @@ model Provider {
     updatedAt     DateTime @updatedAt
 
     users ProviderUser[]
+    accessRequests ProviderAccessRequest[]
     owner User           @relation(fields: [ownerUUID], references: [uuid], onDelete: Cascade)
 }
 
@@ -160,6 +162,28 @@ model ProviderUser {
     user     User     @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
 
     @@unique([providerUUID, userUUID])
+}
+
+enum AccessRequestStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+model ProviderAccessRequest {
+    id           Int                 @id @default(autoincrement())
+    providerUUID String
+    userUUID     String
+    status       AccessRequestStatus @default(PENDING)
+    decidedAt    DateTime?
+    createdAt    DateTime            @default(now())
+    updatedAt    DateTime            @updatedAt
+
+    provider Provider @relation(fields: [providerUUID], references: [uuid], onDelete: Cascade)
+    user     User     @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+
+    @@unique([providerUUID, userUUID])
+    @@index([userUUID])
 }
 
 model Playlist {
