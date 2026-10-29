@@ -7,6 +7,7 @@ export class Music {
 	private constructor(
 		public readonly uuid: string,
 		public readonly name: string,
+		public providerUuid: string,
 		public providerUrl: string,
 		public readonly duration: number,
 		public readonly publishedAt: Date | null,
@@ -33,14 +34,16 @@ export class Music {
 		return buildMediaUrl(this.providerUrl, "musicCover", this.uuid, token);
 	}
 
-	public static fromRawObject(this: void, rawMusicObject: ProviderDataMusicDto, providerUrl: string): Music {
+	public static fromRawObject(this: void, rawMusicObject: ProviderDataMusicDto, providerUrl: string, providerUuid: string): Music {
 		const music = { ...rawMusicObject } as Music;
 		Object.setPrototypeOf(music, Music.prototype);
 		music.providerUrl = providerUrl;
+		music.providerUuid = providerUuid;
 		return music;
 	}
 
 	public static zodSchema = musicItemSchema.extend({
 		providerUrl: z.string(),
-	}).transform(({ providerUrl, ...music }): Music => Music.fromRawObject(music, providerUrl));
+		providerUuid: z.string(),
+	}).transform(({ providerUrl, providerUuid, ...music }): Music => Music.fromRawObject(music, providerUrl, providerUuid));
 }

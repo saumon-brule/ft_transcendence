@@ -1,7 +1,7 @@
-import { createEffect, createResource, For, onCleanup, Show } from "solid-js";
+import { For, Show } from "solid-js";
 import type { ProviderDataDto } from "@flex/shared";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
-import { getMediaToken, getProviderClient } from "~/api/providerClients";
+import { useMediaToken } from "~/api/providerClients";
 import { Music } from "~/class/Music";
 import "./MusicSection.scss";
 import { A } from "@solidjs/router";
@@ -18,30 +18,28 @@ function ArtistsLinks(props: { music: ProviderDataDto["music"]["musics"][number]
 	}</>;
 }
 
+function MusicCover(props: { music: Music }) {
+	const mediaToken = useMediaToken(() => props.music.providerUrl);
+
+	const src = () => {
+		const token = mediaToken();
+		if (token && props.music.hasCover) return props.music.coverUrl(token);
+		return "/images/default_cover.png";
+	};
+
+	return <img src={src()} alt={props.music.name} />;
+}
+
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
 export type MusicSectionProps = {
 	music: ProviderInfo["music"];
-	providerUrl: string;
-	providerUuid: string;
 	hiddenColumns?: MusicSectionColumn[];
 };
 
 export default function MusicSection(props: MusicSectionProps) {
 	const audioManager = useAudioManagerContext();
 	const shown = (column: MusicSectionColumn) => !props.hiddenColumns?.includes(column);
-	const [mediaToken, { refetch }] = createResource(() => props.providerUrl, getMediaToken);
-
-	let refreshTimer: ReturnType<typeof setTimeout> | undefined;
-	createEffect(() => {
-		if (!mediaToken()) return;
-		clearTimeout(refreshTimer);
-		const expiresAt = getProviderClient(props.providerUrl).mediaToken.expiresAt;
-		const delay = expiresAt.getTime() - Date.now() - 30_000;
-		refreshTimer = setTimeout(() => void refetch(), Math.max(delay, 0));
-	});
-	onCleanup(() => clearTimeout(refreshTimer));
-
 
 	function toDate(value: Date | string): Date {
 		return value instanceof Date ? value : new Date(value);
@@ -60,12 +58,6 @@ export default function MusicSection(props: MusicSectionProps) {
 
 	function addToQueue(music: Music) {
 		audioManager.pushTrackToQueue(music);
-	}
-
-	function getCover(music: Music): string {
-		const token = mediaToken();
-		if (token && music.hasCover) return music.coverUrl(token);
-		return "/images/default_cover.png";
 	}
 
 	// function getCover(music: ProviderDataDto["music"]["musics"][number]) {
@@ -91,16 +83,16 @@ export default function MusicSection(props: MusicSectionProps) {
 				<For each={props.music.musics}>{(music) => <tr>
 					<td class="col-title">
 						<div class="music-title">
-							<img src={getCover(music)} alt={music.name} />
+							<MusicCover music={music} />
 							<div class="music-title-text">
 								<Button variant="text" onClick={() => void playMusic(music)}>{music.name}</Button>
-								<Show when={shown("artists")}><span class="music-title-artists"><ArtistsLinks music={music} providerUUID={props.providerUuid} /></span></Show>
+								<Show when={shown("artists")}><span class="music-title-artists"><ArtistsLinks music={music} providerUUID={music.providerUuid} /></span></Show>
 							</div>
 						</div>
 					</td>
 					<Show when={shown("actions")}><td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td></Show>
-					<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks music={music} providerUUID={props.providerUuid} /></td></Show>
-					<Show when={shown("album")}><td class="col-album">{music.album ? <A href={`/provider/${props.providerUuid}/album/${music.album.uuid}`} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
+					<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks music={music} providerUUID={music.providerUuid} /></td></Show>
+					<Show when={shown("album")}><td class="col-album">{music.album ? <A href={`/provider/${music.providerUuid}/album/${music.album.uuid}`} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
 					<Show when={shown("published")}><td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString() : "-"}</td></Show>
 					<Show when={shown("duration")}><td class="col-duration">{formatDuration(music.duration)}</td></Show>
 				</tr>}</For>

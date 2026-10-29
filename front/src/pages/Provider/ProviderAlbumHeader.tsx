@@ -1,21 +1,11 @@
 import type { AlbumDetailedItemDto, Provider } from "@flex/shared";
-import { createEffect, createResource, onCleanup, Show } from "solid-js";
-import { getMediaToken, getProviderClient } from "~/api/providerClients";
+import { Show } from "solid-js";
+import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
 import { A } from "@solidjs/router";
 
 export default function ProviderAlbumHeader(props: { album: AlbumDetailedItemDto; providerBack: Provider }) {
-	const [mediaToken, { refetch }] = createResource(() => props.providerBack.address, getMediaToken);
-
-	let refreshTimer: ReturnType<typeof setTimeout> | undefined;
-	createEffect(() => {
-		if (!mediaToken()) return;
-		clearTimeout(refreshTimer);
-		const expiresAt = getProviderClient(props.providerBack.address).mediaToken.expiresAt;
-		const delay = expiresAt.getTime() - Date.now() - 30_000;
-		refreshTimer = setTimeout(() => void refetch(), Math.max(delay, 0));
-	});
-	onCleanup(() => clearTimeout(refreshTimer));
+	const mediaToken = useMediaToken(() => props.providerBack.address);
 
 	function getCover(album: AlbumDetailedItemDto) {
 		const token = mediaToken();

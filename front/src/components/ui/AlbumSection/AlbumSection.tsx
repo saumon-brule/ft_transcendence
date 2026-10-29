@@ -1,6 +1,6 @@
-import { createEffect, createResource, For, onCleanup, Show } from "solid-js";
+import { For, Show } from "solid-js";
 import { buildMediaUrl } from "@flex/shared";
-import { getMediaToken, getProviderClient } from "~/api/providerClients";
+import { useMediaToken } from "~/api/providerClients";
 import "./AlbumSection.scss";
 import { A } from "@solidjs/router";
 import { ProviderInfo } from "~/api/queryHooks/providerInfo";
@@ -15,6 +15,18 @@ function ArtistsLinks(props: { album: AlbumSectionProps["album"]["albums"][numbe
 	}</>;
 }
 
+function AlbumCover(props: { album: ProviderInfo["album"]["albums"][number]; providerUrl: string }) {
+	const mediaToken = useMediaToken(() => props.providerUrl);
+
+	const src = () => {
+		const token = mediaToken();
+		if (token && props.album.hasCover) return buildMediaUrl(props.providerUrl, "albumCover", props.album.uuid, token);
+		return "/images/default_album.png";
+	};
+
+	return <img src={src()} alt={props.album.name} />;
+}
+
 export type AlbumSectionData = "artists" | "published";
 
 export type AlbumSectionProps = {
@@ -26,34 +38,14 @@ export type AlbumSectionProps = {
 
 export default function AlbumSection(props: AlbumSectionProps) {
 	const shown = (column: AlbumSectionData) => !props.hiddenProp?.includes(column);
-	const [mediaToken, { refetch }] = createResource(() => props.providerUrl, getMediaToken);
-
-	let refreshTimer: ReturnType<typeof setTimeout> | undefined;
-	createEffect(() => {
-		if (!mediaToken()) return;
-		clearTimeout(refreshTimer);
-		const expiresAt = getProviderClient(props.providerUrl).mediaToken.expiresAt;
-		const delay = expiresAt.getTime() - Date.now() - 30_000;
-		refreshTimer = setTimeout(() => void refetch(), Math.max(delay, 0));
-	});
-	onCleanup(() => clearTimeout(refreshTimer));
-
 
 	function toDate(value: Date | string): Date {
 		return value instanceof Date ? value : new Date(value);
 	}
 
-	function getCover(album: AlbumSectionProps["album"]["albums"][number]): string {
-		const token = mediaToken();
-		if (token && album.hasCover) {
-			return buildMediaUrl(props.providerUrl, "albumCover", album.uuid, token);
-		}
-		return "/images/default_album.png";
-	}
-
 	return <div class="album-section">
 		<For each={props.album.albums}>{(album) => <div class="album">
-			<img src={getCover(album)} alt={album.name} />
+			<AlbumCover album={album} providerUrl={props.providerUrl} />
 			<div class="album-info">
 				<A href={`/provider/${props.providerUuid}/album/${album.uuid}`} class="white-variant album-name">{album.name}</A>
 				<Show when={shown("artists")}><div class="album-artist"><ArtistsLinks album={album} providerUUID={props.providerUuid}/></div></Show>
