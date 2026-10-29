@@ -50,3 +50,26 @@ export const useProviderArtistQuery = (providerUrl: () => string, artistUUID: ()
 		}),
 	});
 };
+
+export const useProviderAlbumQuery = (providerUrl: () => string, albumUUID: () => string) => {
+	const provider = createMemo(() => getProviderClient(providerUrl()));
+	return createQuery({
+		queryKey: () => provider().keys.album.get([albumUUID()]),
+		get enabled() { return providerUrl() !== ""; },
+		queryFn: async () => {
+			const res = await provider().client.album.get.query({ params: ({ uuid: albumUUID() }) });
+			if (res.status !== 200) throw new Error(`Provider album failed with status ${res.status}`);
+			return res;
+		},
+		select: (response) => ({
+			...response,
+			body: {
+				...response.body,
+				music: {
+					...response.body.music,
+					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl())),
+				},
+			},
+		}),
+	});
+};

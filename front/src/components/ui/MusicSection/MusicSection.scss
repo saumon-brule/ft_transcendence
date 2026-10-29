@@ -67,6 +67,14 @@ $compact-below: 520px;
 				text-overflow: ellipsis;
 				overflow: hidden;
 			}
+
+			button {
+				padding: 0;
+				text-align: left;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
 		}
 
 		.music-title-artists {

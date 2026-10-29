@@ -6,6 +6,7 @@ import "./Provider.scss";
 import { useProviderArtistQuery } from "~/api/queryHooks/providerInfo";
 import ProviderArtistHeader from "./ProviderArtistHeader";
 import MusicSection from "../../components/ui/MusicSection/MusicSection";
+import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 
 export default function ProviderArtist() {
 	const navigate = useNavigate();
@@ -21,6 +22,10 @@ export default function ProviderArtist() {
 			navigate("/home");
 			summonErrorToast("Unknown provider");
 		}
+		if (artist.isError) {
+			navigate(`/provider/${params.uuid}`);
+			summonErrorToast("Unknown artist");
+		}
 	});
 
 	return <div class="page" id="provider">
@@ -28,7 +33,11 @@ export default function ProviderArtist() {
 			<ProviderArtistHeader artist={data.info} providerBack={data.back} />
 			<section>
 				<h2>Musiques</h2>
-				<MusicSection music={data.info.music} providerUrl={data.back.address} providerUuid={params.uuid} />
+				<MusicSection music={data.info.music} providerUrl={data.back.address} providerUuid={params.uuid} hiddenColumns={["artists"]} />
+			</section>
+			<section>
+				<h2>Albums</h2>
+				<AlbumSection album={data.info.album} providerUrl={data.back.address} providerUuid={params.uuid} hiddenProp={["artists"]} />
 			</section>
 		</>}</Show>
 	</div>;

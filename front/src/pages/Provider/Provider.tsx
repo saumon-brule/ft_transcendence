@@ -6,6 +6,8 @@ import { useProviderInfoQuery } from "~/api/queryHooks/providerInfo";
 import ProviderHeader from "./ProviderHeader";
 import MusicSection from "../../components/ui/MusicSection/MusicSection";
 import "./Provider.scss";
+import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
+import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
 
 export default function Provider() {
 	const navigate = useNavigate();
@@ -29,6 +31,14 @@ export default function Provider() {
 			<section>
 				<h2>Musiques</h2>
 				<MusicSection music={data.info.music} providerUrl={data.back.address} providerUuid={params.uuid} />
+			</section>
+			<section>
+				<h2>Albums</h2>
+				<AlbumSection album={data.info.album} providerUrl={data.back.address} providerUuid={params.uuid} />
+			</section>
+			<section>
+				<h2>Artistes</h2>
+				<ArtistSection artist={data.info.artist} providerUrl={data.back.address} providerUuid={params.uuid} />
 			</section>
 		</>}</Show>
 	</div>;

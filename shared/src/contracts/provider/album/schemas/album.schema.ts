@@ -12,6 +12,7 @@ export const albumDetailedItemSchema = z.object({
 	music: musicListResponseSchema,
 	artists: z.array(artistItemSchema),
 });
+export type AlbumDetailedItemDto = z.infer<typeof albumDetailedItemSchema>;
 
 export const albumListResponseSchema = z.object({
 	albums: z.array(albumItemSchema),

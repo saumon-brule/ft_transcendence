@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { artistItemSchema, albumItemSchema } from "../../schemas/items.schema";
+import { artistItemSchema } from "../../schemas/items.schema";
 import { musicListResponseSchema } from "../../music/schemas/music.schema";
+import { albumListResponseSchema } from "../../album/schemas/album.schema";
 
 export const artistDetailedItemSchema = z.object({
 	uuid: z.string().uuid(),
@@ -10,7 +11,7 @@ export const artistDetailedItemSchema = z.object({
 	biography: z.string().nullable(),
 	hasAvatar: z.boolean(),
 	music: musicListResponseSchema,
-	albums: z.array(albumItemSchema),
+	album: albumListResponseSchema,
 });
 export type ArtistDetailedItemDto = z.infer<typeof artistDetailedItemSchema>;
 
