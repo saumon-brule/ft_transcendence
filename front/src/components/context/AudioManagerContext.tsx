@@ -33,11 +33,20 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	const [isPlaying, setIsPlaying] = createSignal(false);
 	const [duration, setDuration] = createSignal(0.0);
 
+	let loadId = 0;
+	let loading = false;
+	let playWhenLoaded = false;
+
 	function play() {
+		if (loading) {
+			playWhenLoaded = true;
+			return;
+		}
 		audio.play().catch(() => setIsPlaying(false));
 	}
 
 	function pause() {
+		playWhenLoaded = false;
 		audio.pause();
 	}
 
@@ -95,17 +104,29 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 
 	createEffect(() => {
 		const currentTrack = trackManager.manager.current;
+		const id = ++loadId;
 		if (currentTrack !== null) {
+			loading = true;
 			currentTrack.music.audioUrl()
 				.then((url) => {
+					if (id !== loadId) return;
+					loading = false;
 					audio.src = url;
-					if (untrack(isPlaying)) play();
+					if (playWhenLoaded || untrack(isPlaying)) {
+						playWhenLoaded = false;
+						play();
+					}
 				})
 				.catch((e) => {
+					if (id !== loadId) return;
+					loading = false;
+					playWhenLoaded = false;
 					console.error(e);
 					summonErrorToast(() => "This music is not avaible right now :(");
 				});
 		} else {
+			loading = false;
+			playWhenLoaded = false;
 			audio.pause();
 			audio.src = "";
 			setDuration(0);

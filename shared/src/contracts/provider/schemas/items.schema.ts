@@ -11,6 +11,7 @@ export const albumItemSchema = z.object({
 	name: z.string(),
 	publishedAt: z.coerce.date().nullable(),
 	hasCover: z.boolean(),
+	artists: z.array(artistItemSchema),
 });
 
 export const musicItemSchema = z.object({

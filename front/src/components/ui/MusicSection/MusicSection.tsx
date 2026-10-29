@@ -1,4 +1,4 @@
-import { createEffect, createResource, For, onCleanup } from "solid-js";
+import { createEffect, createResource, For, onCleanup, Show } from "solid-js";
 import type { ProviderDataDto } from "@flex/shared";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import { getMediaToken, getProviderClient } from "~/api/providerClients";
@@ -18,14 +18,18 @@ function ArtistsLinks(props: { music: ProviderDataDto["music"]["musics"][number]
 	}</>;
 }
 
+export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
+
 export type MusicSectionProps = {
 	music: ProviderInfo["music"];
 	providerUrl: string;
 	providerUuid: string;
+	hiddenColumns?: MusicSectionColumn[];
 };
 
 export default function MusicSection(props: MusicSectionProps) {
 	const audioManager = useAudioManagerContext();
+	const shown = (column: MusicSectionColumn) => !props.hiddenColumns?.includes(column);
 	const [mediaToken, { refetch }] = createResource(() => props.providerUrl, getMediaToken);
 
 	let refreshTimer: ReturnType<typeof setTimeout> | undefined;
@@ -61,7 +65,7 @@ export default function MusicSection(props: MusicSectionProps) {
 	function getCover(music: Music): string {
 		const token = mediaToken();
 		if (token && music.hasCover) return music.coverUrl(token);
-		return "/assets/images/default_cover.png";
+		return "/images/default_cover.png";
 	}
 
 	// function getCover(music: ProviderDataDto["music"]["musics"][number]) {
@@ -76,11 +80,11 @@ export default function MusicSection(props: MusicSectionProps) {
 			<thead>
 				<tr>
 					<th class="col-title" scope="col">Title</th>
-					<th class="col-actions" scope="col">Actions</th>
-					<th class="col-artists" scope="col">Artists</th>
-					<th class="col-album" scope="col">Album</th>
-					<th class="col-published" scope="col">Published</th>
-					<th class="col-duration" scope="col">Duration</th>
+					<Show when={shown("actions")}><th class="col-actions" scope="col">Actions</th></Show>
+					<Show when={shown("artists")}><th class="col-artists" scope="col">Artists</th></Show>
+					<Show when={shown("album")}><th class="col-album" scope="col">Album</th></Show>
+					<Show when={shown("published")}><th class="col-published" scope="col">Published</th></Show>
+					<Show when={shown("duration")}><th class="col-duration" scope="col">Duration</th></Show>
 				</tr>
 			</thead>
 			<tbody>
@@ -89,16 +93,16 @@ export default function MusicSection(props: MusicSectionProps) {
 						<div class="music-title">
 							<img src={getCover(music)} alt={music.name} />
 							<div class="music-title-text">
-								<span><Button variant="text" onClick={() => void playMusic(music)}>{music.name}</Button></span>
-								<span class="music-title-artists"><ArtistsLinks music={music} providerUUID={props.providerUuid} /></span>
+								<Button variant="text" onClick={() => void playMusic(music)}>{music.name}</Button>
+								<Show when={shown("artists")}><span class="music-title-artists"><ArtistsLinks music={music} providerUUID={props.providerUuid} /></span></Show>
 							</div>
 						</div>
 					</td>
-					<td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td>
-					<td class="col-artists"><ArtistsLinks music={music} providerUUID={props.providerUuid} /></td>
-					<td class="col-album">{music.album ? <A href={`/provider/${props.providerUuid}/album/${music.album.uuid}`} class="white-variant">{music.album.name}</A> : "-"}</td>
-					<td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString() : "-"}</td>
-					<td class="col-duration">{formatDuration(music.duration)}</td>
+					<Show when={shown("actions")}><td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td></Show>
+					<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks music={music} providerUUID={props.providerUuid} /></td></Show>
+					<Show when={shown("album")}><td class="col-album">{music.album ? <A href={`/provider/${props.providerUuid}/album/${music.album.uuid}`} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
+					<Show when={shown("published")}><td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString() : "-"}</td></Show>
+					<Show when={shown("duration")}><td class="col-duration">{formatDuration(music.duration)}</td></Show>
 				</tr>}</For>
 			</tbody>
 		</table>

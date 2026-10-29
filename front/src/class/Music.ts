@@ -12,7 +12,7 @@ export class Music {
 		public readonly publishedAt: Date | null,
 		public readonly hasCover: boolean,
 		public readonly artists: { uuid: string; name: string; hasAvatar: boolean }[],
-		public readonly album: { uuid: string; name: string; publishedAt: Date | null; hasCover: boolean } | null,
+		public readonly album: ProviderDataMusicDto["album"],
 	) {}
 
 	public async audioUrl(): Promise<string> {

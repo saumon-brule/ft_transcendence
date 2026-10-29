@@ -34,3 +34,4 @@ export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/bu
 export { type HealthResponseDto, type ProviderDataDto, type ProviderDataMusicDto } from "./contracts/provider/info/schemas/info.schema";
 export { musicItemSchema } from "./contracts/provider/schemas/items.schema";
 export { type ArtistDetailedItemDto } from "./contracts/provider/artist/schemas/artist.schema";
+export { type AlbumDetailedItemDto } from "./contracts/provider/album/schemas/album.schema";

@@ -185,12 +185,12 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			where: { name: "Liam's Public Provider" },
 			update: {
 				ownerUUID: liamUser.uuid,
-				address: "https://liam-public-provider",
+				address: "https://liam-public-providerr",
 				publicDisplay: true,
 			},
 			create: {
 				name: "Liam's Public Provider",
-				address: "https://liam-public-provider",
+				address: "https://liam-public-providerr",
 				ownerUUID: liamUser.uuid,
 				publicDisplay: true,
 				...providerCredentials(),
