@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { musicItemInclude, toAlbumItem, toArtistItem, toMusicItem } from "../core/catalog/catalog.mappers";
+import { albumItemInclude, musicItemInclude, toAlbumItem, toArtistItem, toMusicItem } from "../core/catalog/catalog.mappers";
 
 interface SearchQuery {
 	query: string;
@@ -105,7 +105,7 @@ export class SearchService {
 		const [musics, artists, albums] = await Promise.all([
 			this.page("Music", query, page, (ids) => this.prisma.music.findMany({ where: { id: { in: ids } }, include: musicItemInclude })),
 			this.page("Artist", query, page, (ids) => this.prisma.artist.findMany({ where: { id: { in: ids } } })),
-			this.page("Album", query, page, (ids) => this.prisma.album.findMany({ where: { id: { in: ids } } })),
+			this.page("Album", query, page, (ids) => this.prisma.album.findMany({ where: { id: { in: ids } }, include: albumItemInclude })),
 		]);
 
 		return {

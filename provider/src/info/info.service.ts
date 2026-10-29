@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { musicItemInclude, toAlbumItem, toArtistItem, toMusicItem } from "../core/catalog/catalog.mappers";
+import { albumItemInclude, musicItemInclude, toAlbumItem, toArtistItem, toMusicItem } from "../core/catalog/catalog.mappers";
 
 const byName = [{ name: "asc" as const }, { id: "asc" as const }];
 
@@ -17,7 +17,7 @@ export class InfoService {
 		const [info, musics, albums, artists] = await Promise.all([
 			this.get(),
 			this.prisma.music.findMany({ include: musicItemInclude, orderBy: byName }),
-			this.prisma.album.findMany({ orderBy: byName }),
+			this.prisma.album.findMany({ include: albumItemInclude, orderBy: byName }),
 			this.prisma.artist.findMany({ orderBy: byName }),
 		]);
 

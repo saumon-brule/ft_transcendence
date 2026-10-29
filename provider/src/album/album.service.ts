@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { findArtistUuids } from "../core/catalog/catalog.lookups";
-import { albumDetailInclude, toAlbumDetail, toAlbumItem } from "../core/catalog/catalog.mappers";
+import { albumDetailInclude, albumItemInclude, toAlbumDetail, toAlbumItem } from "../core/catalog/catalog.mappers";
 import { MediaService } from "../media/media.service";
 import { SearchService } from "../search/search.service";
 
@@ -31,6 +31,7 @@ export class AlbumService {
 	async list({ limit, offset, search }: ListQuery) {
 		if (search) {
 			const { rows, total } = await this.search.page("Album", search, { limit, offset }, (ids) => this.prisma.album.findMany({
+				include: albumItemInclude,
 				where: { id: { in: ids } },
 			}));
 			return { albums: rows.map(toAlbumItem), total };
@@ -38,6 +39,7 @@ export class AlbumService {
 
 		const [rows, total] = await this.prisma.$transaction([
 			this.prisma.album.findMany({
+				include: albumItemInclude,
 				orderBy: [{ name: "asc" }, { id: "asc" }],
 				take: limit,
 				skip: offset,
