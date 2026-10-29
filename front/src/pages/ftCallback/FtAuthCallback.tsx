@@ -9,6 +9,7 @@ import { decodeOauthState } from "~/utils/encodeOauthState";
 
 export default function FtAuthCallback() {
 	const ftAuthMutation = client.auth.auth42.createMutation();
+	const ftLinkMutation = client.auth.link42.createMutation();
 	const navigate = useNavigate();
 	const { t } = useTranslation();
 
@@ -36,7 +37,12 @@ export default function FtAuthCallback() {
 
 		const state = queryParams.get("state");
 		if (!state) return onError();
-		const { backState, authTarget } = decodeOauthState(state);
+		const authState = decodeOauthState(state);
+		if (authState === null) {
+			onError(null);
+			return;
+		}
+		const { backState, authTarget, linkType } = authState;
 
 		const errorParam = queryParams.get("error");
 		if (errorParam) {
@@ -47,14 +53,25 @@ export default function FtAuthCallback() {
 		const code = queryParams.get("code");
 		if (!code) return onError(authTarget);
 
-		ftAuthMutation.mutate({ body: { code, state: backState } }, {
-			onSuccess: (r) => {
-				authActions.login(r.body.accessToken);
-				if (authTarget === "_parent") window.close();
-				navigate(authTarget ?? "/home", { replace: true });
-			},
-			onError: () => onError(authTarget),
-		});
+		if (linkType === "auth") {
+			ftAuthMutation.mutate({ body: { code, state: backState } }, {
+				onSuccess: (r) => {
+					authActions.login(r.body.accessToken);
+					if (authTarget === "_parent") window.close();
+					navigate(authTarget ?? "/home", { replace: true });
+				},
+				onError: () => onError(authTarget),
+			});
+		} else {
+			ftLinkMutation.mutate({ body: { code, state: backState } }, {
+				onSuccess: (_) => {
+
+					if (authTarget === "_parent") window.close();
+					navigate(authTarget ?? "/home", { replace: true });
+				},
+				onError: () => onError(authTarget),
+			});
+		}
 	});
 
 	return <main id="ft-auth-callback" />;

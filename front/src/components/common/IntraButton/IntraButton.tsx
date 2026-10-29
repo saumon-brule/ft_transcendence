@@ -10,13 +10,16 @@ import { useLocation } from "@solidjs/router";
 
 import "./IntraButton.scss";
 
-export type IntraButtonProps = ButtonProps;
+export type IntraButtonProps = ButtonProps & {
+	linkType: "auth" | "link";
+	unstyled?: boolean;
+};
 
 export default function IntraButton(props: IntraButtonProps) {
 	const { t } = useTranslation();
 	const location = useLocation();
 	const [fetchingUrl, setFetchingUrl] = createSignal(false);
-	const [local, rest] = splitProps(props, ["class", "disabled"]);
+	const [local, rest] = splitProps(props, ["unstyled", "class", "disabled", "linkType"]);
 
 	const messageListener = (event: MessageEvent<MessageEventData>) => {
 		if (event.origin !== window.location.origin) return;
@@ -36,7 +39,14 @@ export default function IntraButton(props: IntraButtonProps) {
 
 	async function handleClick(e: MouseEvent) {
 		setFetchingUrl(true);
-		const response = await client.auth.getLogin42url.query();
+		let response;
+
+		if (local.linkType === "auth") {
+			response = await client.auth.getLogin42url.query();
+		} else {
+			response = await client.auth.getLink42url.query();
+		}
+
 		if (response.status == 200) {
 			const url = new URL(response.body.url);
 			const state = url.searchParams.get("state");
@@ -45,7 +55,7 @@ export default function IntraButton(props: IntraButtonProps) {
 
 			const openToBlank = e.ctrlKey || e.button === 1;
 
-			url.searchParams.set("state", encodeOauthState({ backState: state ?? "", authTarget: openToBlank ? "_parent" : localAuthTarget }));
+			url.searchParams.set("state", encodeOauthState({ backState: state ?? "", authTarget: openToBlank ? "_parent" : localAuthTarget, linkType: local.linkType }));
 			const popup = window.open(url, openToBlank ? "_blank" : "_self");
 			if (openToBlank && popup) {
 				closeChecker = window.setInterval(() => { if (popup.closed) cleanup(); }, 500);
@@ -58,7 +68,7 @@ export default function IntraButton(props: IntraButtonProps) {
 
 	return <Button
 		type="button"
-		class={`ft-login-button ${local.class ?? ""}`}
+		class={`${props.unstyled ? "" : "ft-login-button "}${local.class ?? ""}`}
 		disabled={fetchingUrl()}
 		onAuxClick={(e) => void handleClick(e)}
 		onClick={(e) => void handleClick(e)}

@@ -15,21 +15,45 @@
 		.setting-field-title {
 			display: flex;
 			justify-content: space-between;
-			margin-bottom: .2rem;
+			margin-bottom: 0.2rem;
+			gap: 1rem;
+			align-items: center;
 
 			h3 {
 				font-size: 1rem;
 				width: 100%;
 				font-weight: 600;
 
+				& > svg {
+					fill: var(--text-primary);
+				}
+
+				&.intra-link-title {
+					display: flex;
+					align-items: center;
+					gap: .5rem;
+				}
+
 				& > .secondary-info {
 					margin-left: 0.5rem;
 					color: var(--text-secondary);
 				}
 			}
-			button {
-				padding: 0;
+
+			& > button {
 				flex-shrink: 0;
+
+				&.unlink-intra-button {
+					color: var(--text-danger);
+
+					&:is(:hover, :focus-visible) {
+						color: var(--text-danger-hover);
+					}
+
+					&:active {
+						color: var(--text-danger-active);
+					}
+				}
 			}
 		}
 	}

@@ -109,6 +109,10 @@ export default {
 					english: "English",
 					french: "Français",
 				},
+				intraLink: {
+					title: "Intra connexion",
+					unsetPassword: "You need to set a password before unlinking your account",
+				},
 			},
 			profile: {
 				title: "Profile",

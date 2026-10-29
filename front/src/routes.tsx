@@ -11,7 +11,7 @@ import VerifiedEmailGuard from "./components/guards/VerifiedEmailGuard";
 
 import PromptVerifyEmail from "./pages/auth/verifyEmail/PromptVerifyEmail";
 import UnverifiedEmailGuard from "./components/guards/UnverifiedEmailGuard";
-import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath, changeEmailConfirmationPath } from "@flex/shared";
+import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraCallbackPath, changeEmailConfirmationPath } from "@flex/shared";
 import FtAuthCallback from "./pages/ftCallback/FtAuthCallback";
 import ResetPassword from "./pages/auth/passwordReset/ResetPassword";
 import RequestPasswordReset from "./pages/auth/passwordReset/RequestPasswordReset";
@@ -34,7 +34,7 @@ export const AppRouter = () => {
 		</Route>
 		<Route path={emailConfirmationPath} component={VerifyEmail} />
 		<Route path={changeEmailConfirmationPath} component={ChangeEmailValidation} />
-		<Route path={ftIntraAuthCallbackPath} component={FtAuthCallback} />
+		<Route path={ftIntraCallbackPath} component={FtAuthCallback} />
 		<Route path={passwordResetConfirmationPath} component={ResetPassword} />
 		<Route path="/" component={AuthGuard}>
 			<Route path="/" component={UnverifiedEmailGuard}>

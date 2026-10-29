@@ -4,7 +4,7 @@ import {
 	InternalServerErrorException,
 } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
-import { emailConfirmationPath, ftIntraAuthCallbackPath, ftIntraLinkCallbackPath, RegisterDto } from "@flex/shared";
+import { emailConfirmationPath, ftIntraCallbackPath, RegisterDto } from "@flex/shared";
 import * as bcrypt from "bcrypt";
 import { LoginDto } from "@flex/shared";
 import { JwtService } from "@nestjs/jwt";
@@ -350,7 +350,7 @@ export class AuthService {
 
 		const state = await this.tokensService.create42AuthStateToken();
 
-		const url = `https://api.intra.42.fr/oauth/authorize?client_id=${api42_client_uid}&redirect_uri=${env.BASE_FRONT_URL}${ftIntraAuthCallbackPath}&response_type=code&scope=public&state=${state}`;
+		const url = `https://api.intra.42.fr/oauth/authorize?client_id=${api42_client_uid}&redirect_uri=${env.BASE_FRONT_URL}${ftIntraCallbackPath}&response_type=code&scope=public&state=${state}`;
 		return url;
 	}
 
@@ -364,7 +364,7 @@ export class AuthService {
 		const user = await this.users.getByUUID(userUUID);
 		const state = await this.tokensService.create42LinkStateToken(user.uuid);
 
-		const url = `https://api.intra.42.fr/oauth/authorize?client_id=${api42_client_uid}&redirect_uri=${env.BASE_FRONT_URL}${ftIntraLinkCallbackPath}&response_type=code&scope=public&state=${state}`;
+		const url = `https://api.intra.42.fr/oauth/authorize?client_id=${api42_client_uid}&redirect_uri=${env.BASE_FRONT_URL}${ftIntraCallbackPath}&response_type=code&scope=public&state=${state}`;
 		return url;
 	}
 
@@ -376,7 +376,7 @@ export class AuthService {
 	) {
 		await this.tokensService.isValidToken(state, "STATE_42AUTH");
 
-		const userData = await this.get42UserInfo(code, env.BASE_FRONT_URL + ftIntraAuthCallbackPath);
+		const userData = await this.get42UserInfo(code, env.BASE_FRONT_URL + ftIntraCallbackPath);
 
 		if (!userData || !userData.login) {
 			throw new AppUnauthorizedException("UNAUTHORIZED", "Failed to retrieve user data from 42");
@@ -425,7 +425,7 @@ export class AuthService {
 			throw new ConflictException("This account is already linked to an intra account");
 		}
 
-		const userData = await this.get42UserInfo(code, env.BASE_FRONT_URL + ftIntraLinkCallbackPath);
+		const userData = await this.get42UserInfo(code, env.BASE_FRONT_URL + ftIntraCallbackPath);
 
 		if (!userData || !userData.login) {
 			throw new AppUnauthorizedException("UNAUTHORIZED", "Failed to retrieve user data from 42");
