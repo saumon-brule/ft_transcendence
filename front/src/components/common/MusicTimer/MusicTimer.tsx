@@ -5,9 +5,15 @@ export type MusicTimerProps = JSX.IntrinsicElements["span"] & {
 	time: number;
 };
 
-export default function MusicTimer(props: MusicTimerProps) {
+export function formatTimer(duration: number): string {
+	const minutes = Math.floor(duration / 60);
+	const seconds = Math.floor(duration % 60);
+	return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
+export function MusicTimer(props: MusicTimerProps) {
 	const [local, rest] = splitProps(props, ["time"]);
 	return <span {...rest}>
-		{`${Math.floor(local.time / 60)}`.padStart(2, "0")}:{`${Math.floor(local.time % 60)}`.padStart(2, "0")}
+		{formatTimer(local.time)}
 	</span>;
 }

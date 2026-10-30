@@ -7,6 +7,7 @@ import Button from "~/components/inputs/Button";
 import { ProviderInfo } from "~/api/queryHooks/providerInfo";
 import MusicCover from "../MusicCover";
 import ArtistsLinks from "../ArtistLinks";
+import { formatTimer } from "~/components/common/MusicTimer/MusicTimer";
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
@@ -23,12 +24,6 @@ export default function MusicSection(props: MusicSectionProps) {
 		return value instanceof Date ? value : new Date(value);
 	}
 
-	function formatDuration(duration: number): string {
-		const minutes = Math.floor(duration / 60);
-		const seconds = duration % 60;
-		return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-	}
-
 	function playMusic(music: Music) {
 		audioManager.setCurrentTrack(music);
 		audioManager.play();
@@ -37,13 +32,6 @@ export default function MusicSection(props: MusicSectionProps) {
 	function addToQueue(music: Music) {
 		audioManager.pushTrackToQueue(music);
 	}
-
-	// function getCover(music: ProviderDataDto["music"]["musics"][number]) {
-	// 	const token = mediaToken();
-	// 	if (music.hasCover && token) {
-	// 		return buildMediaUrl(props.providerURL, "musicCover", music.uuid, token);
-	// 	}
-	// }
 
 	return <div class="music-section">
 		<table class="data">
@@ -74,9 +62,9 @@ export default function MusicSection(props: MusicSectionProps) {
 					</td>
 					<Show when={shown("actions")}><td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td></Show>
 					<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks artists={music.artists} providerUUID={music.providerUuid} /></td></Show>
-					<Show when={shown("album")}><td class="col-album">{music.album ? <A href={`/provider/${music.providerUuid}/album/${music.album.uuid}`} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
+					<Show when={shown("album")}><td class="col-album">{music.hasAlbum() ? <A href={music.albumRoute()} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
 					<Show when={shown("published")}><td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString() : "-"}</td></Show>
-					<Show when={shown("duration")}><td class="col-duration">{formatDuration(music.duration)}</td></Show>
+					<Show when={shown("duration")}><td class="col-duration">{formatTimer(music.duration)}</td></Show>
 				</tr>}</For>
 			</tbody>
 		</table>
