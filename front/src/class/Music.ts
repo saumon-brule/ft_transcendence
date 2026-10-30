@@ -3,6 +3,10 @@ import z from "zod";
 import { getMediaToken } from "~/api/providerClients";
 import { summonErrorToast } from "~/components/ui/Toaster";
 
+type MusicAlbumDto = ProviderDataMusicDto["album"];
+
+type MusicWithAlbum = Music & { album: NonNullable<MusicAlbumDto> };
+
 export class Music {
 	private constructor(
 		public readonly uuid: string,
@@ -13,7 +17,7 @@ export class Music {
 		public readonly publishedAt: Date | null,
 		public readonly hasCover: boolean,
 		public readonly artists: { uuid: string; name: string; hasAvatar: boolean }[],
-		public readonly album: ProviderDataMusicDto["album"],
+		public readonly album: MusicAlbumDto,
 	) {}
 
 	public async audioUrl(): Promise<string> {
@@ -26,12 +30,15 @@ export class Music {
 	}
 
 	public coverUrl(token: string) {
-		// const token = await getMediaToken(this.providerUrl);
-		// if (!token) {
-		// 	summonErrorToast("Failed to get media token for provider");
-		// 	throw new Error("Failed to get media token for provider");
-		// }
 		return buildMediaUrl(this.providerUrl, "musicCover", this.uuid, token);
+	}
+
+	public hasAlbum(): this is MusicWithAlbum {
+		return this.album !== null;
+	}
+
+	public albumRoute(this: MusicWithAlbum) {
+		return `/provider/${this.providerUuid}/album/${this.album.uuid}`;
 	}
 
 	public static fromRawObject(this: void, rawMusicObject: ProviderDataMusicDto, providerUrl: string, providerUuid: string): Music {

@@ -1,6 +1,6 @@
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import Button from "~/components/inputs/Button";
-import MusicTimer from "~/components/common/MusicTimer/MusicTimer";
+import { MusicTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { Pause, Play, SkipBack, SkipForward, Square } from "lucide-solid";
 import { createSignal, onCleanup } from "solid-js";
 import { REM } from "~/utils/constants";
@@ -63,9 +63,9 @@ export default function Controller() {
 
 	return <div class={"controller"}>
 		<div class="controller-buttons">
-			<Button class={`controller${audioManager.history.length > 0 ? "" : " disabled"}`} onClick={audioManager.back} size="sm" ><SkipBack/></Button>
-			<Button class={`controller${musicSelected() ? "" : " disabled"}`} onClick={audioManager.toggle} size="sm">{musicSelected() ? audioManager.playing ? <Pause/> : <Play/> : <Square/>}</Button>
-			<Button class={`controller${musicSelected() ? "" : " disabled"}`} onClick={audioManager.forward} size="sm"><SkipForward/></Button>
+			<Button disabled={audioManager.history.length === 0} class="controller" onClick={audioManager.back} size="sm" ><SkipBack/></Button>
+			<Button disabled={!musicSelected()} class="controller" onClick={audioManager.toggle} size="sm">{musicSelected() ? audioManager.playing ? <Pause/> : <Play/> : <Square/>}</Button>
+			<Button disabled={!musicSelected()} class="controller" onClick={audioManager.forward} size="sm"><SkipForward/></Button>
 		</div>
 		<div class={`progression${musicSelected() ? "" : " disabled"}`} style={{ "--progression-bar": `${displayedProgression()}` }}>
 			<MusicTimer time={displayedProgressionTime()} />

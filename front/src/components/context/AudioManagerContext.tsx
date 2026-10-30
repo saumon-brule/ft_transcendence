@@ -5,6 +5,7 @@ import { PushTrackToQueueFn, SetCurrentTrackFn, useTrackManager } from "~/store/
 import { setupMediaSession } from "./mediaSession";
 import { Track } from "~/class/Track";
 import { summonErrorToast } from "../ui/Toaster";
+import { LocalStorageItem } from "~/utils/storageHelper";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
 
@@ -14,6 +15,10 @@ export type AudioManager = {
 	get duration(): number;
 	get progression(): number;
 	set progression(time: number);
+	get volume(): number;
+	set volume(value: number);
+	get muted(): boolean;
+	set muted(value: boolean);
 	get history(): Array<Track>;
 	play: () => void;
 	pause: () => void;
@@ -27,9 +32,14 @@ export type AudioManager = {
 
 const AudioManagerContext = createContext<AudioManager>();
 
+const volumeItem = new LocalStorageItem<number>("volume", 1);
+const mutedItem = new LocalStorageItem<boolean>("muted", false);
+
 export const AudioPlayerProvider: ParentComponent = (props) => {
 	const audio = new Audio();
 	const trackManager = useTrackManager();
+	const [volume, setVolume] = createSignal(volumeItem.get());
+	const [muted, setMuted] = createSignal(mutedItem.get());
 	const [isPlaying, setIsPlaying] = createSignal(false);
 	const [duration, setDuration] = createSignal(0.0);
 
@@ -133,12 +143,35 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		}
 	});
 
+	// 3 createEffect here :
+	// changes volume (reacts to muted and volume)
+	createEffect(() => {
+		audio.volume = muted() ? 0 : volume();
+	});
+
+	// set volume in localStorage (reacts to volume only)
+	createEffect(() => {
+		volumeItem.set(volume());
+	});
+
+	// set muted in localStorage (reacts to muted only)
+	createEffect(() => {
+		mutedItem.set(muted());
+	});
+
 	const audioManager = {
 		get playing() { return isPlaying(); },
 		get currentMusic() { return trackManager.manager.current?.music ?? null; },
+		get duration() { return duration(); },
 		get progression() { return trackManager.manager.progression; },
 		set progression(time: number) { audio.currentTime = time; },
-		get duration() { return duration(); },
+		// As volume is not interpreted lineraly by human hear, a simple correction
+		// between real volume and the linear representation we use ins sliders allows
+		// us to have a "linear" volume change
+		get volume() { return Math.sqrt(volume()); },
+		set volume(volume: number) { setVolume(Math.pow(Math.min(Math.max(volume, 0), 1), 2)); },
+		get muted() { return muted(); },
+		set muted(muted: boolean) { setMuted(muted); },
 		get history() { return trackManager.manager.history; },
 		play,
 		pause,
