@@ -171,7 +171,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		get volume() { return Math.sqrt(volume()); },
 		set volume(volume: number) { setVolume(Math.pow(Math.min(Math.max(volume, 0), 1), 2)); },
 		get muted() { return muted(); },
-		set muted(muted: number) { setMuted(muted); },
+		set muted(muted: boolean) { setMuted(muted); },
 		get history() { return trackManager.manager.history; },
 		play,
 		pause,
