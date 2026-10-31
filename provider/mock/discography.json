@@ -1,0 +1,3970 @@
+{
+	"source": "Deezer public API (metadata only)",
+	"generatedAt": "2026-10-31",
+	"artists": [
+		{
+			"uuid": "26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+			"name": "Orelsan",
+			"deezerId": 259467
+		},
+		{
+			"uuid": "83a3b597-131d-577d-ad99-0534aa3878db",
+			"name": "Gringe",
+			"deezerId": 172008
+		},
+		{
+			"uuid": "cd3e1857-7e87-547b-ba78-fe8291391ec0",
+			"name": "Ron Thal",
+			"deezerId": 6113
+		},
+		{
+			"uuid": "f0c38105-41c0-5348-9b7a-55cfacabeb59",
+			"name": "GIMS",
+			"deezerId": 226882155
+		},
+		{
+			"uuid": "834cbeda-c948-5c56-a182-8c2a04c71725",
+			"name": "Nekfeu",
+			"deezerId": 268175362
+		},
+		{
+			"uuid": "f61065d2-2bcd-58fd-a8cd-091848ef8020",
+			"name": "Dizzee Rascal",
+			"deezerId": 317621581
+		},
+		{
+			"uuid": "2710a61b-a85c-5186-909c-19d842d74733",
+			"name": "Stromae",
+			"deezerId": 9948510
+		},
+		{
+			"uuid": "fb1669af-3680-5fba-8667-b7a8fb02c4f3",
+			"name": "Ibeyi",
+			"deezerId": 254818612
+		},
+		{
+			"uuid": "715b56b8-4459-5602-97fb-2448568fe5c3",
+			"name": "Cordae",
+			"deezerId": 4567404
+		},
+		{
+			"uuid": "d252f28f-58dd-5ed6-a98f-6f33dd816b43",
+			"name": "Eugy Official",
+			"deezerId": 9109400
+		},
+		{
+			"uuid": "3d89a017-b0ad-56fa-91ac-2625ff02381c",
+			"name": "Kojo Funds",
+			"deezerId": 8550306
+		},
+		{
+			"uuid": "a0f90e17-786e-5f3c-a7ae-506eab7117d2",
+			"name": "Damso",
+			"deezerId": 9197980
+		},
+		{
+			"uuid": "b6a0bcfe-bada-5a98-bd59-759508c7c268",
+			"name": "The Neptunes",
+			"deezerId": 11415
+		},
+		{
+			"uuid": "c2309fbc-b017-5fa1-b2e1-606b4cf7fb04",
+			"name": "Skread",
+			"deezerId": 4495584
+		},
+		{
+			"uuid": "fc6ef1b7-de8e-5988-a691-359e13df082f",
+			"name": "Lilas Ikuta",
+			"deezerId": 106606492
+		},
+		{
+			"uuid": "ce63c626-3214-5c87-83fb-804660b1d0c2",
+			"name": "Lilas",
+			"deezerId": 4319916
+		},
+		{
+			"uuid": "68a2dead-028b-5bb9-a617-99f1d5b20b5e",
+			"name": "Yamê",
+			"deezerId": 107030802
+		},
+		{
+			"uuid": "63f4e6dc-b402-5812-94ff-bed447f2da27",
+			"name": "Fifty fifty",
+			"deezerId": 468440
+		},
+		{
+			"uuid": "c06fad08-bba9-5d0d-8a08-b6267b91c8ca",
+			"name": "SDM",
+			"deezerId": 604107
+		},
+		{
+			"uuid": "6de27dc3-955e-5c4a-a5cb-a470d6cfafea",
+			"name": "Thomas Bangalter",
+			"deezerId": 4490
+		},
+		{
+			"uuid": "0596fab9-4f92-577b-8e86-e74f997e7123",
+			"name": "Stupeflip",
+			"deezerId": 939
+		},
+		{
+			"uuid": "232197c5-0fac-52c3-89e2-00a83d9b6613",
+			"name": "Jacno",
+			"deezerId": 84890
+		},
+		{
+			"uuid": "5c5016b7-30b4-5bff-b351-9658fefbb290",
+			"name": "Tanguy P",
+			"deezerId": 48860221
+		},
+		{
+			"uuid": "12af62c4-74ea-532b-969c-b28d961dfce7",
+			"name": "Melanie Bauer",
+			"deezerId": 6142732
+		},
+		{
+			"uuid": "e102ed1f-b06d-58f5-8cec-d0877105a54c",
+			"name": "Mangu",
+			"deezerId": 160675
+		},
+		{
+			"uuid": "2dc8bff0-cb8d-5ce3-ada0-28880979d8ba",
+			"name": "Cadillac",
+			"deezerId": 281552171
+		},
+		{
+			"uuid": "bf5e7108-7318-5474-aa4b-8a9d77f90725",
+			"name": "Louise",
+			"deezerId": 16065
+		},
+		{
+			"uuid": "64b9bfe8-600f-5bfa-ada8-2d00b56bdf43",
+			"name": "Hannah Helene",
+			"deezerId": 262419631
+		},
+		{
+			"uuid": "30b5cd0e-4f26-5def-ada0-a00c31d1c32c",
+			"name": "Salo'",
+			"deezerId": 58183
+		},
+		{
+			"uuid": "e0ecbec4-e1de-54c7-b584-93b7a03d8319",
+			"name": "Cocolino",
+			"deezerId": 1203507
+		},
+		{
+			"uuid": "0bef58f2-1736-5206-86dd-47630383ea09",
+			"name": "Reverb Man",
+			"deezerId": 148183502
+		},
+		{
+			"uuid": "62096427-448d-57e9-b502-d5c5872b27d5",
+			"name": "Loulou",
+			"deezerId": 1215654
+		},
+		{
+			"uuid": "a5f1cf15-2e9a-53ba-8b35-fae51de0f1bc",
+			"name": "Colette",
+			"deezerId": 10210
+		},
+		{
+			"uuid": "7e87f09d-5715-5102-9fc7-81dd4658d3ad",
+			"name": "Sandrine Cacheton",
+			"deezerId": 12103030
+		},
+		{
+			"uuid": "8c59f517-0921-527f-865b-34a8ef999b0c",
+			"name": "MC Salo",
+			"deezerId": 5972326
+		}
+	],
+	"albums": [
+		{
+			"uuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"name": "Perdu d'avance",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"publishedAt": "2009-02-16",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/f7061d4e6fa7484202371ce3b0f80b95/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 353993
+		},
+		{
+			"uuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"name": "Le Chant des sirènes",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"publishedAt": "2011-09-26",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/df92a3f9eece374346452bea687278f1/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 1261739
+		},
+		{
+			"uuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"name": "La fête est finie",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"publishedAt": "2017-10-20",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/a73297e3ab7ccacfba29d7b958a28fe6/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 49458742
+		},
+		{
+			"uuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"name": "La fête est finie - EPILOGUE",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"publishedAt": "2018-11-16",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/08aeffc28b62c4e3119924eaabf7c028/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 78591962
+		},
+		{
+			"uuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"name": "Civilisation",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"publishedAt": "2021-11-19",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/974e863966461c44768f0732752695c9/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 270762122
+		},
+		{
+			"uuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"name": "La fuite en avant",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"publishedAt": "2025-11-07",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/7a9d1807d77676a4f182dba7ca09c122/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 850246932
+		},
+		{
+			"uuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"name": "Cheese",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"publishedAt": "2010-06-14",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/43bd78a4753df33da9efc2207c4286ee/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 576738
+		},
+		{
+			"uuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"name": "racine carrée",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"publishedAt": "2013-08-19",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/914db9146f330d0a2969d157872da5eb/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 6851659
+		},
+		{
+			"uuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"name": "Multitude",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"publishedAt": "2022-03-03",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/07d285aac432f1d6452da1a7694f6bf3/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 300098017
+		},
+		{
+			"uuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"name": "Stupeflip",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"publishedAt": "2003-08-01",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/639896b8f4c5b06cf3b02417e39e3022/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 522702642
+		},
+		{
+			"uuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"name": "Stup Religion",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"publishedAt": "2005-06-14",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/238cc3d0b8c3d9690b2459b2eefec82c/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 522793772
+		},
+		{
+			"uuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"name": "The Hypnoflip Invasion",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"publishedAt": "2018-07-20",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/49271a00c7c8407f63119a0c063d3baf/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 522760492
+		},
+		{
+			"uuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"name": "Stup Virus",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"publishedAt": "2018-07-24",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/ef145b3d87c6487961798ff053dead40/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 522730272
+		},
+		{
+			"uuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"name": "Stup Forever",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"publishedAt": "2022-09-16",
+			"recordType": "album",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/8fc0c4ad2946af57e91a71942b4dcb90/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 310552027
+		},
+		{
+			"uuid": "7c658652-a167-5443-8e22-a29c14e6b8ba",
+			"name": "Terrora !!",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"publishedAt": "2012-09-17",
+			"recordType": "ep",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/2be1434acc93d3e41ce383be61a76d34/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 522818762
+		},
+		{
+			"uuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"name": "Parenthèse (Bande originale du film)",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"publishedAt": "2023-09-08",
+			"recordType": "ep",
+			"coverUrl": "https://cdn-images.dzcdn.net/images/cover/d82b982dd7d9f4a2e6d57545ccebcd98/1000x1000-000000-80-0-0.jpg",
+			"deezerId": 452294655
+		}
+	],
+	"musics": [
+		{
+			"uuid": "9c74052e-8e3d-5acb-aa0a-396a25168b49",
+			"name": "Etoiles Invisibles",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 275,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900100",
+			"deezerId": 3766756
+		},
+		{
+			"uuid": "ddd44988-5692-5e98-a909-167d49eb7dbc",
+			"name": "Changement",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 198,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30802280",
+			"deezerId": 3766757
+		},
+		{
+			"uuid": "d7784bf5-2a5e-5bb8-8211-0bf8bfb58bc5",
+			"name": "Soirée Ratée",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 185,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900110",
+			"deezerId": 3766758
+		},
+		{
+			"uuid": "711c4b9a-25c0-5d80-a21c-2dfab6f78e4f",
+			"name": "Différent",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 224,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900120",
+			"deezerId": 3766759
+		},
+		{
+			"uuid": "cfd52a9a-8089-570a-90a3-0b4f54fce927",
+			"name": "No Life",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 249,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900130",
+			"deezerId": 3766760
+		},
+		{
+			"uuid": "566b600e-c35c-5ba1-8572-896daf5b23c3",
+			"name": "Pour Le Pire",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 214,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900140",
+			"deezerId": 3766761
+		},
+		{
+			"uuid": "716de31a-baea-5431-8b0b-074188030535",
+			"name": "Perdu D'avance",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 214,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900150",
+			"deezerId": 3766762
+		},
+		{
+			"uuid": "2ce685d5-8546-51b4-84af-436e74d284a8",
+			"name": "Gros Poissons Dans Une Petite Mare",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 274,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900210",
+			"deezerId": 3766763
+		},
+		{
+			"uuid": "9c1f3d21-950d-5f7c-a682-17dc304bf3b7",
+			"name": "Logo Dans Le Ciel",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 218,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900220",
+			"deezerId": 3766764
+		},
+		{
+			"uuid": "1125ac02-f8cc-5927-bfa6-ee82ac146518",
+			"name": "50 Pourcents",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 281,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900160",
+			"deezerId": 3766765
+		},
+		{
+			"uuid": "2a513e15-680a-539c-85c7-e24d429b6316",
+			"name": "Jimmy Punchline",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 246,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900170",
+			"deezerId": 3766766
+		},
+		{
+			"uuid": "028ad26d-63c2-5809-aa36-30919b9d9f65",
+			"name": "Entre Bien Et Mal",
+			"artistUuids": [
+				"83a3b597-131d-577d-ad99-0534aa3878db",
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 281,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900180",
+			"deezerId": 3766767
+		},
+		{
+			"uuid": "696c5e9e-ec97-5cd2-8a64-6e64abaf793b",
+			"name": "Courez Courez",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 244,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900190",
+			"deezerId": 3766768
+		},
+		{
+			"uuid": "7269f51f-c0ff-5446-825b-2c4e4818e73f",
+			"name": "Peur De L'échec (feat. Ron Thal)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"cd3e1857-7e87-547b-ba78-fe8291391ec0"
+			],
+			"albumUuid": "63f72a5e-3b12-552c-af3f-3d311631819a",
+			"duration": 315,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2009-02-16",
+			"isrc": "FR6F30900200",
+			"deezerId": 3766769
+		},
+		{
+			"uuid": "8427a0c8-bc21-58e8-b4c0-1c28f56e225a",
+			"name": "Raelsan",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 256,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101200",
+			"deezerId": 13789076
+		},
+		{
+			"uuid": "294c4637-2eb9-582f-9dac-056661f19c12",
+			"name": "Le chant des sirènes",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 347,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101330",
+			"deezerId": 13789077
+		},
+		{
+			"uuid": "779ec4a1-051e-5df3-baf2-c8d497e9a383",
+			"name": "Plus rien ne m'étonne",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 218,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101300",
+			"deezerId": 13789078
+		},
+		{
+			"uuid": "638e444e-8b89-5805-8746-4718481c3bb0",
+			"name": "Mauvaise idée",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 199,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101340",
+			"deezerId": 13789079
+		},
+		{
+			"uuid": "c177e19e-cf97-5f1a-acbf-95912aa8c681",
+			"name": "Double vie",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 239,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101220",
+			"deezerId": 13789080
+		},
+		{
+			"uuid": "e9c1c687-f7bb-5505-9b05-d18c2d32a11b",
+			"name": "Finir mal",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 288,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101350",
+			"deezerId": 13789081
+		},
+		{
+			"uuid": "d4d13fd3-d93d-50b5-ae07-d59f07309f61",
+			"name": "Si Seul",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 245,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101360",
+			"deezerId": 13789082
+		},
+		{
+			"uuid": "bef7871b-890a-5433-870b-69b48640e18a",
+			"name": "Des trous dans la tête",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 241,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101370",
+			"deezerId": 13789083
+		},
+		{
+			"uuid": "875a8646-b635-5b70-b5e3-c98891c35423",
+			"name": "La petite marchande de porte-clefs",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 254,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101380",
+			"deezerId": 13789084
+		},
+		{
+			"uuid": "fbb9ca71-88df-5aa5-95a6-d66005ec457c",
+			"name": "La terre est ronde",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 217,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101390",
+			"deezerId": 13789085
+		},
+		{
+			"uuid": "11f8116c-dc70-5d07-93aa-6eac67e9de6c",
+			"name": "1990",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 98,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101400",
+			"deezerId": 13789086
+		},
+		{
+			"uuid": "35f8e50e-f586-5e7b-87c9-d112626eb0ca",
+			"name": "2010",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 163,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101410",
+			"deezerId": 13789087
+		},
+		{
+			"uuid": "d5db626c-5322-5115-bbf5-4c39203c90ca",
+			"name": "La morale",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 244,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101420",
+			"deezerId": 13789088
+		},
+		{
+			"uuid": "81eafa69-877c-5e22-af7a-eb687d1475c3",
+			"name": "Ils sont cools",
+			"artistUuids": [
+				"83a3b597-131d-577d-ad99-0534aa3878db",
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 216,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101430",
+			"deezerId": 13789089
+		},
+		{
+			"uuid": "632b59de-1d82-59c4-8bf7-0504e70bcafa",
+			"name": "Suicide social",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 342,
+			"discNumber": 1,
+			"trackNumber": 15,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101440",
+			"deezerId": 13789090
+		},
+		{
+			"uuid": "5b9d88b4-61d9-5dec-8de5-f79b884d2116",
+			"name": "Elle viendra quand même",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "631f023b-5c90-5d93-8342-284fb7979ae2",
+			"duration": 203,
+			"discNumber": 1,
+			"trackNumber": 16,
+			"publishedAt": "2011-09-26",
+			"isrc": "FR6F31101450",
+			"deezerId": 13789091
+		},
+		{
+			"uuid": "18995757-1824-5eb4-9b39-8560f0164c61",
+			"name": "San",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 241,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701040",
+			"deezerId": 414838102
+		},
+		{
+			"uuid": "a52a7a14-43f6-5efb-b781-94fef509c68c",
+			"name": "La fête est finie",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 184,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701050",
+			"deezerId": 414838112
+		},
+		{
+			"uuid": "0361f265-046b-5aaa-a37a-4f949392fc7d",
+			"name": "Basique",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 164,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701060",
+			"deezerId": 414838122
+		},
+		{
+			"uuid": "8570e5fb-5f12-517f-a792-1bb32bd9fc8b",
+			"name": "Tout va bien",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 148,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701070",
+			"deezerId": 414838132
+		},
+		{
+			"uuid": "26b17ebe-166a-5f70-b5fc-dbdaf0cbb3e5",
+			"name": "Défaite de famille",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 223,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701080",
+			"deezerId": 414838142
+		},
+		{
+			"uuid": "a91147f6-a4f9-5021-b201-2c1849fc984a",
+			"name": "La lumière",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 193,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701100",
+			"deezerId": 414838152
+		},
+		{
+			"uuid": "abfd19f0-3bdf-5f3d-9629-7472f4dd33d7",
+			"name": "Bonne meuf",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 123,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701090",
+			"deezerId": 414838162
+		},
+		{
+			"uuid": "fcdb8d70-a958-5046-90a2-a6f305af4877",
+			"name": "Quand est-ce que ça s'arrête",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 176,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701130",
+			"deezerId": 414838172
+		},
+		{
+			"uuid": "764fd37a-be27-5423-8493-d2ab7f4ee965",
+			"name": "Christophe (feat. GIMS)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"f0c38105-41c0-5348-9b7a-55cfacabeb59"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 166,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701110",
+			"deezerId": 414838182
+		},
+		{
+			"uuid": "f617f2d5-20ae-5902-8a84-49ee2ccd0a6c",
+			"name": "Zone (feat. Nekfeu & Dizzee Rascal)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"834cbeda-c948-5c56-a182-8c2a04c71725",
+				"f61065d2-2bcd-58fd-a8cd-091848ef8020"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 284,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701120",
+			"deezerId": 414838192
+		},
+		{
+			"uuid": "fc1cd0dd-5edc-5d73-80a8-eea50087daa0",
+			"name": "Dans ma ville, on traîne",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 242,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701150",
+			"deezerId": 414838202
+		},
+		{
+			"uuid": "1961300c-bee1-5c29-8ce3-8e3c47541df0",
+			"name": "La pluie (feat. Stromae)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 175,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701140",
+			"deezerId": 414838212
+		},
+		{
+			"uuid": "2144bdb3-b0a7-55ac-beb0-419bca09999e",
+			"name": "Paradis",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 229,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701160",
+			"deezerId": 414838222
+		},
+		{
+			"uuid": "54d775cf-80a7-5fcc-a59c-80586fb652f7",
+			"name": "Notes pour trop tard (feat. Ibeyi)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"fb1669af-3680-5fba-8667-b7a8fb02c4f3"
+			],
+			"albumUuid": "0da3acdc-47b6-5358-84d7-69c7940a80fe",
+			"duration": 454,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2017-10-20",
+			"isrc": "FR6F31701170",
+			"deezerId": 414838232
+		},
+		{
+			"uuid": "5790f59a-4e94-5c48-beca-570a8221dc38",
+			"name": "Fantômes",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 158,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801510",
+			"deezerId": 585387232
+		},
+		{
+			"uuid": "7c025c43-c103-5498-ac1b-979249abe369",
+			"name": "Tout ce que je sais (feat. YBN Cordae)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"715b56b8-4459-5602-97fb-2448568fe5c3"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 177,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801520",
+			"deezerId": 585387242
+		},
+		{
+			"uuid": "8d23e1b5-356c-5bf5-9615-74224b28a650",
+			"name": "La famille, la famille",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 211,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801530",
+			"deezerId": 585387252
+		},
+		{
+			"uuid": "903c53d7-8e05-5495-adac-dad6d3e0b5b4",
+			"name": "Mes grands-parents",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 156,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801540",
+			"deezerId": 585387262
+		},
+		{
+			"uuid": "17b70c54-1d71-5813-9533-b843579faf64",
+			"name": "Tout va bien (feat. Eugy & Kojo Funds) (Remix)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"d252f28f-58dd-5ed6-a98f-6f33dd816b43",
+				"3d89a017-b0ad-56fa-91ac-2625ff02381c"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 149,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801550",
+			"deezerId": 585387272
+		},
+		{
+			"uuid": "e61cf35b-2d76-55ea-a027-392373225fb1",
+			"name": "Discipline",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 166,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801560",
+			"deezerId": 585387282
+		},
+		{
+			"uuid": "a94840ce-f7e7-53b6-aa71-a0b8ffb13656",
+			"name": "Adieu les filles",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 106,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801570",
+			"deezerId": 585387292
+		},
+		{
+			"uuid": "d2688eed-c753-5441-8660-9394f80cae54",
+			"name": "Excuses ou mensonges",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 182,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801580",
+			"deezerId": 585387302
+		},
+		{
+			"uuid": "354113fa-c4bd-5f59-843a-a7d29c522834",
+			"name": "Dis-moi",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 198,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801590",
+			"deezerId": 585387312
+		},
+		{
+			"uuid": "76fa5845-ad6c-549c-bb1f-2c8989079ea3",
+			"name": "Rêves bizarres (feat. Damso)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"a0f90e17-786e-5f3c-a7ae-506eab7117d2"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 212,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801600",
+			"deezerId": 585387322
+		},
+		{
+			"uuid": "0351bb97-3e02-598c-aa38-9a59c1e03b9a",
+			"name": "Epilogue",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 291,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31801610",
+			"deezerId": 585387332
+		},
+		{
+			"uuid": "63d4fd79-cbfc-515a-a475-17b30740538c",
+			"name": "San",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 241,
+			"discNumber": 2,
+			"trackNumber": 1,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701040",
+			"deezerId": 585387342
+		},
+		{
+			"uuid": "41c65c94-0f94-5704-ae68-c92651c74ee2",
+			"name": "La fête est finie",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 184,
+			"discNumber": 2,
+			"trackNumber": 2,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701050",
+			"deezerId": 585387352
+		},
+		{
+			"uuid": "4b429171-42be-5cca-89aa-b25bfe9ffcb8",
+			"name": "Basique",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 164,
+			"discNumber": 2,
+			"trackNumber": 3,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701060",
+			"deezerId": 585387362
+		},
+		{
+			"uuid": "55f9911b-5fad-5035-9a0d-19fbfe950932",
+			"name": "Tout va bien",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 148,
+			"discNumber": 2,
+			"trackNumber": 4,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701070",
+			"deezerId": 585387372
+		},
+		{
+			"uuid": "70ee6d61-5938-5362-8613-cd2d6fba8e75",
+			"name": "Défaite de famille",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 223,
+			"discNumber": 2,
+			"trackNumber": 5,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701080",
+			"deezerId": 585387382
+		},
+		{
+			"uuid": "ce63dfb4-42dc-50a2-94e6-f4624d5081a3",
+			"name": "La lumière",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 193,
+			"discNumber": 2,
+			"trackNumber": 6,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701100",
+			"deezerId": 585387392
+		},
+		{
+			"uuid": "2143e797-d544-580b-9b39-7ff7c7f19ac8",
+			"name": "Bonne meuf",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 123,
+			"discNumber": 2,
+			"trackNumber": 7,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701090",
+			"deezerId": 585387402
+		},
+		{
+			"uuid": "6475debd-8281-5d36-adad-1512a89caf9d",
+			"name": "Quand est-ce que ça s'arrête",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 176,
+			"discNumber": 2,
+			"trackNumber": 8,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701130",
+			"deezerId": 585387412
+		},
+		{
+			"uuid": "3990f51a-f154-5e9f-b464-26bd5480dd7b",
+			"name": "Christophe (feat. GIMS)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"f0c38105-41c0-5348-9b7a-55cfacabeb59"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 166,
+			"discNumber": 2,
+			"trackNumber": 9,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701110",
+			"deezerId": 585387422
+		},
+		{
+			"uuid": "d60abe3d-8e57-5fa2-8752-e37ddb78d6aa",
+			"name": "Zone (feat. Nekfeu & Dizzee Rascal)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"834cbeda-c948-5c56-a182-8c2a04c71725",
+				"f61065d2-2bcd-58fd-a8cd-091848ef8020"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 284,
+			"discNumber": 2,
+			"trackNumber": 10,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701120",
+			"deezerId": 585387432
+		},
+		{
+			"uuid": "d869d103-ec9b-50fb-8e57-984a070f0fb6",
+			"name": "Dans ma ville, on traîne",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 242,
+			"discNumber": 2,
+			"trackNumber": 11,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701150",
+			"deezerId": 585387442
+		},
+		{
+			"uuid": "cdb86020-f4eb-583a-be57-e2b8355805a1",
+			"name": "La pluie (feat. Stromae)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 175,
+			"discNumber": 2,
+			"trackNumber": 12,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701140",
+			"deezerId": 585387452
+		},
+		{
+			"uuid": "138f0e59-c926-5b5e-b1e8-6b5ffd459bd5",
+			"name": "Paradis",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 229,
+			"discNumber": 2,
+			"trackNumber": 13,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701160",
+			"deezerId": 585387462
+		},
+		{
+			"uuid": "ff2564e9-e7a4-592a-ae34-b11ac7eb5307",
+			"name": "Notes pour trop tard (feat. Ibeyi)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"fb1669af-3680-5fba-8667-b7a8fb02c4f3"
+			],
+			"albumUuid": "397f7cca-6783-5254-ac50-9ab298a69c2d",
+			"duration": 454,
+			"discNumber": 2,
+			"trackNumber": 14,
+			"publishedAt": "2018-11-16",
+			"isrc": "FR6F31701170",
+			"deezerId": 585387472
+		},
+		{
+			"uuid": "fa8a74ac-cc99-5d51-9659-70cce3c67be0",
+			"name": "Shonen",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 153,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102350",
+			"deezerId": 1544258302
+		},
+		{
+			"uuid": "7610e638-a246-5da7-af59-ec89cde4ad1f",
+			"name": "La Quête",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 244,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102360",
+			"deezerId": 1544258312
+		},
+		{
+			"uuid": "7e6404f1-4cd3-5094-aa0d-5d973ec66270",
+			"name": "Du propre",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 227,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102370",
+			"deezerId": 1544258322
+		},
+		{
+			"uuid": "b8b8682c-849e-5a55-a563-0f2acee6f15f",
+			"name": "Bébéboa",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 182,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102380",
+			"deezerId": 1544258332
+		},
+		{
+			"uuid": "315850a2-09cd-5812-a842-bd6284cdd72d",
+			"name": "Rêve mieux",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 224,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102390",
+			"deezerId": 1544258342
+		},
+		{
+			"uuid": "9a1affbd-3097-56d7-af14-7b67cd2570ef",
+			"name": "Seul avec du monde autour",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 208,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102400",
+			"deezerId": 1544258352
+		},
+		{
+			"uuid": "8429bb17-ac97-5550-8efe-c24727e17105",
+			"name": "Manifeste",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 442,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102410",
+			"deezerId": 1544258362
+		},
+		{
+			"uuid": "7085bcef-5a88-586d-8f9e-e64cc803fb15",
+			"name": "L'odeur de l'essence",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 282,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102420",
+			"deezerId": 1544258372
+		},
+		{
+			"uuid": "e7a57183-fdde-5c1d-82ee-7d0b33da6519",
+			"name": "Jour meilleur",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 181,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102430",
+			"deezerId": 1544258382
+		},
+		{
+			"uuid": "55097421-3a93-5e7f-8362-f4c299516279",
+			"name": "Baise le monde",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 225,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102440",
+			"deezerId": 1544258392
+		},
+		{
+			"uuid": "c5bcf35a-72ca-53de-ba0e-ae2f53d219c3",
+			"name": "Casseurs Flowters Infinity",
+			"artistUuids": [
+				"83a3b597-131d-577d-ad99-0534aa3878db",
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 188,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102450",
+			"deezerId": 1544258402
+		},
+		{
+			"uuid": "d94ac802-a51f-57a5-80b6-c6236ed9abb1",
+			"name": "Dernier verre",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"b6a0bcfe-bada-5a98-bd59-759508c7c268"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 203,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102460",
+			"deezerId": 1544258412
+		},
+		{
+			"uuid": "0820dd0f-4d5a-543d-9031-5c8608db499e",
+			"name": "Ensemble",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"c2309fbc-b017-5fa1-b2e1-606b4cf7fb04"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 283,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102470",
+			"deezerId": 1544258422
+		},
+		{
+			"uuid": "38708c23-16d9-54b4-8b31-a0469fe9432a",
+			"name": "Athéna",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 172,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102480",
+			"deezerId": 1544258432
+		},
+		{
+			"uuid": "0eb069a2-8ecc-5768-aa14-a24da1e4b166",
+			"name": "Civilisation",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "94396c1e-7afa-5e70-930a-51015ca9a333",
+			"duration": 245,
+			"discNumber": 1,
+			"trackNumber": 15,
+			"publishedAt": "2021-11-19",
+			"isrc": "FR6F32102490",
+			"deezerId": 1544258442
+		},
+		{
+			"uuid": "8a92bbba-3b6f-5813-9634-58deaff57387",
+			"name": "Le pacte",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 268,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551643",
+			"deezerId": 3637839272
+		},
+		{
+			"uuid": "0c937080-86a9-51dc-b578-c05a3d5eeba1",
+			"name": "Plus rien (feat. 幾田りら)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"fc6ef1b7-de8e-5988-a691-359e13df082f",
+				"ce63c626-3214-5c87-83fb-804660b1d0c2"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 209,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551644",
+			"deezerId": 3637839282
+		},
+		{
+			"uuid": "e628b837-4034-59bb-8a9b-c38b7c8d0338",
+			"name": "Ailleurs",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 192,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551645",
+			"deezerId": 3637839292
+		},
+		{
+			"uuid": "7c48dd3c-d778-5b02-9328-ce559fb20cc0",
+			"name": "Boss",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 189,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551646",
+			"deezerId": 3637839302
+		},
+		{
+			"uuid": "d49a3d74-fc25-576d-ab55-447293442855",
+			"name": "Deux et demi",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 228,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551647",
+			"deezerId": 3637839312
+		},
+		{
+			"uuid": "52dc0786-f28e-57ca-a949-6d6afac351bc",
+			"name": "Osaka",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 191,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551648",
+			"deezerId": 3637839322
+		},
+		{
+			"uuid": "df4f2f3f-aad5-5a9c-8ad7-77ca94f67371",
+			"name": "Encore une fois",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"68a2dead-028b-5bb9-a617-99f1d5b20b5e"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 181,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551649",
+			"deezerId": 3637839332
+		},
+		{
+			"uuid": "43869314-ada4-5ed0-9c93-96cbd99c2a8d",
+			"name": "Internet",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 101,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551650",
+			"deezerId": 3637839342
+		},
+		{
+			"uuid": "ee8e3ffb-f1b1-58ea-938a-ad920507a23f",
+			"name": "Dans quelques mois",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 208,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551651",
+			"deezerId": 3637839352
+		},
+		{
+			"uuid": "c7dce5a6-1be2-5ef2-8b94-c9258bfdc2eb",
+			"name": "Oulalalala (feat. FIFTY FIFTY)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"63f4e6dc-b402-5812-94ff-bed447f2da27"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 163,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551652",
+			"deezerId": 3637839362
+		},
+		{
+			"uuid": "96636eeb-0b8d-5621-aa6c-f65d126e0fa1",
+			"name": "Tellement d'amis",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 229,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551653",
+			"deezerId": 3637839372
+		},
+		{
+			"uuid": "48dfe964-33ce-538f-9b0b-e916a6e56a91",
+			"name": "La petite voix",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 242,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551654",
+			"deezerId": 3637839382
+		},
+		{
+			"uuid": "5dba2c5a-377f-5df8-a9ac-ae534f14f1a6",
+			"name": "SAMA",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 224,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551655",
+			"deezerId": 3637839392
+		},
+		{
+			"uuid": "4c087d11-c633-5a9c-a07b-6a59eaa21a9b",
+			"name": "Soleil levant",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"c06fad08-bba9-5d0d-8a08-b6267b91c8ca"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 205,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551656",
+			"deezerId": 3637839402
+		},
+		{
+			"uuid": "ec87a865-a557-5714-83c5-9723f21f7ee7",
+			"name": "Les monstres",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 191,
+			"discNumber": 1,
+			"trackNumber": 15,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551657",
+			"deezerId": 3637839422
+		},
+		{
+			"uuid": "0c0d8b6e-68bb-5a86-bd26-77eb73cb9b5c",
+			"name": "Epiphanie",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 265,
+			"discNumber": 1,
+			"trackNumber": 16,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551658",
+			"deezerId": 3637839442
+		},
+		{
+			"uuid": "84078a89-8be7-54c9-96d9-072904b567d1",
+			"name": "Yoroï (with Thomas Bangalter)",
+			"artistUuids": [
+				"26e54298-3a3b-59f0-ad54-0800b9f9bb5d",
+				"6de27dc3-955e-5c4a-a5cb-a470d6cfafea"
+			],
+			"albumUuid": "36f5ec08-0077-5883-9dd2-d6e03c7db1da",
+			"duration": 199,
+			"discNumber": 1,
+			"trackNumber": 17,
+			"publishedAt": "2025-11-07",
+			"isrc": "FR9W12551659",
+			"deezerId": 3637839462
+		},
+		{
+			"uuid": "f9803176-1d4e-5381-b0b8-6425df2847a2",
+			"name": "Bienvenue Chez Moi",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 177,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000011",
+			"deezerId": 6297551
+		},
+		{
+			"uuid": "8ceb0133-800f-5e12-9424-32b454153bfc",
+			"name": "Te Quiero",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 206,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000015",
+			"deezerId": 6297552
+		},
+		{
+			"uuid": "e1418a4f-4f0d-5fdc-bde0-560597aacd92",
+			"name": "Peace Or Violence",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 189,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000014",
+			"deezerId": 6297553
+		},
+		{
+			"uuid": "718ad86c-0630-523f-b8bd-ed4ce3914737",
+			"name": "Rail De Musique",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 247,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000012",
+			"deezerId": 6575059
+		},
+		{
+			"uuid": "d790733f-d0ce-5fd3-824a-3a8057622cd6",
+			"name": "Alors on danse (Radio Edit)",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 208,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2010-06-14",
+			"isrc": "FRUM70902424",
+			"deezerId": 6297555
+		},
+		{
+			"uuid": "876c93a0-f1e6-5d5e-b25b-328e6b273b46",
+			"name": "Summertime",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 187,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000130",
+			"deezerId": 6297556
+		},
+		{
+			"uuid": "9df8a427-9230-5eeb-b400-7cfe6e5bf35e",
+			"name": "Dodo",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 237,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000016",
+			"deezerId": 6297557
+		},
+		{
+			"uuid": "5f8ccd3a-5585-5b83-8665-59ebeec2a0c8",
+			"name": "Silence",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 281,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000017",
+			"deezerId": 6297558
+		},
+		{
+			"uuid": "eeb9b908-1c52-5201-81cb-174ae4ff10c7",
+			"name": "Je Cours",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 195,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000132",
+			"deezerId": 6297559
+		},
+		{
+			"uuid": "337eb5f8-4d5b-59a6-9d26-e84fe1ab6d3c",
+			"name": "House'llelujah",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 239,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000013",
+			"deezerId": 6297560
+		},
+		{
+			"uuid": "dcca1013-bd88-5142-9311-ce1244a67225",
+			"name": "Cheese",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 181,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000019",
+			"deezerId": 6297561
+		},
+		{
+			"uuid": "264e43cd-51a5-5090-8ba9-c630621e71bb",
+			"name": "Alors On Danse (90's Remix)",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "e1606a69-7f69-52f9-b555-c9c5ae84bafe",
+			"duration": 171,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2010-06-14",
+			"isrc": "BET671000131",
+			"deezerId": 6297562
+		},
+		{
+			"uuid": "b48957b1-191a-5a43-a203-b527c6db6970",
+			"name": "Ta fête",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 175,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300190",
+			"deezerId": 69879249
+		},
+		{
+			"uuid": "a058f435-009d-5a43-be52-b078d1ed0f87",
+			"name": "Papaoutai",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 232,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300160",
+			"deezerId": 69879250
+		},
+		{
+			"uuid": "2b22dce9-e361-5cc1-a327-2ccd1d515774",
+			"name": "bâtard",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 208,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300180",
+			"deezerId": 69879251
+		},
+		{
+			"uuid": "9b4dad8a-1f77-56b6-8fd8-c4057218bf54",
+			"name": "ave cesaria",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 248,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300191",
+			"deezerId": 69879252
+		},
+		{
+			"uuid": "ecefb39e-7a82-51c3-8954-7dbc8881ca47",
+			"name": "Tous les mêmes",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 211,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300182",
+			"deezerId": 69879253
+		},
+		{
+			"uuid": "97adf1f9-ce71-55df-a178-0cd5c6be244c",
+			"name": "Formidable",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 215,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300161",
+			"deezerId": 69879254
+		},
+		{
+			"uuid": "f1159421-5be9-5f48-b64a-c6eeff103ceb",
+			"name": "moules frites",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 159,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300183",
+			"deezerId": 69879255
+		},
+		{
+			"uuid": "b1de03bc-532c-5883-bb31-8aa01b023b93",
+			"name": "carmen",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 188,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300184",
+			"deezerId": 69879256
+		},
+		{
+			"uuid": "09871585-e721-5b17-8880-e24b3143beda",
+			"name": "humain à l'eau",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 241,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300185",
+			"deezerId": 69879257
+		},
+		{
+			"uuid": "429b4d01-e07f-5347-9aa3-efdd9c80a301",
+			"name": "quand c'est ?",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 182,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300186",
+			"deezerId": 69879258
+		},
+		{
+			"uuid": "226c5175-7792-5119-9ca7-a032347bab80",
+			"name": "sommeil",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 220,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300187",
+			"deezerId": 69879259
+		},
+		{
+			"uuid": "e58b12ba-c108-5d25-817c-17a0d5d0d2c5",
+			"name": "merci",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 229,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300188",
+			"deezerId": 69879260
+		},
+		{
+			"uuid": "a7c149d5-299c-57f6-8f6f-16300479f358",
+			"name": "avf",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "31175cad-d198-5908-95d9-a9529e16644d",
+			"duration": 224,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2013-08-19",
+			"isrc": "BET671300189",
+			"deezerId": 69879261
+		},
+		{
+			"uuid": "385b01cf-3560-559e-ad2d-d8e3e1908967",
+			"name": "Invaincu",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 125,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100002",
+			"deezerId": 1674114537
+		},
+		{
+			"uuid": "811179c6-5744-503c-aea5-f1680f6f860f",
+			"name": "Santé",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 190,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100001",
+			"deezerId": 1674114547
+		},
+		{
+			"uuid": "56d1ccd5-1f45-515b-ac2b-00410ff43ea3",
+			"name": "La solassitude",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 182,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100003",
+			"deezerId": 1674114557
+		},
+		{
+			"uuid": "aadd4fc4-ebae-5a2e-b55d-c9615478d5e2",
+			"name": "Fils de joie",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 195,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100004",
+			"deezerId": 1674114567
+		},
+		{
+			"uuid": "edd15c2b-a0f7-5e55-bfb6-ef02ed4e0aec",
+			"name": "L’enfer",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 189,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100005",
+			"deezerId": 1674114577
+		},
+		{
+			"uuid": "29b5f807-122d-594d-80e0-54e263a2899a",
+			"name": "C’est que du bonheur",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 162,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100006",
+			"deezerId": 1674114587
+		},
+		{
+			"uuid": "25a8521e-180e-5b47-9368-8087408b4764",
+			"name": "Pas vraiment",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 162,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100007",
+			"deezerId": 1674114597
+		},
+		{
+			"uuid": "99a728c2-ca33-5b7d-ba9f-08b90e22fc49",
+			"name": "Riez",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 201,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100008",
+			"deezerId": 1674114607
+		},
+		{
+			"uuid": "ced18633-2a0a-586d-8424-b69a3dc15b6b",
+			"name": "Mon amour",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 172,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100009",
+			"deezerId": 1674114617
+		},
+		{
+			"uuid": "f27d292e-d183-56a6-8eaa-80e74b8be997",
+			"name": "Déclaration",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 184,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100010",
+			"deezerId": 1674114627
+		},
+		{
+			"uuid": "b721efb4-f847-5752-a18b-43345a6c1415",
+			"name": "Mauvaise journée",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 187,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100011",
+			"deezerId": 1674114637
+		},
+		{
+			"uuid": "08fb7999-d7fb-538a-8c05-62da4685e2a9",
+			"name": "Bonne journée",
+			"artistUuids": [
+				"2710a61b-a85c-5186-909c-19d842d74733"
+			],
+			"albumUuid": "96f40ca9-8069-54f6-ae87-76df8aa104a8",
+			"duration": 192,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2022-03-03",
+			"isrc": "BET672100012",
+			"deezerId": 1674114647
+		},
+		{
+			"uuid": "62143ecc-8ebe-5a9b-b37f-a11333d0118d",
+			"name": "Le crou ne mourra jamais - Intro",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 106,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200028",
+			"deezerId": 2581476642
+		},
+		{
+			"uuid": "f85bc002-bd44-5eab-b44e-69419b5e882a",
+			"name": "Stupeflip",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 186,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200029",
+			"deezerId": 2581476652
+		},
+		{
+			"uuid": "731c5cb5-de59-518b-a8dc-388e209713d0",
+			"name": "Presentation du crou - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 71,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200009",
+			"deezerId": 2581476662
+		},
+		{
+			"uuid": "9d5a43c0-c6d8-547a-b0b8-eadd274ac97f",
+			"name": "Je fume pu d'shit",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"232197c5-0fac-52c3-89e2-00a83d9b6613"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 196,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200024",
+			"deezerId": 2581476672
+		},
+		{
+			"uuid": "0916560d-dd93-59f5-890f-f7ee67a9e1d4",
+			"name": "Je refume du shit",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 261,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200025",
+			"deezerId": 2581476682
+		},
+		{
+			"uuid": "0e1d8a92-345c-5bd2-b571-04e27e15c78a",
+			"name": "Explication No. 1 - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 51,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200010",
+			"deezerId": 2581476692
+		},
+		{
+			"uuid": "8561ea00-e0a2-5157-97ed-0b6511351af9",
+			"name": "L'épouvantable épouvantail",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 302,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200011",
+			"deezerId": 2581476702
+		},
+		{
+			"uuid": "d1bf9912-efd0-58a6-9850-488529b46364",
+			"name": "Naissance de la région Sud - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 15,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200026",
+			"deezerId": 2581476712
+		},
+		{
+			"uuid": "d13bc778-2f6a-5575-92db-5bb2cd8e8a18",
+			"name": "Les monstres",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"5c5016b7-30b4-5bff-b351-9658fefbb290"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 223,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200012",
+			"deezerId": 2581476722
+		},
+		{
+			"uuid": "e66bb170-7a41-5022-81b9-d71ed086fa4b",
+			"name": "Crou nostalgie - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 107,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200027",
+			"deezerId": 2581476732
+		},
+		{
+			"uuid": "dd3ba9a9-3942-578e-aa78-6531ecac39a5",
+			"name": "Avertissement - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 10,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200013",
+			"deezerId": 2581476742
+		},
+		{
+			"uuid": "5b1452de-24a3-57a8-9d8f-55231ef094e1",
+			"name": "Carry On",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 215,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200030",
+			"deezerId": 2581476752
+		},
+		{
+			"uuid": "0c71f99e-7a73-5bcc-a362-7e3808f0ffa3",
+			"name": "Comme les zot",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 91,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200002",
+			"deezerId": 2581476762
+		},
+		{
+			"uuid": "d7a06e4c-74d4-505e-9e38-f9a1f13c138a",
+			"name": "Media terror - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"12af62c4-74ea-532b-969c-b28d961dfce7"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 47,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200015",
+			"deezerId": 2581476772
+		},
+		{
+			"uuid": "ecf90f65-caa8-50b1-b616-b6f37415eecd",
+			"name": "L.E.C.R.O.U",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"e102ed1f-b06d-58f5-8cec-d0877105a54c"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 345,
+			"discNumber": 1,
+			"trackNumber": 15,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200016",
+			"deezerId": 2581476782
+		},
+		{
+			"uuid": "238e469e-6a86-5263-a4a1-21dc26002dca",
+			"name": "Creation de la 2eme ère du stup - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 56,
+			"discNumber": 1,
+			"trackNumber": 16,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200017",
+			"deezerId": 2581476792
+		},
+		{
+			"uuid": "84ce506e-d98a-5e23-ba61-5240f170fb9a",
+			"name": "A bas la hierarchie",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 247,
+			"discNumber": 1,
+			"trackNumber": 17,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200018",
+			"deezerId": 2581476802
+		},
+		{
+			"uuid": "b2b39bfa-913e-5e80-963b-698dbc204ec5",
+			"name": "La bavure de Pop Hip",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 296,
+			"discNumber": 1,
+			"trackNumber": 18,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200019",
+			"deezerId": 2581476812
+		},
+		{
+			"uuid": "136a20b0-fe64-5f0a-9e54-1c7f69a5251f",
+			"name": "The Cadillac Theory",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 81,
+			"discNumber": 1,
+			"trackNumber": 19,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200020",
+			"deezerId": 2581476822
+		},
+		{
+			"uuid": "bc751239-31c7-57ec-b188-ea725ca34fce",
+			"name": "Passe mon truc",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 196,
+			"discNumber": 1,
+			"trackNumber": 20,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200021",
+			"deezerId": 2581476832
+		},
+		{
+			"uuid": "bc6a8095-0952-55fa-9570-9ca288ca81cb",
+			"name": "Stupeflip - Home version",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 190,
+			"discNumber": 1,
+			"trackNumber": 21,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200022",
+			"deezerId": 2581476842
+		},
+		{
+			"uuid": "e7b51a53-cb04-582d-b1ac-a209b661ca04",
+			"name": "Annexion de la region Sud",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"e102ed1f-b06d-58f5-8cec-d0877105a54c"
+			],
+			"albumUuid": "3c07606d-ab66-5133-a27a-0a2712618cf2",
+			"duration": 442,
+			"discNumber": 1,
+			"trackNumber": 22,
+			"publishedAt": "2003-08-01",
+			"isrc": "FR71W0200023",
+			"deezerId": 2581476852
+		},
+		{
+			"uuid": "c3ad540f-eecc-517d-b101-ef41ce752364",
+			"name": "Intro",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 76,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500036",
+			"deezerId": 2581716042
+		},
+		{
+			"uuid": "92eaf610-54a6-56d3-af36-3c5f1dd02d32",
+			"name": "Krou Kontre attakk",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"2dc8bff0-cb8d-5ce3-ada0-28880979d8ba"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 233,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500056",
+			"deezerId": 2581716052
+		},
+		{
+			"uuid": "01efc496-3c16-5a0e-99bb-5620fbdc8b25",
+			"name": "La religion du stup",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"bf5e7108-7318-5474-aa4b-8a9d77f90725",
+				"64b9bfe8-600f-5bfa-ada8-2d00b56bdf43"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 174,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500057",
+			"deezerId": 2581716062
+		},
+		{
+			"uuid": "08c9d2d0-6ed8-5a3a-a57c-74b22d702846",
+			"name": "Les cles du mystere au chocolat - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 35,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500039",
+			"deezerId": 2581716072
+		},
+		{
+			"uuid": "d92ffe3c-fce7-5e3e-9c5f-04dd4d720abf",
+			"name": "Mon style en Crr",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 211,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500040",
+			"deezerId": 2581716082
+		},
+		{
+			"uuid": "4a191321-3498-5c72-b47e-a0e8a528437a",
+			"name": "Le miracle",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 18,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500041",
+			"deezerId": 2581716092
+		},
+		{
+			"uuid": "7ec05123-06c9-5528-b47c-12451606a88a",
+			"name": "Stup danse",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"64b9bfe8-600f-5bfa-ada8-2d00b56bdf43"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 209,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500042",
+			"deezerId": 2581716102
+		},
+		{
+			"uuid": "34022942-55c8-5289-b6c2-9bf5e4a3f3a0",
+			"name": "Une bonne correction - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 38,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500043",
+			"deezerId": 2581716112
+		},
+		{
+			"uuid": "ac91664b-c57d-5820-957b-767ded2c14c3",
+			"name": "Les cages en métal",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 243,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500044",
+			"deezerId": 2581716122
+		},
+		{
+			"uuid": "da8a5e90-2f5d-57e2-80fb-dcfc86584b53",
+			"name": "35 animaux morts",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 161,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500045",
+			"deezerId": 2581716132
+		},
+		{
+			"uuid": "05ece1af-4988-586b-8af4-f902496c9c21",
+			"name": "Pop Hip's Revenge",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 138,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500046",
+			"deezerId": 2581716142
+		},
+		{
+			"uuid": "ff9f67aa-91f4-5038-9f45-ef9e0337755c",
+			"name": "Région Nord (Soulèvement de la)",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 121,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500047",
+			"deezerId": 2581716152
+		},
+		{
+			"uuid": "99ea02d7-abd2-5b3f-b51c-ffd97ae27dd3",
+			"name": "L'enfant fou",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 251,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500059",
+			"deezerId": 2581716162
+		},
+		{
+			"uuid": "6b095db8-fea3-52fe-961e-093fbaf66662",
+			"name": "Stup monastere",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 201,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500060",
+			"deezerId": 2581716172
+		},
+		{
+			"uuid": "075e1305-4a07-5fbc-aadb-93201e92e956",
+			"name": "Salo therapy",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"30b5cd0e-4f26-5def-ada0-a00c31d1c32c"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 46,
+			"discNumber": 1,
+			"trackNumber": 15,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500061",
+			"deezerId": 2581716182
+		},
+		{
+			"uuid": "ff5ebe13-5a06-5ea9-bc31-8778c1196490",
+			"name": "Ce que tu dois savoir... - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 32,
+			"discNumber": 1,
+			"trackNumber": 16,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500051",
+			"deezerId": 2581716192
+		},
+		{
+			"uuid": "7cfeeff2-6b9e-562a-95ba-2b15d603806b",
+			"name": "Le cartable (feat. Helene)",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"64b9bfe8-600f-5bfa-ada8-2d00b56bdf43"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 251,
+			"discNumber": 1,
+			"trackNumber": 17,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500052",
+			"deezerId": 2581716202
+		},
+		{
+			"uuid": "9b7b08bb-0f38-5e5b-90c2-643cf6f2b692",
+			"name": "Argent",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 221,
+			"discNumber": 1,
+			"trackNumber": 18,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500053",
+			"deezerId": 2581716212
+		},
+		{
+			"uuid": "42f552a4-b66f-5241-8863-4dcfa1858087",
+			"name": "Une victoire bien meritée - Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"30b5cd0e-4f26-5def-ada0-a00c31d1c32c"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 34,
+			"discNumber": 1,
+			"trackNumber": 19,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500054",
+			"deezerId": 2581716222
+		},
+		{
+			"uuid": "d1b200a0-4ea6-57c3-bf34-7a64d0174d6d",
+			"name": "Ouest region's inquisitors",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"2dc8bff0-cb8d-5ce3-ada0-28880979d8ba",
+				"30b5cd0e-4f26-5def-ada0-a00c31d1c32c"
+			],
+			"albumUuid": "3f2c953e-b285-5e2d-9efe-0bf556a62f98",
+			"duration": 500,
+			"discNumber": 1,
+			"trackNumber": 20,
+			"publishedAt": "2005-06-14",
+			"isrc": "FR71W0500055",
+			"deezerId": 2581716232
+		},
+		{
+			"uuid": "4e373ed4-5048-5910-88b0-ecb9a5b37e72",
+			"name": "Invasion",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 105,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000063",
+			"deezerId": 2581637772
+		},
+		{
+			"uuid": "98e0b283-5787-5ec2-b744-6e2c51a54f40",
+			"name": "Stupeflip vite !!!",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"2dc8bff0-cb8d-5ce3-ada0-28880979d8ba"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 278,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000064",
+			"deezerId": 2581637782
+		},
+		{
+			"uuid": "22a969ed-a142-5f07-be5a-fc9895068572",
+			"name": "La menuiserie",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"e0ecbec4-e1de-54c7-b584-93b7a03d8319"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 294,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000065",
+			"deezerId": 2581637792
+		},
+		{
+			"uuid": "1c5831af-4529-54e1-bcd2-95dc63fc109b",
+			"name": "Gaëlle",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 245,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000066",
+			"deezerId": 2581637802
+		},
+		{
+			"uuid": "5b4984ca-e5b9-5953-80b0-463e887a6b87",
+			"name": "Check da Crou",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"30b5cd0e-4f26-5def-ada0-a00c31d1c32c"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 230,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000067",
+			"deezerId": 2581637812
+		},
+		{
+			"uuid": "c836cc67-3c3d-5b27-bd03-d2db17c7fb42",
+			"name": "Le spleen des petits",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 188,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000068",
+			"deezerId": 2581637822
+		},
+		{
+			"uuid": "9ca58b20-751b-5a35-babc-c1054ef19dc4",
+			"name": "Dangereux !! - Interlude 1",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 31,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000069",
+			"deezerId": 2581637832
+		},
+		{
+			"uuid": "506e3ac3-5877-5ea0-8a29-263d6ed90daa",
+			"name": "Hater's Killah",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 222,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000070",
+			"deezerId": 2581637842
+		},
+		{
+			"uuid": "77089220-4b7c-5366-bb13-313f686d43d2",
+			"name": "Strange Pain - Interlude 2",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 43,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000071",
+			"deezerId": 2581637852
+		},
+		{
+			"uuid": "ae0d69e0-7122-58b7-9a38-74257910be11",
+			"name": "Gem lé moch'",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 197,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000072",
+			"deezerId": 2581637862
+		},
+		{
+			"uuid": "d8d3137f-607f-5fbb-99a9-96450ab851fc",
+			"name": "Sinode pibouin",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 252,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000073",
+			"deezerId": 2581637872
+		},
+		{
+			"uuid": "71c02a1f-cb73-51ef-9247-796eabd00f2b",
+			"name": "72.8 mhz - Interlude 3",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 12,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000074",
+			"deezerId": 2581637892
+		},
+		{
+			"uuid": "906995bd-b94a-5d71-a9a1-169da7640c20",
+			"name": "Ce petit blouson en daim",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 212,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000075",
+			"deezerId": 2581637902
+		},
+		{
+			"uuid": "91b5aa8f-3517-5117-a9ca-0589fc41c14a",
+			"name": "Dark Warriors - Interlude 4",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 102,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000076",
+			"deezerId": 2581637912
+		},
+		{
+			"uuid": "893c7cd8-9ffa-5142-8994-a37626928998",
+			"name": "Lettre à Mylène",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 250,
+			"discNumber": 1,
+			"trackNumber": 15,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000077",
+			"deezerId": 2581637922
+		},
+		{
+			"uuid": "a1342a2b-c109-553d-b398-7a2d611ab374",
+			"name": "Ancienne prophétie - Interlude 5",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 36,
+			"discNumber": 1,
+			"trackNumber": 16,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000078",
+			"deezerId": 2581637932
+		},
+		{
+			"uuid": "3f214f91-3c71-511d-8499-3dd9e20c0dcd",
+			"name": "Apocalypse 894",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 200,
+			"discNumber": 1,
+			"trackNumber": 17,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000079",
+			"deezerId": 2581637942
+		},
+		{
+			"uuid": "4c58db8d-265a-52ce-829d-f391e5d9ac17",
+			"name": "La mort à Pop Hip - Interlude 6",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"0bef58f2-1736-5206-86dd-47630383ea09"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 85,
+			"discNumber": 1,
+			"trackNumber": 18,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000080",
+			"deezerId": 2581637952
+		},
+		{
+			"uuid": "cb8eb1f8-3398-5871-ae97-33815d17c985",
+			"name": "Le cœur qui cogne",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"62096427-448d-57e9-b502-d5c5872b27d5"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 236,
+			"discNumber": 1,
+			"trackNumber": 19,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000081",
+			"deezerId": 2581637962
+		},
+		{
+			"uuid": "7644b44c-d042-5cc6-b9d2-0a42644e1083",
+			"name": "Keep the Faith - Interlude 7",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 72,
+			"discNumber": 1,
+			"trackNumber": 20,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000082",
+			"deezerId": 2581637972
+		},
+		{
+			"uuid": "6edd1eb6-e4e5-5056-9a2c-763d751748f3",
+			"name": "Région est",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"30b5cd0e-4f26-5def-ada0-a00c31d1c32c"
+			],
+			"albumUuid": "5f1742dc-eb65-5f46-90e2-205dcac85fac",
+			"duration": 678,
+			"discNumber": 1,
+			"trackNumber": 21,
+			"publishedAt": "2011-02-28",
+			"isrc": "FR0Z21000083",
+			"deezerId": 2581637982
+		},
+		{
+			"uuid": "54c82028-ab43-5890-a588-f7329ac80f1d",
+			"name": "Intro",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 41,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600010",
+			"deezerId": 2581557572
+		},
+		{
+			"uuid": "c625f007-79d2-519f-8242-6ee1f5a549f9",
+			"name": "The Antidote",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 198,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600020",
+			"deezerId": 2581557582
+		},
+		{
+			"uuid": "e956c760-4d47-520e-9dc3-c16670c7b63b",
+			"name": "Creepy Slugs",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 232,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600030",
+			"deezerId": 2581557592
+		},
+		{
+			"uuid": "05611c4c-f1eb-5ecd-8f2c-d1a440c924be",
+			"name": "Cosmocrou",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 45,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600040",
+			"deezerId": 2581557602
+		},
+		{
+			"uuid": "9ed7d46f-0792-5124-84a3-a9131d1d5e88",
+			"name": "La seule alternative",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 188,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600050",
+			"deezerId": 2581557612
+		},
+		{
+			"uuid": "55010942-b384-53de-9528-70129a0e4010",
+			"name": "The Solution",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 242,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600060",
+			"deezerId": 2581557622
+		},
+		{
+			"uuid": "14d2c614-fa86-511f-af4c-26dd99b75689",
+			"name": "Knights of Chaos",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 74,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600070",
+			"deezerId": 2581557632
+		},
+		{
+			"uuid": "790f729a-51d3-54f7-8861-49193c0e0966",
+			"name": "Stup Virus",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 193,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600080",
+			"deezerId": 2581557642
+		},
+		{
+			"uuid": "305d2de2-f16f-542c-a8d0-99342c0be759",
+			"name": "Des nouvelles de pophip",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 35,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600090",
+			"deezerId": 2581557652
+		},
+		{
+			"uuid": "f23075ff-925e-5642-a1b4-1e0485fa1c53",
+			"name": "Lonely Loverz",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 213,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600100",
+			"deezerId": 2581557662
+		},
+		{
+			"uuid": "5bfa8cdd-5140-5373-abaa-c9f32f15ece9",
+			"name": "Understup",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"a5f1cf15-2e9a-53ba-8b35-fae51de0f1bc"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 217,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600111",
+			"deezerId": 2581557672
+		},
+		{
+			"uuid": "a6c12670-c8d1-5edd-b420-c959123f08cb",
+			"name": "Stalactites",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 173,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600120",
+			"deezerId": 2581557682
+		},
+		{
+			"uuid": "6c055018-f57d-5815-a117-ece75446ff2f",
+			"name": "Fou-Fou",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"a5f1cf15-2e9a-53ba-8b35-fae51de0f1bc"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 45,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600130",
+			"deezerId": 2581557692
+		},
+		{
+			"uuid": "a297044b-1e45-50af-a7bd-f1b9dd1141b7",
+			"name": "1993",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 171,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600140",
+			"deezerId": 2581557702
+		},
+		{
+			"uuid": "55845902-c8b8-5862-92e8-773943e774d8",
+			"name": "Grosse tête",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 47,
+			"discNumber": 1,
+			"trackNumber": 15,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600150",
+			"deezerId": 2581557712
+		},
+		{
+			"uuid": "c9a01912-de5d-54ad-9b08-1a95ae0dc2a0",
+			"name": "Crou Anthem",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 184,
+			"discNumber": 1,
+			"trackNumber": 16,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600160",
+			"deezerId": 2581557722
+		},
+		{
+			"uuid": "36e319b1-379c-54ec-b254-57fe9a6d2b2b",
+			"name": "Forcefield",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"7e87f09d-5715-5102-9fc7-81dd4658d3ad"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 130,
+			"discNumber": 1,
+			"trackNumber": 17,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600170",
+			"deezerId": 2581557732
+		},
+		{
+			"uuid": "70412654-1aad-59d1-9af2-753a878bf8aa",
+			"name": "Le trou noir",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"8c59f517-0921-527f-865b-34a8ef999b0c"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 304,
+			"discNumber": 1,
+			"trackNumber": 18,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600180",
+			"deezerId": 2581557742
+		},
+		{
+			"uuid": "aaa88254-db50-5999-ae5f-325d2dcd9e9a",
+			"name": "Pleure pas Stupeflip",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "90f1348b-f2f9-5d9c-98af-40485b6854bd",
+			"duration": 924,
+			"discNumber": 1,
+			"trackNumber": 19,
+			"publishedAt": "2017-03-03",
+			"isrc": "FR0Z21600190",
+			"deezerId": 2581557752
+		},
+		{
+			"uuid": "fe5b5c78-7e4a-585b-a552-b5f63e9526b5",
+			"name": "Stup forever",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 58,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205755",
+			"deezerId": 1718423277
+		},
+		{
+			"uuid": "39007893-bf7a-5c6e-85da-b2bfaf0c7701",
+			"name": "Dans ton baladeur (DTB)",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 138,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205756",
+			"deezerId": 1718423287
+		},
+		{
+			"uuid": "0a87e59e-0d3a-5e66-b577-194b3a73d980",
+			"name": "Cosmos 1999",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 33,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205757",
+			"deezerId": 1718423297
+		},
+		{
+			"uuid": "584d53d9-650c-59dd-8929-838dc6dd8bac",
+			"name": "Etranges phénomènes",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 158,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205758",
+			"deezerId": 1718423307
+		},
+		{
+			"uuid": "825cd290-a71e-54aa-ac16-c72467e3f9dc",
+			"name": "Tellement bon",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 237,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205760",
+			"deezerId": 1718423317
+		},
+		{
+			"uuid": "b8eb1884-3d90-5dbd-afd1-e3273861c7ee",
+			"name": "L’truc xplosiff",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 207,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205762",
+			"deezerId": 1718423327
+		},
+		{
+			"uuid": "e86488a9-30d9-545b-b6ce-950f4d025e2a",
+			"name": "Tensions",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 22,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205763",
+			"deezerId": 1718423337
+		},
+		{
+			"uuid": "13135272-6974-53e2-9466-7d942c7e582b",
+			"name": "Les gens qui s’énervent",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 211,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205764",
+			"deezerId": 1718423347
+		},
+		{
+			"uuid": "690e864e-c1f2-5d9d-bc48-fda02274290b",
+			"name": "Gluô",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 128,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205765",
+			"deezerId": 1718423357
+		},
+		{
+			"uuid": "7652c104-77be-5f87-a8bb-98cd929a4182",
+			"name": "Les voûtes",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 206,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205766",
+			"deezerId": 1718423367
+		},
+		{
+			"uuid": "16eb7878-2d60-542c-b861-9617e7bad847",
+			"name": "Sharkattack",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 158,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205767",
+			"deezerId": 1718423377
+		},
+		{
+			"uuid": "a3db1764-ba7a-50a2-9823-be5711db210b",
+			"name": "Pop-Hip le mort-vivant",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 231,
+			"discNumber": 1,
+			"trackNumber": 12,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205768",
+			"deezerId": 1718423387
+		},
+		{
+			"uuid": "5961d545-746c-5473-a5d4-bf61789c0442",
+			"name": "Tiger crane",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 107,
+			"discNumber": 1,
+			"trackNumber": 13,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205769",
+			"deezerId": 1718423397
+		},
+		{
+			"uuid": "0401d907-f93f-5a26-a532-30daafc56d94",
+			"name": "The platform (feat. Cadillac et MC Salo)",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"8c59f517-0921-527f-865b-34a8ef999b0c",
+				"2dc8bff0-cb8d-5ce3-ada0-28880979d8ba"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 180,
+			"discNumber": 1,
+			"trackNumber": 14,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205770",
+			"deezerId": 1718423407
+		},
+		{
+			"uuid": "7a9fdcb2-062e-5db8-94ee-9f31f8cdcce3",
+			"name": "Vengeance!!!",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 197,
+			"discNumber": 1,
+			"trackNumber": 15,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205771",
+			"deezerId": 1718423417
+		},
+		{
+			"uuid": "b2dd6011-6a84-571f-84c5-8943c64bd102",
+			"name": "Régions fédérées (feat. MC Salo)",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123",
+				"8c59f517-0921-527f-865b-34a8ef999b0c"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 452,
+			"discNumber": 1,
+			"trackNumber": 16,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205772",
+			"deezerId": 1718423427
+		},
+		{
+			"uuid": "68d28649-05b3-5e95-a506-80c248f0e37f",
+			"name": "Stay positiv’",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "aac757ed-ff00-5e2b-99b0-0a1d357dc321",
+			"duration": 155,
+			"discNumber": 1,
+			"trackNumber": 17,
+			"publishedAt": "2022-09-16",
+			"isrc": "FR9W12205773",
+			"deezerId": 1718423447
+		},
+		{
+			"uuid": "78566576-871a-5463-840c-b49ed74aef21",
+			"name": "Introduction",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "7c658652-a167-5443-8e22-a29c14e6b8ba",
+			"duration": 95,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2012-07-19",
+			"isrc": "FR0Z21000095",
+			"deezerId": 2581798512
+		},
+		{
+			"uuid": "ce760f0f-45c5-520f-bf50-567bbb61e5d9",
+			"name": "Terrora !!",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "7c658652-a167-5443-8e22-a29c14e6b8ba",
+			"duration": 169,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2012-07-19",
+			"isrc": "FR0Z21000096",
+			"deezerId": 2581798522
+		},
+		{
+			"uuid": "760a1dd0-212a-5a69-8321-881444de10aa",
+			"name": "Crou genesis",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "7c658652-a167-5443-8e22-a29c14e6b8ba",
+			"duration": 56,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2012-07-19",
+			"isrc": "FR0Z21000097",
+			"deezerId": 2581798532
+		},
+		{
+			"uuid": "16eb5b9b-9798-5629-9073-18df490a5804",
+			"name": "Le sonkifoudécou",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "7c658652-a167-5443-8e22-a29c14e6b8ba",
+			"duration": 173,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2012-07-19",
+			"isrc": "FR0Z21000098",
+			"deezerId": 2581798542
+		},
+		{
+			"uuid": "d50c612f-473b-5831-a1eb-ad3b68f9c050",
+			"name": "Nan ?.... Si ?",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "7c658652-a167-5443-8e22-a29c14e6b8ba",
+			"duration": 172,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2012-07-19",
+			"isrc": "FR0Z21000099",
+			"deezerId": 2581798552
+		},
+		{
+			"uuid": "6e6058ee-2d06-5f14-ade1-89fa49751877",
+			"name": "Strange Traps",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "7c658652-a167-5443-8e22-a29c14e6b8ba",
+			"duration": 217,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2012-07-19",
+			"isrc": "FR0Z21000101",
+			"deezerId": 2581798562
+		},
+		{
+			"uuid": "c888fa85-2b94-5c10-88d1-b8506126f465",
+			"name": "Opening",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 178,
+			"discNumber": 1,
+			"trackNumber": 1,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W12311368",
+			"deezerId": 2323874155
+		},
+		{
+			"uuid": "a60b982c-c6ee-5f66-9c52-58706361b951",
+			"name": "Don't want to cry anymore",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 175,
+			"discNumber": 1,
+			"trackNumber": 2,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W12311369",
+			"deezerId": 2323874165
+		},
+		{
+			"uuid": "c0236c01-d4d7-5b91-9c9a-f81364a6a27b",
+			"name": "Parenthèse",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 228,
+			"discNumber": 1,
+			"trackNumber": 3,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W12311370",
+			"deezerId": 2323874175
+		},
+		{
+			"uuid": "9ca210d8-d1a3-5fe7-b52e-4786abf9aadd",
+			"name": "Parencool",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 195,
+			"discNumber": 1,
+			"trackNumber": 4,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W11629022",
+			"deezerId": 2323874185
+		},
+		{
+			"uuid": "adc0aa65-84e8-5656-b163-9a0fdc573abb",
+			"name": "Olga's theme",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 97,
+			"discNumber": 1,
+			"trackNumber": 5,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W11629023",
+			"deezerId": 2323874195
+		},
+		{
+			"uuid": "18086968-8e5b-5c6b-8bf4-6b1d96ad03c3",
+			"name": "Tech vacances",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 66,
+			"discNumber": 1,
+			"trackNumber": 6,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W11629024",
+			"deezerId": 2323874205
+		},
+		{
+			"uuid": "c4d517aa-64f1-551e-8ee1-1f591eafda65",
+			"name": "Alain's complaint",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 66,
+			"discNumber": 1,
+			"trackNumber": 7,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W12311371",
+			"deezerId": 2323874215
+		},
+		{
+			"uuid": "818f0318-7d7f-57b0-93d4-1d38f6f38475",
+			"name": "Wilasi you again",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 92,
+			"discNumber": 1,
+			"trackNumber": 8,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W11629026",
+			"deezerId": 2323874225
+		},
+		{
+			"uuid": "f1e07401-19e5-5e45-bbde-c19ff29ce23a",
+			"name": "Italian serenade",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 188,
+			"discNumber": 1,
+			"trackNumber": 9,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W12311372",
+			"deezerId": 2323874235
+		},
+		{
+			"uuid": "208705bd-9347-51a7-8f92-5a387293c781",
+			"name": "Interlude",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 45,
+			"discNumber": 1,
+			"trackNumber": 10,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W12311373",
+			"deezerId": 2323874245
+		},
+		{
+			"uuid": "acbb2011-11f4-5aea-9627-0103e222b765",
+			"name": "Alice's theme",
+			"artistUuids": [
+				"0596fab9-4f92-577b-8e86-e74f997e7123"
+			],
+			"albumUuid": "580f6011-a17c-5f04-a9e4-06b72c4d304d",
+			"duration": 131,
+			"discNumber": 1,
+			"trackNumber": 11,
+			"publishedAt": "2023-09-08",
+			"isrc": "FR9W12311374",
+			"deezerId": 2323874255
+		}
+	]
+}
