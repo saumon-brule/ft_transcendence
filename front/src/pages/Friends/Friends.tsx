@@ -1,7 +1,6 @@
 import { useParams, useNavigate, A } from "@solidjs/router";
-import { createEffect, For, Show, createMemo, createSignal, on } from "solid-js";
+import { createEffect, For, Show, createMemo } from "solid-js";
 import { summonErrorToast } from "~/components/ui/Toaster";
-import { useUserProfileQuery } from "~/api/queryHooks/userProfile";
 import "./Friends.scss";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import FriendshipActions from "~/components/ui/FriendshipAction/FriendshipActions";
@@ -25,19 +24,10 @@ export default function Friends() {
 			return {
 				info,
 				chat: openChat(params.uuid),
-			};;
+			};
 		}
 		return null;
-	})
-
-	// const profile = useUserProfileQuery(() => params.uuid);
-
-	// createEffect(() => {
-	//     if (profile.isError) {
-	//         navigate("/home"); // !:! A remettre mais desact car chiant en dev
-	//         summonErrorToast(() => "Unknown user");
-	//     }
-	// });
+	});
 
 	createEffect(() => {
 		if (params.uuid && !friend()) {
@@ -50,13 +40,13 @@ export default function Friends() {
 		if (friend() && friend()!.chat.isRead === false) {
 			markAsRead(friend()!.info.uuid);
 		}
-	})
+	});
 
 	function navigateChat(friendUuid: string) {
 		navigate(`/friends/${friendUuid}`);
 	}
 
-	function sendMessage(e: SubmitEvent, friendUuid: string) {
+	function sendMessage(e: SubmitEvent) {
 		e.preventDefault();
 
 		const f = friend();
@@ -131,7 +121,7 @@ export default function Friends() {
 						</div>
 					</div>
 					<div class="chat-input">
-						<Form onSubmit={(e) => sendMessage(e, friend.info.uuid)}>
+						<Form onSubmit={(e) => sendMessage(e)}>
 							<TextInput value={friend.chat.draft} onInput={(e) => setDraft(friend.info.uuid, e.currentTarget.value)} type="text" placeholder="Type a message..."/>
 							<Button disabled={friend.chat.draft === ""} type="submit"><SendHorizontalIcon/></Button>
 						</Form>
