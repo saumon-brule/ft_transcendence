@@ -5,3 +5,5 @@ dist/
 *.tsbuildinfo
 back/src/generated/prisma/
 provider/src/generated/prisma/
+provider/mock/**/*.mp3
+provider/mock/**/*.jpg

@@ -61,3 +61,7 @@ dist/
 
 # Fichiers audio envoyés (MEDIA_DIR)
 /media
+
+# Second dev provider (make provider2)
+.env.provider2
+/media2

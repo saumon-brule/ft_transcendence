@@ -10,7 +10,12 @@ run: init
 	pnpm run dev
 
 provider: init
-	pnpm run dev:provider
+	MOCK_DISCOGRAPHY=1 pnpm run dev:provider
+
+# Second provider on port 3003, configured by provider/.env.provider2
+provider2: init
+	@cd provider && DOTENV_CONFIG_PATH=.env.provider2 pnpm prisma migrate dev --name init && cd ..
+	DOTENV_CONFIG_PATH=.env.provider2 pnpm run dev:provider
 
 migrate:
 	@cd back && pnpm prisma migrate dev --name init && cd ..
@@ -19,6 +24,6 @@ migrate:
 genkey:
 	@openssl genrsa -out back/provider.pem 2048
 
-.PHONY: run init migrate genkey
+.PHONY: run init provider provider2 migrate genkey
 
 
