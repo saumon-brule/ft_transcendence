@@ -2,10 +2,11 @@ import { createContext, useContext, ParentComponent, createEffect, onCleanup, on
 import { createSignal } from "solid-js";
 import { Music } from "~/class/Music";
 import { PushTrackToQueueFn, SetCurrentTrackFn, useTrackManager } from "~/store/trackManager.store";
-import { setupMediaSession } from "./mediaSession";
+import { setupMediaSession, updateMediaMetadata } from "./mediaSession";
 import { Track } from "~/class/Track";
 import { summonErrorToast } from "../ui/Toaster";
 import { LocalStorageItem } from "~/utils/storageHelper";
+import { getMediaToken } from "~/api/providerClients";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
 
@@ -126,6 +127,11 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 						playWhenLoaded = false;
 						play();
 					}
+					void getMediaToken(currentTrack.music.providerUrl)
+						.catch(() => null)
+						.then((token) => {
+							if (id === loadId) updateMediaMetadata(currentTrack.music, token);
+						});
 				})
 				.catch((e) => {
 					if (id !== loadId) return;
@@ -140,6 +146,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 			audio.pause();
 			audio.src = "";
 			setDuration(0);
+			updateMediaMetadata(null, null);
 		}
 	});
 
