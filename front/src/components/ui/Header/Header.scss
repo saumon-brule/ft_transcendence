@@ -156,6 +156,12 @@
 			&:last-child {
 				color: var(--text-danger);
 			}
+
+			.icon-badge {
+				position: relative;
+				display: inline-flex;
+			}
+
 		}
 	}
 

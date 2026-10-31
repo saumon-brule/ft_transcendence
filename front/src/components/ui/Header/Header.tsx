@@ -1,5 +1,5 @@
-import { ChevronDown, LogOut, Search, Settings, X, User, Server } from "lucide-solid";
-import { createSignal, onCleanup, onMount, Show } from "solid-js";
+import { ChevronDown, LogOut, Search, Settings, X, User, Server, Users } from "lucide-solid";
+import { createMemo, createSignal, onCleanup, onMount, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import { authActions } from "~/store/auth.store";
@@ -8,6 +8,7 @@ import { useNavigate } from "@solidjs/router";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 
 import "./Header.scss";
+import { hasUnreadMessages } from "~/store/messages.store";
 
 export default function Header() {
 	const meProfileQuery = useMeProfileQuery();
@@ -17,6 +18,10 @@ export default function Header() {
 	const [searchValue, setSearchValue] = createSignal("");
 	let searchInput!: FormEmbeddedComponentRef<HTMLInputElement>;
 	let profileMenu!: HTMLDivElement;
+
+	const hasFriendNotification = createMemo(() =>
+		(meProfileQuery.data?.body.friendRequests.length ?? 0) > 0 || hasUnreadMessages()
+	);
 
 	function handleDocumentClick(event: MouseEvent) {
 		if (profileMenu && !profileMenu.contains(event.target as Node)) {
@@ -83,6 +88,12 @@ export default function Header() {
 								<span>Profile</span>
 							</button>}
 						</Show>
+						<button type="button" role="menuitem" onClick={() => { navigate("/friends"); setIsMenuOpen(false); }}>
+							<span class="icon-badge" classList={{ notification: hasFriendNotification() }}>
+								<Users size={17} aria-hidden="true" />
+							</span>
+							<span>Friends</span>
+						</button>
 						<button type="button" role="menuitem" onClick={() => { navigate("/settings"); setIsMenuOpen(false); }}>
 							<Settings size={17} aria-hidden="true" />
 							<span>Settings</span>
