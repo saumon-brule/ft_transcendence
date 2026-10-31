@@ -19,9 +19,7 @@ export default function Header() {
 	let searchInput!: FormEmbeddedComponentRef<HTMLInputElement>;
 	let profileMenu!: HTMLDivElement;
 
-	const hasFriendNotification = createMemo(() =>
-		(meProfileQuery.data?.body.friendRequests.length ?? 0) > 0 || hasUnreadMessages()
-	);
+	const hasFriendNotification = createMemo(() => (meProfileQuery.data?.body.friendRequests.length ?? 0) > 0 || hasUnreadMessages());
 
 	function handleDocumentClick(event: MouseEvent) {
 		if (profileMenu && !profileMenu.contains(event.target as Node)) {

@@ -11,8 +11,7 @@ type ChatStore = { chats: Record<string, Chat> };
 const [chatStore, setChatStore] = createStore<ChatStore>({ chats: {} });
 
 function ensureChat(userUuid: string) {
-	if (!chatStore.chats[userUuid])
-		setChatStore("chats", userUuid, { draft: "", isRead: true, messages: [] });
+	if (!chatStore.chats[userUuid]) setChatStore("chats", userUuid, { draft: "", isRead: true, messages: [] });
 }
 
 function openChat(userUuid: string) {
@@ -31,7 +30,7 @@ function addMessage(userUuid: string, message: Message) {
 	if (message.author === "friend") {
 		setChatStore("chats", userUuid, "isRead", false);
 	}
-	setChatStore("chats", userUuid, "messages", msgs => [...msgs, message]);
+	setChatStore("chats", userUuid, "messages", (msgs) => [...msgs, message]);
 	// send future webscoket
 }
 
@@ -46,7 +45,7 @@ function markAsRead(userUuid: string) {
 
 function hasUnreadMessages(userUuid?: string) {
 	if (userUuid) return chatStore.chats[userUuid]?.isRead === false;
-	return Object.values(chatStore.chats).some(chat => !chat.isRead);
+	return Object.values(chatStore.chats).some((chat) => !chat.isRead);
 }
 
 
@@ -56,5 +55,5 @@ export {
 	addMessage,
 	markAsRead,
 	clearChats,
-	hasUnreadMessages
+	hasUnreadMessages,
 };
