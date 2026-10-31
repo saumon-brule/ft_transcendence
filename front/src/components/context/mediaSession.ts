@@ -1,6 +1,24 @@
 import { AudioManager } from "./AudioManagerContext";
+import { Music } from "~/class/Music";
 
 const DEFAULT_SEEK_OFFSET = 3; // seconds
+const DEFAULT_COVER = "/images/default_cover.png";
+
+export function updateMediaMetadata(music: Music | null, token: string | null) {
+	if (!("mediaSession" in navigator)) return;
+	if (!music) {
+		navigator.mediaSession.metadata = null;
+		return;
+	}
+
+	const cover = token && music.hasCover ? music.coverUrl(token) : DEFAULT_COVER;
+	navigator.mediaSession.metadata = new MediaMetadata({
+		title: music.name,
+		artist: music.artists.map((artist) => artist.name).join(", "),
+		album: music.album?.name ?? "",
+		artwork: [{ src: new URL(cover, window.location.origin).href }],
+	});
+}
 
 export function setupMediaSession(audioManager: AudioManager, audio: HTMLAudioElement) {
 	if (!("mediaSession" in navigator)) return;
