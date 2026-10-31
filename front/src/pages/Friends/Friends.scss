@@ -1,0 +1,218 @@
+$mobile: 1200px;
+
+// change it for this page so we can have an inner scrollable area
+#app-body:has(> #friends) {
+	flex: 1 1 0;
+	min-height: 0;
+}
+
+#friends {
+	padding: 40px;
+	display: flex;
+	gap: 40px;
+	flex: 1;
+	min-width: 0;
+
+	.friends-left {
+		width: 50%;
+		min-height: 0;
+		overflow-y: auto;
+
+		section {
+			margin-bottom: 40px;
+	
+			h2 {
+				margin-bottom: 10px;
+				font-size: 1.5rem;
+				font-weight: 600;
+			}
+
+			.friend-list {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+		}
+
+	
+		.friend-card {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 15px;
+			background-color: var(--background-card);
+			border: 1px solid var(--background-overlay);
+			border-radius: 9px;
+	
+			.friend-info {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+	
+				img {
+					width: 50px;
+					height: 50px;
+					object-fit: cover;
+					border-radius: 50px;
+				}
+			}
+	
+			.friend-actions {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+	
+				.friendship-status {
+					display: none;
+				}
+	
+				.friendship-buttons {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+				}
+
+				button {
+					overflow: visible;
+
+					&:hover, &:focus-visible {
+						.notification::after {
+							box-shadow: 0 0 0 2px var(--background-card);
+						}
+					}
+				}
+			}
+		}
+		
+	}
+
+	.friends-right {
+		width: 50%;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+
+		.back {
+			padding: 10px;
+			display: none;
+
+			a {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+		}
+
+		@media (max-width: $mobile) {
+			.back {
+				display: block;
+			}
+		}
+
+		.chat {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			min-height: 0;
+			width: 100%;
+			background-color: var(--background-card);
+			border: 1px solid var(--background-overlay);
+			border-radius: 9px;
+
+			.no-chat {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex: 1;
+				font-size: 1.2rem;
+				padding: 20px;
+			}
+
+			.chat-header {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 10px;
+				border-bottom: 1px solid var(--background-overlay);
+
+				.friend-avatar {
+					width: 40px;
+					height: 40px;
+					object-fit: cover;
+					border-radius: 50px;
+				}
+
+				.friend-username {
+					font-size: 1.2rem;
+					font-weight: 600;
+				}
+			}
+
+			.chat-messages {
+				display: flex;
+				flex-direction: column-reverse;
+				flex: 1;
+				min-height: 0;
+				padding: 10px;
+				overflow-y: auto;
+
+				.chat-messages-inner {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+				}
+
+				.chat-message-info {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 0.9rem;
+					color: var(--text-secondary);
+					padding: 10px;
+				}
+
+				.chat-message {
+					max-width: 70%;
+					padding: 10px;
+					margin-bottom: 10px;
+					border-radius: 9px;
+
+					&.from-me {
+						align-self: flex-end;
+						background-color: var(--background-accent);
+					}
+
+					&.from-friend {
+						align-self: flex-start;
+						background-color: var(--background-overlay);
+					}
+				}
+			}
+
+			.chat-input {
+				border-top: 1px solid var(--background-overlay);
+
+				form {
+					display: flex;
+					align-items: center;
+					width: 100%;
+					gap: 6px;
+					padding: 6px;
+	
+					.text-input {
+						width: 100%;
+						height: 100%;
+					}
+					
+					button {
+						padding: 0.5rem 0.74rem;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						height: 46px;
+					}
+				}
+			}
+		}
+	}
+}

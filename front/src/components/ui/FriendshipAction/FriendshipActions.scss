@@ -1,0 +1,38 @@
+.friendship-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    margin-left: auto;
+
+    .friendship-buttons {
+        display: flex;
+        gap: 8px;
+    }
+}
+
+.friendship-status {
+    padding: 6px 12px;
+    border: 1px solid currentColor;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &.friends {
+        color: var(--text-valid);
+    }
+
+    &.outgoing {
+        color: var(--text-secondary);
+    }
+
+    &.incoming {
+        color: var(--text-secondary);
+    }
+}
+
+.friendship-actions--status--friends {
+    flex-direction: row;
+    align-items: center;
+}

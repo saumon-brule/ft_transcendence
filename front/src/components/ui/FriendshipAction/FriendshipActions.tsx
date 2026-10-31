@@ -6,6 +6,8 @@ import { client, queryKeys } from "~/api/client";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import Button from "~/components/inputs/Button";
 import { summonErrorToast } from "~/components/ui/Toaster";
+import { UserRoundX } from "lucide-solid";
+import "./FriendshipActions.scss";
 
 type FriendshipStatus = "loading" | "friends" | "incoming" | "outgoing" | "none";
 type MeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
@@ -112,7 +114,7 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 		);
 	}
 
-	return <div class="friendship-actions">
+	return <div class={`friendship-actions friendship-actions--status--${status()}`}>
 		<Switch>
 			<Match when={status() === "none"}>
 				<Button type="button" onClick={sendRequest} disabled={pending()}>Request friend</Button>
@@ -129,7 +131,7 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 			</Match>
 			<Match when={status() === "friends"}>
 				<div class="friendship-status friends">Friends</div>
-				<Button type="button" onClick={removeFriend} disabled={pending()} variant="text" size="sm">Remove friend</Button>
+				<Button icon type="button" onClick={removeFriend} disabled={pending()} variant="danger" size="sm"><UserRoundX/></Button>
 			</Match>
 		</Switch>
 	</div>;
