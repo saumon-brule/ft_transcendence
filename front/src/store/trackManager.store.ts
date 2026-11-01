@@ -1,53 +1,46 @@
-import { createEffect } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import z from "zod";
 import { Music } from "~/class/Music";
 import { Track } from "~/class/Track";
+import { LocalStorageItem } from "~/utils/storageHelper";
 
 const MAX_HISTORY_SIZE = 64;
-
 
 const trackManagerStateSchema = z.object({
 	current: Track.zodSchema.nullable(),
 	queue: z.array(Track.zodSchema),
 	history: z.array(Track.zodSchema).max(MAX_HISTORY_SIZE).catch(() => []),
-	progression: z.number(),
-	activePlaylist: z.array(Track.zodSchema).nullable(),
+	activePlaylist: z.array(Music.zodSchema).nullable(),
 });
 
-type TrackManagerState = z.infer<typeof trackManagerStateSchema>;
+export type TrackManagerState = z.infer<typeof trackManagerStateSchema>;
 
-const defaultTrackManagerState = {
-	current: null,
-	queue: [],
-	history: [],
-	progression: 0,
-	activePlaylist: null,
-};
-
-function loadLocalTrackManagerState(): TrackManagerState {
-	let data: unknown;
-	try {
-		const item = localStorage.getItem("track-state");
-		if (!item) return defaultTrackManagerState;
-		data = JSON.parse(item);
-	} catch (e: unknown) {
-		console.error(e);
-		return defaultTrackManagerState;
-	}
-	const result = trackManagerStateSchema.safeParse(data);
-	if (result.success) {
-		return result.data;
-	} else {
-		return defaultTrackManagerState;
-	}
-}
+const trackProgressionItem = new LocalStorageItem("track-progression", () => 0, JSON.stringify);
+const trackStateItem = new LocalStorageItem<TrackManagerState>(
+	"track-state",
+	() => ({ current: null, queue: [], history: [], activePlaylist: null }),
+	JSON.stringify,
+	(stored, defaultFactory) => {
+		try {
+			return trackManagerStateSchema.parse(JSON.parse(stored));
+		} catch (e: unknown) {
+			console.error(e);
+			return defaultFactory();
+		}
+	},
+);
 
 export function useTrackManager() {
-	const [trackManager, setTrackManager] = createStore<TrackManagerState>(loadLocalTrackManagerState());
+	const [trackManager, setTrackManager] = createStore<TrackManagerState>(trackStateItem.get());
+	const [progression, setProgression] = createSignal(trackProgressionItem.get());
 
 	createEffect(() => {
-		localStorage.setItem("track-state", JSON.stringify(trackManager));
+		trackStateItem.set(trackManager);
+	});
+
+	createEffect(() => {
+		trackProgressionItem.set(progression());
 	});
 
 	function next() {
@@ -92,11 +85,11 @@ export function useTrackManager() {
 		}
 
 		setTrackManager(produce((manager) => {
-			if (manager.current != null) {
+			if (manager.current != null && !manager.current.temporary) {
 				if (manager.history.length >= MAX_HISTORY_SIZE) manager.history.shift();
-				if (!manager.current.temporary) manager.history.push(manager.current);
-				manager.current = track ?? null;
+				manager.history.push(manager.current);
 			}
+			manager.current = track ?? null;
 		}));
 	}
 
@@ -118,13 +111,10 @@ export function useTrackManager() {
 		}
 	}
 
-
-	function setProgression(progression: number) {
-		setTrackManager("progression", progression);
-	}
-
 	return {
 		manager: trackManager,
+		get progression() { return progression(); },
+		set progression(progression: number) { setProgression(progression); },
 		nextTrack: next,
 		prevTrack: prev,
 		setCurrentTrack,

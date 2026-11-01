@@ -3,3 +3,5 @@ export const ftIntraAuthCallbackPath = "/auth/42/auth-callback" as const;
 export const ftIntraLinkCallbackPath = "/auth/42/link-callback" as const;
 export const passwordResetConfirmationPath = "/auth/reset-password" as const;
 export const changeEmailConfirmationPath = "/auth/set-email" as const;
+
+export const MAX_SIZE = 10 * 1024 * 1024;

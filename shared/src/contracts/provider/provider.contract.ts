@@ -1,12 +1,14 @@
 import { initContract } from "@ts-rest/core";
 import { infoContract } from "./info/info.contract";
-import { accessRequestsContract } from "./accessRequests/access-requests.contract";
-import { providerMembersContract } from "./members/members.contract";
-import { providerRolesContract } from "./roles/roles.contract";
-import { settingsContract } from "./settings/settings.contract";
+import { accessRequestContract } from "./accessRequest/access-request.contract";
+import { providerMemberContract } from "./member/member.contract";
+import { providerRoleContract } from "./role/role.contract";
+import { settingContract } from "./setting/setting.contract";
 import { musicContract } from "./music/music.contract";
 import { artistContract } from "./artist/artist.contract";
 import { albumContract } from "./album/album.contract";
+import { mediaContract } from "./media/media.contract";
+import { searchContract } from "./search/search.contract";
 import { commonError400Schema, commonError429Schema, providerError401Schema, providerError403Schema } from "../../errors/error-schemas";
 
 const c = initContract();
@@ -14,13 +16,15 @@ const c = initContract();
 export const providerContract = c.router(
 	{
 		info: infoContract,
-		accessRequests: accessRequestsContract,
-		members: providerMembersContract,
-		roles: providerRolesContract,
-		settings: settingsContract,
+		accessRequest: accessRequestContract,
+		member: providerMemberContract,
+		role: providerRoleContract,
+		setting: settingContract,
 		music: musicContract,
 		artist: artistContract,
 		album: albumContract,
+		media: mediaContract,
+		search: searchContract,
 	},
 	{
 		commonResponses: {

@@ -11,6 +11,7 @@ async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
 	app.set("trust proxy", 1);
+	app.enableCors();
 	app.useGlobalFilters(new TsRestValidationFilter());
 
 	if (env.NODE_ENV === "dev") {
@@ -32,7 +33,7 @@ async function bootstrap() {
 			security: [{ bearerAuth: [] }],
 		});
 
-		SwaggerModule.setup("api", app, provider_document, {
+		SwaggerModule.setup("swagger", app, provider_document, {
 			swaggerOptions: { persistAuthorization: true },
 		});
 	}

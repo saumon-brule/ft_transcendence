@@ -4,6 +4,8 @@ import { Music } from "~/class/Music";
 import { PushTrackToQueueFn, SetCurrentTrackFn, useTrackManager } from "~/store/trackManager.store";
 import { setupMediaSession } from "./mediaSession";
 import { Track } from "~/class/Track";
+import { summonErrorToast } from "../ui/Toaster";
+import { LocalStorageItem } from "~/utils/storageHelper";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
 
@@ -13,6 +15,10 @@ export type AudioManager = {
 	get duration(): number;
 	get progression(): number;
 	set progression(time: number);
+	get volume(): number;
+	set volume(value: number);
+	get muted(): boolean;
+	set muted(value: boolean);
 	get history(): Array<Track>;
 	play: () => void;
 	pause: () => void;
@@ -26,17 +32,31 @@ export type AudioManager = {
 
 const AudioManagerContext = createContext<AudioManager>();
 
+const volumeItem = new LocalStorageItem<number>("volume", () => 1);
+const mutedItem = new LocalStorageItem<boolean>("muted", () => false);
+
 export const AudioPlayerProvider: ParentComponent = (props) => {
 	const audio = new Audio();
 	const trackManager = useTrackManager();
+	const [volume, setVolume] = createSignal(volumeItem.get());
+	const [muted, setMuted] = createSignal(mutedItem.get());
 	const [isPlaying, setIsPlaying] = createSignal(false);
 	const [duration, setDuration] = createSignal(0.0);
 
+	let loadId = 0;
+	let loading = false;
+	let playWhenLoaded = false;
+
 	function play() {
+		if (loading) {
+			playWhenLoaded = true;
+			return;
+		}
 		audio.play().catch(() => setIsPlaying(false));
 	}
 
 	function pause() {
+		playWhenLoaded = false;
 		audio.pause();
 	}
 
@@ -66,6 +86,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	}
 
 	const handleKeyDown = (e: KeyboardEvent) => {
+		if ((e.target as HTMLElement).matches("input, textarea, select") || (e.target as HTMLElement).isContentEditable) return;
 		if (e.key === " ") {
 			e.preventDefault();
 			toggle();
@@ -74,7 +95,10 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	};
 	const handlePlay = () => setIsPlaying(true);
 	const handlePause = () => setIsPlaying(false);
-	const handleEnded = () => trackManager.nextTrack();
+	const handleEnded = () => {
+		trackManager.nextTrack();
+		setIsPlaying(true);
+	};
 	const handleTimeUpdate = () => trackManager.setProgression(audio.currentTime);
 	const handleLoadedMetadata = () => setDuration(audio.duration);
 
@@ -86,28 +110,71 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	audio.addEventListener("loadedmetadata", handleLoadedMetadata);
 
 	onMount(() => {
-		audio.addEventListener("loadedmetadata", (() => audio.currentTime = trackManager.manager.progression), { once: true });
-		audio.src = trackManager.manager.current?.music.url().href ?? "";
+		audio.addEventListener("loadedmetadata", (() => audio.currentTime = trackManager.progression), { once: true });
+		audio.src = "";
+		// audio.src = trackManager.manager.current?.music.url().href ?? "";
 	});
 
 	createEffect(() => {
 		const currentTrack = trackManager.manager.current;
+		const id = ++loadId;
 		if (currentTrack !== null) {
-			audio.src = currentTrack.music.url().href;
-			if (untrack(isPlaying)) play();
+			loading = true;
+			currentTrack.music.audioUrl()
+				.then((url) => {
+					if (id !== loadId) return;
+					loading = false;
+					audio.src = url;
+					if (playWhenLoaded || untrack(isPlaying)) {
+						playWhenLoaded = false;
+						play();
+					}
+				})
+				.catch((e) => {
+					if (id !== loadId) return;
+					loading = false;
+					playWhenLoaded = false;
+					console.error(e);
+					summonErrorToast(() => "This music is not avaible right now :(");
+				});
 		} else {
+			loading = false;
+			playWhenLoaded = false;
 			audio.pause();
 			audio.src = "";
 			setDuration(0);
 		}
 	});
 
+	// 3 createEffect here :
+	// changes volume (reacts to muted and volume)
+	createEffect(() => {
+		audio.volume = muted() ? 0 : volume();
+	});
+
+	// set volume in localStorage (reacts to volume only)
+	createEffect(() => {
+		volumeItem.set(volume());
+	});
+
+	// set muted in localStorage (reacts to muted only)
+	createEffect(() => {
+		mutedItem.set(muted());
+	});
+
 	const audioManager = {
 		get playing() { return isPlaying(); },
 		get currentMusic() { return trackManager.manager.current?.music ?? null; },
-		get progression() { return trackManager.manager.progression; },
-		set progression(time: number) { audio.currentTime = time; },
 		get duration() { return duration(); },
+		get progression() { return trackManager.progression; },
+		set progression(time: number) { audio.currentTime = time; },
+		// As volume is not interpreted lineraly by human hear, a simple correction
+		// between real volume and the linear representation we use ins sliders allows
+		// us to have a "linear" volume change
+		get volume() { return Math.sqrt(volume()); },
+		set volume(volume: number) { setVolume(Math.pow(Math.min(Math.max(volume, 0), 1), 2)); },
+		get muted() { return muted(); },
+		set muted(muted: boolean) { setMuted(muted); },
 		get history() { return trackManager.manager.history; },
 		play,
 		pause,

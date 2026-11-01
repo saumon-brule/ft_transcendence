@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
-import { JwtModule } from "@nestjs/jwt";
-import { MusicAudioService } from "./music-audio.service";
+import { MediaModule } from "../media/media.module";
+import { SearchModule } from "../search/search.module";
 import { MusicController } from "./music.controller";
 import { MusicService } from "./music.service";
 
 @Module({
-	imports: [JwtModule.register({})],
+	imports: [MediaModule, SearchModule],
 	controllers: [MusicController],
-	providers: [MusicService, MusicAudioService],
+	providers: [MusicService],
 })
 export class MusicModule {}

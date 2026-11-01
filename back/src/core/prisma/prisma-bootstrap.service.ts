@@ -4,7 +4,7 @@ import { PERMISSIONS } from "@flex/shared";
 import * as bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
 import { env } from "../env";
-import { generateApiKey } from "../../providersAPI/providerAPIKey";
+import { generateApiKey } from "../../providersAPI/providersAPIKey";
 
 function providerCredentials() {
 	const uuid = randomUUID();
@@ -165,16 +165,50 @@ export class DatabaseBootstrapService implements OnModuleInit {
 
 		console.log("Roles asignated : liam→bigboss, chantal→manager, machin→user");
 
+		// ─── Friends ─────────────────────────────────────────────────────────────────
+
+		await this.prisma.friendRequest.upsert({
+			where: {
+				userUUID_friendUUID: {
+					userUUID: chantalUser.uuid,
+					friendUUID: liamUser.uuid,
+				},
+			},
+			update: { status: "ACCEPTED" },
+			create: {
+				userUUID: chantalUser.uuid,
+				friendUUID: liamUser.uuid,
+				status: "ACCEPTED",
+			},
+		});
+
+		await this.prisma.friendRequest.upsert({
+			where: {
+				userUUID_friendUUID: {
+					userUUID: machinUser.uuid,
+					friendUUID: liamUser.uuid,
+				},
+			},
+			update: { status: "PENDING" },
+			create: {
+				userUUID: machinUser.uuid,
+				friendUUID: liamUser.uuid,
+				status: "PENDING",
+			},
+		});
+
+		console.log("Friends : chantal↔liam (accepted), machin→liam (pending)");
+
 		const privateProvider = await this.prisma.provider.upsert({
 			where: { name: "Liam's Private Provider" },
 			update: {
 				ownerUUID: liamUser.uuid,
-				adress: "liam-private-provider",
+				address: "https://liam-private-provider",
 				publicDisplay: false,
 			},
 			create: {
 				name: "Liam's Private Provider",
-				adress: "liam-private-provider",
+				address: "https://liam-private-provider",
 				ownerUUID: liamUser.uuid,
 				publicDisplay: false,
 				...providerCredentials(),
@@ -185,31 +219,31 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			where: { name: "Liam's Public Provider" },
 			update: {
 				ownerUUID: liamUser.uuid,
-				adress: "liam-public-provider",
+				address: "https://liam-public-providerr",
 				publicDisplay: true,
 			},
 			create: {
 				name: "Liam's Public Provider",
-				adress: "liam-public-provider",
+				address: "https://liam-public-providerr",
 				ownerUUID: liamUser.uuid,
 				publicDisplay: true,
 				...providerCredentials(),
 			},
 		});
 
-		const additionalProviders = [
-			{ name: "Liam's Provider 3", adress: "liam-provider-3" },
-			{ name: "Liam's Provider 4", adress: "liam-provider-4" },
-			{ name: "Liam's Provider 5", adress: "liam-provider-5" },
-			{ name: "Liam's Provider 6", adress: "liam-provider-6" },
-			{ name: "Liam's Provider 7", adress: "liam-provider-7" },
-			{ name: "Liam's Provider 8", adress: "liam-provider-8" },
+		const additionalProviders: { name: string; address: string }[] = [
+			// { name: "Liam's Provider 3", address: "https://liam-provider-3" },
+			// { name: "Liam's Provider 4", address: "https://liam-provider-4" },
+			// { name: "Liam's Provider 5", address: "https://liam-provider-5" },
+			// { name: "Liam's Provider 6", address: "https://liam-provider-6" },
+			// { name: "Liam's Provider 7", address: "https://liam-provider-7" },
+			// { name: "Liam's Provider 8", address: "https://liam-provider-8" },
 		];
 
 		for (const provider of additionalProviders) {
 			await this.prisma.provider.upsert({
 				where: { name: provider.name },
-				update: { ownerUUID: liamUser.uuid, adress: provider.adress },
+				update: { ownerUUID: liamUser.uuid, address: provider.address },
 				create: { ...provider, ownerUUID: liamUser.uuid, ...providerCredentials() },
 			});
 		}

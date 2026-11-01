@@ -3,12 +3,16 @@ import { z } from "zod";
 export const artistItemSchema = z.object({
 	uuid: z.string().uuid(),
 	name: z.string(),
+	hasAvatar: z.boolean(),
 });
+export type ArtistItemDto = z.infer<typeof artistItemSchema>;
 
 export const albumItemSchema = z.object({
 	uuid: z.string().uuid(),
 	name: z.string(),
 	publishedAt: z.coerce.date().nullable(),
+	hasCover: z.boolean(),
+	artists: z.array(artistItemSchema),
 });
 
 export const musicItemSchema = z.object({
@@ -16,6 +20,7 @@ export const musicItemSchema = z.object({
 	name: z.string(),
 	duration: z.number(),
 	publishedAt: z.coerce.date().nullable(),
+	hasCover: z.boolean(),
 	artists: z.array(artistItemSchema),
 	album: albumItemSchema.nullable(),
 });

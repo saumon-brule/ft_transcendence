@@ -12,13 +12,13 @@ import { useUserProfileQuery } from "~/api/queryHooks/userProfile";
 export default function Profile() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string }>();
-	const profile = useUserProfileQuery(params.uuid);
+	const profile = useUserProfileQuery(() => params.uuid);
 
 
 	createEffect(() => {
 		if (profile.isError) {
 			navigate("/home"); // !:! A remettre mais desact car chiant en dev
-			summonErrorToast("Unknown user");
+			summonErrorToast(() => "Unknown user");
 		}
 	});
 

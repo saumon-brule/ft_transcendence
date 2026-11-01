@@ -1,11 +1,11 @@
 import { createContext, JSX, splitProps, useContext } from "solid-js";
-import { InputComponentRef } from "~/types/ComponentRef";
+import { FormEmbeddedComponentRef } from "~/types/ComponentRef";
 
 type FormProps = JSX.IntrinsicElements["form"];
 
 interface FormContextValue {
-	register: (ref: InputComponentRef) => void;
-	unregister: (ref: InputComponentRef) => void;
+	register: (ref: FormEmbeddedComponentRef) => void;
+	unregister: (ref: FormEmbeddedComponentRef) => void;
 }
 
 
@@ -22,10 +22,10 @@ type SubmitHandler = JSX.EventHandler<HTMLFormElement, SubmitEvent>;
 export default function Form(props: FormProps) {
 	const [local, rest] = splitProps(props, ["children", "novalidate", "onSubmit"]);
 
-	const inputs: InputComponentRef[] = [];
+	const inputs: FormEmbeddedComponentRef[] = [];
 
 	const contextValue: FormContextValue = {
-		register: (ref: InputComponentRef) => inputs.push(ref),
+		register: (ref: FormEmbeddedComponentRef) => inputs.push(ref),
 		unregister: (ref) => inputs.splice(inputs.indexOf(ref), 1),
 	};
 

@@ -6,6 +6,7 @@ export const musicDetailedItemSchema = z.object({
 	name: z.string(),
 	duration: z.number(),
 	publishedAt: z.coerce.date().nullable(),
+	hasCover: z.boolean(),
 	addedBy: z.string().uuid().nullable(),
 	addedAt: z.coerce.date(),
 	artists: z.array(artistItemSchema),
@@ -28,8 +29,3 @@ export const createMusicSchema = z.object({
 });
 
 export const updateMusicSchema = createMusicSchema.partial();
-
-export const audioUrlResponseSchema = z.object({
-	url: z.string().url(),
-	expiresAt: z.coerce.date(),
-});
