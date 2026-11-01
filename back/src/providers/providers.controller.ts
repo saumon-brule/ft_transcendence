@@ -12,7 +12,7 @@ export class ProvidersController {
 	constructor(
 		private readonly providersService: ProvidersService,
 		private readonly accessRequests: ProviderAccessRequestsService,
-	) {}
+	) { }
 
 	@Throttle({ default: { limit: 10, ttl: 60000 } })
 	@UseGuards(JwtAuthGuard)
