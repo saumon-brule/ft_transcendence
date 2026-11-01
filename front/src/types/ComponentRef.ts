@@ -2,8 +2,8 @@ export interface ComponentRef<E extends HTMLElement = HTMLElement> {
 	htmlElement: E;
 }
 
-interface InputComponentRefProperty {
+interface FormEmbeddedComponentRefProperty {
 	checkErrors: () => void;
 }
 
-export type InputComponentRef = ComponentRef<HTMLInputElement> & InputComponentRefProperty;
+export type FormEmbeddedComponentRef<E extends HTMLInputElement | HTMLSelectElement = HTMLInputElement | HTMLSelectElement> = ComponentRef<E> & FormEmbeddedComponentRefProperty;

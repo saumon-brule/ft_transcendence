@@ -6,7 +6,7 @@ import {
 	updateAlbumSchema,
 } from "./schemas/album.schema";
 import { listQuerySchema, uuidParamSchema } from "../../../schemas/common.schema";
-import { commonError404Schema } from "../../../errors/error-schemas";
+import { commonError404Schema, commonError413Schema, commonError415Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -55,6 +55,28 @@ export const albumContract = c.router(
 				404: commonError404Schema,
 			},
 		},
+		uploadCover: {
+			method: "PUT",
+			path: "/:uuid/cover",
+			pathParams: uuidParamSchema,
+			contentType: "multipart/form-data",
+			body: c.type<{ file: File }>(),
+			responses: {
+				204: null,
+				404: commonError404Schema,
+				413: commonError413Schema,
+				415: commonError415Schema,
+			},
+		},
+		removeCover: {
+			method: "DELETE",
+			path: "/:uuid/cover",
+			pathParams: uuidParamSchema,
+			responses: {
+				204: null,
+				404: commonError404Schema,
+			},
+		},
 	},
-	{ pathPrefix: "/albums" },
+	{ pathPrefix: "/album" },
 );

@@ -20,6 +20,11 @@ import AppContainer from "./components/ui/RoutedLayout/AppContainer";
 import ChangeEmailValidation from "./pages/auth/changeEmail/ChangeEmailValidation";
 import SidebarRoute from "./components/ui/RoutedLayout/SidebarRoute";
 import SettingsRoutes from "./pages/Settings/SettingsRoutes";
+import Providers from "./pages/Providers";
+import Provider from "./pages/Provider";
+import ProviderArtist from "./pages/Provider/ProviderArtist";
+import ProviderAlbum from "./pages/Provider/ProviderAlbum";
+import Friends from "./pages/Friends";
 
 export const AppRouter = () => {
 	return <Router >
@@ -44,6 +49,12 @@ export const AppRouter = () => {
 					<Route path="/" component={SidebarRoute}>
 						<Route path="/home" component={Home} />
 						<Route path="/user/:uuid" component={Profile} />
+						<Route path="/friends" component={Friends} />
+						<Route path="/friends/:uuid" component={Friends} />
+						<Route path="/providers" component={Providers} />
+						<Route path="/provider/:uuid" component={Provider} />
+						<Route path="/provider/:uuid/artist/:artistUUID" component={ProviderArtist} />
+						<Route path="/provider/:uuid/album/:albumUUID" component={ProviderAlbum} />
 					</Route>
 					<SettingsRoutes/>
 				</Route>

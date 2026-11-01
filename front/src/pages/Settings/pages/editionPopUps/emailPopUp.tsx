@@ -51,7 +51,7 @@ export const summonEmailEditPopUp = (onClose: () => void) => summonPopUp((popUpC
 	}
 
 	return <Form onSubmit={handleSubmit}>
-		<h2>{t("pages.settings.account.username.popUp.title")}</h2>
+		<h2>{t("pages.settings.account.email.popUp.title")}</h2>
 		<div class="pop-up-inputs">
 			<TextInput ref={(e) => newEmailInput = e.htmlElement} placeholder={t("pages.settings.account.email.popUp.placeholder.newEmail")} type="email" validator={(e) => validateFromZod(requestEmailResetSchema.shape.newEmail, e.value)} required/>
 			<TextInput ref={(e) => passwordInput = e.htmlElement} placeholder={t("pages.settings.account.email.popUp.placeholder.password")} type="password" validator={(e) => validateFromZod(requestEmailResetSchema.shape.password, e.value)} required />

@@ -9,6 +9,9 @@ init:
 run: init
 	pnpm run dev
 
+provider: init
+	pnpm run dev:provider
+
 migrate:
 	@cd back && pnpm prisma migrate dev --name init && cd ..
 	@cd provider && pnpm prisma migrate dev --name init && cd ..

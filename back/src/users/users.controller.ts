@@ -5,7 +5,6 @@ import {
 	UploadedFile,
 	ParseFilePipe,
 	FileTypeValidator,
-	MaxFileSizeValidator,
 	Get,
 	StreamableFile,
 	Param,
@@ -22,6 +21,7 @@ import {
 	usersContract,
 	rolesListDetailedResponseSchema,
 	rolesListResponseSchema,
+	MAX_SIZE,
 } from "@flex/shared";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { RequirePermission } from "../core/decorators/require-permission.decorator";
@@ -33,7 +33,7 @@ import type { Express } from "express";
 import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
 import { createReadStream, existsSync } from "node:fs";
-import { ASSET_DIR, AVATAR_DIR, MAX_SIZE } from "../core/utils/constants";
+import { ASSET_DIR, AVATAR_DIR } from "../core/utils/constants";
 
 @Controller()
 export class UsersController {
@@ -66,13 +66,14 @@ export class UsersController {
 		});
 	}
 
-	@UseInterceptors(FileInterceptor("avatar"))
+	@UseInterceptors(FileInterceptor("avatar", {
+		limits: { fileSize: MAX_SIZE },
+	}))
 	@TsRestHandler(usersContract.uploadAvatar)
 	@UseGuards(JwtAuthGuard)
 	public uploadAvatar(
 		@UploadedFile(new ParseFilePipe({ validators: [
 			new FileTypeValidator({ fileType: /image\/(jpeg|jpg|png|webp|gif)$/ }),
-			new MaxFileSizeValidator({ maxSize: MAX_SIZE }),
 		] }))
 		file: Express.Multer.File,
 		@CurrentUser() authUser: AuthUser,

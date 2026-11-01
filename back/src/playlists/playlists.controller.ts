@@ -17,6 +17,7 @@ import {
 	CurrentUser,
 } from "../core/decorators/current-user.decorator";
 import {
+	MAX_SIZE,
 	playlistsContract,
 } from "@flex/shared";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";

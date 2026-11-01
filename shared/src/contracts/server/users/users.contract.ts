@@ -12,7 +12,7 @@ import {
 } from "../roles/schemas/role.schema";
 import z from "zod";
 import { uuidParamSchema } from "../../../schemas/common.schema";
-import { commonError404Schema } from "../../../errors/error-schemas";
+import { commonError404Schema, commonError413Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -47,6 +47,7 @@ export const usersContract = c.router(
 				200: z.object({
 					avatarPath: z.string(),
 				}),
+				413: commonError413Schema,
 			},
 		},
 		getUserRoles: {

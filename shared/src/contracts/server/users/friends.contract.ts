@@ -26,6 +26,7 @@ export const friendsContract = c.router(
 			method: "DELETE",
 			path: "/:friendUuid",
 			pathParams: friendUuidParamSchema,
+			body: null,
 			responses: { 204: null },
 		},
 		manageRequests: {

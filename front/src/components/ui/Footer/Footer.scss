@@ -4,14 +4,13 @@
 	margin-top: auto;
 
 	width: 100%;
+	box-sizing: border-box;
+	height: 100px;
 	background-color: var(--background-surface);
 	padding: 1rem;
+	border-top: solid var(--background-overlay) 1px;
 
-	display: flex;
-	justify-content: space-between;
-
-	& > :first-child,
-	& > :last-child {
-		flex: 1;
-	}
+	display: grid;
+	grid-template-columns: minmax(105px, 1fr) minmax(min-content, 42%) minmax(105px, 1fr);
+	align-items: center;
 }

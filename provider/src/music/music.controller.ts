@@ -1,24 +1,22 @@
-import { Controller, Get, Param, ParseUUIDPipe, Query, Req, Res, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { FileInterceptor } from "@nestjs/platform-express";
+import { Controller, Get, Param, ParseUUIDPipe, Query, Res, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
-import { providerContract } from "@flex/shared";
-import type { Request, Response } from "express";
+import { MEDIA_ROUTES, providerContract } from "@flex/shared";
+import type { Response } from "express";
 import { CurrentMember, MemberOnly, RequirePermission } from "../core/auth/auth.decorators";
 import type { MemberContext } from "../core/auth/auth.types";
 import {
-	audioUploadStorage,
+	AudioUploadInterceptor,
 	DiscardFailedUploadInterceptor,
-	MAX_UPLOAD_BYTES,
-	type UploadedAudio,
-} from "./audio-upload.storage";
-import { MusicAudioService } from "./music-audio.service";
+	ImageUploadInterceptor,
+} from "../media/media.interceptor";
+import { MediaService, type UploadedMedia } from "../media/media.service";
 import { MusicService } from "./music.service";
 
 @Controller()
 export class MusicController {
 	constructor(
 		private readonly musicService: MusicService,
-		private readonly audio: MusicAudioService,
+		private readonly media: MediaService,
 	) {}
 
 	@TsRestHandler(providerContract.music.list)
@@ -66,46 +64,49 @@ export class MusicController {
 		});
 	}
 
-	@TsRestHandler(providerContract.music.audioUrl)
-	@MemberOnly()
-	audioUrl(@CurrentMember() member: MemberContext, @Req() request: Request) {
-		const origin = `${request.protocol}://${request.get("host")}`;
-
-		return tsRestHandler(providerContract.music.audioUrl, async ({ params }) => ({
-			status: 200,
-			body: await this.audio.createAudioUrl(origin, params.uuid, member.uuid),
-		}));
-	}
-
-	@Get("music/:uuid/audio")
+	@Get(MEDIA_ROUTES.audio)
 	async audioFile(
 		@Param("uuid", ParseUUIDPipe) uuid: string,
 		@Query("token") token: string,
 		@Res() response: Response,
 	) {
-		const file = await this.audio.resolveAudio(uuid, token);
-		response.sendFile(file.path, {
-			dotfiles: "deny",
-			headers: {
-				"Content-Type": file.mime,
-				"Cache-Control": "private, no-store",
-				"X-Content-Type-Options": "nosniff",
-			},
-		});
+		await this.media.serve("audio", uuid, token, response);
 	}
 
 	@TsRestHandler(providerContract.music.uploadAudio)
 	@RequirePermission("MANAGE_CATALOG")
-	@UseInterceptors(
-		DiscardFailedUploadInterceptor,
-		FileInterceptor("file", {
-			storage: audioUploadStorage,
-			limits: { fileSize: MAX_UPLOAD_BYTES, files: 1, fields: 0 },
-		}),
-	)
-	uploadAudio(@UploadedFile() file: UploadedAudio | undefined) {
+	@UseInterceptors(DiscardFailedUploadInterceptor, AudioUploadInterceptor)
+	uploadAudio(@UploadedFile() file: UploadedMedia | undefined) {
 		return tsRestHandler(providerContract.music.uploadAudio, async ({ params }) => {
-			await this.audio.saveFile(params.uuid, file);
+			await this.media.save("audio", params.uuid, file);
+			return { status: 204, body: null };
+		});
+	}
+
+	@Get(MEDIA_ROUTES.musicCover)
+	async coverFile(
+		@Param("uuid", ParseUUIDPipe) uuid: string,
+		@Query("token") token: string,
+		@Res() response: Response,
+	) {
+		await this.media.serve("musicCover", uuid, token, response);
+	}
+
+	@TsRestHandler(providerContract.music.uploadCover)
+	@RequirePermission("MANAGE_CATALOG")
+	@UseInterceptors(DiscardFailedUploadInterceptor, ImageUploadInterceptor)
+	uploadCover(@UploadedFile() file: UploadedMedia | undefined) {
+		return tsRestHandler(providerContract.music.uploadCover, async ({ params }) => {
+			await this.media.save("musicCover", params.uuid, file);
+			return { status: 204, body: null };
+		});
+	}
+
+	@TsRestHandler(providerContract.music.removeCover)
+	@RequirePermission("MANAGE_CATALOG")
+	removeCover() {
+		return tsRestHandler(providerContract.music.removeCover, async ({ params }) => {
+			await this.media.clear("musicCover", params.uuid);
 			return { status: 204, body: null };
 		});
 	}

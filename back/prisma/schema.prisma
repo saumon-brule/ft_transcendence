@@ -31,9 +31,10 @@ model User {
     tokens             Token[]
     ownedProviders     Provider[]
     providers          ProviderUser[]
+    providerAccessRequests ProviderAccessRequest[]
     playlists          UserPlaylist[]
     ownedPlaylists     Playlist[]
-    currentlyListening Music?          @relation(fields: [currentlyListeningUUID], references: [uuid])
+    currentlyListening Music?          @relation(fields: [currentlyListeningUUID], references: [uuid], onDelete: SetNull)
     friendsRequests    FriendRequest[] @relation("Requester")
     friendsReceive     FriendRequest[] @relation("Receiver")
 }
@@ -50,8 +51,8 @@ model FriendRequest {
     friendUUID String       @map("friend_uuid")
     status     FriendStatus @map("status")
 
-    user   User @relation("Requester", fields: [userUUID], references: [uuid])
-    friend User @relation("Receiver", fields: [friendUUID], references: [uuid])
+    user   User @relation("Requester", fields: [userUUID], references: [uuid], onDelete: Cascade)
+    friend User @relation("Receiver", fields: [friendUUID], references: [uuid], onDelete: Cascade)
 
     @@unique([userUUID, friendUUID])
 }
@@ -108,7 +109,7 @@ model RolePermission {
     roleId     Int
     permission String
 
-    roleRef Role @relation(fields: [roleId], references: [id])
+    roleRef Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
     @@unique([roleId, permission])
 }
@@ -118,8 +119,8 @@ model UserRole {
     userUUID String
     roleId   Int
 
-    userRef User @relation(fields: [userUUID], references: [uuid])
-    roleRef Role @relation(fields: [roleId], references: [id])
+    userRef User @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+    roleRef Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
     @@unique([userUUID, roleId])
 }
@@ -136,7 +137,7 @@ model Provider {
     id            Int      @id @default(autoincrement())
     uuid          String   @unique @default(uuid())
     name          String   @unique
-    adress        String   @unique
+    address       String   @unique
     ownerUUID     String
     hashedKey     String   @unique
     publicDisplay Boolean  @default(true)
@@ -145,7 +146,8 @@ model Provider {
     updatedAt     DateTime @updatedAt
 
     users ProviderUser[]
-    owner User           @relation(fields: [ownerUUID], references: [uuid])
+    accessRequests ProviderAccessRequest[]
+    owner User           @relation(fields: [ownerUUID], references: [uuid], onDelete: Cascade)
 }
 
 model ProviderUser {
@@ -156,10 +158,32 @@ model ProviderUser {
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
-    provider Provider @relation(fields: [providerUUID], references: [uuid])
-    user     User     @relation(fields: [userUUID], references: [uuid])
+    provider Provider @relation(fields: [providerUUID], references: [uuid], onDelete: Cascade)
+    user     User     @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
 
     @@unique([providerUUID, userUUID])
+}
+
+enum AccessRequestStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+model ProviderAccessRequest {
+    id           Int                 @id @default(autoincrement())
+    providerUUID String
+    userUUID     String
+    status       AccessRequestStatus @default(PENDING)
+    decidedAt    DateTime?
+    createdAt    DateTime            @default(now())
+    updatedAt    DateTime            @updatedAt
+
+    provider Provider @relation(fields: [providerUUID], references: [uuid], onDelete: Cascade)
+    user     User     @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+
+    @@unique([providerUUID, userUUID])
+    @@index([userUUID])
 }
 
 model Playlist {
@@ -173,7 +197,7 @@ model Playlist {
 
     userPlaylists UserPlaylist[]
     musics        PlaylistMusic[]
-    owner         User            @relation(fields: [ownerUUID], references: [uuid])
+    owner         User            @relation(fields: [ownerUUID], references: [uuid], onDelete: Cascade)
 }
 
 model UserPlaylist {
@@ -184,7 +208,7 @@ model UserPlaylist {
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
 
-    user     User     @relation(fields: [userUUID], references: [uuid])
+    user     User     @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
     playlist Playlist @relation(fields: [playlistUUID], references: [uuid], onDelete: Cascade)
 
     @@unique([userUUID, playlistUUID])
@@ -198,7 +222,7 @@ model PlaylistMusic {
     updatedAt    DateTime @updatedAt
 
     playlist Playlist @relation(fields: [playlistUUID], references: [uuid], onDelete: Cascade)
-    music    Music    @relation(fields: [musicUUID], references: [uuid])
+    music    Music    @relation(fields: [musicUUID], references: [uuid], onDelete: Cascade)
 
     @@unique([playlistUUID, musicUUID])
 }

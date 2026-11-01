@@ -1,0 +1,82 @@
+.select {
+	display: flex;
+	flex-direction: column;
+
+	.select-field {
+		position: relative;
+		display: flex;
+
+		&::after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			right: 1.1rem;
+			width: 0.5rem;
+			height: 0.5rem;
+			border-right: 2px solid var(--input-value);
+			border-bottom: 2px solid var(--input-value);
+			transform: translateY(-75%) rotate(45deg);
+			pointer-events: none;
+			transition: transform 0.2s;
+		}
+
+		&:focus-within::after {
+			transform: translateY(-25%) rotate(225deg);
+		}
+	}
+
+	select {
+		appearance: none;
+		width: 100%;
+		padding: 0.75rem 2.75rem 0.75rem 1rem;
+		border-radius: 0.75rem;
+		font-size: 1rem;
+		outline: none;
+		transition:
+			border-color 0.2s,
+			background-color 0.2s;
+		border: solid 1px var(--input-outline-main);
+		background-color: var(--input-background);
+		font-weight: 600;
+		color: var(--input-value);
+		cursor: pointer;
+
+		&:has(option[value=""]:checked) {
+			font-weight: bold;
+			color: var(--input-placeholder);
+		}
+
+		option {
+			font-weight: 600;
+			color: var(--input-value);
+			background-color: var(--input-background);
+		}
+
+		&[aria-invalid="true"] {
+			border-color: var(--input-outline-invalid);
+		}
+
+		&:hover {
+			border-color: var(--input-outline-hover);
+			background-color: var(--input-background-hover);
+		}
+
+		&:focus {
+			border-color: var(--input-outline-active);
+			background-color: var(--input-background-active);
+		}
+
+		&:disabled {
+			cursor: not-allowed;
+			border-color: var(--input-outline-active);
+			background-color: var(--input-background-active);
+		}
+	}
+
+	.invalid-message {
+		margin-top: .2rem;
+		margin-bottom: 0;
+		margin-inline: .3rem;
+		color: var(--input-invalid);
+	}
+}

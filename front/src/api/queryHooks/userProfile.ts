@@ -1,7 +1,9 @@
 import { env } from "~/env";
 import { client, queryKeys } from "../client";
 
-export const useUserProfileQuery = (uuid: string) => client.users.getUser.createQuery(queryKeys.users.getUser, { params: { uuid: uuid } }, {
+export const useUserProfileQuery = (uuid: () => string) => client.users.getUser.createQuery(() => queryKeys.users.getUser([uuid()]), {
+	params: { get uuid() { return uuid(); } },
+}, {
 	select: (data) => ({
 		...data,
 		body: {

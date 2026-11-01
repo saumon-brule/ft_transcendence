@@ -3,7 +3,8 @@ import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { findAlbumUuid, findArtistUuids } from "../core/catalog/catalog.lookups";
 import { musicDetailInclude, musicItemInclude, toMusicDetail, toMusicItem } from "../core/catalog/catalog.mappers";
-import { MusicAudioService, NO_FILE } from "./music-audio.service";
+import { MediaService } from "../media/media.service";
+import { SearchService } from "../search/search.service";
 
 interface ListQuery {
 	limit: number;
@@ -25,23 +26,27 @@ type UpdateMusic = Partial<CreateMusic>;
 export class MusicService {
 	constructor(
 		private readonly prisma: PrismaService,
-		private readonly audio: MusicAudioService,
+		private readonly media: MediaService,
+		private readonly search: SearchService,
 	) {}
 
 	async list({ limit, offset, search }: ListQuery) {
-		const where: Prisma.MusicWhereInput = search
-			? { name: { contains: search, mode: "insensitive" } }
-			: {};
+		if (search) {
+			const { rows, total } = await this.search.page("Music", search, { limit, offset }, (ids) => this.prisma.music.findMany({
+				where: { id: { in: ids } },
+				include: musicItemInclude,
+			}));
+			return { musics: rows.map(toMusicItem), total };
+		}
 
 		const [rows, total] = await this.prisma.$transaction([
 			this.prisma.music.findMany({
-				where,
 				include: musicItemInclude,
 				orderBy: [{ name: "asc" }, { id: "asc" }],
 				take: limit,
 				skip: offset,
 			}),
-			this.prisma.music.count({ where }),
+			this.prisma.music.count(),
 		]);
 
 		return { musics: rows.map(toMusicItem), total };
@@ -69,7 +74,6 @@ export class MusicService {
 					name: dto.name,
 					duration: dto.duration,
 					publishedAt: dto.publishedAt ?? null,
-					path: NO_FILE,
 					albumUuid,
 					addedByUuid: actorUuid,
 					artists: { create: artistUuids.map((artistUuid) => ({ artistUuid })) },
@@ -115,11 +119,12 @@ export class MusicService {
 	async remove(uuid: string) {
 		const music = await this.prisma.music.findUnique({
 			where: { uuid },
-			select: { id: true, path: true },
+			select: { id: true },
 		});
 		if (!music) throw new NotFoundException("Music not found");
 
 		await this.prisma.music.delete({ where: { id: music.id } });
-		await this.audio.deleteFile(music.path);
+		await this.media.discard("audio", uuid);
+		await this.media.discard("musicCover", uuid);
 	}
 }
