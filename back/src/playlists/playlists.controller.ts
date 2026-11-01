@@ -28,12 +28,12 @@ import type { Express } from "express";
 import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
 import { createReadStream, existsSync } from "node:fs";
-import { ASSET_DIR, COVER_DIR, MAX_SIZE } from "../core/utils/constants";
+import { ASSET_DIR, COVER_DIR } from "../core/utils/constants";
 import { AppForbiddenException } from "../core/error/forbidden";
 
 @Controller()
 export class PlaylistsController {
-	constructor(private readonly playlistsService: PlaylistsService) {}
+	constructor(private readonly playlistsService: PlaylistsService) { }
 
 	@UseInterceptors(FileInterceptor("cover"))
 	@TsRestHandler(playlistsContract.uploadCover)
