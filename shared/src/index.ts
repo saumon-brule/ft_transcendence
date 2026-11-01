@@ -31,7 +31,8 @@ export * from "./errors/error-codes";
 export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
 
-export { type HealthResponseDto, type ProviderDataDto, type ProviderDataMusicDto } from "./contracts/provider/info/schemas/info.schema";
+export { type ProviderDataDto, type ProviderDataMusicDto } from "./contracts/provider/info/schemas/info.schema";
+export { healthResponseSchema, healthUnavailableSchema, type HealthResponseDto, type HealthUnavailableDto } from "./schemas/common.schema";
 export { musicItemSchema } from "./contracts/provider/schemas/items.schema";
 export { type ArtistDetailedItemDto } from "./contracts/provider/artist/schemas/artist.schema";
 export { type AlbumDetailedItemDto } from "./contracts/provider/album/schemas/album.schema";

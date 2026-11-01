@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import { env } from "~/env";
+import { API_URL } from "~/utils/constants";
 import type { User } from "@flex/shared";
 import { A } from "@solidjs/router";
 
@@ -10,7 +10,7 @@ export default function FriendsSection(props: FriendsSectionProps) {
 		<h3>Friends</h3>
 		<div class="friends-list">
 			<For each={props.friends}>{(friend) => <A class="friend-card" href={`/user/${friend.uuid}`}>
-				<img src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username} profile picture`} />
+				<img src={`${API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username} profile picture`} />
 				<span>{friend.username}</span>
 			</A>}</For>
 		</div>

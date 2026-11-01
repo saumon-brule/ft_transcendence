@@ -9,11 +9,6 @@ export const providerPublicInfoSchema = z.object({
 	visibility: visibilitySchema,
 });
 
-export const healthResponseSchema = z.object({
-	status: z.literal("ok"),
-});
-export type HealthResponseDto = z.infer<typeof healthResponseSchema>;
-
 export const providerDataSchema = z.object({
 	uuid: z.string().uuid(),
 	visibility: visibilitySchema,

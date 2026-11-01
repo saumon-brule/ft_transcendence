@@ -5,3 +5,6 @@ dist/
 *.tsbuildinfo
 back/src/generated/prisma/
 provider/src/generated/prisma/
+
+secrets/
+

@@ -18,6 +18,7 @@ import { AppConfigModule } from "./config/config.module";
 import { PlaylistsModule } from "./playlists/playlists.module";
 import { ProvidersModule } from "./providers/providers.module";
 import { FriendsModule } from "./users/friends/friends.module";
+import { HealthModule } from "./health/health.module";
 
 @Module({
 	providers: [
@@ -33,6 +34,7 @@ import { FriendsModule } from "./users/friends/friends.module";
 	],
 	imports: [
 		ProvidersApiModule,
+		HealthModule,
 		PrismaModule,
 		UsersModule,
 		FriendsModule,

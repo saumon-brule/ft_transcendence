@@ -1,24 +1,157 @@
+name: flex
+
+x-back-build: &back-build
+  context: .
+  dockerfile: back/Dockerfile
+
+x-hardened: &hardened
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: [ALL]
+  read_only: true
+  tmpfs: [/tmp]
+
 services:
   postgres:
-    image: paradedb/paradedb:0.26.3-pg16
+    <<: *hardened
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    tmpfs: [/tmp, /run/postgresql]
+    image: postgres:16-alpine
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: dev
-      POSTGRES_DB: flex
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dev -d flex"]
-      interval: 2s
-      timeout: 5s
-      retries: 10
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
+    secrets:
+      - postgres_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [db]
+
+  migrate:
+    <<: *hardened
+    build: *back-build
+    image: flex-back
+    command: ["./node_modules/.bin/prisma", "migrate", "deploy"]
+    restart: "no"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [db]
+
+  back:
+    <<: *hardened
+    build: *back-build
+    image: flex-back
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: prod
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      BASE_FRONT_URL: ${BASE_FRONT_URL:?set BASE_FRONT_URL in .env}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?set ADMIN_EMAIL in .env}
+      SMTP_HOST: ${SMTP_HOST:?set SMTP_HOST in .env}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_USER: ${SMTP_USER:?set SMTP_USER in .env}
+      API42_CLIENT_UID: ${API42_CLIENT_UID:?set API42_CLIENT_UID in .env}
+      TRUST_PROXY: ${TRUST_PROXY:-1}
+      PROVIDER_KEY_PATH: /run/secrets/provider_key
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      JWT_REFRESH_SECRET_FILE: /run/secrets/jwt_refresh_secret
+      SMTP_PASS_FILE: /run/secrets/smtp_pass
+      API42_CLIENT_SECRET_FILE: /run/secrets/api42_client_secret
+      ADMIN_PASSWORD_FILE: /run/secrets/admin_password
+    secrets:
+      - postgres_password
+      - provider_key
+      - jwt_secret
+      - jwt_refresh_secret
+      - smtp_pass
+      - api42_client_secret
+      - admin_password
+    volumes:
+      - uploads:/data/uploads
+      - logs:/data/logs
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks: [db, web]
+
+  front:
+    <<: *hardened
+    tmpfs: [/tmp, "/etc/nginx/conf.d:uid=101,gid=101"]
+    build:
+      context: .
+      dockerfile: front/Dockerfile
+    image: flex-front
+    restart: unless-stopped
+    ports:
+      - "${FRONT_HTTP_PORT:-80}:80"
+      - "${FRONT_PORT:-443}:443"
+    environment:
+      BASE_FRONT_URL: ${BASE_FRONT_URL:?set BASE_FRONT_URL in .env}
+    secrets:
+      - tls_cert
+      - tls_key
+    depends_on:
+      back:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "--no-check-certificate", "https://127.0.0.1:443/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [web]
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password
+  provider_key:
+    file: ./secrets/provider.pem
+  jwt_secret:
+    file: ./secrets/jwt_secret
+  jwt_refresh_secret:
+    file: ./secrets/jwt_refresh_secret
+  smtp_pass:
+    file: ./secrets/smtp_pass
+  api42_client_secret:
+    file: ./secrets/api42_client_secret
+  admin_password:
+    file: ./secrets/admin_password
+  tls_cert:
+    file: ./secrets/tls.crt
+  tls_key:
+    file: ./secrets/tls.key
+
+networks:
+  db:
+    internal: true
+  web:
 
 volumes:
   postgres_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /tmp/flex-db
-      o: bind
+  uploads:
+  logs:

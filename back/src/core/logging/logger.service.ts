@@ -1,4 +1,5 @@
 import { Injectable, LoggerService } from "@nestjs/common";
+import { join } from "node:path";
 import { env } from "../env";
 import { Logger, createLogger, format, transports } from "winston";
 
@@ -38,13 +39,13 @@ export class WinstonLoggerService implements LoggerService {
 			transports: [
 				new transports.Console(),
 				new transports.File({
-					filename: "logs/error.log",
+					filename: join(env.LOG_DIR, "error.log"),
 					level: "error",
 					maxsize: 5242880,
 					maxFiles: 5,
 				}),
 				new transports.File({
-					filename: "logs/combined.log",
+					filename: join(env.LOG_DIR, "combined.log"),
 					maxsize: 5242880,
 					maxFiles: 5,
 				}),
