@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 import type { User } from "@flex/shared";
 import MusicBars from "~/components/graphics/icons/MusicBars";
-import { env } from "~/env";
+import { API_URL } from "~/utils/constants";
 import { auth } from "~/store/auth.store";
 import FriendshipActions from "./FriendshipActions";
 
@@ -11,7 +11,7 @@ function toDate(value: Date | string): Date {
 
 export default function ProfileHeader(props: { profile: User }) {
 	return <header class="profile-header">
-		<img src={`${env.VITE_API_URL}/users/${props.profile.uuid}/avatar`} alt="Profile picture" />
+		<img src={`${API_URL}/users/${props.profile.uuid}/avatar`} alt="Profile picture" />
 		<div class="header-info">
 			<h2>{props.profile.username}</h2>
 			<div class="user-stats">

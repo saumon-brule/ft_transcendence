@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from "@nestjs/common";
 import { buildErrorResponse, providerErrorScope } from "@flex/shared";
-import { Response } from "express";
+import type { Response } from "express";
 import { env } from "../env";
 import { isWriteConflict } from "../prisma/write-conflict";
 

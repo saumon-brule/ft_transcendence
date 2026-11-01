@@ -9,6 +9,7 @@ import { appConfigContract } from "./appConfig/app-config.contract";
 import { providersAPIContract } from "./providersAPI/providersAPI.contract";
 import { providersContract } from "./providers/providers.contract";
 import { friendsContract } from "./users/friends.contract";
+import { healthContract } from "./health/health.contract";
 
 const c = initContract();
 
@@ -23,6 +24,7 @@ export const serverContract = c.router(
 		providersAPI: providersAPIContract,
 		providers: providersContract,
 		friends: friendsContract,
+		health: healthContract,
 	},
 	{
 		// Pour ceux qui se demandent, la difference entre 401 Unauthorized et 403 Forbidden :
