@@ -1,15 +1,19 @@
 export class LocalStorageItem<T> {
 	constructor(
 		public readonly key: string,
-		public readonly defaultValue: T,
+		public readonly defaultFactory: () => T,
 		public readonly serializer: (value: T) => string = JSON.stringify,
-		public readonly deserializer: (stored: string) => T = JSON.parse,
+		public readonly deserializer: (stored: string, defaultValue: () => T) => T = ((stored) => JSON.parse(stored) as T),
 	) {}
 
-	public get() {
+	public get(): T {
 		const stored = localStorage.getItem(this.key);
-		if (!stored) return this.defaultValue;
-		return this.deserializer(stored);
+		if (!stored) return this.defaultFactory();
+		try {
+			return this.deserializer(stored, this.defaultFactory);
+		} catch (_) {
+			return this.defaultFactory();
+		}
 	}
 
 	public set(value: T) {
@@ -24,15 +28,19 @@ export class LocalStorageItem<T> {
 export class SessionStorageItem<T> {
 	constructor(
 		public readonly key: string,
-		public readonly defaultValue: T,
+		public readonly defaultFactory: () => T,
 		public readonly serializer: (value: T) => string = JSON.stringify,
-		public readonly deserializer: (stored: string) => T = JSON.parse,
+		public readonly deserializer: (stored: string, defaultValue: () => T) => T = ((stored) => JSON.parse(stored) as T),
 	) {}
 
-	public get() {
+	public get(): T {
 		const stored = sessionStorage.getItem(this.key);
-		if (!stored) return this.defaultValue;
-		return this.deserializer(stored);
+		if (!stored) return this.defaultFactory();
+		try {
+			return this.deserializer(stored, this.defaultFactory);
+		} catch (_) {
+			return this.defaultFactory();
+		}
 	}
 
 	public set(value: T) {
