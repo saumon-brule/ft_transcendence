@@ -18,3 +18,5 @@ export const providerDataSchema = z.object({
 });
 export type ProviderDataDto = z.infer<typeof providerDataSchema>;
 export type ProviderDataMusicDto = ProviderDataDto["music"]["musics"][number];
+export type ProviderDataAlbumDto = ProviderDataDto["album"]["albums"][number];
+export type ProviderDataArtistDto = ProviderDataDto["artist"]["artists"][number];

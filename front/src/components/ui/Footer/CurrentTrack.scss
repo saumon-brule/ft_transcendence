@@ -8,9 +8,15 @@
 		position: relative;
 		display: flex;
 
+		.album-link {
+			flex: 0;
+		}
+
 		img {
 			max-height: 100%;
 			height: 100%;
+			aspect-ratio: 1/1;
+			object-fit: cover;
 		}
 
 		.track-details {

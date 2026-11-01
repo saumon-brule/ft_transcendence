@@ -13,7 +13,7 @@ export default function CurrentTrack() {
 		<Show when={audioManager.currentMusic} keyed>
 			{(currentMusic) => <div class="track-display">
 				<Show when={currentMusic.hasAlbum() && currentMusic} keyed fallback={<MusicCover music={currentMusic} />}>
-					{(music) => <A href={music.albumRoute()} ><MusicCover music={currentMusic} /></A>}
+					{(music) => <A class="album-link" href={music.albumRoute()} ><MusicCover music={currentMusic} /></A>}
 				</Show>
 				<div class="track-details">
 					<div class="track-name">
