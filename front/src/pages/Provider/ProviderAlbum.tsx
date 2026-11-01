@@ -37,7 +37,7 @@ export default function ProviderAlbum() {
 			</section>
 			<section>
 				<h2>Artists</h2>
-				<ArtistSection artist={{ total: data.info.artists.length, artists: data.info.artists }} providerUrl={data.back.address} providerUuid={params.uuid} />
+				<ArtistSection artist={{ total: data.info.artists.length, artists: data.info.artists }}/>
 			</section>
 		</>}</Show>
 	</div>;

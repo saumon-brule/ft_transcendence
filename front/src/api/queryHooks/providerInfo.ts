@@ -2,6 +2,8 @@ import { createMemo } from "solid-js";
 import { createQueries, createQuery } from "@tanstack/solid-query";
 import { getProviderClient } from "../providerClients";
 import { Music } from "~/class/Music";
+import { Album } from "~/class/Album";
+import { Artist } from "~/class/Artist";
 
 export const useProviderInfoQuery = (providerUrl: () => string, providerUuid: () => string) => {
 	const provider = createMemo(() => getProviderClient(providerUrl()));
@@ -20,6 +22,14 @@ export const useProviderInfoQuery = (providerUrl: () => string, providerUuid: ()
 				music: {
 					...response.body.music,
 					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl(), providerUuid())),
+				},
+				artist: {
+					...response.body.artist,
+					artists: response.body.artist.artists.map((artist) => Artist.fromRawObject(artist, providerUrl(), providerUuid())),
+				},
+				album: {
+					...response.body.album,
+					albums: response.body.album.albums.map((album) => Album.fromRawObject(album, providerUrl(), providerUuid())),
 				},
 			},
 		}),
@@ -46,6 +56,10 @@ export const useProviderArtistQuery = (providerUrl: () => string, providerUuid: 
 					...response.body.music,
 					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl(), providerUuid())),
 				},
+				album: {
+					...response.body.album,
+					albums: response.body.album.albums.map((album) => Album.fromRawObject(album, providerUrl(), providerUuid())),
+				},
 			},
 		}),
 	});
@@ -70,6 +84,7 @@ export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: (
 					...response.body.music,
 					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl(), providerUuid())),
 				},
+				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, providerUrl(), providerUuid())),
 			},
 		}),
 	});
@@ -90,6 +105,8 @@ const providerSearchOptions = (providerUrl: string, providerUuid: string, search
 			body: {
 				...response.body,
 				musics: response.body.musics.map((music) => Music.fromRawObject(music, providerUrl, providerUuid)),
+				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, providerUrl, providerUuid)),
+				albums: response.body.albums.map((album) => Album.fromRawObject(album, providerUrl, providerUuid)),
 			},
 		}),
 	};
