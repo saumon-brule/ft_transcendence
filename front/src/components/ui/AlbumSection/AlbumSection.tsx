@@ -31,8 +31,6 @@ export type AlbumSectionData = "artists" | "published";
 
 export type AlbumSectionProps = {
 	album: ProviderInfo["album"];
-	providerUrl: string;
-	providerUuid: string;
 	hiddenProp?: AlbumSectionData[];
 };
 
@@ -45,10 +43,10 @@ export default function AlbumSection(props: AlbumSectionProps) {
 
 	return <div class="album-section">
 		<For each={props.album.albums}>{(album) => <div class="album">
-			<AlbumCover album={album} providerUrl={props.providerUrl} />
+			<AlbumCover album={album} providerUrl={album.providerUrl} />
 			<div class="album-info">
-				<A href={`/provider/${props.providerUuid}/album/${album.uuid}`} class="white-variant album-name">{album.name}</A>
-				<Show when={shown("artists")}><div class="album-artist"><ArtistsLinks album={album} providerUUID={props.providerUuid}/></div></Show>
+				<A href={`/provider/${album.providerUuid}/album/${album.uuid}`} class="white-variant album-name">{album.name}</A>
+				<Show when={shown("artists")}><div class="album-artist"><ArtistsLinks album={album} providerUUID={album.providerUuid}/></div></Show>
 				<Show when={shown("published")}><Show when={album.publishedAt} keyed>{(albumDate) => <div class="album-date">Sorti le {toDate(albumDate).toLocaleDateString()}</div>}</Show></Show>
 			</div>
 		</div>}</For>
