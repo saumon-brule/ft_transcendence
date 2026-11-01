@@ -95,7 +95,10 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	};
 	const handlePlay = () => setIsPlaying(true);
 	const handlePause = () => setIsPlaying(false);
-	const handleEnded = () => trackManager.nextTrack();
+	const handleEnded = () => {
+		trackManager.nextTrack();
+		setIsPlaying(true);
+	};
 	const handleTimeUpdate = () => trackManager.setProgression(audio.currentTime);
 	const handleLoadedMetadata = () => setDuration(audio.duration);
 
