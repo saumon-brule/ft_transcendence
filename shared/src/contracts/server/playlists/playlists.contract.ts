@@ -1,6 +1,6 @@
 import { initContract } from "@ts-rest/core";
 import { uuidParamSchema } from "../../../schemas/common.schema";
-import { createdPlaylistSchema, createPlaylistBodySchema, musicPathParamsSchema } from "./schemas/playlist.schema";
+import { addMusicBodySchema, createdPlaylistSchema, createPlaylistBodySchema, musicPathParamsSchema } from "./schemas/playlist.schema";
 import { commonError404Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
@@ -17,7 +17,8 @@ export const playlistsContract = c.router(
 		},
 		addMusicToPlaylist: {
 			method: "POST",
-			path: "/:uuid/musics/:musicUUID",
+			path: "/:uuid/musics",
+			body: addMusicBodySchema,
 			pathParams: musicPathParamsSchema,
 			responses: {
 				204: null,

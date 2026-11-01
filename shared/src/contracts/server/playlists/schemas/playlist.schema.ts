@@ -16,3 +16,7 @@ export const createdPlaylistSchema = z.object({
 	name: z.string(),
 	private: z.boolean(),
 });
+
+export const addMusicBodySchema = z.object({
+	musicUUID: z.string().uuid(),
+});

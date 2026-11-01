@@ -120,11 +120,11 @@ export class PlaylistsController {
 	@UseGuards(JwtAuthGuard)
 	public addMusicToPlaylist(@CurrentUser() authUser: AuthUser) {
 		return tsRestHandler(
-			playlistsContract.addMusicToPlaylist, async ({ params }) => {
+			playlistsContract.addMusicToPlaylist, async ({ params, body }) => {
 				await this.assertPlaylistOwner(params.uuid, authUser.uuid);
 				await this.playlistsService.addMusicToPlaylist(
 					params.uuid,
-					params.musicUUID,
+					body.musicUUID,
 				);
 
 				return { status: 204, body: null };
