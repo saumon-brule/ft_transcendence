@@ -1,5 +1,5 @@
 import { createMemo } from "solid-js";
-import { createQuery } from "@tanstack/solid-query";
+import { createQueries, createQuery } from "@tanstack/solid-query";
 import { getProviderClient } from "../providerClients";
 import { Music } from "~/class/Music";
 
@@ -74,3 +74,31 @@ export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: (
 		}),
 	});
 };
+
+const providerSearchOptions = (providerUrl: string, providerUuid: string, searchTerm: string) => {
+	const provider = getProviderClient(providerUrl);
+	return {
+		queryKey: () => provider.keys.search.search([searchTerm]),
+		enabled: providerUrl !== "" && searchTerm !== "",
+		queryFn: async () => {
+			const res = await provider.client.search.search.query({ query: { query: searchTerm } });
+			if (res.status !== 200) throw new Error(`Provider search failed with status ${res.status}`);
+			return res;
+		},
+		select: (response: Awaited<ReturnType<typeof provider.client.search.search.query>> & { status: 200 }) => ({
+			...response,
+			body: {
+				...response.body,
+				musics: response.body.musics.map((music) => Music.fromRawObject(music, providerUrl, providerUuid)),
+			},
+		}),
+	};
+};
+
+export const useProvidersSearchQueries = (providers: () => { address: string; uuid: string }[], searchTerm: () => string) => {
+	return createQueries({
+		get queries() {
+			return providers().map((provider) => providerSearchOptions(provider.address, provider.uuid, searchTerm()));
+		},
+	});
+}

@@ -1,21 +1,26 @@
 import { ChevronDown, LogOut, Search, Settings, X, User, Server, Users } from "lucide-solid";
-import { createMemo, createSignal, onCleanup, onMount, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, onCleanup, onMount, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import { authActions } from "~/store/auth.store";
 import type { FormEmbeddedComponentRef } from "~/types/ComponentRef";
-import { useNavigate } from "@solidjs/router";
+import { useMatch, useNavigate, useSearchParams } from "@solidjs/router";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 
 import "./Header.scss";
 import { hasUnreadMessages } from "~/store/messages.store";
+import { Tab } from "~/pages/Search/Search";
 
 export default function Header() {
 	const meProfileQuery = useMeProfileQuery();
 	const navigate = useNavigate();
 
 	const [isMenuOpen, setIsMenuOpen] = createSignal(false);
-	const [searchValue, setSearchValue] = createSignal("");
+	const searchMatch = useMatch(() => "/search/:search");
+	const [searchValue, setSearchValue] = createSignal(searchMatch() ? decodeURIComponent(searchMatch()!.params.search ?? "") : "");
+	createEffect(() => {
+		setSearchValue(searchMatch() ? decodeURIComponent(searchMatch()!.params.search ?? "") : "");
+	});
 	let searchInput!: FormEmbeddedComponentRef<HTMLInputElement>;
 	let profileMenu!: HTMLDivElement;
 
@@ -25,6 +30,25 @@ export default function Header() {
 		if (profileMenu && !profileMenu.contains(event.target as Node)) {
 			setIsMenuOpen(false);
 		}
+	}
+
+
+	let searchBasePage: null | string = null;
+	let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+	const [searchParams] = useSearchParams<{ tab?: Tab }>();
+
+	function search() {
+		clearTimeout(searchTimeout);
+
+		searchTimeout = setTimeout(() => {
+			if (!searchBasePage && !searchMatch()) {
+				searchBasePage = window.location.pathname;
+			}
+
+			if (searchValue()) {
+				navigate(`/search/${encodeURIComponent(searchValue())}${searchParams.tab ? `?tab=${searchParams.tab}` : ""}`, { replace: !!searchMatch() });
+			}
+		}, 300);
 	}
 
 	onMount(() => document.addEventListener("click", handleDocumentClick));
@@ -42,7 +66,7 @@ export default function Header() {
 						placeholder="Search"
 						aria-label="Search"
 						value={searchValue()}
-						onInput={(event) => setSearchValue(event.currentTarget.value)}
+						onInput={(event) => { setSearchValue(event.currentTarget.value); search(); }}
 						ref={searchInput}
 					/>
 					<Show when={searchValue()}>
@@ -53,6 +77,8 @@ export default function Header() {
 							onClick={() => {
 								setSearchValue("");
 								searchInput.htmlElement.focus();
+								navigate(searchBasePage ?? "/home", { replace: true });
+								searchBasePage = null;
 							}}
 						>
 							<X size={17} aria-hidden="true" />
