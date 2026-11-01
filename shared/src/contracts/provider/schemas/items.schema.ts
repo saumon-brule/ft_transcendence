@@ -5,6 +5,7 @@ export const artistItemSchema = z.object({
 	name: z.string(),
 	hasAvatar: z.boolean(),
 });
+export type ArtistItemDto = z.infer<typeof artistItemSchema>;
 
 export const albumItemSchema = z.object({
 	uuid: z.string().uuid(),
