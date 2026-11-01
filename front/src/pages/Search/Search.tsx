@@ -8,9 +8,44 @@ import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import { For } from "solid-js";
 import Button from "~/components/inputs/Button";
 import MusicSection from "~/components/ui/MusicSection/MusicSection";
+import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
+import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
+import { Music } from "~/class/Music";
+import { Album } from "~/class/Album";
+import { Artist } from "~/class/Artist";
 
 const TABS = ["all", "musics", "albums", "artists", "playlists", "users", "providers"] as const;
 export type Tab = typeof TABS[number];
+
+// const TABLES: Record<SearchTable, { from: Prisma.Sql; fields: SearchField[] }> = {
+// 	Music: { from: Prisma.raw("\"Music\""), fields: [field("name", 3), field("searchArtists", 2), field("searchAlbum", 1)] },
+// 	Artist: { from: Prisma.raw("\"Artist\""), fields: [field("name", 1)] },
+// 	Album: { from: Prisma.raw("\"Album\""), fields: [field("name", 3), field("searchArtists", 2)] },
+// };
+
+const MIN_FUZZY_LENGTH = 3;
+const tokensOf = (value: string) => value.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+const POINTS_EXACT = 1.0;
+const POINTS_PREFIX = 0.8;
+const POINTS_FUZZY = 0.5;
+
+const BONUS_TITLE_MATCH = 5;
+const BONUS_TITLE_STARTS_WITH = 2;
+const BONUS_COVERING = 1;
+const MALUS_WORD_NOT_FOUND = -1;
+
+function scoreMusic(music: Music, query: string) {
+
+}
+
+function scoreAlbum(album: Album, query: string) {
+
+}
+
+function scoreArtist(artist: Artist, query: string) {
+
+}
+
 
 export default function Provider() {
 	const navigate = useNavigate();
@@ -18,7 +53,8 @@ export default function Provider() {
 	const profileQuery = useMeProfileQuery();
 
 	const providers = () => profileQuery.data?.body.connectedProviders ?? [];
-	const searches = useProvidersSearchQueries(providers, () => params.search);
+	const search = () => decodeURIComponent(params.search ?? "");
+	const searches = useProvidersSearchQueries(providers, search);
 
 	const results = createMemo(() => {
 		const data = providers().map((provider, i) => ({
@@ -32,9 +68,9 @@ export default function Provider() {
 
 		const organizedData = {
 			musics: data.flatMap((d) => d.musics),
-			albums: data.flatMap((d) => d.albums.map((album) => ({ ...album, provider: d.provider }))),
-			artists: data.flatMap((d) => d.artists.map((artist) => ({ ...artist, provider: d.provider }))),
-			providers: (data.filter((d) => d.musics.length + d.albums.length + d.artists.length > 0 || d.provider.name.toLocaleLowerCase().includes(params.search.toLowerCase()))).map((d) => d.provider),
+			albums: data.flatMap((d) => d.albums),
+			artists: data.flatMap((d) => d.artists),
+			providers: (data.filter((d) => d.musics.length + d.albums.length + d.artists.length > 0 || d.provider.name.toLocaleLowerCase().includes(search().toLowerCase()))).map((d) => d.provider),
 		}
 
 		return organizedData;
@@ -73,16 +109,16 @@ export default function Provider() {
 				</section>
 			</Match>
 			<Match when={tab() === "albums"}>
-				<p>albums</p>
-				<code>
-					{JSON.stringify(results().albums, null, 2)}
-				</code>
+				<section class="albums">
+					<h2>Albums</h2>
+					<AlbumSection album={{ albums: results().albums, total: results().albums.length }} />
+				</section>
 			</Match>
 			<Match when={tab() === "artists"}>
-				<p>artists</p>
-				<code>
-					{JSON.stringify(results().artists, null, 2)}
-				</code>
+				<section class="artists">
+					<h2>Artists</h2>
+					<ArtistSection artist={{ artists: results().artists, total: results().artists.length }} />
+				</section>
 			</Match>
 			<Match when={tab() === "playlists"}>
 				<p>Comming soon</p>
