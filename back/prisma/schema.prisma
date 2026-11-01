@@ -185,7 +185,7 @@ model UserPlaylist {
     updatedAt    DateTime @updatedAt
 
     user     User     @relation(fields: [userUUID], references: [uuid])
-    playlist Playlist @relation(fields: [playlistUUID], references: [uuid])
+    playlist Playlist @relation(fields: [playlistUUID], references: [uuid], onDelete: Cascade)
 
     @@unique([userUUID, playlistUUID])
 }
@@ -197,7 +197,7 @@ model PlaylistMusic {
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
 
-    playlist Playlist @relation(fields: [playlistUUID], references: [uuid])
+    playlist Playlist @relation(fields: [playlistUUID], references: [uuid], onDelete: Cascade)
     music    Music    @relation(fields: [musicUUID], references: [uuid])
 
     @@unique([playlistUUID, musicUUID])
