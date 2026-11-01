@@ -165,6 +165,40 @@ export class DatabaseBootstrapService implements OnModuleInit {
 
 		console.log("Roles asignated : liam→bigboss, chantal→manager, machin→user");
 
+		// ─── Friends ─────────────────────────────────────────────────────────────────
+
+		await this.prisma.friendRequest.upsert({
+			where: {
+				userUUID_friendUUID: {
+					userUUID: chantalUser.uuid,
+					friendUUID: liamUser.uuid,
+				},
+			},
+			update: { status: "ACCEPTED" },
+			create: {
+				userUUID: chantalUser.uuid,
+				friendUUID: liamUser.uuid,
+				status: "ACCEPTED",
+			},
+		});
+
+		await this.prisma.friendRequest.upsert({
+			where: {
+				userUUID_friendUUID: {
+					userUUID: machinUser.uuid,
+					friendUUID: liamUser.uuid,
+				},
+			},
+			update: { status: "PENDING" },
+			create: {
+				userUUID: machinUser.uuid,
+				friendUUID: liamUser.uuid,
+				status: "PENDING",
+			},
+		});
+
+		console.log("Friends : chantal↔liam (accepted), machin→liam (pending)");
+
 		const privateProvider = await this.prisma.provider.upsert({
 			where: { name: "Liam's Private Provider" },
 			update: {

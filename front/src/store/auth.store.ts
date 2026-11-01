@@ -5,6 +5,7 @@ import { JwtPayload } from "@flex/shared";
 import { queryClient } from "~/App";
 import { client, queryKeys } from "~/api/client";
 import { createStore } from "solid-js/store";
+import { clearChats } from "./messages.store";
 
 export interface AuthenticatedState {
 	accessToken: string;
@@ -64,6 +65,7 @@ export const authActions = {
 	setProviderToken,
 	login: (accessToken: string) => setAccessToken(accessToken),
 	logout: () => {
+		clearChats();
 		void client.auth.logout.mutation().then(() => {
 			setAccessToken(null);
 			window.location.replace("/login");
