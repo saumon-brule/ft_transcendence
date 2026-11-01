@@ -20,7 +20,9 @@ migrate-provider:
 	@test -n "$(NAME)" || { echo "usage: make migrate-provider NAME=what_you_changed"; exit 1; }
 	@cd provider && pnpm prisma migrate dev --name $(NAME)
 
-docker-secrets:
+docker-secrets: docker-secrets-server docker-secrets-provider
+
+docker-secrets-server:
 	@docker/make-secrets.sh server
 
 docker-secrets-provider:
