@@ -32,8 +32,8 @@ export type AudioManager = {
 
 const AudioManagerContext = createContext<AudioManager>();
 
-const volumeItem = new LocalStorageItem<number>("volume", 1);
-const mutedItem = new LocalStorageItem<boolean>("muted", false);
+const volumeItem = new LocalStorageItem<number>("volume", () => 1);
+const mutedItem = new LocalStorageItem<boolean>("muted", () => false);
 
 export const AudioPlayerProvider: ParentComponent = (props) => {
 	const audio = new Audio();
@@ -110,7 +110,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	audio.addEventListener("loadedmetadata", handleLoadedMetadata);
 
 	onMount(() => {
-		audio.addEventListener("loadedmetadata", (() => audio.currentTime = trackManager.manager.progression), { once: true });
+		audio.addEventListener("loadedmetadata", (() => audio.currentTime = trackManager.progression), { once: true });
 		audio.src = "";
 		// audio.src = trackManager.manager.current?.music.url().href ?? "";
 	});
@@ -166,7 +166,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		get playing() { return isPlaying(); },
 		get currentMusic() { return trackManager.manager.current?.music ?? null; },
 		get duration() { return duration(); },
-		get progression() { return trackManager.manager.progression; },
+		get progression() { return trackManager.progression; },
 		set progression(time: number) { audio.currentTime = time; },
 		// As volume is not interpreted lineraly by human hear, a simple correction
 		// between real volume and the linear representation we use ins sliders allows
