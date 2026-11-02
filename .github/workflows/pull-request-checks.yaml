@@ -122,6 +122,8 @@ jobs:
           POSTGRES_USER=flex
           POSTGRES_DB=flex
           BASE_FRONT_URL=https://localhost:8443
+          VITE_API_URL=/api
+          VITE_DEFAULT_LANG=en
           ADMIN_EMAIL=admin@example.com
           SMTP_HOST=smtp.invalid
           SMTP_USER=ci

@@ -24,6 +24,8 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
 COPY tsconfig.base.json tsconfig.node.json ./
 COPY shared shared
 COPY front front
+ARG VITE_API_URL
+ARG VITE_DEFAULT_LANG
 RUN pnpm --filter @flex/shared run build \
  && pnpm --filter @flex/front run build
 

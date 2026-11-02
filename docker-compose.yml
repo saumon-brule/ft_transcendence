@@ -106,6 +106,9 @@ services:
     build:
       context: .
       dockerfile: front/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:?set VITE_API_URL in .env}
+        VITE_DEFAULT_LANG: ${VITE_DEFAULT_LANG:?set VITE_DEFAULT_LANG in .env}
     image: flex-front
     restart: unless-stopped
     ports:

@@ -73,7 +73,7 @@ services:
       - flex_api_key
       - server_ca
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:${HOST_GATEWAY:-host-gateway}"
     volumes:
       - media:/data/media
     depends_on:

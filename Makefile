@@ -6,11 +6,10 @@ init:
 	@cd back && pnpm prisma generate && pnpm prisma migrate deploy && cd ..
 	@cd provider && pnpm prisma generate && pnpm prisma migrate deploy && cd ..
 
-run: init
+dev: init
 	pnpm run dev
 
-provider: init
-	pnpm run dev:provider
+migrate: migrate-back migrate-provider
 
 migrate-back:
 	@test -n "$(NAME)" || { echo "usage: make migrate-back NAME=what_you_changed"; exit 1; }
@@ -20,34 +19,34 @@ migrate-provider:
 	@test -n "$(NAME)" || { echo "usage: make migrate-provider NAME=what_you_changed"; exit 1; }
 	@cd provider && pnpm prisma migrate dev --name $(NAME)
 
-docker-secrets: docker-secrets-server docker-secrets-provider
+secrets: secrets-server secrets-provider
 
-docker-secrets-server:
+secrets-server:
 	@docker/make-secrets.sh server
 
-docker-secrets-provider:
+secrets-provider:
 	@docker/make-secrets.sh provider
 
-prod-server:
+server:
 	@docker compose up -d --build --wait
 
-prod-provider:
+provider:
 	@docker compose -f provider/docker-compose.yml up -d --build --wait
 
-prod-server-down:
+server-down:
 	@docker compose down
 
-prod-provider-down:
+provider-down:
 	@docker compose -f provider/docker-compose.yml down
 
-prod-server-logs:
+server-logs:
 	@docker compose logs -f --tail=100
 
-prod-provider-logs:
+provider-logs:
 	@docker compose -f provider/docker-compose.yml logs -f --tail=100
 
 genkey:
 	@openssl genrsa -out back/provider.pem 2048
 
-.PHONY: run init provider migrate-back migrate-provider genkey docker-secrets docker-secrets-provider prod-server prod-provider prod-server-down prod-provider-down prod-server-logs prod-provider-logs
+.PHONY: run init provider migrate migrate-back migrate-provider genkey secrets secrets-server secrets-provider server provider server-down provider-down server-logs provider-logs
 
