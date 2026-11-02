@@ -33,7 +33,7 @@ import { AppForbiddenException } from "../core/error/forbidden";
 
 @Controller()
 export class PlaylistsController {
-	constructor(private readonly playlistsService: PlaylistsService) { }
+	constructor(private readonly playlistsService: PlaylistsService) {}
 
 	@UseInterceptors(FileInterceptor("cover"))
 	@TsRestHandler(playlistsContract.uploadCover)

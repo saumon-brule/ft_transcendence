@@ -19,7 +19,7 @@ export class ProvidersService {
 		private readonly prisma: PrismaService,
 		private readonly logger: WinstonLoggerService,
 		private readonly signingKey: ProviderSigningKeyService,
-	) { }
+	) {}
 
 	async create(ownerUUID: string, dto: CreateProviderDto) {
 		const uuid = randomUUID();
