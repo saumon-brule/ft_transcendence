@@ -46,4 +46,10 @@
 			margin-top: 8px;
 		}
 	}
+
+	.providers-list {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
 }
