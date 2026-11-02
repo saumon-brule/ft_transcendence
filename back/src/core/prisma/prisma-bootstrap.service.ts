@@ -31,6 +31,28 @@ const USER_PERMISSIONS = [
 export class DatabaseBootstrapService implements OnModuleInit {
 	constructor(private readonly prisma: PrismaService) {}
 
+	private async ensureAdmin(bigbossId: number): Promise<void> {
+		const email = env.ADMIN_EMAIL!;
+		const admin = await this.prisma.user.upsert({
+			where: { email },
+			update: {},
+			create: {
+				email,
+				username: "admin",
+				password: await bcrypt.hash(env.ADMIN_PASSWORD!, 10),
+				emailValidated: true,
+			},
+		});
+
+		await this.prisma.userRole.upsert({
+			where: { userUUID_roleId: { userUUID: admin.uuid, roleId: bigbossId } },
+			update: {},
+			create: { userUUID: admin.uuid, roleId: bigbossId },
+		});
+
+		console.log(`Administrator: ${email}`);
+	}
+
 	public async onModuleInit(): Promise<void> {
 		console.log("Seeding...");
 
@@ -95,6 +117,13 @@ export class DatabaseBootstrapService implements OnModuleInit {
 		console.log("  bigboss     : every permissions (superRole)");
 		console.log(`  manager     : ${MANAGER_PERMISSIONS.length} permissions`);
 		console.log(`  user        : ${USER_PERMISSIONS.length} permissions`);
+
+
+		if (env.NODE_ENV !== "dev") {
+			await this.ensureAdmin(bigboss.id);
+			console.log("Seed finished (no test data outside of dev)");
+			return;
+		}
 
 		// ─── Users ───────────────────────────────────────────────────────────────────
 

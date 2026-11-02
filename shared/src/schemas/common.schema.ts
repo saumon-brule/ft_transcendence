@@ -24,3 +24,13 @@ export const listQuerySchema = paginationQuerySchema.extend({
 		max(100).
 		optional(),
 });
+
+export const healthResponseSchema = z.object({
+	status: z.literal("ok"),
+});
+export type HealthResponseDto = z.infer<typeof healthResponseSchema>;
+
+export const healthUnavailableSchema = z.object({
+	status: z.literal("error"),
+});
+export type HealthUnavailableDto = z.infer<typeof healthUnavailableSchema>;
