@@ -14,6 +14,7 @@ import { Artist } from "~/class/Artist";
 import { Provider } from "@flex/shared";
 import { BestResult } from "./BestResult";
 import NoResult from "~/components/ui/NoResult/NoResult";
+import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
 
 const TABS = ["All", "Musics", "Albums", "Artists", "Playlists", "Users", "Providers"] as const;
 export type Tab = typeof TABS[number];
@@ -267,10 +268,12 @@ export default function Search() {
 			</Match>
 			<Match when={tab() === "Providers"}>
 				<Show when={results().providers.length > 0}>
-					<p>Providers</p>
-					<code>
-						{JSON.stringify(results().providers, null, 2)}
-					</code>
+					<section class="providers">
+						<h2>Providers</h2>
+						<div class="providers-list">
+							<For each={results().providers}>{(provider) => <ProviderCard provider={provider} mine={false}/>}</For>
+						</div>
+					</section>
 				</Show>
 				<NoResult show={results().providers.length === 0} />
 			</Match>

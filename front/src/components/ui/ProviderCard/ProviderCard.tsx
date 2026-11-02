@@ -1,12 +1,12 @@
 import { createEffect, createSignal, onMount, Show } from "solid-js";
-import { A } from "@solidjs/router";
+import { A, useNavigate } from "@solidjs/router";
 import { type User } from "@flex/shared";
 import Button from "~/components/inputs/Button";
 import "./ProviderCard.scss";
-import { summonEditProviderPopUp } from "./popUps/editProviderPopUp";
-import { summonDeleteProviderPopUp } from "./popUps/deleteProviderPopUp";
+import { summonEditProviderPopUp } from "../../../pages/Providers/popUps/editProviderPopUp";
+import { summonDeleteProviderPopUp } from "../../../pages/Providers/popUps/deleteProviderPopUp";
 import { client } from "~/api/client";
-import { summonProviderKeyPopUp } from "./popUps/providerKeyPopUp";
+import { summonProviderKeyPopUp } from "../../../pages/Providers/popUps/providerKeyPopUp";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { getProviderClient } from "~/api/providerClients";
 import { createMemo } from "solid-js";
@@ -30,6 +30,7 @@ export default function ProviderCard(props: ProviderCardProps) {
 			return res;
 		},
 	});
+	const navigate = useNavigate();
 
 	createEffect(() => {
 		if (health.isSuccess) {
@@ -65,7 +66,7 @@ export default function ProviderCard(props: ProviderCardProps) {
 		return "Checking";
 	};
 
-	return <div class="provider-card">
+	return <div class="provider-card" onClick={() => navigate(`/provider/${props.provider.uuid}`)}>
 		<div class="provider-details">
 			<div class="provider-info">
 				<h4><A href={`/provider/${props.provider.uuid}`}>
@@ -74,9 +75,9 @@ export default function ProviderCard(props: ProviderCardProps) {
 				<p>{props.provider.address}</p>
 			</div>
 			<Show when={props.mine}><div class="provider-actions">
-				<Button type="button" onClick={() => summonEditProviderPopUp(props.provider)} variant="text" size="md">Edit</Button>
-				<Button type="button" onClick={() => regenerateKey(props.provider.uuid)} variant="text" size="md">Regenerate Key</Button>
-				<Button type="button" onClick={() => summonDeleteProviderPopUp(props.provider.uuid)} variant="text" size="md">Delete</Button>
+				<Button type="button" onClick={(e) => { e.stopPropagation(); summonEditProviderPopUp(props.provider); }} variant="text" size="md">Edit</Button>
+				<Button type="button" onClick={(e) => { e.stopPropagation(); regenerateKey(props.provider.uuid); }} variant="text" size="md">Regenerate Key</Button>
+				<Button type="button" onClick={(e) => { e.stopPropagation(); summonDeleteProviderPopUp(props.provider.uuid); }} variant="text" size="md">Delete</Button>
 			</div></Show>
 		</div>
 		<div class={`provider-status ${status()}`}>
