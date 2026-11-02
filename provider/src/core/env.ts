@@ -7,7 +7,7 @@ const EnvSchema = z.object({
 	FLEX_API_KEY: z.string(),
 	NODE_ENV: z.enum(["dev", "prod"]),
 	MEDIA_DIR: z.string().default("media"),
-	// dev only: which half of mock/discography.v2.json to seed
+	// dev only: which mock catalog to seed, 1 (discography.v2.json) or 2 (discography.v3.json)
 	MOCK_DISCOGRAPHY: z.enum(["1", "2"]).optional(),
 	PORT: z.coerce.number().int().positive()
 		.max(65535)

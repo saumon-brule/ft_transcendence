@@ -11,13 +11,13 @@ dev: init
 
 migrate: migrate-back migrate-provider
 
-provider: init
+provider1: init
 	MOCK_DISCOGRAPHY=1 pnpm run dev:provider
 
-# Second provider on port 3003, configured by provider/.env.provider2
 provider2: init
-	@cd provider && DOTENV_CONFIG_PATH=.env.provider2 pnpm prisma migrate dev --name init && cd ..
+	DOTENV_CONFIG_PATH=.env.provider2 pnpm --dir provider prisma migrate deploy
 	DOTENV_CONFIG_PATH=.env.provider2 pnpm run dev:provider
+
 
 migrate-back:
 	@test -n "$(NAME)" || { echo "usage: make migrate-back NAME=what_you_changed"; exit 1; }
