@@ -49,10 +49,15 @@ const COVER_EXTENSIONS: Record<string, string> = {
 	"image/webp": "webp",
 };
 
-// mock/discography.v2.json: each album lists the mock providers (MOCK_DISCOGRAPHY) that serve it
+// Mock catalog of each dev provider (MOCK_DISCOGRAPHY): provider 1 also serves MOCK_MUSICS
+const DISCOGRAPHIES: Record<number, { file: string; audioDir: string }> = {
+	1: { file: "discography.v2.json", audioDir: "audio" },
+	2: { file: "discography.v3.json", audioDir: "audio2" },
+};
+
 interface Discography {
 	artists: { uuid: string; name: string; avatarFile?: string }[];
-	albums: { uuid: string; name: string; artistUuids: string[]; publishedAt: string; coverUrl: string; providers: number[] }[];
+	albums: { uuid: string; name: string; artistUuids: string[]; publishedAt: string; coverUrl: string }[];
 	musics: { uuid: string; name: string; artistUuids: string[]; albumUuid: string; duration: number; publishedAt: string; audioFile: string | null }[];
 }
 
@@ -63,7 +68,7 @@ interface MockMusic {
 	publishedAt?: Date;
 }
 
-// Provider 2 gets its own uuids so the two catalogs stay independent, even for the shared albums
+// Provider 2 gets its own uuids so the two catalogs stay independent, even for shared artists
 function partUuid(part: number, uuid: string) {
 	if (part === 1) return uuid;
 
@@ -141,23 +146,20 @@ export class PrismaBootstrapService implements OnModuleInit {
 
 	private async seedDiscography(part: number) {
 		const mediaRoot = resolve(process.cwd(), env.MEDIA_DIR);
-		const discography = JSON.parse(await readFile(join(MOCK_DIR, "discography.v2.json"), "utf8")) as Discography;
+		const { file, audioDir } = DISCOGRAPHIES[part];
+		const { artists, albums, musics } = JSON.parse(await readFile(join(MOCK_DIR, file), "utf8")) as Discography;
 		const id = (uuid: string) => partUuid(part, uuid);
 
-		const albums = discography.albums.filter((album) => album.providers.includes(part));
-		const albumUuids = new Set(albums.map((album) => album.uuid));
-		const musics = discography.musics.filter((music) => albumUuids.has(music.albumUuid));
-		const artistUuids = new Set([...albums, ...musics].flatMap((entry) => entry.artistUuids));
-
-		for (const artist of discography.artists.filter((artist) => artistUuids.has(artist.uuid))) {
+		for (const artist of artists) {
 			const uuid = id(artist.uuid);
 			const row = await this.prisma.artist.upsert({ create: { uuid, name: artist.name }, update: {}, where: { uuid } });
 			if (row.hasAvatar || !artist.avatarFile) continue;
 
 			const avatarDir = join(mediaRoot, "images/artist");
 			await mkdir(avatarDir, { recursive: true });
-			await copyFile(join(MOCK_DIR, "images/artist", artist.avatarFile), join(avatarDir, `${uuid}.jpg`));
-			await this.prisma.artist.update({ where: { uuid }, data: { hasAvatar: true } });
+			// Not every avatarFile listed in the discography was downloaded
+			const copied = await copyFile(join(MOCK_DIR, "images/artist", artist.avatarFile), join(avatarDir, `${uuid}.jpg`)).then(() => true, () => false);
+			if (copied) await this.prisma.artist.update({ where: { uuid }, data: { hasAvatar: true } });
 		}
 
 		for (const album of albums) {
@@ -192,7 +194,7 @@ export class PrismaBootstrapService implements OnModuleInit {
 			if (await this.prisma.music.findUnique({ where: { uuid: data.uuid } })) continue;
 
 			if (music.audioFile) {
-				await this.importMockMusic(join(MOCK_DIR, "audio", music.audioFile), data, artists);
+				await this.importMockMusic(join(MOCK_DIR, audioDir, music.audioFile), data, artists);
 			} else {
 				await this.prisma.music.create({
 					data: { ...data, duration: music.duration, artists: { create: artists.map((artistUuid) => ({ artistUuid })) } },
@@ -200,7 +202,7 @@ export class PrismaBootstrapService implements OnModuleInit {
 			}
 		}
 
-		this.logger.log(`Discography part ${part} ready (${albums.length} albums, ${musics.length} musics)`);
+		this.logger.log(`Discography ${file} ready (${albums.length} albums, ${musics.length} musics)`);
 	}
 
 	private async importMockMusic(source: string, music: MockMusic, artistUuids: string[]) {

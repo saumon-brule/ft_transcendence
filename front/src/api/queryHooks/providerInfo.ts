@@ -118,4 +118,4 @@ export const useProvidersSearchQueries = (providers: () => { address: string; uu
 			return providers().map((provider) => providerSearchOptions(provider.address, provider.uuid, searchTerm()));
 		},
 	});
-}
+};
