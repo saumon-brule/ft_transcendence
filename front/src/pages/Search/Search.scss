@@ -38,3 +38,12 @@
 	border-bottom: 1px solid var(--background-overlay);
 
 }
+
+#provider {
+	section {
+		.see-more {
+			display: block;
+			margin-top: 8px;
+		}
+	}
+}
