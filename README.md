@@ -15,8 +15,8 @@ The server and the provider are two independent stacks, each started with `docke
 
 ```bash
 cp .env.example .env        # fill in the public URL, ADMIN_EMAIL, the SMTP server and the 42 application
-make docker-secrets         # creates secrets/ (see below)
-make prod-server           # docker compose up -d --build --wait
+make secrets         # creates secrets/ (see below)
+make server           # docker compose up -d --build --wait
 ```
 
 The site is served by nginx in HTTPS on `FRONT_PORT` (443 by default). `FRONT_HTTP_PORT` (80) redirects to `BASE_FRONT_URL`. The front calls the back through `/api`.
@@ -29,7 +29,7 @@ mounted in `/run/secrets` (the `NAME_FILE` variables are resolved by [docker/ent
 | --- | --- |
 | `postgres_password`, `jwt_secret`, `jwt_refresh_secret`, `admin_password` | random, generated |
 | `provider.pem` | RSA key signing the provider tokens, generated |
-| `tls.crt`, `tls.key` | certificate and key of nginx: self-signed when generated, **replace them with a real certificate** in production (`DOMAIN=example.com make docker-secrets` adds a name to the self-signed one) |
+| `tls.crt`, `tls.key` | certificate and key of nginx: self-signed when generated, **replace them with a real certificate** in production (`DOMAIN=example.com make secrets` adds a name to the self-signed one) |
 | `smtp_pass`, `api42_client_secret` | to fill in by hand |
 
 Existing files are never overwritten. On the first start, the account `ADMIN_EMAIL` is created with the password of
@@ -43,8 +43,8 @@ Create the provider on the server first: it gives the API key.
 
 ```bash
 cp provider/.env.example provider/.env        # FLEX_SERVER_URL, POSTGRES_*
-make docker-secrets-provider   # then put the API key in provider/secrets/flex_api_key
-make prod-provider         # docker compose -f provider/docker-compose.yml up -d --build --wait
+make secrets-provider   # then put the API key in provider/secrets/flex_api_key
+make provider         # docker compose -f provider/docker-compose.yml up -d --build --wait
 ```
 
 The provider is served in HTTPS by its own nginx on `PROVIDER_PORT` (443 by default, to change if the server runs on the same machine); `PROVIDER_HTTP_PORT` (80) redirects to `PROVIDER_URL`, its public address; `tls.crt` and `tls.key` work like the server's.
@@ -55,7 +55,7 @@ copies the server's self-signed certificate if `secrets/tls.crt` exists.
 (`https://host.docker.internal:<FRONT_PORT>/api` for a server on the same machine).
 The `provider` URL registered on the server is the one browsers use to reach it (`https://…`), not a container name.
 
-`make prod-server-down` / `prod-provider-down` stop a stack (the volumes are kept), `prod-server-logs` / `prod-provider-logs` follow its logs.
+`make server-down` / `provider-down` stop a stack (the volumes are kept), `server-logs` / `provider-logs` follow its logs.
 
 ### Hardening and logs
 

@@ -113,7 +113,7 @@ jobs:
 
       - name: Prepare secrets and environment
         run: |
-          make docker-secrets
+          make secrets-server
           echo -n ci > secrets/smtp_pass
           echo -n ci > secrets/api42_client_secret
           cat > .env <<EOF
