@@ -1,7 +1,7 @@
 import { For, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import type { User } from "@flex/shared";
-import { API_URL } from "~/utils/constants";
+import { env } from "~/env";
 
 type PlaylistSectionProps = { playlists: User["ownedPlaylists"] };
 
@@ -11,7 +11,7 @@ export default function PlaylistSection(props: PlaylistSectionProps) {
 		<div class="playlists-list">
 			<Show when={props.playlists.length > 0} fallback={<p class="no-providers">No owned playlists</p>}>
 				<For each={props.playlists}>{(playlist) => <A class="playlist-card" href={`/playlist/${playlist.uuid}`}>
-					<img src={`${API_URL}/playlists/${playlist.uuid}/cover`} alt="playlist logo" />
+					<img src={`${env.VITE_API_URL}/playlists/${playlist.uuid}/cover`} alt="playlist logo" />
 					<div class="playlist-info">
 						<h4>{playlist.name}</h4>
 						<p>{playlist._count.musics} musics</p>

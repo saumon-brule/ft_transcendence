@@ -65,5 +65,7 @@ CI builds the three images and starts the server stack (`docker-stack` job) on e
 
 ### Development
 
-`make run` starts a database in Docker (`docker-compose.dev.yml`) and the back, the front and `shared` with hot reload.
+`make run` starts a database in Docker (`docker-compose.dev.yml`) and the back and the front with hot reload (`make provider` for the provider).
+The back and the provider read `shared/src` directly in development (`paths` in their `tsconfig.json`), so `shared` does not need to be built to run them.
+`shared/dist` is only needed by production builds (`tsconfig.build.json` ignores these `paths`), the Docker images and the front's type-check: `pnpm run build:shared`.
 New migration: `make migrate-back NAME=what_you_changed` (or `migrate-provider`).

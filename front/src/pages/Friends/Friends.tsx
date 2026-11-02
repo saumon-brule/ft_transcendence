@@ -4,7 +4,7 @@ import { summonErrorToast } from "~/components/ui/Toaster";
 import "./Friends.scss";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import FriendshipActions from "~/components/ui/FriendshipAction/FriendshipActions";
-import { API_URL } from "~/utils/constants";
+import { env } from "~/env";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
@@ -69,7 +69,7 @@ export default function Friends() {
 						<div class="friend-list">
 							<For each={data.body.friendRequests}>{(friend) => <div class="friend-card">
 								<div class="friend-info">
-									<img class="friend-avatar" src={`${API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
+									<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
 									<A href={`/user/${friend.uuid}`} class="white-variant">{friend.username}</A>
 								</div>
 								<div class="friend-actions">
@@ -84,7 +84,7 @@ export default function Friends() {
 					<div class="friend-list">
 						<For each={data.body.friends}>{(friend) => <div class="friend-card">
 							<div class="friend-info">
-								<img class="friend-avatar" src={`${API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
+								<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
 								<A href={`/user/${friend.uuid}`} class="white-variant">{friend.username}</A>
 							</div>
 							<div class="friend-actions">
@@ -107,7 +107,7 @@ export default function Friends() {
 			<div class="chat">
 				<Show when={friend()} keyed>{(friend) => <>
 					<div class="chat-header">
-						<img class="friend-avatar" src={`${API_URL}/users/${friend.info.uuid}/avatar`} alt={`${friend.info.username}'s avatar`} />
+						<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.info.uuid}/avatar`} alt={`${friend.info.username}'s avatar`} />
 						<span class="friend-username">{friend.info.username}</span>
 					</div>
 					<div class="chat-messages">

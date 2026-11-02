@@ -50,6 +50,7 @@
     "globals": "catalog:",
     "nodemon": "catalog:",
     "ts-node": "catalog:",
+    "tsconfig-paths": "catalog:",
     "typescript": "catalog:",
     "typescript-eslint": "catalog:"
   }

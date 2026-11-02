@@ -1,4 +1,4 @@
-import { API_URL } from "~/utils/constants";
+import { env } from "~/env";
 import { client, queryKeys } from "../client";
 
 export const useMeProfileQuery = () => client.users.me.createQuery(queryKeys.users.me, {}, {
@@ -8,7 +8,7 @@ export const useMeProfileQuery = () => client.users.me.createQuery(queryKeys.use
 		...data,
 		body: {
 			...data.body,
-			avatarUrl: `${API_URL}/users/${data.body.uuid}/avatar?v=${data.body.avatarUpdatedAt.getTime()}`,
+			avatarUrl: `${env.VITE_API_URL}/users/${data.body.uuid}/avatar?v=${data.body.avatarUpdatedAt.getTime()}`,
 		},
 	}),
 });

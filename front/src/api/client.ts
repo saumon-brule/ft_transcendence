@@ -2,7 +2,7 @@ import { initQueryClient } from "@ts-rest/solid-query";
 import { serverContract } from "@flex/shared";
 import { auth, authActions } from "../store/auth.store";
 import { ApiFetcher, tsRestFetchApi } from "@ts-rest/core";
-import { API_URL } from "~/utils/constants";
+import { env } from "~/env";
 import { doRefresh } from "./doRefresh";
 import z from "zod";
 import { serverBaseError401Schema } from "@flex/shared";
@@ -42,7 +42,7 @@ const fetchWithRefresh: ApiFetcher = async (args) => {
 };
 
 export const client = initQueryClient(serverContract, {
-	baseUrl: API_URL,
+	baseUrl: env.VITE_API_URL,
 	baseHeaders: {
 		Authorization: () => `Bearer ${auth.accessToken}`,
 	},
