@@ -1,10 +1,10 @@
 import { authContract } from "@flex/shared";
 import { initClient } from "@ts-rest/core";
-import { API_URL } from "~/utils/constants";
+import { env } from "~/env";
 import { client } from "./client";
 
 const refreshClient = initClient(authContract, {
-	baseUrl: API_URL,
+	baseUrl: env.VITE_API_URL,
 });
 
 let refreshPromise: Promise<string | null> | null = null;

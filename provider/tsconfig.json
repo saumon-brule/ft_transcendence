@@ -6,6 +6,9 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "outDir": "./dist",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@flex/shared": ["../shared/src/index.ts"]
+    }
   }
 }
