@@ -1,5 +1,5 @@
-import { useParams, useSearchParams } from "@solidjs/router";
-import { createEffect, createMemo, Match, on, onCleanup, onMount, Switch } from "solid-js";
+import { A, useParams, useSearchParams } from "@solidjs/router";
+import { createEffect, createMemo, Match, on, onCleanup, onMount, Show, Switch } from "solid-js";
 import { useProvidersSearchQueries } from "~/api/queryHooks/providerInfo";
 import "./Search.scss";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
@@ -13,6 +13,7 @@ import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
 import { Provider } from "@flex/shared";
 import { BestResult } from "./BestResult";
+import NoResult from "~/components/ui/NoResult/NoResult";
 
 const TABS = ["All", "Musics", "Albums", "Artists", "Playlists", "Users", "Providers"] as const;
 export type Tab = typeof TABS[number];
@@ -175,7 +176,7 @@ export default function Search() {
 	});
 
 	const [searchParams, setSearchParams] = useSearchParams<{ tab?: Tab }>();
-	const tab = () => searchParams.tab ?? "all";
+	const tab = () => searchParams.tab ?? "All";
 
 	let tabsNav!: HTMLElement;
 	const updateTabIndicator = () => {
@@ -208,26 +209,55 @@ export default function Search() {
 		<Switch>
 			<Match when={tab() === "All"}>
 				<BestResult best={results().best} />
-				<code>{JSON.stringify(results().best, null, 2)}</code>
-				<code>{JSON.stringify(results(), null, 2)}</code>
+				<Show when={results().musics.length > 0}>
+					<section class="musics">
+						<h2>Musics</h2>
+						<MusicSection music={{ musics: results().musics.slice(0, 6), total: results().musics.length }} />
+						<A href={`/search/${encodeURIComponent(search())}?tab=Musics`} class="white-variant see-more">See more</A>
+					</section>
+				</Show>
+				<Show when={results().albums.length > 0}>
+					<section class="albums">
+						<h2>Albums</h2>
+						<AlbumSection album={{ albums: results().albums.slice(0, 6), total: results().albums.length }} />
+						<A href={`/search/${encodeURIComponent(search())}?tab=Albums`} class="white-variant see-more">See more</A>
+					</section>
+				</Show>
+				<Show when={results().artists.length > 0}>
+					<section class="artists">
+						<h2>Artists</h2>
+						<ArtistSection artist={{ artists: results().artists.slice(0, 6), total: results().artists.length }} />
+						<A href={`/search/${encodeURIComponent(search())}?tab=Artists`} class="white-variant see-more">See more</A>
+					</section>
+				</Show>
+				<NoResult show={results().musics.length + results().albums.length + results().artists.length === 0} />
 			</Match>
 			<Match when={tab() === "Musics"}>
-				<section class="musics">
-					<h2>Musics</h2>
-					<MusicSection music={{ musics: results().musics, total: results().musics.length }} />
-				</section>
+				<Show when={results().musics.length > 0}>
+					<section class="musics">
+						<h2>Musics</h2>
+						<MusicSection music={{ musics: results().musics, total: results().musics.length }} />
+					</section>
+				</Show>
+				<NoResult show={results().musics.length === 0} />
 			</Match>
 			<Match when={tab() === "Albums"}>
-				<section class="albums">
-					<h2>Albums</h2>
-					<AlbumSection album={{ albums: results().albums, total: results().albums.length }} />
-				</section>
+				<Show when={results().albums.length > 0}>
+					<section class="albums">
+						<h2>Albums</h2>
+						<AlbumSection album={{ albums: results().albums, total: results().albums.length }} />
+					</section>
+				</Show>
+				<NoResult show={results().albums.length === 0} />
 			</Match>
 			<Match when={tab() === "Artists"}>
-				<section class="artists">
-					<h2>Artists</h2>
-					<ArtistSection artist={{ artists: results().artists, total: results().artists.length }} />
-				</section>
+				<Show when={results().artists.length > 0}>
+					<section class="artists">
+						<h2>Artists</h2>
+						<ArtistSection artist={{ artists: results().artists, total: results().artists.length }} />
+					</section>
+				</Show>
+				<NoResult show={results().artists.length === 0} />
 			</Match>
 			<Match when={tab() === "Playlists"}>
 				<p>Comming soon</p>
@@ -236,10 +266,13 @@ export default function Search() {
 				<p>Comming soon</p>
 			</Match>
 			<Match when={tab() === "Providers"}>
-				<p>Providers</p>
-				<code>
-					{JSON.stringify(results().providers, null, 2)}
-				</code>
+				<Show when={results().providers.length > 0}>
+					<p>Providers</p>
+					<code>
+						{JSON.stringify(results().providers, null, 2)}
+					</code>
+				</Show>
+				<NoResult show={results().providers.length === 0} />
 			</Match>
 		</Switch>
 	</div>;
