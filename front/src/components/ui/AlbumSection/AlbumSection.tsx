@@ -4,23 +4,14 @@ import { useMediaToken } from "~/api/providerClients";
 import "./AlbumSection.scss";
 import { A } from "@solidjs/router";
 import { ProviderInfo } from "~/api/queryHooks/providerInfo";
+import ArtistsLinks from "../ArtistLinks";
 
-function ArtistsLinks(props: { album: AlbumSectionProps["album"]["albums"][number]; providerUUID: string }) {
-	return <>{props.album.artists.length === 0
-		? "-"
-		: <For each={props.album.artists}>{(artist, index) => <>
-			<A href={`/provider/${props.providerUUID}/artist/${artist.uuid}`} class="white-variant">{artist.name}</A>
-			{index() < props.album.artists.length - 1 ? ", " : ""}
-		</>}</For>
-	}</>;
-}
-
-function AlbumCover(props: { album: ProviderInfo["album"]["albums"][number]; providerUrl: string }) {
-	const mediaToken = useMediaToken(() => props.providerUrl);
+export function AlbumCover(props: { album: ProviderInfo["album"]["albums"][number] }) {
+	const mediaToken = useMediaToken(() => props.album.providerUrl);
 
 	const src = () => {
 		const token = mediaToken();
-		if (token && props.album.hasCover) return buildMediaUrl(props.providerUrl, "albumCover", props.album.uuid, token);
+		if (token && props.album.hasCover) return buildMediaUrl(props.album.providerUrl, "albumCover", props.album.uuid, token);
 		return "/images/default_album.png";
 	};
 
@@ -43,10 +34,10 @@ export default function AlbumSection(props: AlbumSectionProps) {
 
 	return <div class="album-section">
 		<For each={props.album.albums}>{(album) => <div class="album">
-			<AlbumCover album={album} providerUrl={album.providerUrl} />
+			<AlbumCover album={album}/>
 			<div class="album-info">
 				<A href={`/provider/${album.providerUuid}/album/${album.uuid}`} class="white-variant album-name">{album.name}</A>
-				<Show when={shown("artists")}><div class="album-artist"><ArtistsLinks album={album} providerUUID={album.providerUuid}/></div></Show>
+				<Show when={shown("artists")}><div class="album-artist"><ArtistsLinks artists={album.artists} providerUUID={album.providerUuid}/></div></Show>
 				<Show when={shown("published")}><Show when={album.publishedAt} keyed>{(albumDate) => <div class="album-date">Sorti le {toDate(albumDate).toLocaleDateString()}</div>}</Show></Show>
 			</div>
 		</div>}</For>
