@@ -13,6 +13,7 @@ import { ClientInferResponses } from "@ts-rest/core";
 import { serverContract } from "@flex/shared";
 
 import "./AccountSettings.scss";
+import { A } from "@solidjs/router";
 
 type SelectChangeHandler = JSX.EventHandler<HTMLSelectElement, Event>;
 type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
@@ -103,6 +104,12 @@ export default function AccountSettings() {
 						<option value="en" selected={user().language === "en"}>{t("pages.settings.account.language.english")}</option>
 						<option value="fr" selected={user().language === "fr"}>{t("pages.settings.account.language.french")}</option>
 					</Select>
+				</div>
+				<div class="setting-field">
+					<div class="settings-links">
+						<A href="/privacy-policy">Privacy Policy</A>
+						<A href="/terms-of-service">Terms of Service</A>
+					</div>
 				</div>
 			</div>}
 		</Show>
