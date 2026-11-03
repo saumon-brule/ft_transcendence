@@ -25,10 +25,14 @@ import Provider from "./pages/Provider";
 import ProviderArtist from "./pages/Provider/ProviderArtist";
 import ProviderAlbum from "./pages/Provider/ProviderAlbum";
 import Friends from "./pages/Friends";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsOfService from "./pages/Legal/TermsOfService";
 
 export const AppRouter = () => {
 	return <Router >
 		<Route path="/" component={Landing} />
+		<Route path="/privacy-policy" component={PrivacyPolicy} />
+		<Route path="/terms-of-service" component={TermsOfService} />
 		<Route path="/" component={GuestGuard}>
 			<Route path="/" component={AuthLayout}>
 				<Route path="/login" component={LoginForm}/>
