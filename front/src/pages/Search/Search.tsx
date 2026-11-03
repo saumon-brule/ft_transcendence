@@ -213,21 +213,21 @@ export default function Search() {
 				<Show when={results().musics.length > 0}>
 					<section class="musics">
 						<h2>Musics</h2>
-						<MusicSection music={{ musics: results().musics.slice(0, 6), total: results().musics.length }} />
+						<MusicSection music={{ musics: results().musics.slice(0, 6), total: results().musics.length }} providers={results().providers}/>
 						<A href={`/search/${encodeURIComponent(search())}?tab=Musics`} class="white-variant see-more">See more</A>
 					</section>
 				</Show>
 				<Show when={results().albums.length > 0}>
 					<section class="albums">
 						<h2>Albums</h2>
-						<AlbumSection album={{ albums: results().albums.slice(0, 6), total: results().albums.length }} />
+						<AlbumSection album={{ albums: results().albums.slice(0, 6), total: results().albums.length }} providers={results().providers}/>
 						<A href={`/search/${encodeURIComponent(search())}?tab=Albums`} class="white-variant see-more">See more</A>
 					</section>
 				</Show>
 				<Show when={results().artists.length > 0}>
 					<section class="artists">
 						<h2>Artists</h2>
-						<ArtistSection artist={{ artists: results().artists.slice(0, 6), total: results().artists.length }} />
+						<ArtistSection artist={{ artists: results().artists.slice(0, 6), total: results().artists.length }} providers={results().providers}/>
 						<A href={`/search/${encodeURIComponent(search())}?tab=Artists`} class="white-variant see-more">See more</A>
 					</section>
 				</Show>
@@ -237,7 +237,7 @@ export default function Search() {
 				<Show when={results().musics.length > 0}>
 					<section class="musics">
 						<h2>Musics</h2>
-						<MusicSection music={{ musics: results().musics, total: results().musics.length }} />
+						<MusicSection music={{ musics: results().musics, total: results().musics.length }} providers={results().providers}/>
 					</section>
 				</Show>
 				<NoResult show={results().musics.length === 0} />
@@ -246,7 +246,7 @@ export default function Search() {
 				<Show when={results().albums.length > 0}>
 					<section class="albums">
 						<h2>Albums</h2>
-						<AlbumSection album={{ albums: results().albums, total: results().albums.length }} />
+						<AlbumSection album={{ albums: results().albums, total: results().albums.length }} providers={results().providers} />
 					</section>
 				</Show>
 				<NoResult show={results().albums.length === 0} />
@@ -255,7 +255,7 @@ export default function Search() {
 				<Show when={results().artists.length > 0}>
 					<section class="artists">
 						<h2>Artists</h2>
-						<ArtistSection artist={{ artists: results().artists, total: results().artists.length }} />
+						<ArtistSection artist={{ artists: results().artists, total: results().artists.length }} providers={results().providers} />
 					</section>
 				</Show>
 				<NoResult show={results().artists.length === 0} />
