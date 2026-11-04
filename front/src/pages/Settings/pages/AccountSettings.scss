@@ -32,6 +32,12 @@
 				flex-shrink: 0;
 			}
 		}
+
+		.settings-links {
+			display: flex;
+			flex-direction: row;
+			gap: 1rem;
+		}
 	}
 
 	.setting-field:not(:last-of-type) {
