@@ -1,6 +1,6 @@
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
-import { Match, onCleanup, Switch } from "solid-js";
-import { Volume, Volume1, Volume2, VolumeOff, VolumeX } from "lucide-solid";
+import { Match, onCleanup, Setter, Switch } from "solid-js";
+import { ListMusic, Volume, Volume1, Volume2, VolumeOff, VolumeX } from "lucide-solid";
 import "./SecondaryControl.scss";
 
 function interpolateValue(slider: HTMLDivElement, mouseX: number) {
@@ -9,7 +9,11 @@ function interpolateValue(slider: HTMLDivElement, mouseX: number) {
 	return Math.min(Math.max(elementMouseX / (width - 4), 0), 1); // "- 4" for same reasons as above
 }
 
-export default function SecondaryControl() {
+export type SecondaryControlsProps = {
+	setShowQueue: Setter<boolean>;
+};
+
+export default function SecondaryControl(props: SecondaryControlsProps) {
 	const audioManager = useAudioManagerContext();
 	let slider!: HTMLDivElement;
 
@@ -38,6 +42,7 @@ export default function SecondaryControl() {
 	});
 
 	return <div class="volume-control">
+		<ListMusic onClick={() => props.setShowQueue((old) => !old)} />
 		<Switch>
 			<Match when={audioManager.muted} >
 				<VolumeOff onClick={() => { audioManager.muted = false; }} />

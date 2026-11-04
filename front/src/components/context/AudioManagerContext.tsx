@@ -12,6 +12,7 @@ const BACK_TIMER_THRESHOLD = 3; // secondesw
 export type AudioManager = {
 	get playing(): boolean;
 	get currentMusic(): Music | null;
+	get queue(): Array<Track>;
 	get duration(): number;
 	get progression(): number;
 	set progression(time: number);
@@ -162,6 +163,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	const audioManager = {
 		get playing() { return isPlaying(); },
 		get currentMusic() { return trackManager.manager.current?.music ?? null; },
+		get queue() { return trackManager.manager.queue; },
 		get duration() { return duration(); },
 		get progression() { return trackManager.manager.progression; },
 		set progression(time: number) { audio.currentTime = time; },
