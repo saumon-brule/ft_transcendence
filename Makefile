@@ -11,6 +11,14 @@ dev: init
 
 migrate: migrate-back migrate-provider
 
+provider1: init
+	MOCK_DISCOGRAPHY=1 pnpm run dev:provider
+
+provider2: init
+	DOTENV_CONFIG_PATH=.env.provider2 pnpm --dir provider prisma migrate deploy
+	DOTENV_CONFIG_PATH=.env.provider2 pnpm run dev:provider
+
+
 migrate-back:
 	@test -n "$(NAME)" || { echo "usage: make migrate-back NAME=what_you_changed"; exit 1; }
 	@cd back && pnpm prisma migrate dev --name $(NAME)
@@ -48,5 +56,5 @@ provider-logs:
 genkey:
 	@openssl genrsa -out back/provider.pem 2048
 
-.PHONY: run init provider migrate migrate-back migrate-provider genkey secrets secrets-server secrets-provider server provider server-down provider-down server-logs provider-logs
+.PHONY: run init provider provider2 migrate migrate-back migrate-provider genkey secrets secrets-server secrets-provider server provider server-down provider-down server-logs provider-logs
 

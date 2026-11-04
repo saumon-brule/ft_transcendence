@@ -12,6 +12,7 @@
 	justify-content: space-between;
 	gap: 16px;
 	transition: background-color .2s ease;
+	cursor: pointer;
 	
 	&:hover {
 		background-color: var(--background-overlay);

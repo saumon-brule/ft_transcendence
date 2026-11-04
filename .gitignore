@@ -8,3 +8,6 @@ provider/src/generated/prisma/
 
 secrets/
 
+provider/mock/**/*.mp3
+provider/mock/**/*.jpg
+provider/mock/discography*

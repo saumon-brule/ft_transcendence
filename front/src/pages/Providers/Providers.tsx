@@ -1,6 +1,6 @@
 import { For, Show } from "solid-js";
 import "./Providers.scss";
-import ProviderCard from "./ProviderCard";
+import ProviderCard from "../../components/ui/ProviderCard/ProviderCard";
 import Button from "~/components/inputs/Button";
 import { Plus } from "lucide-solid";
 import { summonNewProviderPopUp } from "./popUps/newProviderPopUp";

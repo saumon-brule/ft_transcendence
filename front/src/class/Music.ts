@@ -1,5 +1,4 @@
-import { buildMediaUrl, musicItemSchema, type ProviderDataMusicDto } from "@flex/shared";
-import { ArtistItemDto } from "node_modules/@flex/shared/src/contracts/provider/schemas/items.schema";
+import { buildMediaUrl, musicItemSchema, type ProviderDataMusicDto, type ProviderDataArtistDto } from "@flex/shared";
 import z from "zod";
 import { getMediaToken } from "~/api/providerClients";
 import { summonErrorToast } from "~/components/ui/Toaster";
@@ -17,7 +16,7 @@ export class Music {
 		public readonly duration: number,
 		public readonly publishedAt: Date | null,
 		public readonly hasCover: boolean,
-		public readonly artists: ArtistItemDto[],
+		public readonly artists: ProviderDataArtistDto[],
 		public readonly album: MusicAlbumDto,
 	) {}
 

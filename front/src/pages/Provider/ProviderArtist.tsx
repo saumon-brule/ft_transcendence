@@ -37,7 +37,7 @@ export default function ProviderArtist() {
 			</section>
 			<section>
 				<h2>Albums</h2>
-				<AlbumSection album={data.info.album} providerUrl={data.back.address} providerUuid={params.uuid} hiddenProp={["artists"]} />
+				<AlbumSection album={data.info.album} hiddenProp={["artists"]} />
 			</section>
 		</>}</Show>
 	</div>;

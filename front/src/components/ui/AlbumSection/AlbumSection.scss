@@ -27,6 +27,7 @@
 			display: flex;
 			flex-direction: column;
 			gap: 4px;
+			height: 100%;
 
 			.album-name {
 				font-size: 16px;
@@ -36,6 +37,10 @@
 			.album-date {
 				font-size: 12px;
 				color: var(--text-secondary);
+			}
+
+			.album-provider {
+				margin-top: auto;
 			}
 		}
 	}

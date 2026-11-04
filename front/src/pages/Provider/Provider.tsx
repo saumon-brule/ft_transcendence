@@ -34,11 +34,11 @@ export default function Provider() {
 			</section>
 			<section>
 				<h2>Albums</h2>
-				<AlbumSection album={data.info.album} providerUrl={data.back.address} providerUuid={params.uuid} />
+				<AlbumSection album={data.info.album}/>
 			</section>
 			<section>
 				<h2>Artistes</h2>
-				<ArtistSection artist={data.info.artist} providerUrl={data.back.address} providerUuid={params.uuid} />
+				<ArtistSection artist={data.info.artist}/>
 			</section>
 		</>}</Show>
 	</div>;
