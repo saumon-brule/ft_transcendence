@@ -17,7 +17,7 @@
 		"build": "pnpm run build:shared && concurrently -n back,provider,front -c blue,green,red \"pnpm --filter @flex/back build\" \"pnpm --filter @flex/provider build\" \"pnpm --filter @flex/front build\""
 	},
 	"devDependencies": {
-		"concurrently": "^9.2.4",
-		"wait-on": "^9.1.0"
+		"concurrently": "^9.2.5",
+		"wait-on": "^9.5.1"
 	}
 }

@@ -25,6 +25,7 @@ import Provider from "./pages/Provider";
 import ProviderArtist from "./pages/Provider/ProviderArtist";
 import ProviderAlbum from "./pages/Provider/ProviderAlbum";
 import Friends from "./pages/Friends";
+import Search from "./pages/Search";
 
 export const AppRouter = () => {
 	return <Router >
@@ -48,6 +49,7 @@ export const AppRouter = () => {
 				<Route path="/" component={AppContainer}>
 					<Route path="/" component={SidebarRoute}>
 						<Route path="/home" component={Home} />
+						<Route path="/search/:search" component={Search} />
 						<Route path="/user/:uuid" component={Profile} />
 						<Route path="/friends" component={Friends} />
 						<Route path="/friends/:uuid" component={Friends} />
