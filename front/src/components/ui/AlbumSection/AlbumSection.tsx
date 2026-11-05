@@ -7,7 +7,7 @@ import { ProviderInfo } from "~/api/queryHooks/providerInfo";
 import ArtistsLinks from "../ArtistLinks";
 
 export function AlbumCover(props: { album: ProviderInfo["album"]["albums"][number] }) {
-	const mediaToken = useMediaToken(() => props.album.providerUrl);
+	const mediaToken = useMediaToken(() => props.album.providerUrl, () => props.album.providerUuid);
 
 	const src = () => {
 		const token = mediaToken();
