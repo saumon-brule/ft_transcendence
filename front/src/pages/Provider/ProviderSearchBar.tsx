@@ -1,11 +1,11 @@
-import { createEffect, createSignal, on, onCleanup, Show } from "solid-js";
+import { createEffect, createSignal, on, onCleanup, Show, untrack } from "solid-js";
 import { Search, X } from "lucide-solid";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import type { FormEmbeddedComponentRef } from "~/types/ComponentRef";
 
 export default function ProviderSearchBar(props: { value: string; onSearch: (value: string) => void }) {
-	const [value, setValue] = createSignal(props.value);
+	const [value, setValue] = createSignal(untrack(() => props.value));
 	let input!: FormEmbeddedComponentRef<HTMLInputElement>;
 	let timeout: ReturnType<typeof setTimeout> | undefined;
 

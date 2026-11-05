@@ -1,16 +1,14 @@
 import { Show } from "solid-js";
 import "./NoResult.scss";
-import { A, useNavigate } from "@solidjs/router";
+import { useNavigate } from "@solidjs/router";
 import Button from "~/components/inputs/Button";
 
 export default function NoResult(props: { show: boolean }) {
 	const navigate = useNavigate();
 
 	const goBack = () => {
-		if (window.history.length > 1)
-			navigate(-1);
-		else
-			navigate("/home");
+		if (window.history.length > 1) navigate(-1);
+		else navigate("/home");
 	};
 
 	return <Show when={props.show} keyed>
