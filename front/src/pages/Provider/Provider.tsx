@@ -3,6 +3,7 @@ import { createEffect, createMemo, Match, Show, Switch } from "solid-js";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { client, queryKeys } from "~/api/client";
 import { useProviderInfoQuery } from "~/api/queryHooks/providerInfo";
+import ProviderTabMusics from "./ProviderTabMusics";
 import ProviderHeader from "./ProviderHeader";
 import MusicSection from "../../components/ui/MusicSection/MusicSection";
 import "./Provider.scss";
@@ -11,6 +12,8 @@ import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
 import { useTabParam } from "~/components/ui/Tabs/useTabParam";
 import Tabs from "~/components/ui/Tabs/Tabs";
 import NoResult from "~/components/ui/NoResult/NoResult";
+import ProviderTabAlbums from "./ProviderTabAlbums";
+import ProviderTabArtists from "./ProviderTabArtists";
 
 const TABS = ["All", "Musics", "Albums", "Artists"] as const;
 type Tab = typeof TABS[number];
@@ -63,31 +66,13 @@ export default function Provider() {
 					<NoResult show={data.info.music.total + data.info.album.total + data.info.artist.total === 0} />
 				</Match>
 				<Match when={tab() === "Musics"}>
-					<Show when={data.info.music.total > 0}>
-						<section class="musics">
-							<h2>Musics</h2>
-							<MusicSection music={data.info.music}/>
-						</section>
-					</Show>
-					<NoResult show={data.info.music.total === 0} />
+					<ProviderTabMusics providerUrl={data.back.address} providerUuid={params.uuid} />
 				</Match>
 				<Match when={tab() === "Albums"}>
-					<Show when={data.info.album.total > 0}>
-						<section class="albums">
-							<h2>Albums</h2>
-							<AlbumSection album={data.info.album} />
-						</section>
-					</Show>
-					<NoResult show={data.info.album.total === 0} />
+					<ProviderTabAlbums providerUrl={data.back.address} providerUuid={params.uuid} />
 				</Match>
 				<Match when={tab() === "Artists"}>
-					<Show when={data.info.artist.total > 0}>
-						<section class="artists">
-							<h2>Artists</h2>
-							<ArtistSection artist={data.info.artist} />
-						</section>
-					</Show>
-					<NoResult show={data.info.artist.total === 0} />
+					<ProviderTabArtists providerUrl={data.back.address} providerUuid={params.uuid} />
 				</Match>
 			</Switch>
 		</>}</Show>
