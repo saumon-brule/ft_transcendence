@@ -21,7 +21,7 @@ type ProviderCardProps = {
 
 export default function ProviderCard(props: ProviderCardProps) {
 	const [status, setStatus] = createSignal<ProviderStatus>("pinging");
-	const provider = createMemo(() => getProviderClient(props.provider.address));
+	const provider = createMemo(() => getProviderClient(props.provider.address, props.provider.uuid));
 	const health = createQuery({
 		queryKey: () => provider().keys.info.health(),
 		queryFn: async () => {

@@ -6,7 +6,7 @@ import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
 
 export const useProviderInfoQuery = (providerUrl: () => string, providerUuid: () => string) => {
-	const provider = createMemo(() => getProviderClient(providerUrl()));
+	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
 	return createQuery({
 		queryKey: () => provider().keys.info.all(),
 		get enabled() { return providerUrl() !== ""; },
@@ -39,7 +39,7 @@ export const useProviderInfoQuery = (providerUrl: () => string, providerUuid: ()
 export type ProviderInfo = Exclude<ReturnType<typeof useProviderInfoQuery>["data"], undefined>["body"];
 
 export const useProviderArtistQuery = (providerUrl: () => string, providerUuid: () => string, artistUUID: () => string) => {
-	const provider = createMemo(() => getProviderClient(providerUrl()));
+	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
 	return createQuery({
 		queryKey: () => provider().keys.artist.get([artistUUID()]),
 		get enabled() { return providerUrl() !== ""; },
@@ -67,7 +67,7 @@ export const useProviderArtistQuery = (providerUrl: () => string, providerUuid: 
 
 
 export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: () => string, albumUUID: () => string) => {
-	const provider = createMemo(() => getProviderClient(providerUrl()));
+	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
 	return createQuery({
 		queryKey: () => provider().keys.album.get([albumUUID()]),
 		get enabled() { return providerUrl() !== ""; },
@@ -91,7 +91,7 @@ export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: (
 };
 
 const providerSearchOptions = (providerUrl: string, providerUuid: string, searchTerm: string) => {
-	const provider = getProviderClient(providerUrl);
+	const provider = getProviderClient(providerUrl, providerUuid);
 	return {
 		queryKey: () => provider.keys.search.search([searchTerm]),
 		enabled: providerUrl !== "" && searchTerm !== "",

@@ -122,7 +122,16 @@ export class ProvidersService {
 		return { apiKey: key };
 	}
 
-	async issueAccessToken(userUUID: string) {
-		return this.signingKey.signUserAccessToken(userUUID);
+	async issueAccessToken(userUUID: string, providerUUID: string) {
+		const provider = await this.prisma.provider.findUnique({
+			where: { uuid: providerUUID },
+			select: { uuid: true },
+		});
+
+		if (!provider) {
+			throw new NotFoundException("Provider not found");
+		}
+
+		return this.signingKey.signUserAccessToken(userUUID, provider.uuid);
 	}
 }

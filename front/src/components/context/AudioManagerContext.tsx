@@ -130,7 +130,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 						playWhenLoaded = false;
 						play();
 					}
-					void getMediaToken(currentTrack.music.providerUrl)
+					void getMediaToken(currentTrack.music.providerUrl, currentTrack.music.providerUuid)
 						.catch(() => null)
 						.then((token) => {
 							if (id === loadId) updateMediaMetadata(currentTrack.music, token);
