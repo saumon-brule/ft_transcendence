@@ -1,10 +1,9 @@
-import { A, useParams, useSearchParams } from "@solidjs/router";
-import { createEffect, createMemo, Match, on, onCleanup, onMount, Show, Switch } from "solid-js";
+import { A, useParams } from "@solidjs/router";
+import { createMemo, Match, Show, Switch } from "solid-js";
 import { useProvidersSearchQueries } from "~/api/queryHooks/providerInfo";
 import "./Search.scss";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import { For } from "solid-js";
-import Button from "~/components/inputs/Button";
 import MusicSection from "~/components/ui/MusicSection/MusicSection";
 import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
 import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
@@ -15,106 +14,12 @@ import { Provider } from "@flex/shared";
 import { BestResult } from "./BestResult";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
+import Tabs from "~/components/ui/Tabs/Tabs";
+import { useTabParam } from "~/components/ui/Tabs/useTabParam";
+import { scoreAlbum, scoreArtist, scoreMusic, sortByScore } from "~/utils/sortUtils";
 
 const TABS = ["All", "Musics", "Albums", "Artists", "Playlists", "Users", "Providers"] as const;
 export type Tab = typeof TABS[number];
-
-// const TABLES: Record<SearchTable, { from: Prisma.Sql; fields: SearchField[] }> = {
-// 	Music: { from: Prisma.raw("\"Music\""), fields: [field("name", 3), field("searchArtists", 2), field("searchAlbum", 1)] },
-// 	Artist: { from: Prisma.raw("\"Artist\""), fields: [field("name", 1)] },
-// 	Album: { from: Prisma.raw("\"Album\""), fields: [field("name", 3), field("searchArtists", 2)] },
-// };
-
-const normalize = (value: string) => value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
-const tokensOf = (value: string) => value.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
-const MIN_FUZZY_LENGTH = 3;
-const POINTS_EXACT = 1.0;
-const POINTS_PREFIX = 0.8;
-const POINTS_FUZZY = 0.5;
-
-const BONUS_TITLE_MATCH = 5;
-const BONUS_TITLE_STARTS_WITH = 2;
-const BONUS_COVERING = 1;
-const MALUS_WORD_NOT_FOUND = -1;
-
-function withinOneEdit(a: string, b: string) {
-	if (Math.abs(a.length - b.length) > 1) return false;
-	let i = 0;
-	let j = 0;
-	let edits = 0;
-	while (i < a.length && j < b.length) {
-		if (a[i] === b[j]) {
-			i++;
-			j++;
-			continue;
-		}
-		if (++edits > 1) return false;
-		if (a.length >= b.length) i++;
-		if (a.length <= b.length) j++;
-	}
-	return edits + (a.length - i) + (b.length - j) <= 1;
-}
-
-function tokenPoints(queryToken: string, fieldTokens: string[]) {
-	let best = 0;
-	for (const token of fieldTokens) {
-		if (token === queryToken) return POINTS_EXACT;
-		if (token.startsWith(queryToken)) best = Math.max(best, POINTS_PREFIX);
-		else if (queryToken.length >= MIN_FUZZY_LENGTH && withinOneEdit(queryToken, token)) best = Math.max(best, POINTS_FUZZY);
-	}
-	return best;
-}
-
-function scoreFields(title: string, fields: { value: string; boost: number }[], query: string) {
-	const queryTokens = tokensOf(normalize(query));
-	if (queryTokens.length === 0) return 0;
-	const tokenized = fields.map(({ value, boost }) => ({ tokens: tokensOf(normalize(value)), boost }));
-
-	let score = 0;
-	let found = 0;
-	for (const queryToken of queryTokens) {
-		const best = Math.max(...tokenized.map(({ tokens, boost }) => tokenPoints(queryToken, tokens) * boost));
-		if (best > 0) found++;
-		else score += MALUS_WORD_NOT_FOUND;
-		score += best;
-	}
-
-	const normalizedTitle = tokensOf(normalize(title)).join(" ");
-	const normalizedQuery = queryTokens.join(" ");
-	if (normalizedTitle === normalizedQuery) score += BONUS_TITLE_MATCH;
-	else if (normalizedTitle.startsWith(normalizedQuery)) score += BONUS_TITLE_STARTS_WITH;
-	if (found === queryTokens.length) score += BONUS_COVERING;
-
-	return score;
-}
-
-
-function scoreMusic(music: Music, query: string) {
-	return scoreFields(music.name, [
-		{ value: music.name, boost: 3 },
-		{ value: music.artists.map((artist) => artist.name).join(" "), boost: 2 },
-		{ value: music.album?.name ?? "", boost: 1 },
-	], query);
-}
-
-function scoreAlbum(album: Album, query: string) {
-	return scoreFields(album.name, [
-		{ value: album.name, boost: 3 },
-		{ value: album.artists.map((artist) => artist.name).join(" "), boost: 2 },
-	], query);
-}
-
-function scoreArtist(artist: Artist, query: string) {
-	return scoreFields(artist.name, [
-		{ value: artist.name, boost: 1 },
-	], query);
-}
-
-function sortByScore<T>(items: T[], score: (item: T) => number) {
-	return items.map((item) => ({ item, score: score(item) }))
-		.sort((a, b) => b.score - a.score)
-		.map(({ item }) => item);
-}
 
 export default function Search() {
 	const params = useParams<{ search: string }>();
@@ -176,37 +81,10 @@ export default function Search() {
 		return organizedData;
 	});
 
-	const [searchParams, setSearchParams] = useSearchParams<{ tab?: Tab }>();
-	const tab = () => searchParams.tab ?? "All";
+	const [tab, setTab] = useTabParam(TABS, "All");
 
-	let tabsNav!: HTMLElement;
-	const updateTabIndicator = () => {
-		const selected = tabsNav.querySelector<HTMLElement>("[aria-selected=true]");
-		tabsNav.style.setProperty("--indicator-left", `${selected?.offsetLeft ?? 0}px`);
-		tabsNav.style.setProperty("--indicator-width", `${selected?.offsetWidth ?? 0}px`);
-	};
-	createEffect(on(tab, updateTabIndicator));
-	onMount(() => {
-		const observer = new ResizeObserver(updateTabIndicator);
-		observer.observe(tabsNav);
-		onCleanup(() => observer.disconnect());
-	});
-
-	return <div class="page" id="provider">
-		<nav class="search-tabs" role="tablist" ref={tabsNav}>
-			<For each={TABS}>
-				{(t) => <Button
-					type="button"
-					role="tab"
-					variant="text"
-					aria-selected={tab() === t}
-					classList={{ active: tab() === t }}
-					onClick={() => setSearchParams({ tab: t }, { replace: true })}
-				>
-					{t}
-				</Button>}
-			</For>
-		</nav>
+	return <div class="page" id="search">
+		<Tabs tabs={TABS} value={tab()} onChange={setTab} />
 		<Switch>
 			<Match when={tab() === "All"}>
 				<BestResult best={results().best} />
