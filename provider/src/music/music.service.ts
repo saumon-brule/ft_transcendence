@@ -2,11 +2,12 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { findAlbumUuid, findArtistUuids } from "../core/catalog/catalog.lookups";
+import { musicWhere, type MusicFilters } from "../core/catalog/catalog.filters";
 import { musicDetailInclude, musicItemInclude, toMusicDetail, toMusicItem } from "../core/catalog/catalog.mappers";
 import { MediaService } from "../media/media.service";
 import { SearchService } from "../search/search.service";
 
-interface ListQuery {
+interface ListQuery extends MusicFilters {
 	limit: number;
 	offset: number;
 	search?: string;
@@ -30,23 +31,27 @@ export class MusicService {
 		private readonly search: SearchService,
 	) {}
 
-	async list({ limit, offset, search }: ListQuery) {
+	async list({ limit, offset, search, ...filters }: ListQuery) {
+		const where = musicWhere(filters);
+
 		if (search) {
+			const only = where && await this.search.idsOf(this.prisma.music.findMany({ where, select: { id: true } }));
 			const { rows, total } = await this.search.page("Music", search, { limit, offset }, (ids) => this.prisma.music.findMany({
 				where: { id: { in: ids } },
 				include: musicItemInclude,
-			}));
+			}), only);
 			return { musics: rows.map(toMusicItem), total };
 		}
 
 		const [rows, total] = await this.prisma.$transaction([
 			this.prisma.music.findMany({
+				where,
 				include: musicItemInclude,
 				orderBy: [{ name: "asc" }, { id: "asc" }],
 				take: limit,
 				skip: offset,
 			}),
-			this.prisma.music.count(),
+			this.prisma.music.count({ where }),
 		]);
 
 		return { musics: rows.map(toMusicItem), total };

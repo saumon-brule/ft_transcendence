@@ -5,7 +5,7 @@ import {
 	musicListResponseSchema,
 	updateMusicSchema,
 } from "./schemas/music.schema";
-import { listQuerySchema, uuidParamSchema } from "../../../schemas/common.schema";
+import { musicListQuerySchema, uuidParamSchema } from "../../../schemas/common.schema";
 import { commonError404Schema, commonError413Schema, commonError415Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
@@ -15,7 +15,7 @@ export const musicContract = c.router(
 		list: {
 			method: "GET",
 			path: "/",
-			query: listQuerySchema,
+			query: musicListQuerySchema,
 			responses: { 200: musicListResponseSchema },
 		},
 		get: {
