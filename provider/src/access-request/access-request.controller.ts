@@ -19,7 +19,7 @@ export class AccessRequestController {
 	}
 
 	@TsRestHandler(providerContract.accessRequest.me)
-	@MemberOnly()
+	@Authenticated()
 	getMine(@CurrentUser() user: CurrentUserData) {
 		return tsRestHandler(providerContract.accessRequest.me, async () => ({
 			status: 200,
