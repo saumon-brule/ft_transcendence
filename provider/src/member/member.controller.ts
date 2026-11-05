@@ -37,7 +37,7 @@ export class MemberController {
 	}
 
 	@TsRestHandler(providerContract.member.setRoles)
-	@RequirePermission("MANAGE_ROLES")
+	@RequirePermission("ADMIN")
 	setRoles() {
 		return tsRestHandler(providerContract.member.setRoles, async ({ params, body }) => ({
 			status: 200,
