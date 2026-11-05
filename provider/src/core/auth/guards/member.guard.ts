@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { providerPermissions } from "@flex/shared";
 import { PrismaService } from "../../prisma/prisma.service";
 import type { AuthenticatedRequest } from "../auth.types";
 import { AppForbiddenException } from "../../error/forbidden";
+import { providerPermissions } from "@flex/shared";
 
 @Injectable()
 export class MemberGuard implements CanActivate {
