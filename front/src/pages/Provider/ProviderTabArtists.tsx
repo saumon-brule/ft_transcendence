@@ -4,8 +4,8 @@ import NoResult from "~/components/ui/NoResult/NoResult";
 import Button from "~/components/inputs/Button";
 import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
 
-export default function ProviderTabArtists(props: { providerUrl: string; providerUuid: string }) {
-	const artistsQuery = useProviderArtistsInfiniteQuery(() => props.providerUrl, () => props.providerUuid);
+export default function ProviderTabArtists(props: { providerUrl: string; providerUuid: string; search: string }) {
+	const artistsQuery = useProviderArtistsInfiniteQuery(() => props.providerUrl, () => props.providerUuid, () => props.search);
 	const artists = createMemo(() => artistsQuery.data && {
 		artists: artistsQuery.data.pages.flatMap((page) => page.artists),
 		total: artistsQuery.data.pages[0]?.total ?? 0,

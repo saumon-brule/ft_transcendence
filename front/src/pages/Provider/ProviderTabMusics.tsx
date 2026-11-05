@@ -4,8 +4,8 @@ import MusicSection from "~/components/ui/MusicSection/MusicSection";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import Button from "~/components/inputs/Button";
 
-export default function ProviderTabMusics(props: { providerUrl: string; providerUuid: string }) {
-	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerUrl, () => props.providerUuid);
+export default function ProviderTabMusics(props: { providerUrl: string; providerUuid: string; search: string }) {
+	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerUrl, () => props.providerUuid, () => props.search);
 	const musics = createMemo(() => musicsQuery.data && {
 		musics: musicsQuery.data.pages.flatMap((page) => page.musics),
 		total: musicsQuery.data.pages[0]?.total ?? 0,

@@ -62,20 +62,26 @@ export default function Search() {
 			artists: organizedData.artists[0] ? scoreArtist(organizedData.artists[0], search()) : 0,
 		};
 		if (bestScores.musics > bestScores.albums && bestScores.musics > bestScores.artists) {
-			organizedData.best = {
-				item: organizedData.musics[0],
-				providerName: organizedData.providers.find((p) => p.uuid === organizedData.musics[0].providerUuid)?.name ?? "",
-			};
+			if (organizedData.musics[0]) {
+				organizedData.best = {
+					item: organizedData.musics[0],
+					providerName: organizedData.providers.find((p) => p.uuid === organizedData.musics[0].providerUuid)?.name ?? "",
+				};
+			}
 		} else if (bestScores.albums > bestScores.artists) {
-			organizedData.best = {
-				item: organizedData.albums[0],
-				providerName: organizedData.providers.find((p) => p.uuid === organizedData.albums[0].providerUuid)?.name ?? "",
-			};
+			if (organizedData.albums[0]) {
+				organizedData.best = {
+					item: organizedData.albums[0],
+					providerName: organizedData.providers.find((p) => p.uuid === organizedData.albums[0].providerUuid)?.name ?? "",
+				};
+			}
 		} else if (bestScores.artists > 0) {
-			organizedData.best = {
-				item: organizedData.artists[0],
-				providerName: organizedData.providers.find((p) => p.uuid === organizedData.artists[0].providerUuid)?.name ?? "",
-			};
+			if (organizedData.artists[0]) {
+				organizedData.best = {
+					item: organizedData.artists[0],
+					providerName: organizedData.providers.find((p) => p.uuid === organizedData.artists[0].providerUuid)?.name ?? "",
+				};
+			}
 		}
 
 		return organizedData;

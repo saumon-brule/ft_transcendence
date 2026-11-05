@@ -4,8 +4,8 @@ import NoResult from "~/components/ui/NoResult/NoResult";
 import Button from "~/components/inputs/Button";
 import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 
-export default function ProviderTabAlbums(props: { providerUrl: string; providerUuid: string }) {
-	const albumsQuery = useProviderAlbumsInfiniteQuery(() => props.providerUrl, () => props.providerUuid);
+export default function ProviderTabAlbums(props: { providerUrl: string; providerUuid: string; search: string }) {
+	const albumsQuery = useProviderAlbumsInfiniteQuery(() => props.providerUrl, () => props.providerUuid, () => props.search);
 	const albums = createMemo(() => albumsQuery.data && {
 		albums: albumsQuery.data.pages.flatMap((page) => page.albums),
 		total: albumsQuery.data.pages[0]?.total ?? 0,

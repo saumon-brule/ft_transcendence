@@ -9,7 +9,7 @@ import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 export default function Providers() {
 	const me = useMeProfileQuery();
 
-	return <div id="providers-page">
+	return <div id="providers-page" class="page">
 		<div class="providers-header">
 			<h1>My Providers</h1>
 			<Button onClick={() => summonNewProviderPopUp()}><Plus/>New provider</Button>

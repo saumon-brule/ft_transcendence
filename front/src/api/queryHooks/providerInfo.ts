@@ -39,16 +39,16 @@ export const useProviderInfoQuery = (providerUrl: () => string, providerUuid: ()
 
 export type ProviderInfo = Exclude<ReturnType<typeof useProviderInfoQuery>["data"], undefined>["body"];
 
-export const useProviderMusicsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string) => {
+export const useProviderMusicsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "") => {
 	const provider = createMemo(() => getProviderClient(providerUrl()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
-		queryKey: () => provider().keys.music.list(),
+		queryKey: () => provider().keys.music.list([search()]),
 		get enabled() { return providerUrl() !== ""; },
 		queryFn: async ({ pageParam }) => {
 			const res = await provider().client.music.list.query({
-				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT },
+				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined },
 			});
 			if (res.status !== 200) throw new Error(`Provider musics failed with status ${res.status}`);
 			return res.body;
@@ -58,11 +58,13 @@ export const useProviderMusicsInfiniteQuery = (providerUrl: () => string, provid
 			return loaded < lastPage.total ? loaded : undefined;
 		},
 		initialData: () => {
+			if (search()) return undefined;
 			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(provider().keys.info.all());
 			return all ? { pages: [all.body.music], pageParams: [0] } : undefined;
 		},
 		initialDataUpdatedAt: () => queryClient.getQueryState(provider().keys.info.all())?.dataUpdatedAt,
 		staleTime: 30_000,
+		keepPreviousData: true,
 		select: (data) => ({
 			...data,
 			pages: data.pages.map((page) => ({
@@ -73,16 +75,16 @@ export const useProviderMusicsInfiniteQuery = (providerUrl: () => string, provid
 	});
 };
 
-export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string) => {
+export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "") => {
 	const provider = createMemo(() => getProviderClient(providerUrl()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
-		queryKey: () => provider().keys.album.list(),
+		queryKey: () => provider().keys.album.list([search()]),
 		get enabled() { return providerUrl() !== ""; },
 		queryFn: async ({ pageParam }) => {
 			const res = await provider().client.album.list.query({
-				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT },
+				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined },
 			});
 			if (res.status !== 200) throw new Error(`Provider albums failed with status ${res.status}`);
 			return res.body;
@@ -92,11 +94,13 @@ export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, provid
 			return loaded < lastPage.total ? loaded : undefined;
 		},
 		initialData: () => {
+			if (search()) return undefined;
 			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(provider().keys.info.all());
 			return all ? { pages: [all.body.album], pageParams: [0] } : undefined;
 		},
 		initialDataUpdatedAt: () => queryClient.getQueryState(provider().keys.info.all())?.dataUpdatedAt,
 		staleTime: 30_000,
+		keepPreviousData: true,
 		select: (data) => ({
 			...data,
 			pages: data.pages.map((page) => ({
@@ -107,16 +111,16 @@ export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, provid
 	});
 };
 
-export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string) => {
+export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "") => {
 	const provider = createMemo(() => getProviderClient(providerUrl()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
-		queryKey: () => provider().keys.artist.list(),
+		queryKey: () => provider().keys.artist.list([search()]),
 		get enabled() { return providerUrl() !== ""; },
 		queryFn: async ({ pageParam }) => {
 			const res = await provider().client.artist.list.query({
-				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT },
+				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined },
 			});
 			if (res.status !== 200) throw new Error(`Provider artists failed with status ${res.status}`);
 			return res.body;
@@ -126,11 +130,13 @@ export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, provi
 			return loaded < lastPage.total ? loaded : undefined;
 		},
 		initialData: () => {
+			if (search()) return undefined;
 			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(provider().keys.info.all());
 			return all ? { pages: [all.body.artist], pageParams: [0] } : undefined;
 		},
 		initialDataUpdatedAt: () => queryClient.getQueryState(provider().keys.info.all())?.dataUpdatedAt,
 		staleTime: 30_000,
+		keepPreviousData: true,
 		select: (data) => ({
 			...data,
 			pages: data.pages.map((page) => ({
@@ -203,6 +209,7 @@ const providerSearchOptions = (providerUrl: string, providerUuid: string, search
 			if (res.status !== 200) throw new Error(`Provider search failed with status ${res.status}`);
 			return res;
 		},
+		keepPreviousData: true,
 		select: (response: Awaited<ReturnType<typeof provider.client.search.search.query>> & { status: 200 }) => ({
 			...response,
 			body: {
