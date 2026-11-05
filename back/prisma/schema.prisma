@@ -26,17 +26,17 @@ model User {
     updatedAt              DateTime? @updatedAt
     createdAt              DateTime? @default(now())
 
-    userRoles          UserRole[]
-    sessions           Session[]
-    tokens             Token[]
-    ownedProviders     Provider[]
-    providers          ProviderUser[]
+    userRoles              UserRole[]
+    sessions               Session[]
+    tokens                 Token[]
+    ownedProviders         Provider[]
+    providers              ProviderUser[]
     providerAccessRequests ProviderAccessRequest[]
-    playlists          UserPlaylist[]
-    ownedPlaylists     Playlist[]
-    currentlyListening Music?          @relation(fields: [currentlyListeningUUID], references: [uuid], onDelete: SetNull)
-    friendsRequests    FriendRequest[] @relation("Requester")
-    friendsReceive     FriendRequest[] @relation("Receiver")
+    playlists              UserPlaylist[]
+    ownedPlaylists         Playlist[]
+    currentlyListening     Music?                  @relation(fields: [currentlyListeningUUID], references: [uuid], onDelete: SetNull)
+    friendsRequests        FriendRequest[]         @relation("Requester")
+    friendsReceive         FriendRequest[]         @relation("Receiver")
 }
 
 enum FriendStatus {
@@ -145,9 +145,9 @@ model Provider {
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
-    users ProviderUser[]
+    users          ProviderUser[]
     accessRequests ProviderAccessRequest[]
-    owner User           @relation(fields: [ownerUUID], references: [uuid], onDelete: Cascade)
+    owner          User                    @relation(fields: [ownerUUID], references: [uuid], onDelete: Cascade)
 }
 
 model ProviderUser {
@@ -223,6 +223,8 @@ model PlaylistMusic {
 
     playlist Playlist @relation(fields: [playlistUUID], references: [uuid], onDelete: Cascade)
     music    Music    @relation(fields: [musicUUID], references: [uuid], onDelete: Cascade)
+
+    @@unique([playlistUUID, musicUUID])
 }
 
 model Music {

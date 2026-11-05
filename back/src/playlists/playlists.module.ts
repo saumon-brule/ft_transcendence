@@ -10,4 +10,4 @@ import { LoggingModule } from "../core/logging/logging.module";
 	controllers: [PlaylistsController],
 	exports: [PlaylistsService],
 })
-export class PlaylistsModule {}
+export class PlaylistsModule { }
