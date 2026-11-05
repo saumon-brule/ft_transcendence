@@ -1,11 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
+import { albumWhere, artistWhere, musicWhere } from "../core/catalog/catalog.filters";
 import { albumItemInclude, musicItemInclude, toAlbumItem, toArtistItem, toMusicItem } from "../core/catalog/catalog.mappers";
 
 interface SearchQuery {
 	query: string;
 	limit: number;
+	artist?: string;
+	album?: string;
+	dateBefore?: Date;
+	dateAfter?: Date;
 }
 
 interface Page {
@@ -41,9 +46,13 @@ const tokensOf = (value: string) => value.split(/[^\p{L}\p{N}]+/u).filter(Boolea
 export class SearchService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	private async rank(table: SearchTable, rawTerm: string, { limit, offset }: Page) {
+	async idsOf(rows: Promise<{ id: number }[]>) {
+		return (await rows).map((row) => row.id);
+	}
+
+	private async rank(table: SearchTable, rawTerm: string, { limit, offset }: Page, only?: number[]) {
 		const tokens = tokensOf(rawTerm);
-		if (tokens.length === 0) return { ids: [], total: 0 };
+		if (tokens.length === 0 || only?.length === 0) return { ids: [], total: 0 };
 
 		const exact = tokens.join(" ");
 		const fuzzy = FUZZY_DISTANCES.map(({ minLength, distance }, index, all) => ({
@@ -70,10 +79,13 @@ export class SearchService {
   		OR    "searchAlbum"   ||| $6::pdb.fuzzy(1, t, t)::pdb.boost(1)
 		*/
 
+		const restriction = only
+			? Prisma.sql` AND "id" = ANY(${only}::int[])`
+			: Prisma.empty;
 		const matches = Prisma.sql`(
 			SELECT "id", pdb.score("id") AS "score", max(pdb.score("id")) OVER () AS "best"
 			FROM ${from}
-			WHERE ${where}
+			WHERE (${where})${restriction}
 		) AS "matches"`;
 		const relevant = Prisma.sql`"score" >= "best" * ${Prisma.raw(String(MIN_RELATIVE_SCORE))}`;
 
@@ -98,21 +110,47 @@ export class SearchService {
 		term: string,
 		page: Page,
 		load: (ids: number[]) => Promise<T[]>,
+		only?: number[],
 	) {
-		const { ids, total } = await this.rank(table, term, page);
+		const { ids, total } = await this.rank(table, term, page, only);
 		if (ids.length === 0) return { rows: [] as T[], total };
 
 		const loaded = new Map((await load(ids)).map((row) => [row.id, row]));
 		return { rows: ids.flatMap((id) => loaded.get(id) ?? []), total };
 	}
 
-	async search({ query, limit }: SearchQuery) {
+	async search({ query, limit, artist, album, dateBefore, dateAfter }: SearchQuery) {
 		const page = { limit, offset: 0 };
+		const hasDate = dateBefore !== undefined || dateAfter !== undefined;
+
+		const musicWhereInput = musicWhere({ artist, album, dateBefore, dateAfter });
+		const albumWhereInput = albumWhere({ name: album, artist, dateBefore, dateAfter });
+		const artistWhereInput = artistWhere({ name: artist });
 
 		const [musics, artists, albums] = await Promise.all([
-			this.page("Music", query, page, (ids) => this.prisma.music.findMany({ where: { id: { in: ids } }, include: musicItemInclude })),
-			this.page("Artist", query, page, (ids) => this.prisma.artist.findMany({ where: { id: { in: ids } } })),
-			this.page("Album", query, page, (ids) => this.prisma.album.findMany({ where: { id: { in: ids } }, include: albumItemInclude })),
+			this.page(
+				"Music",
+				query,
+				page,
+				(ids) => this.prisma.music.findMany({ where: { id: { in: ids } }, include: musicItemInclude }),
+				musicWhereInput && await this.idsOf(this.prisma.music.findMany({ where: musicWhereInput, select: { id: true } })),
+			),
+			album !== undefined || hasDate
+				? { rows: [], total: 0 }
+				: this.page(
+					"Artist",
+					query,
+					page,
+					(ids) => this.prisma.artist.findMany({ where: { id: { in: ids } } }),
+					artistWhereInput && await this.idsOf(this.prisma.artist.findMany({ where: artistWhereInput, select: { id: true } })),
+				),
+			this.page(
+				"Album",
+				query,
+				page,
+				(ids) => this.prisma.album.findMany({ where: { id: { in: ids } }, include: albumItemInclude }),
+				albumWhereInput && await this.idsOf(this.prisma.album.findMany({ where: albumWhereInput, select: { id: true } })),
+			),
 		]);
 
 		return {
