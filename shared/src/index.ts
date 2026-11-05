@@ -32,7 +32,7 @@ export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
 
 
-export { type ProviderDataDto, type ProviderDataMusicDto, type ProviderDataAlbumDto, type ProviderDataArtistDto } from "./contracts/provider/info/schemas/info.schema";
+export { type ProviderInfoDto, type ProviderDataDto, type ProviderDataMusicDto, type ProviderDataAlbumDto, type ProviderDataArtistDto } from "./contracts/provider/info/schemas/info.schema";
 export { healthResponseSchema, healthUnavailableSchema, type HealthResponseDto, type HealthUnavailableDto } from "./schemas/common.schema";
 export { musicItemSchema, artistItemSchema, albumItemSchema } from "./contracts/provider/schemas/items.schema";
 

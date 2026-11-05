@@ -1,5 +1,5 @@
 import { initContract } from "@ts-rest/core";
-import { providerPublicInfoSchema, providerDataSchema } from "./schemas/info.schema";
+import { providerInfoSchema, providerDataSchema } from "./schemas/info.schema";
 import { healthResponseSchema, healthUnavailableSchema } from "../../../schemas/common.schema";
 
 const c = initContract();
@@ -8,7 +8,7 @@ export const infoContract = c.router({
 	info: {
 		method: "GET",
 		path: "/info",
-		responses: { 200: providerPublicInfoSchema },
+		responses: { 200: providerInfoSchema },
 	},
 	all: {
 		method: "GET",

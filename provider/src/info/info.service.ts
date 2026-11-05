@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../core/prisma/prisma.service";
+import { resolvePermissions } from "../core/auth/permissions";
 import { albumItemInclude, musicItemInclude, toAlbumItem, toArtistItem, toMusicItem } from "../core/catalog/catalog.mappers";
 
 const DB_TIMEOUT_MS = 3000;
@@ -19,6 +20,42 @@ export class InfoService {
 		} catch {
 			return false;
 		}
+	}
+
+	async getWithMember(userUuid: string) {
+		const [info, { ownerUuid }, member] = await Promise.all([
+			this.get(),
+			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 }, select: { ownerUuid: true } }),
+			this.prisma.member.findUnique({
+				where: { uuid: userUuid },
+				include: { roles: { include: { role: { include: { permissions: true } } }, orderBy: { role: { name: "asc" } } } },
+			}),
+		]);
+
+		const isOwner = ownerUuid === userUuid;
+		if (!member) {
+			return { ...info, member: { status: "none" as const, isOwner, memberSince: null, revokedAt: null, roles: [], permissions: [] } };
+		}
+
+		const revoked = member.revokedAt !== null;
+		const granted = new Set(member.roles.flatMap((link) => link.role.permissions.map((row) => row.permission)));
+		return {
+			...info,
+			member: {
+				status: revoked
+					? "revoked" as const
+					: "active" as const,
+				isOwner,
+				memberSince: member.createdAt,
+				revokedAt: member.revokedAt,
+				roles: revoked
+					? []
+					: member.roles.map((link) => ({ uuid: link.role.uuid, name: link.role.name })),
+				permissions: revoked
+					? []
+					: resolvePermissions(isOwner, granted),
+			},
+		};
 	}
 
 	async get() {
