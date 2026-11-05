@@ -14,6 +14,7 @@ import Tabs from "~/components/ui/Tabs/Tabs";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import ProviderTabAlbums from "./ProviderTabAlbums";
 import ProviderTabArtists from "./ProviderTabArtists";
+import OfflineProvider from "~/components/ui/NoResult/OfflineProvider";
 
 const TABS = ["All", "Musics", "Albums", "Artists"] as const;
 type Tab = typeof TABS[number];
@@ -23,9 +24,6 @@ export default function Provider() {
 	const params = useParams<{ uuid: string }>();
 	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { uuid: params.uuid } });
 	const provider = useProviderInfoQuery(() => providerBack.data?.body.address ?? "", () => params.uuid);
-	const data = createMemo(() => provider.data && providerBack.data
-		? { info: provider.data.body, back: providerBack.data.body }
-		: undefined);
 
 	createEffect(() => {
 		if (providerBack.isError) {
@@ -37,44 +35,47 @@ export default function Provider() {
 	const [tab, setTab] = useTabParam<Tab>(TABS, "All");
 
 	return <div class="page" id="provider">
-		<Show when={data()} keyed>{(data) => <>
-			<ProviderHeader provider={data.info} providerBack={data.back} />
-			<Tabs tabs={TABS} value={tab()} onChange={setTab} />
-			<Switch>
-				<Match when={tab() === "All"}>
-					<Show when={data.info.music.total > 0}>
-						<section class="musics">
-							<h2>Musics</h2>
-							<MusicSection music={{ musics: data.info.music.musics.slice(0, 6), total: data.info.music.total }}/>
-							<A href={"?tab=Musics"} class="white-variant see-more">See more</A>
-						</section>
-					</Show>
-					<Show when={data.info.album.total > 0}>
-						<section class="albums">
-							<h2>Albums</h2>
-							<AlbumSection album={{ albums: data.info.album.albums.slice(0, 6), total: data.info.album.total }}/>
-							<A href={"?tab=Albums"} class="white-variant see-more">See more</A>
-						</section>
-					</Show>
-					<Show when={data.info.artist.total > 0}>
-						<section class="artists">
-							<h2>Artists</h2>
-							<ArtistSection artist={{ artists: data.info.artist.artists.slice(0, 6), total: data.info.artist.total }}/>
-							<A href={"?tab=Artists"} class="white-variant see-more">See more</A>
-						</section>
-					</Show>
-					<NoResult show={data.info.music.total + data.info.album.total + data.info.artist.total === 0} />
-				</Match>
-				<Match when={tab() === "Musics"}>
-					<ProviderTabMusics providerUrl={data.back.address} providerUuid={params.uuid} />
-				</Match>
-				<Match when={tab() === "Albums"}>
-					<ProviderTabAlbums providerUrl={data.back.address} providerUuid={params.uuid} />
-				</Match>
-				<Match when={tab() === "Artists"}>
-					<ProviderTabArtists providerUrl={data.back.address} providerUuid={params.uuid} />
-				</Match>
-			</Switch>
+		<Show when={providerBack.data?.body} keyed>{(backData) => <>
+			<ProviderHeader provider={provider.data?.body} providerBack={backData} />
+			<OfflineProvider show={provider.isError} />
+			<Show when={provider.data?.body} keyed>{(providerInfo) => <>
+				<Tabs tabs={TABS} value={tab()} onChange={setTab} />
+				<Switch>
+					<Match when={tab() === "All"}>
+						<Show when={providerInfo.music.total > 0}>
+							<section class="musics">
+								<h2>Musics</h2>
+								<MusicSection music={{ musics: providerInfo.music.musics.slice(0, 6), total: providerInfo.music.total }}/>
+								<A href={"?tab=Musics"} class="white-variant see-more">See more</A>
+							</section>
+						</Show>
+						<Show when={providerInfo.album.total > 0}>
+							<section class="albums">
+								<h2>Albums</h2>
+								<AlbumSection album={{ albums: providerInfo.album.albums.slice(0, 6), total: providerInfo.album.total }}/>
+								<A href={"?tab=Albums"} class="white-variant see-more">See more</A>
+							</section>
+						</Show>
+						<Show when={providerInfo.artist.total > 0}>
+							<section class="artists">
+								<h2>Artists</h2>
+								<ArtistSection artist={{ artists: providerInfo.artist.artists.slice(0, 6), total: providerInfo.artist.total }}/>
+								<A href={"?tab=Artists"} class="white-variant see-more">See more</A>
+							</section>
+						</Show>
+						<NoResult show={providerInfo.music.total + providerInfo.album.total + providerInfo.artist.total === 0} />
+					</Match>
+					<Match when={tab() === "Musics"}>
+						<ProviderTabMusics providerUrl={backData.address} providerUuid={params.uuid} />
+					</Match>
+					<Match when={tab() === "Albums"}>
+						<ProviderTabAlbums providerUrl={backData.address} providerUuid={params.uuid} />
+					</Match>
+					<Match when={tab() === "Artists"}>
+						<ProviderTabArtists providerUrl={backData.address} providerUuid={params.uuid} />
+					</Match>
+				</Switch>
+			</>}</Show>
 		</>}</Show>
 	</div>;
 }

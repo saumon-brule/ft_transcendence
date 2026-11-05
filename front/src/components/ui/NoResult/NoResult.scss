@@ -4,6 +4,7 @@
 	display: flex;
 	justify-content: center;
 	position: relative;
+	flex-direction: column;
 
 	.no-results-text {
 		display: flex;
@@ -12,6 +13,15 @@
 		font-size: 64px;
 		font-weight: 900;
 		letter-spacing: -1.5px;
+	}
+
+	.no-results-subtext {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 24px;
+		font-weight: 600;
+		margin-top: 8px;
 	}
 
 	.af-sad {
