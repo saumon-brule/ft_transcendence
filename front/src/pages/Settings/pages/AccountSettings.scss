@@ -93,6 +93,12 @@
 				}
 			}
 		}
+
+		.settings-links {
+			display: flex;
+			flex-direction: row;
+			gap: 1rem;
+		}
 	}
 
 	.setting-field:not(:last-of-type) {
