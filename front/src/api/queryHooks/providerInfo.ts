@@ -40,7 +40,7 @@ export const useProviderInfoQuery = (providerUrl: () => string, providerUuid: ()
 export type ProviderInfo = Exclude<ReturnType<typeof useProviderInfoQuery>["data"], undefined>["body"];
 
 export const useProviderMusicsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "") => {
-	const provider = createMemo(() => getProviderClient(providerUrl()));
+	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
@@ -76,7 +76,7 @@ export const useProviderMusicsInfiniteQuery = (providerUrl: () => string, provid
 };
 
 export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "") => {
-	const provider = createMemo(() => getProviderClient(providerUrl()));
+	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
@@ -112,7 +112,7 @@ export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, provid
 };
 
 export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "") => {
-	const provider = createMemo(() => getProviderClient(providerUrl()));
+	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
