@@ -65,8 +65,8 @@ export default function AccountSettings() {
 
 	function unlinkIntra(e: MouseEvent) {
 		e.preventDefault();
-		if (profileQuery.data && profileQuery.data.body.intraId !== null) {
-			summonErrorToast(() => t("pages.settings.account.intraLink.unsetPassword"));
+		if (profileQuery.data && !profileQuery.data.body.hasPassword) {
+			summonErrorToast(() => t("pages.settings.account.connexions.unsetPassword"));
 			return;
 		}
 		unlinkIntraMutation.mutate({}, {
@@ -79,7 +79,7 @@ export default function AccountSettings() {
 			onError(e) {
 				if (e.status === 403) {
 					if (e.body.code === "INTRA_ONLY_ACCOUNT") {
-						summonErrorToast(() => t("pages.settings.account.intraLink.unsetPassword"));
+						summonErrorToast(() => t("pages.settings.account.connexions.unsetPassword"));
 						return;
 					}
 				}
@@ -131,10 +131,17 @@ export default function AccountSettings() {
 				</div>
 				<div class="setting-field">
 					<div class="setting-field-title">
-						<h3 class="intra-link-title"><Logo42/><span>{t("pages.settings.account.intraLink.title")}</span></h3>
-						{user().intraId === null
-							? <IntraButton unstyled variant="link" size="sm" linkType="link">link</IntraButton>
-							: <Button variant="link" disabled={unlinkIntraMutation.isPending} class="unlink-intra-button" size="sm" onClick={unlinkIntra}>unlink</Button>}
+						<h3 class="intra-link-title"><span>{t("pages.settings.account.connexions.title")}</span></h3>
+					</div>
+					<div class="setting-field-value">
+						<div class="connexion">
+							<div>
+								<Logo42 /><span class="connexion-name">42's Intra</span>
+							</div>
+							{user().intraId === null
+								? <IntraButton unstyled size="sm" linkType="link">link</IntraButton>
+								: <Button variant="danger" disabled={unlinkIntraMutation.isPending} class="unlink-intra-button" size="sm" onClick={unlinkIntra}>unlink</Button>}
+						</div>
 					</div>
 				</div>
 			</div>}
