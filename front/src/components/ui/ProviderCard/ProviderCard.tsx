@@ -35,8 +35,10 @@ export default function ProviderCard(props: ProviderCardProps) {
 	createEffect(() => {
 		if (health.isSuccess) {
 			setStatus("online");
-		} else {
+		} else if (health.isError) {
 			setStatus("offline");
+		} else {
+			setStatus("pinging");
 		}
 	});
 
