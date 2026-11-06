@@ -15,7 +15,6 @@ import IntraButton from "~/components/common/IntraButton/IntraButton";
 import Logo42 from "~/components/graphics/icons/Logo42";
 
 import "./AccountSettings.scss";
-import { A } from "@solidjs/router";
 
 type SelectChangeHandler = JSX.EventHandler<HTMLSelectElement, Event>;
 type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
