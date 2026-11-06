@@ -111,6 +111,10 @@ export default {
 					english: "English",
 					french: "Français",
 				},
+				connexions: {
+					title: "Connexions",
+					unsetPassword: "Vous devez définir un mot de passe avant de supprimer votre connexion via l'intra",
+				},
 			},
 			profile: {
 				title: "Profile",

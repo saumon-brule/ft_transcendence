@@ -143,6 +143,7 @@ export const authContract = c.router(
 		unlink42: {
 			method: "DELETE",
 			path: "/42/link",
+			body: null,
 			responses: {
 				204: null,
 				403: serverError403Schema,
