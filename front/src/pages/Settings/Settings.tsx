@@ -18,6 +18,13 @@ export default function Settings(props: RouteSectionProps) {
 					<li>
 						<A href="/settings/profile">{t("pages.settings.profileLink") || "Profile"}</A>
 					</li>
+					<hr/>
+					<li>
+						<A class="external-link" href="/privacy-policy">Privacy Policy</A>
+					</li>
+					<li>
+						<A class="external-link" href="/terms-of-service">Terms of Service</A>
+					</li>
 				</ul>
 			</nav>
 			{props.children}

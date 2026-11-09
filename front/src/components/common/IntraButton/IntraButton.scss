@@ -9,7 +9,14 @@
 	display: flex;
 	justify-content: center;
 	gap: 0.5rem;
-	height: 2.875rem;
+
+	&.btn--sm {
+		height: 1.875rem;
+	}
+
+	&.btn--md {
+		height: 2.875rem;
+	}
 
 	&:disabled {
 		background-color: #03030350;
