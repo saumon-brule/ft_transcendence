@@ -1,101 +1,53 @@
-.profile-settings {
-    width: 100%;
-    max-width: 720px;
-    height: 100%;
+.appearance-settings {
+	width: 100%;
+	max-width: 720px;
+	height: 100%;
 
-    h1 {
-        font-size: 2.25rem;
-        font-weight: 600;
-        line-height: 1.25;
-    }
+	h1 {
+		font-size: 2.25rem;
+		font-weight: 600;
+		line-height: 1.25;
+	}
 
-    .profile-settings-content {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        padding: 20px;
-        padding-top: 40px;
-        padding-left: 40px;
+	.setting-field {
+		width: 100%;
+		padding: 2rem 0 2rem 2px;
+		.setting-field-title {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 0.2rem;
 
-        .profile-picture {
-            position: relative;
-            width: 150px;
-            min-width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin-right: 20px;
-            background-size: cover;
-            background-position: center;
-            overflow: hidden;
+			h3 {
+				font-size: 1rem;
+				width: 100%;
+				font-weight: 600;
 
-            label {
-                position: absolute;
-                inset: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgba(0, 0, 0, 0.7);
-                font-size: 1.2rem;
-                font-weight: 600;
-                cursor: pointer;
-                opacity: 0;
-                transition: opacity 0.2s ease;
-            }
-            &:hover label {
-                opacity: 1;
-            }
+				& > .secondary-info {
+					margin-left: 0.5rem;
+					color: var(--text-secondary);
+				}
+			}
 
-            input[type="file"] {
-                display: none;
-            }
-        }
+			button {
+				padding: 0;
+				flex-shrink: 0;
+			}
+		}
 
-        .header-info {
-            .username {
-                display: flex;
-                gap: 1rem;
-                h2 {
-                    font-size: 28px;
-                    margin: 0;
-                }
-            }
+		.setting-field-value {
 
-            .user-stats {
-                display: flex;
-                flex-direction: row;
-                gap: 8px;
-                margin-top: 6px;
-                align-items: center;
-                color: var(--text-secondary);
+			& > div {
+				padding: 0.25rem;
 
-                .stat {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    font-size: 14px;
-                }
+				.toggle {
+					width: 100%;
+					font-weight: 400;
+				}
+			}
+		}
+	}
 
-                .separator {
-                    width: 3px;
-                    height: 3px;
-                    background-color: var(--text-secondary);
-                    border-radius: 50%;
-                }
-            }
-
-            .listening {
-                display: flex;
-                align-items: center;
-                background-color: var(--background-card);
-                font-size: 14px;
-                color: var(--text-primary);
-                width: fit-content;
-                margin-top: 10px;
-                gap: 8px;
-                padding: 8px 12px;
-                border-radius: 32px;
-                border: 1px solid var(--background-accent-hover);
-            }
-        }
-    }
+	.setting-field:not(:last-of-type) {
+		border-bottom: 1px solid var(--background-overlay);
+	}
 }

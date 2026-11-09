@@ -57,8 +57,9 @@ export default {
 			},
 		},
 		settings: {
-			accountLink: "Compte",
 			profileLink: "Profil",
+			accountLink: "Compte",
+			appearanceLink: "Apparence",
 			edit: "modifier",
 			set: "définir",
 			confirm: "confirmer",
@@ -117,6 +118,14 @@ export default {
 				profilePictureUpdated: "Votre photo de profile a bien été modifiée",
 				profilePictureUpdateToolarge: "La taille max d'une photo de profile est de 10Mo",
 				profilePictureUpdateFail: "Nous n'avons pas pu modifier votre photo de profile",
+			},
+			appearance: {
+				title: "Apparence",
+				theme: {
+					title: "Theme",
+					darkMode: "Mode sombre",
+					useSystem: "Suivre le thème de votre navigateur",
+				},
 			},
 		},
 	},
