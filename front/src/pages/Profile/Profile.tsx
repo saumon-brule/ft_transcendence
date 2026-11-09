@@ -9,11 +9,11 @@ import ProviderSection from "./ProviderSection";
 import "./Profile.scss";
 import { useUserProfileQuery } from "~/api/queryHooks/userProfile";
 
+
 export default function Profile() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string }>();
 	const profile = useUserProfileQuery(() => params.uuid);
-
 
 	createEffect(() => {
 		if (profile.isError) {

@@ -21,16 +21,28 @@
 				scroll-snap-align: center;
 
 				a {
-					&:is(.active, :hover) {
-						color: var(--link-hover);
-					}
-
 					padding: 0.5rem;
 					display: inline-block;
 					font-weight: 600;
-					color: var(--text-main);
-					transition: color 0.1s linear;
+
+					&:not(.external-link) {
+						color: var(--text-main);
+						transition: color 0.1s linear;
+
+						&:is(.active, :hover) {
+							color: var(--link-hover);
+						}
+					}
 				}
+
+			}
+
+			hr {
+				margin: .5rem;
+				outline: none;
+				border: none;
+				height: 1px;
+				background-color: var(--text-secondary);
 			}
 		}
 	}
