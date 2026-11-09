@@ -15,6 +15,15 @@ export const playlistsContract = c.router(
 				201: createdPlaylistSchema,
 			},
 		},
+		deletePlaylist: {
+			method: "DELETE",
+			path: "/:uuid",
+			pathParams: uuidParamSchema,
+			responses: {
+				204: null,
+				404: commonError404Schema,
+			},
+		},
 		addMusicToPlaylist: {
 			method: "POST",
 			path: "/:uuid/musics",
@@ -29,15 +38,6 @@ export const playlistsContract = c.router(
 			method: "DELETE",
 			path: "/:uuid/musics/:musicUUID",
 			pathParams: musicPathParamsSchema,
-			responses: {
-				204: null,
-				404: commonError404Schema,
-			},
-		},
-		deletePlaylist: {
-			method: "DELETE",
-			path: "/:uuid",
-			pathParams: uuidParamSchema,
 			responses: {
 				204: null,
 				404: commonError404Schema,

@@ -122,10 +122,10 @@ export class PlaylistsController {
 	public addMusicToPlaylist(@CurrentUser() authUser: AuthUser) {
 		return tsRestHandler(
 			playlistsContract.addMusicToPlaylist, async ({ params, body }) => {
-				await this.assertPlaylistOwner(params.uuid, authUser.uuid);
 				await this.playlistsService.addMusicToPlaylist(
 					params.uuid,
 					body.musicUUID,
+					authUser.uuid,
 				);
 
 				return { status: 204, body: null };
@@ -138,10 +138,10 @@ export class PlaylistsController {
 	public removeMusicFromPlaylist(@CurrentUser() authUser: AuthUser) {
 		return tsRestHandler(
 			playlistsContract.removeMusicFromPlaylist, async ({ params }) => {
-				await this.assertPlaylistOwner(params.uuid, authUser.uuid);
 				await this.playlistsService.removeMusicFromPlaylist(
 					params.uuid,
 					params.musicUUID,
+					authUser.uuid,
 				);
 
 				return { status: 204, body: null };

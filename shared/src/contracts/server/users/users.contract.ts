@@ -3,6 +3,7 @@ import {
 	addRoleUserSchema,
 	DeleteRoleParamSchema,
 	meSchema,
+	ShortPlaylistSchema,
 	updateMeSchema,
 	userSchema,
 } from "./schemas/user.schema";
@@ -76,6 +77,19 @@ export const usersContract = c.router(
 			method: "DELETE",
 			path: "/:uuid/roles/:roleId",
 			pathParams: DeleteRoleParamSchema,
+			responses: { 204: null },
+		},
+		followPlaylist: {
+			method: "POST",
+			path: "/me/playlists/:playlistUUID",
+			pathParams: ShortPlaylistSchema,
+			body: c.noBody(),
+			responses: { 204: null },
+		},
+		unfollowPlaylist: {
+			method: "DELETE",
+			path: "/me/playlists/:playlistUUID",
+			pathParams: ShortPlaylistSchema,
 			responses: { 204: null },
 		},
 	},

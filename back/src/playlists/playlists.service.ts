@@ -1,19 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../core/prisma/prisma.service";
-
-// model Playlist {
-//     id        Int      @id @default(autoincrement())
-//     uuid      String   @unique @default(uuid())
-//     name      String
-//     ownerUUID String
-//     private   Boolean  @default(false)
-//     createdAt DateTime @default(now())
-//     updatedAt DateTime @updatedAt
-
-//     userPlaylists UserPlaylist[]
-//     musics        PlaylistMusic[]
-//     owner         User            @relation(fields: [ownerUUID], references: [uuid])
-// }
+import { AppForbiddenException } from "../core/error/forbidden";
 
 @Injectable()
 export class PlaylistsService {
@@ -40,8 +27,18 @@ export class PlaylistsService {
 		});
 	}
 
-	public async addMusicToPlaylist(uuid: string, musicUUID: string) {
-		await this.getPlaylistByUUID(uuid);
+	private async assertPlaylistOwner(uuid: string, ownerUUID: string) {
+		const playlist = await this.getPlaylistByUUID(uuid);
+		if (playlist.owner.uuid !== ownerUUID) {
+			throw new AppForbiddenException(
+				"FORBIDDEN",
+				"You are not the owner of this playlist",
+			);
+		}
+	}
+
+	public async addMusicToPlaylist(uuid: string, musicUUID: string, ownerUUID: string) {
+		await this.assertPlaylistOwner(uuid, ownerUUID);
 		const music = await this.prisma.music.findUnique({
 			where: { uuid: musicUUID },
 		});
@@ -59,8 +56,8 @@ export class PlaylistsService {
 		});
 	}
 
-	public async removeMusicFromPlaylist(uuid: string, musicUUID: string) {
-		await this.getPlaylistByUUID(uuid);
+	public async removeMusicFromPlaylist(uuid: string, musicUUID: string, ownerUUID: string) {
+		await this.assertPlaylistOwner(uuid, ownerUUID);
 		const result = await this.prisma.playlistMusic.deleteMany({
 			where: { playlistUUID: uuid, musicUUID },
 		});
@@ -75,8 +72,4 @@ export class PlaylistsService {
 		});
 		if (result.count === 0) throw new NotFoundException("Playlist Not Found");
 	}
-
-	// public async setPlaylistCover(uuid: string, coverUUID: string) {
-
-	// }
 }

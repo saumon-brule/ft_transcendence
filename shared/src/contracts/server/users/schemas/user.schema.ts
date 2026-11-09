@@ -92,3 +92,7 @@ export const DeleteRoleParamSchema = z.object({
 	uuid: z.string().uuid(),
 	roleId: z.string().transform(Number),
 });
+
+export const ShortPlaylistSchema = z.object({
+	playlistUUID: z.string().uuid(),
+});
