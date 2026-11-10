@@ -304,4 +304,21 @@ export class UsersService {
 			throw new NotFoundException("Playlist not found");
 		}
 	}
+
+	public async searchUsers(userUUID: string, username: string) {
+		return this.prisma.user.findMany({
+			where: {
+				uuid: { not: userUUID },
+				username: {
+					contains: username,
+					mode: "insensitive",
+				},
+			},
+			select: {
+				uuid: true,
+				username: true,
+			},
+			take: 25,
+		});
+	}
 }

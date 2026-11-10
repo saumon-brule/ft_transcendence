@@ -111,5 +111,4 @@ export class FriendsService {
 			data: { status: status },
 		});
 	}
-
 }

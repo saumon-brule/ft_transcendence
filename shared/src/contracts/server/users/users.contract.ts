@@ -3,6 +3,8 @@ import {
 	addRoleUserSchema,
 	DeleteRoleParamSchema,
 	meSchema,
+	searchUsersQuerySchema,
+	shortUserSchema,
 	ShortPlaylistSchema,
 	updateMeSchema,
 	userSchema,
@@ -29,6 +31,12 @@ export const usersContract = c.router(
 			path: "/me",
 			body: updateMeSchema,
 			responses: { 200: meSchema },
+		},
+		searchUsers: {
+			method: "GET",
+			path: "/search",
+			query: searchUsersQuerySchema,
+			responses: { 200: z.array(shortUserSchema) },
 		},
 		getUser: {
 			method: "GET",
