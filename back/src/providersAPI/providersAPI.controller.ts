@@ -49,4 +49,13 @@ export class ProviderApiController {
 			body: await this.accessRequests.decide(provider.uuid, params.userUuid, body.decision),
 		}));
 	}
+
+	@UseGuards(ProviderApiKeyGuard)
+	@TsRestHandler(serverContract.providersAPI.revokeMember)
+	public revokeMember(@CurrentProvider() provider: AuthenticatedProvider) {
+		return tsRestHandler(serverContract.providersAPI.revokeMember, async ({ params }) => {
+			await this.accessRequests.revoke(provider, params.userUuid);
+			return { status: 204 as const, body: null };
+		});
+	}
 }

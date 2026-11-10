@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
+import { ServerClientService } from "../core/server/server-client.service";
 import type { MemberContext } from "../core/auth/auth.types";
 import { AppForbiddenException } from "../core/error/forbidden";
 
@@ -25,7 +26,10 @@ interface ListQuery {
 
 @Injectable()
 export class MemberService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly server: ServerClientService,
+	) {}
 
 	me(member: MemberContext) {
 		return {
@@ -68,6 +72,8 @@ export class MemberService {
 			throw new AppForbiddenException("FORBIDDEN", "The owner cannot be revoked");
 		}
 		if (member.revokedAt) return;
+
+		await this.server.revokeMember(uuid);
 
 		await this.prisma.$transaction([
 			this.prisma.memberRole.deleteMany({ where: { memberUuid: uuid } }),
