@@ -36,6 +36,8 @@ const AudioManagerContext = createContext<AudioManager>();
 const volumeItem = new LocalStorageItem<number>("volume", () => 1);
 const mutedItem = new LocalStorageItem<boolean>("muted", () => false);
 
+const favicon: HTMLLinkElement | null = document.querySelector("link[rel='icon']");
+
 export const AudioPlayerProvider: ParentComponent = (props) => {
 	const audio = new Audio();
 	const trackManager = useTrackManager();
@@ -167,6 +169,21 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	// set muted in localStorage (reacts to muted only)
 	createEffect(() => {
 		mutedItem.set(muted());
+	});
+
+	createEffect(() => {
+		if (!favicon) return;
+
+		if (isPlaying()) {
+			favicon.href = "/images/icons/logo-favicon-pink.svg";
+		} else {
+			favicon.href = "/images/icons/logo-favicon-white.svg";
+		}
+	});
+
+	onCleanup(() => {
+		if (!favicon) return;
+		favicon.href = "/images/icons/logo-favicon-pink.svg";
 	});
 
 	const audioManager = {
