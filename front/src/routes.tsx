@@ -28,6 +28,7 @@ import Friends from "./pages/Friends";
 import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
 import TermsOfService from "./pages/Legal/TermsOfService";
 import Search from "./pages/Search";
+import NotFound from "./pages/NotFound/NotFound";
 
 export const AppRouter = () => {
 	return <Router >
@@ -61,6 +62,7 @@ export const AppRouter = () => {
 						<Route path="/provider/:uuid" component={Provider} />
 						<Route path="/provider/:uuid/artist/:artistUUID" component={ProviderArtist} />
 						<Route path="/provider/:uuid/album/:albumUUID" component={ProviderAlbum} />
+						<Route path="*" component={NotFound} />
 					</Route>
 					<SettingsRoutes/>
 				</Route>
