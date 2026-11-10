@@ -45,6 +45,17 @@
 	section {
 		padding: 10px;
 
+		.section-heading {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 8px;
+
+			a {
+				font-size: 14px;
+			}
+		}
+
 		h2 {
 			margin-bottom: 8px;
 		}
