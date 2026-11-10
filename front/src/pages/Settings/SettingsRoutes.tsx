@@ -6,7 +6,7 @@ import AppearanceSettings from "./pages/AppearanceSettings";
 
 export default function SettingsRoutes<S extends string, T = unknown>(props: Omit<RouteProps<S, T>, "path" | "component">) {
 	return <Route path="/settings" component={Settings} {...props} >
-		<Route path="/" component={() => <Navigate href={"/settings/account"}/>} />
+		<Route path="/" component={() => <Navigate href={"/settings/profile"}/>} />
 		<Route path="/account" component={AccountSettings} />
 		<Route path="/profile" component={ProfileSettings} />
 		<Route path="/appearance" component={AppearanceSettings} />

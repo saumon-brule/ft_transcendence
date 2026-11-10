@@ -11,6 +11,7 @@ import { OverlayControls } from "~/components/ui/Overlay";
 import { summonUsernameEditPopUp } from "./editionPopUps/usernamePopUp";
 import MusicBars from "~/components/graphics/icons/MusicBars";
 import { MAX_SIZE } from "@flex/shared";
+import { X } from "lucide-solid";
 
 type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;
 
@@ -70,11 +71,14 @@ export default function ProfileSettings() {
 		<Show when={profileQuery.data?.body} keyed>
 			{(user) => <div class="profile-settings-content">
 				{/* <img src={user().avatarUrl} alt="Profile picture" />*/}
-				<div class="profile-picture" style={{ "background-image": `url(${user.avatarUrl}` }}>
-					<label for="avatar-upload">
-						<span>Change</span>
-					</label>
-					<input type="file" id="avatar-upload" accept="image/*" onChange={updatePicture} />
+				<div class="profile-picture-container">
+					<div class="profile-picture" style={{ "background-image": `url(${user.avatarUrl}` }}>
+						<label for="avatar-upload">
+							<span>Change</span>
+						</label>
+						<input type="file" id="avatar-upload" accept="image/*" onChange={updatePicture} />
+					</div>
+					<button type="button" onClick={() => {}} class="remove-avatar-button"><X/></button>
 				</div>
 				<div class="header-info">
 					<div class="username">
