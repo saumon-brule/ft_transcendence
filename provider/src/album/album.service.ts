@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { findArtistUuids } from "../core/catalog/catalog.lookups";
-import { albumWhere, type AlbumFilters } from "../core/catalog/catalog.filters";
+import type { AlbumFilters } from "../core/catalog/catalog.filters";
 import { albumDetailInclude, albumItemInclude, toAlbumDetail, toAlbumItem } from "../core/catalog/catalog.mappers";
 import { MediaService } from "../media/media.service";
 import { SearchService } from "../search/search.service";
@@ -30,28 +30,10 @@ export class AlbumService {
 	) {}
 
 	async list({ limit, offset, search, ...filters }: ListQuery) {
-		const where = albumWhere(filters);
-
-		if (search) {
-			const only = where && await this.search.idsOf(this.prisma.album.findMany({ where, select: { id: true } }));
-			const { rows, total } = await this.search.page("Album", search, { limit, offset }, (ids) => this.prisma.album.findMany({
-				include: albumItemInclude,
-				where: { id: { in: ids } },
-			}), only);
-			return { albums: rows.map(toAlbumItem), total };
-		}
-
-		const [rows, total] = await this.prisma.$transaction([
-			this.prisma.album.findMany({
-				where,
-				include: albumItemInclude,
-				orderBy: [{ name: "asc" }, { id: "asc" }],
-				take: limit,
-				skip: offset,
-			}),
-			this.prisma.album.count({ where }),
-		]);
-
+		const { rows, total } = await this.search.page("Album", { search, filters, limit, offset }, (ids) => this.prisma.album.findMany({
+			where: { id: { in: ids } },
+			include: albumItemInclude,
+		}));
 		return { albums: rows.map(toAlbumItem), total };
 	}
 

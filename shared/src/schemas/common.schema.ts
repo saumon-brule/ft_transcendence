@@ -28,12 +28,16 @@ export const listQuerySchema = paginationQuerySchema.extend({
 const filterTextSchema = z.string().trim().min(1).
 	max(100).
 	optional();
+const filterUuidSchema = z.string().uuid().
+	optional();
 const filterDateSchema = z.coerce.date().optional();
 
 export const musicListQuerySchema = listQuerySchema.extend({
 	name: filterTextSchema,
 	artist: filterTextSchema,
 	album: filterTextSchema,
+	artistUuid: filterUuidSchema,
+	albumUuid: filterUuidSchema,
 	dateBefore: filterDateSchema,
 	dateAfter: filterDateSchema,
 });
@@ -41,6 +45,7 @@ export const musicListQuerySchema = listQuerySchema.extend({
 export const albumListQuerySchema = listQuerySchema.extend({
 	name: filterTextSchema,
 	artist: filterTextSchema,
+	artistUuid: filterUuidSchema,
 	dateBefore: filterDateSchema,
 	dateAfter: filterDateSchema,
 });
