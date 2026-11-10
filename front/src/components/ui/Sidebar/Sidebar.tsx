@@ -14,7 +14,7 @@ export default function Sidebar() {
 	const [showAllPlaylists, setShowAllPlaylists] = createSignal(false);
 	const [showAllProviders, setShowAllProviders] = createSignal(false);
 
-	return <Show when={profileQuery.data?.body} keyed>{(profile) => <div id="app-sidebar">
+	return <div id="app-sidebar">
 		<section>
 			<div class="link-container">
 				<A class="white-variant icon-link" href="/home" end><Home/> Home</A>
@@ -54,8 +54,7 @@ export default function Sidebar() {
 					</Show>
 				</div>
 				<div class="list providers-container">
-					<For each={showAllProviders() ? providers() : providers().slice(0, 4)}>{(provider) =>
-						<ProviderCard provider={provider} mine={false} small={true}/>
+					<For each={showAllProviders() ? providers() : providers().slice(0, 4)}>{(provider) => <ProviderCard provider={provider} mine={false} small={true}/>
 					}</For>
 				</div>
 			</section>
@@ -64,5 +63,5 @@ export default function Sidebar() {
 			<A class="external-link" href="/privacy-policy">Privacy Policy</A>
 			<A class="external-link" href="/terms-of-service">Terms of Service</A>
 		</section>
-	</div>}</Show>;
+	</div>;
 }
