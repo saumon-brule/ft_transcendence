@@ -55,8 +55,9 @@ export default {
 			},
 		},
 		settings: {
-			accountLink: "Account",
 			profileLink: "Profile",
+			accountLink: "Account",
+			appearanceLink: "Appearance",
 			edit: "edit",
 			set: "set",
 			confirm: "confirm",
@@ -119,6 +120,14 @@ export default {
 				profilePictureUpdated: "Your profile picture was successfully updated",
 				profilePictureUpdateToolarge: "Max profile picture size is 10MB",
 				profilePictureUpdateFail: "We coulnd't update your profile picture",
+			},
+			appearance: {
+				title: "Appearance",
+				theme: {
+					title: "Theme",
+					darkMode: "Dark mode",
+					useSystem: "Use browser theme",
+				},
 			},
 		},
 	},
