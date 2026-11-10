@@ -21,6 +21,13 @@ export default function Settings(props: RouteSectionProps) {
 					<li>
 						<A href="/settings/appearance">{t("pages.settings.appearanceLink")}</A>
 					</li>
+					<hr/>
+					<li>
+						<A class="external-link" href="/privacy-policy">Privacy Policy</A>
+					</li>
+					<li>
+						<A class="external-link" href="/terms-of-service">Terms of Service</A>
+					</li>
 				</ul>
 			</nav>
 			{props.children}

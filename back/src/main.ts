@@ -8,11 +8,16 @@ import { TsRestValidationFilter } from "./core/filters/ts-rest-validation.filter
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { env } from "./core/env";
 import { customSwaggerJs } from "./swagger.dev";
+import { AVATAR_DIR, COVER_DIR } from "./core/utils/constants";
+import { mkdir } from "node:fs/promises";
 
 async function bootstrap() {
+	await Promise.all([AVATAR_DIR, COVER_DIR].map((dir) => mkdir(dir, { recursive: true })));
+
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-	app.set("trust proxy", 1);
+	app.enableShutdownHooks();
+	app.set("trust proxy", env.TRUST_PROXY);
 
 	app.use(cookieParser());
 	app.useGlobalFilters(new TsRestValidationFilter());

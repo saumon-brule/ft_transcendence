@@ -11,10 +11,12 @@ export const uuidParamSchema = z.object({
 	uuid: z.string().uuid(),
 });
 
+export const DEFAULT_PAGINATION_LIMIT = 20;
+
 export const paginationQuerySchema = z.object({
 	limit: z.coerce.number().int().min(1).
 		max(100).
-		default(20),
+		default(DEFAULT_PAGINATION_LIMIT),
 	offset: z.coerce.number().int().min(0).
 		default(0),
 });
@@ -24,3 +26,13 @@ export const listQuerySchema = paginationQuerySchema.extend({
 		max(100).
 		optional(),
 });
+
+export const healthResponseSchema = z.object({
+	status: z.literal("ok"),
+});
+export type HealthResponseDto = z.infer<typeof healthResponseSchema>;
+
+export const healthUnavailableSchema = z.object({
+	status: z.literal("error"),
+});
+export type HealthUnavailableDto = z.infer<typeof healthUnavailableSchema>;
