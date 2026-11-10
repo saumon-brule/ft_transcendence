@@ -3,4 +3,110 @@
 	width: 250px;
 	flex-shrink: 0;
 	background-color: var(--background-surface);
+	height: 100%;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	display: flex;
+	flex-direction: column;
+
+	& > section {
+		flex-shrink: 0;
+	}
+
+	.link-container {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+
+		.icon-link {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 10px;
+			font-size: 16px;
+			font-weight: 700;
+			border-radius: 8px;
+
+			&:hover {
+				background-color: var(--background-card);
+				text-decoration: none;
+			}
+
+			&.active {
+				background-color: var(--background-card);
+
+				svg {
+					stroke: var(--text-accent);
+				}
+			}
+		}
+	}
+
+	section {
+		padding: 10px;
+
+		h2 {
+			margin-bottom: 8px;
+		}
+
+		.list {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+	}
+
+	.paylists-container {
+		.playlist-card {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 8px;
+			border-radius: 8px;
+			text-decoration: none;
+			background-color: var(--background-card);
+
+			&:hover {
+				background-color: var(--background-overlay);
+			}
+
+			img {
+				width: 50px;
+				height: 50px;
+				object-fit: cover;
+				border-radius: 4px;
+			}
+
+			.playlist-info {
+				flex: 1 1 auto;
+				min-width: 0;
+
+				h4, p {
+					margin: 0;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				h4 {
+					font-size: 16px;
+				}
+
+				p {
+					margin-top: 4px;
+					color: var(--text-secondary);
+					font-size: 14px;
+				}
+			}
+		}
+	}
+
+	.legal-links {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 10px;
+		margin-top: auto;
+	}
+
 }
