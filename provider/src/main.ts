@@ -10,6 +10,7 @@ import { TsRestValidationFilter } from "./core/filters/ts-rest-validation.filter
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+	app.enableShutdownHooks();
 	app.set("trust proxy", 1);
 	app.enableCors();
 	app.useGlobalFilters(new TsRestValidationFilter());

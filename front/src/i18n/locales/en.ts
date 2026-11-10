@@ -109,6 +109,10 @@ export default {
 					english: "English",
 					french: "Français",
 				},
+				connexions: {
+					title: "Connexions",
+					unsetPassword: "You need to set a password before unlinking your account",
+				},
 			},
 			profile: {
 				title: "Profile",

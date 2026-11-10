@@ -5,7 +5,7 @@ import { buildMediaUrl } from "@flex/shared";
 import { A } from "@solidjs/router";
 
 export default function ProviderArtistHeader(props: { artist: ArtistDetailedItemDto; providerBack: Provider }) {
-	const mediaToken = useMediaToken(() => props.providerBack.address);
+	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
 
 	function getAvatar(artist: ArtistDetailedItemDto) {
 		const token = mediaToken();

@@ -11,6 +11,8 @@ import Select from "~/components/inputs/Select/Select";
 import { queryClient } from "~/App";
 import { ClientInferResponses } from "@ts-rest/core";
 import { serverContract } from "@flex/shared";
+import IntraButton from "~/components/common/IntraButton/IntraButton";
+import Logo42 from "~/components/graphics/icons/Logo42";
 
 import "./AccountSettings.scss";
 
@@ -24,7 +26,7 @@ export default function AccountSettings() {
 	const profileQuery = useMeProfileQuery();
 	const requestPasswordResetMutation = client.auth.requestPasswordReset.createMutation();
 	const updateMeMutation = client.users.updateMe.createMutation();
-
+	const unlinkIntraMutation = client.auth.unlink42.createMutation();
 
 	function requestSetPassword(e: MouseEvent) {
 		e.preventDefault();
@@ -59,8 +61,31 @@ export default function AccountSettings() {
 				onSettled: () => { setIsLanguageChanging(false); },
 			},
 		);
-
 	};
+
+	function unlinkIntra(e: MouseEvent) {
+		e.preventDefault();
+		if (profileQuery.data && !profileQuery.data.body.hasPassword) {
+			summonErrorToast(() => t("pages.settings.account.connexions.unsetPassword"));
+			return;
+		}
+		unlinkIntraMutation.mutate({}, {
+			onSuccess() {
+				queryClient.setQueryData<UserMeResponse>(queryKeys.users.me(), (old) => {
+					if (!old) return old;
+					return { ...old, body: { ...old.body, intraId: null } };
+				});
+			},
+			onError(e) {
+				if (e.status === 403) {
+					if (e.body.code === "INTRA_ONLY_ACCOUNT") {
+						summonErrorToast(() => t("pages.settings.account.connexions.unsetPassword"));
+						return;
+					}
+				}
+			},
+		});
+	}
 
 	let passwordEditPopUpControls: OverlayControls | null = null;
 	let emailEditPopUpControls: OverlayControls | null = null;
@@ -103,6 +128,21 @@ export default function AccountSettings() {
 						<option value="en" selected={user().language === "en"}>{t("pages.settings.account.language.english")}</option>
 						<option value="fr" selected={user().language === "fr"}>{t("pages.settings.account.language.french")}</option>
 					</Select>
+				</div>
+				<div class="setting-field">
+					<div class="setting-field-title">
+						<h3 class="intra-link-title"><span>{t("pages.settings.account.connexions.title")}</span></h3>
+					</div>
+					<div class="setting-field-value">
+						<div class="connexion">
+							<div>
+								<Logo42 /><span class="connexion-name">42's Intra</span>
+							</div>
+							{user().intraId === null
+								? <IntraButton unstyled size="sm" linkType="link">link</IntraButton>
+								: <Button variant="danger" disabled={unlinkIntraMutation.isPending} class="unlink-intra-button" size="sm" onClick={unlinkIntra}>unlink</Button>}
+						</div>
+					</div>
 				</div>
 			</div>}
 		</Show>

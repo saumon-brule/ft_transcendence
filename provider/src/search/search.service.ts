@@ -28,7 +28,11 @@ const TABLES: Record<SearchTable, { from: Prisma.Sql; fields: SearchField[] }> =
 	Album: { from: Prisma.raw("\"Album\""), fields: [field("name", 3), field("searchArtists", 2)] },
 };
 
-const MIN_FUZZY_LENGTH = 3;
+const FUZZY_DISTANCES = [
+	{ minLength: 3, distance: 1 },
+	{ minLength: 6, distance: 2 },
+	{ minLength: 8, distance: 3 },
+];
 const MIN_RELATIVE_SCORE = 0.2;
 
 const tokensOf = (value: string) => value.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
@@ -42,16 +46,19 @@ export class SearchService {
 		if (tokens.length === 0) return { ids: [], total: 0 };
 
 		const exact = tokens.join(" ");
-		const fuzzy = tokens.filter((token) => token.length >= MIN_FUZZY_LENGTH).join(" ");
+		const fuzzy = FUZZY_DISTANCES.map(({ minLength, distance }, index, all) => ({
+			distance: Prisma.raw(String(distance)),
+			term: tokens
+				.filter((token) => token.length >= minLength && token.length < (all[index + 1]?.minLength ?? Infinity))
+				.join(" "),
+		})).filter(({ term }) => term !== "");
 		const { from, fields } = TABLES[table];
 
 		const where = Prisma.join(fields.flatMap(({ column, boost }) => {
 			const weight = Prisma.raw(String(boost));
 			return [
 				Prisma.sql`${column} ||| ${exact}::pdb.boost(${weight})`,
-				...fuzzy === ""
-					? []
-					: [Prisma.sql`${column} ||| ${fuzzy}::pdb.fuzzy(1, t, t)::pdb.boost(${weight})`],
+				...fuzzy.map(({ distance, term }) => Prisma.sql`${column} ||| ${term}::pdb.fuzzy(${distance}, t, t)::pdb.boost(${weight})`),
 			];
 		}), " OR ");
 		/* something like this fuck

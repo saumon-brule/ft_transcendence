@@ -1,6 +1,7 @@
 {
-	"watch": ["src", "../shared/src"],
-	"ext": "ts,hbs",
+	"watch": ["src", "../shared/dist"],
+	"ext": "ts,hbs,js",
 	"ignore": [],
+	"delay": 500,
 	"exec": "ts-node --transpile-only -r tsconfig-paths/register src/main.ts"
 }

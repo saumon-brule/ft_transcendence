@@ -28,12 +28,13 @@ export class ProviderSigningKeyService {
 		return this.publicKeyPem;
 	}
 
-	async signUserAccessToken(userUuid: string) {
+	async signUserAccessToken(userUuid: string, providerUuid: string) {
 		const expiresIn = ACCESS_TOKEN_TTL;
 		const token = await Promise.resolve(this.jwt.signAsync({ scope: "access" }, {
 			privateKey: this.privateKey,
 			algorithm: "RS256",
 			subject: userUuid,
+			audience: providerUuid,
 			expiresIn,
 		}));
 

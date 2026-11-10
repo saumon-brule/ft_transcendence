@@ -21,16 +21,18 @@ export async function doRefresh(): Promise<string | null> {
 	return refreshPromise;
 }
 
-let providerRefreshPromise: Promise<string | null> | null = null;
+const providerRefreshPromises = new Map<string, Promise<string | null>>();
 
-export async function doproviderRefresh(): Promise<string | null> {
-	if (providerRefreshPromise) return providerRefreshPromise;
+export async function doproviderRefresh(providerUuid: string): Promise<string | null> {
+	const pending = providerRefreshPromises.get(providerUuid);
+	if (pending) return pending;
 
-	providerRefreshPromise = client.providers.accessToken.mutation()
+	const promise = client.providers.accessToken.mutation({ params: { uuid: providerUuid } })
 		.then((r) => r.status === 200
 			? r.body.token
 			: null)
-		.finally(() => { providerRefreshPromise = null; });
+		.finally(() => { providerRefreshPromises.delete(providerUuid); });
 
-	return providerRefreshPromise;
+	providerRefreshPromises.set(providerUuid, promise);
+	return promise;
 }

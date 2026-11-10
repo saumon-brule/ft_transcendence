@@ -210,6 +210,13 @@
 			p {
 				font-size: 1.5rem;
 			}
+			.legal-links {
+				margin-top: 4rem;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 2rem;
+			}
 		}
 
 		@media (max-width: 1184px) {
