@@ -78,7 +78,7 @@ export default function LoginForm() {
 			OR
 			<hr />
 		</div>
-		<IntraButton>Login with <Logo42/> Intra</IntraButton>
+		<IntraButton linkType="auth">Login with <Logo42/> Intra</IntraButton>
 		<p class="auth-switcher">
 			Need an account? <A href="/register">Register</A>.
 		</p>

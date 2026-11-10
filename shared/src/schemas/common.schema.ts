@@ -11,10 +11,12 @@ export const uuidParamSchema = z.object({
 	uuid: z.string().uuid(),
 });
 
+export const DEFAULT_PAGINATION_LIMIT = 20;
+
 export const paginationQuerySchema = z.object({
 	limit: z.coerce.number().int().min(1).
 		max(100).
-		default(20),
+		default(DEFAULT_PAGINATION_LIMIT),
 	offset: z.coerce.number().int().min(0).
 		default(0),
 });

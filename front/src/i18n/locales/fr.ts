@@ -57,8 +57,9 @@ export default {
 			},
 		},
 		settings: {
-			accountLink: "Compte",
 			profileLink: "Profil",
+			accountLink: "Compte",
+			appearanceLink: "Apparence",
 			edit: "modifier",
 			set: "définir",
 			confirm: "confirmer",
@@ -111,12 +112,24 @@ export default {
 					english: "English",
 					french: "Français",
 				},
+				connexions: {
+					title: "Connexions",
+					unsetPassword: "Vous devez définir un mot de passe avant de supprimer votre connexion via l'intra",
+				},
 			},
 			profile: {
 				title: "Profile",
 				profilePictureUpdated: "Votre photo de profile a bien été modifiée",
 				profilePictureUpdateToolarge: "La taille max d'une photo de profile est de 10Mo",
 				profilePictureUpdateFail: "Nous n'avons pas pu modifier votre photo de profile",
+			},
+			appearance: {
+				title: "Apparence",
+				theme: {
+					title: "Theme",
+					darkMode: "Mode sombre",
+					useSystem: "Suivre le thème de votre navigateur",
+				},
 			},
 		},
 	},

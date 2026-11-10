@@ -47,6 +47,17 @@ export const providersAPIContract = c.router(
 				409: commonError409Schema,
 			},
 		},
+		revokeMember: {
+			method: "DELETE",
+			path: "/members/:userUuid",
+			pathParams: accessRequestUserParamsSchema,
+			headers: providerApiKeyHeadersSchema,
+			body: null,
+			responses: {
+				204: null,
+				409: commonError409Schema,
+			},
+		},
 	},
 	{
 		pathPrefix: "/providers",

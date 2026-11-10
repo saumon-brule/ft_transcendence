@@ -1,5 +1,5 @@
-#provider {	
-	padding: 20px 40px;
+#provider {
+
 	.provider-header {
 		display: flex;
 		margin-bottom: 20px;
@@ -34,6 +34,48 @@
 		}
 	}
 
+	.provider-search {
+		position: relative;
+		width: min(100%, 420px);
+		margin-top: 20px;
+
+		.search-icon {
+			position: absolute;
+			z-index: 1;
+			top: 50%;
+			transform: translateY(-50%);
+			left: 14px;
+			color: var(--text-muted);
+			pointer-events: none;
+		}
+
+		.text-input input {
+			padding-left: 42px;
+			padding-right: 42px;
+
+			&::-webkit-search-cancel-button,
+			&::-webkit-search-decoration {
+				display: none;
+			}
+		}
+
+		.search-clear {
+			position: absolute;
+			z-index: 1;
+			top: 50%;
+			right: 14px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0;
+			border: 0;
+			transform: translateY(-50%);
+			color: var(--text-primary);
+			background: transparent;
+			cursor: pointer;
+		}
+	}
+
 	section {
 		margin-top: 20px;
 
@@ -47,6 +89,12 @@
 			flex-direction: column;
 			gap: 12px;
 			padding-right: 8px;
+		}
+
+		.see-more {
+			width: fit-content;
+			margin-top: 8px;
+			display: block;
 		}
 
 	}

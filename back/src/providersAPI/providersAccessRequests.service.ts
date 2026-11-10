@@ -34,6 +34,20 @@ export class ProviderAccessRequestsService {
 		return request;
 	}
 
+	async revoke(provider: { uuid: string; ownerUuid: string }, userUUID: string) {
+		if (userUUID === provider.ownerUuid) {
+			throw new ConflictException("The owner of a provider cannot be revoked");
+		}
+
+		await this.prisma.$transaction([
+			this.prisma.providerUser.deleteMany({ where: { providerUUID: provider.uuid, userUUID } }),
+			this.prisma.providerAccessRequest.updateMany({
+				where: { providerUUID: provider.uuid, userUUID, status: { not: "REJECTED" } },
+				data: { status: "REJECTED", decidedAt: new Date() },
+			}),
+		]);
+	}
+
 	decide(providerUUID: string, userUUID: string, decision: Decision) {
 		const key = { providerUUID_userUUID: { providerUUID, userUUID } };
 

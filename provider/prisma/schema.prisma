@@ -103,7 +103,7 @@ model Role {
 enum Permission {
   MANAGE_CATALOG
   MANAGE_MEMBERS
-  MANAGE_ROLES
+  ADMIN
 }
 
 model RolePermission {

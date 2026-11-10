@@ -11,7 +11,7 @@ export type ArtistSectionProps = {
 };
 
 export function ArtistAvatar(props: { artist: ProviderInfo["artist"]["artists"][number] }) {
-	const mediaToken = useMediaToken(() => props.artist.providerUrl);
+	const mediaToken = useMediaToken(() => props.artist.providerUrl, () => props.artist.providerUuid);
 
 	const src = () => {
 		const token = mediaToken();
