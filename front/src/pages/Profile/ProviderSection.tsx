@@ -1,6 +1,6 @@
 import { createSignal, For, Show } from "solid-js";
 import type { User } from "@flex/shared";
-import ProviderCard from "./ProviderCard";
+import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
 
 type ProviderSectionProps = {
 	title: string;
@@ -22,7 +22,7 @@ export default function ProviderSection(props: ProviderSectionProps) {
 		</div>
 		<div class="providers-list">
 			<Show when={props.providers.length > 0} fallback={<p class="no-providers">{props.emptyMessage}</p>}>
-				<For each={showAll() ? props.providers : props.providers.slice(0, 3)}>{(provider) => <ProviderCard provider={provider} />}</For>
+				<For each={showAll() ? props.providers : props.providers.slice(0, 3)}>{(provider) => <ProviderCard provider={provider} mine={false} />}</For>
 			</Show>
 		</div>
 	</section>;

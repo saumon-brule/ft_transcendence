@@ -1,10 +1,11 @@
 import { jwtDecode } from "jwt-decode";
 import { createSignal, untrack } from "solid-js";
-import { doproviderRefresh, doRefresh } from "~/api/doRefresh";
+import { doRefresh } from "~/api/doRefresh";
 import { JwtPayload } from "@flex/shared";
 import { queryClient } from "~/App";
 import { client, queryKeys } from "~/api/client";
-import { createStore } from "solid-js/store";
+import { createStore, reconcile } from "solid-js/store";
+import { clearChats } from "./messages.store";
 
 export interface AuthenticatedState {
 	accessToken: string;
@@ -17,7 +18,7 @@ export interface GuestState {
 
 export type AuthState = AuthenticatedState | GuestState;
 
-export type ProviderTokenState = { token: string | null };
+export type ProviderTokenState = Record<string, string | undefined>;
 
 const authChannel = new BroadcastChannel("auth");
 
@@ -33,7 +34,7 @@ function authStateFromToken(accessToken: string | null): AuthState {
 }
 
 const [auth, setAuth] = createStore<AuthState>(authStateFromToken(null));
-const [providerToken, setProviderAccessToken] = createStore<ProviderTokenState>({ token: null });
+const [providerTokens, setProviderTokens] = createStore<ProviderTokenState>({});
 
 function setAccessToken(accessToken: string | null) {
 	const currentAccessToken = untrack(() => auth.accessToken);
@@ -43,6 +44,7 @@ function setAccessToken(accessToken: string | null) {
 	}
 	setAuth(authStateFromToken(accessToken));
 	if (accessToken === null) {
+		clearProviderTokens();
 		sessionStorage.removeItem("access-token");
 	} else {
 		sessionStorage.setItem("access-token", accessToken);
@@ -50,13 +52,12 @@ function setAccessToken(accessToken: string | null) {
 	authChannel.postMessage(accessToken);
 }
 
-function setProviderToken(accessToken: string | null) {
-	setProviderAccessToken({ token: accessToken });
-	if (accessToken === null) {
-		sessionStorage.removeItem("provider-access-token");
-	} else {
-		sessionStorage.setItem("provider-access-token", accessToken);
-	}
+function setProviderToken(providerUuid: string, accessToken: string | null) {
+	setProviderTokens(providerUuid, accessToken ?? undefined);
+}
+
+function clearProviderTokens() {
+	setProviderTokens(reconcile({}));
 }
 
 export const authActions = {
@@ -64,19 +65,18 @@ export const authActions = {
 	setProviderToken,
 	login: (accessToken: string) => setAccessToken(accessToken),
 	logout: () => {
+		clearChats();
 		void client.auth.logout.mutation().then(() => {
 			setAccessToken(null);
 			window.location.replace("/login");
 		});
 	},
 	refreshToken: async () => setAccessToken(await doRefresh()),
-	refreshProviderToken: async () => setProviderToken(await doproviderRefresh()),
 } as const;
 
 
 async function initialize() {
 	const stored = sessionStorage.getItem("access-token");
-	const storedProvider = sessionStorage.getItem("provider-access-token");
 
 	authChannel.addEventListener("message", (e: MessageEvent<string | null>) => {
 		if (auth.accessToken === e.data) return;
@@ -91,15 +91,6 @@ async function initialize() {
 		try {
 			const accessToken = await doRefresh();
 			if (accessToken !== null) setAuth(authStateFromToken(accessToken));
-		} catch {}
-	}
-
-	if (storedProvider) {
-		setProviderToken(storedProvider);
-	} else if (isLoggedIn()) {
-		try {
-			const token = await doproviderRefresh();
-			if (token !== null) setProviderToken(token);
 		} catch {}
 	}
 
@@ -121,5 +112,5 @@ export {
 	auth,
 	initialized,
 	isLoggedIn,
-	providerToken,
+	providerTokens,
 };

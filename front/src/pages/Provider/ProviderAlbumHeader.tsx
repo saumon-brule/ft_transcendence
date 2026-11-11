@@ -5,7 +5,7 @@ import { buildMediaUrl } from "@flex/shared";
 import { A } from "@solidjs/router";
 
 export default function ProviderAlbumHeader(props: { album: AlbumDetailedItemDto; providerBack: Provider }) {
-	const mediaToken = useMediaToken(() => props.providerBack.address);
+	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
 
 	function getCover(album: AlbumDetailedItemDto) {
 		const token = mediaToken();

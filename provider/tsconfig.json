@@ -1,23 +1,14 @@
 {
+  "extends": "../tsconfig.node.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "skipLibCheck": true,
-    "strict": true,
     "strictPropertyInitialization": false,
-    "types": [
-      "node"
-    ],
-    "resolveJsonModule": true
+    "outDir": "./dist",
+    "types": ["node"],
+    "paths": {
+      "@flex/shared": ["../shared/src/index.ts"]
+    }
   }
 }

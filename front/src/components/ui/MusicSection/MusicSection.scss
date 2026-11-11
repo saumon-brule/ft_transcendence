@@ -18,10 +18,11 @@ $compact-below: 520px;
 			overflow: hidden;
 		}
 
-		.col-title { width: 35%; }
+		.col-title { width: 30%; }
 		.col-actions { width: 5%; }
 		.col-artists { width: 20%; }
 		.col-album { width: 20%; }
+		.col-provider { width: 10%; }
 		.col-published { width: 10%; }
 		.col-duration { width: 10%; }
 
@@ -125,6 +126,7 @@ $compact-below: 520px;
 			.col-title { grid-area: title; }
 			.col-duration { grid-area: duration; }
 			.col-actions { grid-area: actions; }
+			.col-provider { display: none; }
 
 			.music-title-artists { display: block; }
 		}

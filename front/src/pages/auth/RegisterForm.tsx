@@ -69,7 +69,7 @@ export default function RegisterForm() {
 			OR
 			<hr />
 		</div>
-		<IntraButton>
+		<IntraButton linkType="auth">
 			Register with <Logo42/> Intra
 		</IntraButton>
 		<p class="register-details">

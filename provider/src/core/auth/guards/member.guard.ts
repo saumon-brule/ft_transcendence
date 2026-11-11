@@ -30,11 +30,12 @@ export class MemberGuard implements CanActivate {
 		});
 		const isOwner = ownerUuid === member.uuid;
 		const granted = new Set(member.roles.flatMap((r) => r.role.permissions.map((p) => p.permission)));
+		const hasEverything = isOwner || granted.has("ADMIN");
 
 		request.member = {
 			uuid: member.uuid,
 			isOwner,
-			permissions: providerPermissions.filter((p) => isOwner || granted.has(p)),
+			permissions: providerPermissions.filter((p) => hasEverything || granted.has(p)),
 			roles: member.roles.map((r) => ({ uuid: r.role.uuid, name: r.role.name })),
 		};
 		return true;

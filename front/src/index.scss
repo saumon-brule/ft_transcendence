@@ -94,6 +94,7 @@ ul {
 
 .page {
 	width: 100%;
+	padding: 20px 40px;
 }
 
 code {
@@ -109,4 +110,30 @@ code {
 	line-height: 1.6;
 	white-space: pre;
 	overflow-x: auto;
+}
+
+button {
+
+	.icon-badge {
+		position: relative;
+		display: inline-flex;
+	}
+
+	&:hover, &:focus-visible {
+		.notification::after {
+			box-shadow: 0 0 0 2px var(--background-overlay);
+		}
+	}
+
+	.notification::after {
+		content: "";
+		position: absolute;
+		top: -2px;
+		right: -2px;
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background-color: var(--background-danger);
+		box-shadow: 0 0 0 2px var(--background-card);
+	}
 }

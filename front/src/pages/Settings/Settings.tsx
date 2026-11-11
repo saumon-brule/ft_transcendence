@@ -13,10 +13,20 @@ export default function Settings(props: RouteSectionProps) {
 			<nav class="settings-nav">
 				<ul>
 					<li>
-						<A href="/settings/account">{t("pages.settings.accountLink") || "Account"}</A>
+						<A href="/settings/profile">{t("pages.settings.profileLink")}</A>
 					</li>
 					<li>
-						<A href="/settings/profile">{t("pages.settings.profileLink") || "Profile"}</A>
+						<A href="/settings/account">{t("pages.settings.accountLink")}</A>
+					</li>
+					<li>
+						<A href="/settings/appearance">{t("pages.settings.appearanceLink")}</A>
+					</li>
+					<hr/>
+					<li>
+						<A class="external-link" href="/privacy-policy">Privacy Policy</A>
+					</li>
+					<li>
+						<A class="external-link" href="/terms-of-service">Terms of Service</A>
 					</li>
 				</ul>
 			</nav>

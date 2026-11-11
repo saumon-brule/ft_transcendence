@@ -2,10 +2,11 @@ import { createContext, useContext, ParentComponent, createEffect, onCleanup, on
 import { createSignal } from "solid-js";
 import { Music } from "~/class/Music";
 import { PushTrackToQueueFn, SetCurrentTrackFn, useTrackManager } from "~/store/trackManager.store";
-import { setupMediaSession } from "./mediaSession";
+import { setupMediaSession, updateMediaMetadata } from "./mediaSession";
 import { Track } from "~/class/Track";
 import { summonErrorToast } from "../ui/Toaster";
 import { LocalStorageItem } from "~/utils/storageHelper";
+import { getMediaToken } from "~/api/providerClients";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
 
@@ -33,8 +34,10 @@ export type AudioManager = {
 
 const AudioManagerContext = createContext<AudioManager>();
 
-const volumeItem = new LocalStorageItem<number>("volume", 1);
-const mutedItem = new LocalStorageItem<boolean>("muted", false);
+const volumeItem = new LocalStorageItem<number>("volume", () => 1);
+const mutedItem = new LocalStorageItem<boolean>("muted", () => false);
+
+const favicon: HTMLLinkElement | null = document.querySelector("link[rel='icon']");
 
 export const AudioPlayerProvider: ParentComponent = (props) => {
 	const audio = new Audio();
@@ -96,7 +99,10 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	};
 	const handlePlay = () => setIsPlaying(true);
 	const handlePause = () => setIsPlaying(false);
-	const handleEnded = () => trackManager.nextTrack();
+	const handleEnded = () => {
+		trackManager.nextTrack();
+		setIsPlaying(true);
+	};
 	const handleTimeUpdate = () => trackManager.setProgression(audio.currentTime);
 	const handleLoadedMetadata = () => setDuration(audio.duration);
 
@@ -108,7 +114,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	audio.addEventListener("loadedmetadata", handleLoadedMetadata);
 
 	onMount(() => {
-		audio.addEventListener("loadedmetadata", (() => audio.currentTime = trackManager.manager.progression), { once: true });
+		audio.addEventListener("loadedmetadata", (() => audio.currentTime = trackManager.progression), { once: true });
 		audio.src = "";
 		// audio.src = trackManager.manager.current?.music.url().href ?? "";
 	});
@@ -127,6 +133,11 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 						playWhenLoaded = false;
 						play();
 					}
+					void getMediaToken(currentTrack.music.providerUrl, currentTrack.music.providerUuid)
+						.catch(() => null)
+						.then((token) => {
+							if (id === loadId) updateMediaMetadata(currentTrack.music, token);
+						});
 				})
 				.catch((e) => {
 					if (id !== loadId) return;
@@ -141,6 +152,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 			audio.pause();
 			audio.src = "";
 			setDuration(0);
+			updateMediaMetadata(null, null);
 		}
 	});
 
@@ -160,12 +172,27 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		mutedItem.set(muted());
 	});
 
+	createEffect(() => {
+		if (!favicon) return;
+
+		if (isPlaying()) {
+			favicon.href = "/images/icons/logo-favicon-pink.svg";
+		} else {
+			favicon.href = "/images/icons/logo-favicon-white.svg";
+		}
+	});
+
+	onCleanup(() => {
+		if (!favicon) return;
+		favicon.href = "/images/icons/logo-favicon-pink.svg";
+	});
+
 	const audioManager = {
 		get playing() { return isPlaying(); },
 		get currentMusic() { return trackManager.manager.current?.music ?? null; },
 		get queue() { return trackManager.manager.queue; },
 		get duration() { return duration(); },
-		get progression() { return trackManager.manager.progression; },
+		get progression() { return trackManager.progression; },
 		set progression(time: number) { audio.currentTime = time; },
 		// As volume is not interpreted lineraly by human hear, a simple correction
 		// between real volume and the linear representation we use ins sliders allows

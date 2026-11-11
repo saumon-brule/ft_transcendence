@@ -27,11 +27,9 @@ export class InfoController {
 	}
 
 	@TsRestHandler(providerContract.info.health)
-	@Authenticated()
 	health() {
-		return tsRestHandler(providerContract.info.health, () => Promise.resolve({
-			status: 200,
-			body: { status: "ok" },
-		}));
+		return tsRestHandler(providerContract.info.health, async () => (await this.infoService.isDatabaseUp()
+			? { status: 200, body: { status: "ok" } }
+			: { status: 503, body: { status: "error" } }));
 	}
 }

@@ -14,16 +14,15 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"@eslint/js": "^10.0.1",
-		"@stylistic/eslint-plugin": "^5.10.0",
-		"@typescript-eslint/parser": "^8.57.1",
-		"eslint": "^10.1.0",
+		"@eslint/js": "catalog:",
+		"@stylistic/eslint-plugin": "catalog:",
+		"eslint": "catalog:",
 		"eslint-plugin-solid": "^0.14.5",
-		"globals": "^17.4.0",
+		"globals": "catalog:",
 		"sass": "^1.98.0",
 		"solid-devtools": "^0.34.3",
-		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.58.0",
+		"typescript": "catalog:",
+		"typescript-eslint": "catalog:",
 		"vite": "^7.1.4",
 		"vite-plugin-solid": "^2.11.8",
 		"vite-plugin-solid-svg": "^0.8.1"
@@ -35,15 +34,14 @@
 		"@solid-primitives/i18n": "^2.2.1",
 		"@solidjs/router": "^0.16.1",
 		"@tanstack/solid-query": "^4.0.0",
-		"@ts-rest/core": "^3.52.1",
+		"@ts-rest/core": "catalog:",
 		"@ts-rest/solid-query": "^3.52.1",
 		"@tsparticles/engine": "^4.4.0",
 		"@tsparticles/preset-links": "^4.4.0",
-		"class-validator": "^0.14.4",
 		"jwt-decode": "^4.0.0",
 		"lucide-solid": "^1.47.0",
 		"solid-js": "^1.9.5",
 		"solid-transition-group": "^0.3.0",
-		"zod": "^3.25.76"
+		"zod": "catalog:"
 	}
 }

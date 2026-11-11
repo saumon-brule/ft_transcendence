@@ -11,7 +11,7 @@ import VerifiedEmailGuard from "./components/guards/VerifiedEmailGuard";
 
 import PromptVerifyEmail from "./pages/auth/verifyEmail/PromptVerifyEmail";
 import UnverifiedEmailGuard from "./components/guards/UnverifiedEmailGuard";
-import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraAuthCallbackPath, changeEmailConfirmationPath } from "@flex/shared";
+import { emailConfirmationPath, passwordResetConfirmationPath, ftIntraCallbackPath, changeEmailConfirmationPath } from "@flex/shared";
 import FtAuthCallback from "./pages/ftCallback/FtAuthCallback";
 import ResetPassword from "./pages/auth/passwordReset/ResetPassword";
 import RequestPasswordReset from "./pages/auth/passwordReset/RequestPasswordReset";
@@ -24,10 +24,17 @@ import Providers from "./pages/Providers";
 import Provider from "./pages/Provider";
 import ProviderArtist from "./pages/Provider/ProviderArtist";
 import ProviderAlbum from "./pages/Provider/ProviderAlbum";
+import Friends from "./pages/Friends";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsOfService from "./pages/Legal/TermsOfService";
+import Search from "./pages/Search";
+import NotFound from "./pages/NotFound/NotFound";
 
 export const AppRouter = () => {
 	return <Router >
 		<Route path="/" component={Landing} />
+		<Route path="/privacy-policy" component={PrivacyPolicy} />
+		<Route path="/terms-of-service" component={TermsOfService} />
 		<Route path="/" component={GuestGuard}>
 			<Route path="/" component={AuthLayout}>
 				<Route path="/login" component={LoginForm}/>
@@ -37,7 +44,7 @@ export const AppRouter = () => {
 		</Route>
 		<Route path={emailConfirmationPath} component={VerifyEmail} />
 		<Route path={changeEmailConfirmationPath} component={ChangeEmailValidation} />
-		<Route path={ftIntraAuthCallbackPath} component={FtAuthCallback} />
+		<Route path={ftIntraCallbackPath} component={FtAuthCallback} />
 		<Route path={passwordResetConfirmationPath} component={ResetPassword} />
 		<Route path="/" component={AuthGuard}>
 			<Route path="/" component={UnverifiedEmailGuard}>
@@ -47,11 +54,15 @@ export const AppRouter = () => {
 				<Route path="/" component={AppContainer}>
 					<Route path="/" component={SidebarRoute}>
 						<Route path="/home" component={Home} />
+						<Route path="/search/:search" component={Search} />
 						<Route path="/user/:uuid" component={Profile} />
+						<Route path="/friends" component={Friends} />
+						<Route path="/friends/:uuid" component={Friends} />
 						<Route path="/providers" component={Providers} />
 						<Route path="/provider/:uuid" component={Provider} />
 						<Route path="/provider/:uuid/artist/:artistUUID" component={ProviderArtist} />
 						<Route path="/provider/:uuid/album/:albumUUID" component={ProviderAlbum} />
+						<Route path="*" component={NotFound} />
 					</Route>
 					<SettingsRoutes/>
 				</Route>

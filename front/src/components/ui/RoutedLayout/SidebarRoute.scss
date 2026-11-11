@@ -3,9 +3,10 @@
 	flex: 1;
 	overflow: hidden;
 
-	main {
-		overflow: auto;
+	& > :not(#app-sidebar) {
+		flex: 1 1 auto;
+		min-width: 0;
+		overflow-y: auto;
 		overscroll-behavior: contain;
-		width: 100%;
 	}
 }
