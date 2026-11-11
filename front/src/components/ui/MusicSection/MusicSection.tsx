@@ -25,8 +25,9 @@ export default function MusicSection(props: MusicSectionProps) {
 		return value instanceof Date ? value : new Date(value);
 	}
 
-	function playMusic(music: Music) {
-		audioManager.setCurrentMusic(music);
+	function playMusicListFromPosition(position: number) {
+		audioManager.setMusicList(props.musics);
+		audioManager.position = position;
 		audioManager.play();
 	}
 
@@ -48,12 +49,12 @@ export default function MusicSection(props: MusicSectionProps) {
 				</tr>
 			</thead>
 			<tbody>
-				<For each={props.musics}>{(music) => <tr>
+				<For each={props.musics}>{(music, i) => <tr>
 					<td class="col-title">
 						<div class="music-title">
 							<MusicCover music={music} />
 							<div class="music-title-text">
-								<Button variant="text" onClick={() => void playMusic(music)}>{music.name}</Button>
+								<Button variant="text" onClick={() => void playMusicListFromPosition(i())}>{music.name}</Button>
 								<Show when={shown("artists")}>
 									<span class="music-title-artists">
 										<ArtistsLinks artists={music.artists} providerUUID={music.providerUuid} />

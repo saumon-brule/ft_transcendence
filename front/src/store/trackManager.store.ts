@@ -6,9 +6,11 @@ import { LocalStorageItem } from "~/utils/storageHelper";
 
 const trackManagerStateSchema = z.object({
 	current: Music.zodSchema.nullable(),
+	isCurrentTemporary: z.boolean(),
 	queue: z.array(Music.zodSchema),
 	musicList: z.array(Music.zodSchema),
-	positon: z.number(),
+	position: z.number(),
+	loop: z.boolean(),
 });
 
 export type TrackManagerState = z.infer<typeof trackManagerStateSchema>;
@@ -16,7 +18,7 @@ export type TrackManagerState = z.infer<typeof trackManagerStateSchema>;
 const trackProgressionItem = new LocalStorageItem("track-progression", () => 0, JSON.stringify);
 const trackStateItem = new LocalStorageItem<TrackManagerState>(
 	"track-state",
-	() => ({ current: null, queue: [], musicList: [], positon: 0 }),
+	() => ({ current: null, isCurrentTemporary: false, queue: [], musicList: [], position: 0, loop: false }),
 	JSON.stringify,
 	(stored, defaultFactory) => {
 		try {
@@ -43,26 +45,32 @@ export function useTrackManager() {
 	function next() {
 		let nextMusic: Music | null = null;
 		setTrackManager(produce((manager) => {
-			nextMusic = manager.queue.shift() || null;
+			nextMusic = manager.queue.shift() ?? null;
 			if (!nextMusic) {
-				if (manager.positon < manager.musicList.length) {
-					manager.positon += 1;
-					nextMusic = manager.musicList[manager.positon];
-				} else {
-					nextMusic = null;
-				}
+				manager.position += 1;
+				const nextMusicIndex = manager.loop
+					? manager.position % manager.musicList.length
+					: manager.position;
+				nextMusic = manager.musicList[nextMusicIndex];
+				manager.isCurrentTemporary = false;
+			} else {
+				manager.isCurrentTemporary = true;
 			}
 			manager.current = nextMusic;
 		}));
+		console.log(nextMusic);
 		return nextMusic;
 	}
 
-	function prev(): Music | null {
+	function prev() {
 		let prevMusic: Music | null = null;
 		setTrackManager(produce((manager) => {
-			if (manager.positon > 0) {
-				manager.positon -= 1;
-				prevMusic = manager.musicList[manager.positon];
+			if (manager.position > 0) {
+				manager.position -= 1;
+				prevMusic = manager.musicList[manager.position];
+				manager.current = prevMusic;
+			} else if (manager.loop) {
+				prevMusic = manager.musicList[manager.position];
 				manager.current = prevMusic;
 			} else {
 				prevMusic = null;
@@ -74,14 +82,32 @@ export function useTrackManager() {
 	function setCurrentMusic(music: Music): void {
 		setTrackManager(produce((manager) => {
 			manager.current = music;
+			if (!manager.isCurrentTemporary) manager.position += 1;
+			manager.isCurrentTemporary = true;
 		}));
+	}
+
+	function setPosition(position: number) {
+		setTrackManager("position", position);
+		setCurrentMusic(trackManager.musicList[position]);
+	}
+
+	function setMusicList(musics: Array<Music>): void {
+		setTrackManager("musicList", [...musics]);
+	}
+
+	function setLoop(loop: boolean): void {
+		setTrackManager("loop", loop);
 	}
 
 	function pushMusicToQueue(music: Music): void {
 		if (trackManager.current) {
 			setTrackManager("queue", produce((queue) => queue.push(music)));
 		} else {
-			setTrackManager("current", music);
+			setTrackManager(produce((manager) => {
+				manager.current = music;
+				return manager;
+			}));
 		}
 	}
 
@@ -92,10 +118,14 @@ export function useTrackManager() {
 		nextTrack: next,
 		prevTrack: prev,
 		setCurrentMusic,
+		setPosition,
+		setMusicList,
+		setLoop,
 		pushMusicToQueue,
-		setProgression,
 	};
 }
 
 export type PushMusicToQueueFn = ReturnType<typeof useTrackManager>["pushMusicToQueue"];
+export type SetPositionFn = ReturnType<typeof useTrackManager>["setPosition"];
+export type SetMusicListFn = ReturnType<typeof useTrackManager>["setMusicList"];
 export type SetCurrentMusicFn = ReturnType<typeof useTrackManager>["setCurrentMusic"];

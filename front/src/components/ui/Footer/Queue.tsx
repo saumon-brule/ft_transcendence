@@ -17,6 +17,8 @@ export type QueueProps = {
 export default function Queue(props: QueueProps) {
 	const audioManager = useAudioManagerContext();
 
+	const followingMusics = () => audioManager.musicList.slice(audioManager.position + 1);
+
 	return <div id="queue" class={props.show() ? "show" : undefined}>
 		<Button class="hide-queue-button" icon onClick={() => props.setShow(false)} >
 			<ChevronDown/>
@@ -50,7 +52,7 @@ export default function Queue(props: QueueProps) {
 					</Show>
 					<div class="following-list">
 						<h2>A suivre dans <A href="provider/xxxx/artist/xxxx">Ado</A></h2>
-						<MusicSection musics={audioManager.queue}/>
+						<MusicSection musics={followingMusics()}/>
 					</div>
 				</div>
 			</div>
