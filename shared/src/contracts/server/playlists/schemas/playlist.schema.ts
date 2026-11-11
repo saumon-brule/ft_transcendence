@@ -9,6 +9,7 @@ export const createPlaylistBodySchema = z.object({
 
 export const musicPathParamsSchema = uuidParamSchema.extend({
 	musicUUID: z.string().uuid(),
+	providerUUID: z.string().uuid(),
 });
 
 export const createdPlaylistSchema = z.object({
@@ -17,6 +18,15 @@ export const createdPlaylistSchema = z.object({
 	private: z.boolean(),
 });
 
-export const addMusicBodySchema = z.object({
+export const MusicBodySchema = z.object({
 	musicUUID: z.string().uuid(),
+	providerUUID: z.string().uuid(),
+});
+
+export const updatePlaylistNameSchema = z.object({
+	name: z.string().min(1).max(32),
+});
+
+export const updatePlaylistPrivacySchema = z.object({
+	private: z.boolean(),
 });

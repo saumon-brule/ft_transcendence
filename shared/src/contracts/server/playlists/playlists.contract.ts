@@ -1,6 +1,6 @@
 import { initContract } from "@ts-rest/core";
 import { uuidParamSchema } from "../../../schemas/common.schema";
-import { addMusicBodySchema, createdPlaylistSchema, createPlaylistBodySchema, musicPathParamsSchema } from "./schemas/playlist.schema";
+import { createdPlaylistSchema, createPlaylistBodySchema, MusicBodySchema, updatePlaylistNameSchema, updatePlaylistPrivacySchema } from "./schemas/playlist.schema";
 import { commonError404Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
@@ -15,6 +15,26 @@ export const playlistsContract = c.router(
 				201: createdPlaylistSchema,
 			},
 		},
+		updatePlaylistName: {
+			method: "PATCH",
+			path: "/:uuid",
+			pathParams: uuidParamSchema,
+			body: updatePlaylistNameSchema,
+			responses: {
+				204: null,
+				404: commonError404Schema,
+			},
+		},
+		setPlaylistPrivacy: {
+			method: "PATCH",
+			path: "/:uuid/privacy",
+			pathParams: uuidParamSchema,
+			body: updatePlaylistPrivacySchema,
+			responses: {
+				204: null,
+				404: commonError404Schema,
+			},
+		},
 		deletePlaylist: {
 			method: "DELETE",
 			path: "/:uuid",
@@ -27,8 +47,7 @@ export const playlistsContract = c.router(
 		addMusicToPlaylist: {
 			method: "POST",
 			path: "/:uuid/musics",
-			body: addMusicBodySchema,
-			pathParams: musicPathParamsSchema,
+			body: MusicBodySchema,
 			responses: {
 				204: null,
 				404: commonError404Schema,
@@ -36,8 +55,8 @@ export const playlistsContract = c.router(
 		},
 		removeMusicFromPlaylist: {
 			method: "DELETE",
-			path: "/:uuid/musics/:musicUUID",
-			pathParams: musicPathParamsSchema,
+			path: "/:uuid/musics",
+			body: MusicBodySchema,
 			responses: {
 				204: null,
 				404: commonError404Schema,

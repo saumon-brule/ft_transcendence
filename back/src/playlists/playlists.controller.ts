@@ -96,6 +96,34 @@ export class PlaylistsController {
 		}
 	}
 
+	@TsRestHandler(playlistsContract.updatePlaylistName)
+	@UseGuards(JwtAuthGuard)
+	public updatePlaylistName(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(playlistsContract.updatePlaylistName, async ({ params, body }) => {
+			await this.playlistsService.updatePlaylistName(
+				params.uuid,
+				body.name,
+				authUser.uuid,
+			);
+
+			return { status: 204, body: null };
+		});
+	}
+
+	@TsRestHandler(playlistsContract.setPlaylistPrivacy)
+	@UseGuards(JwtAuthGuard)
+	public setPlaylistPrivacy(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(playlistsContract.setPlaylistPrivacy, async ({ params, body }) => {
+			await this.playlistsService.setPlaylistPrivacy(
+				params.uuid,
+				body.private,
+				authUser.uuid,
+			);
+
+			return { status: 204, body: null };
+		});
+	}
+
 	@TsRestHandler(playlistsContract.createPlaylist)
 	@UseGuards(JwtAuthGuard)
 	public createPlaylist(@CurrentUser() authUser: AuthUser) {
@@ -125,6 +153,7 @@ export class PlaylistsController {
 				await this.playlistsService.addMusicToPlaylist(
 					params.uuid,
 					body.musicUUID,
+					body.providerUUID,
 					authUser.uuid,
 				);
 
@@ -137,10 +166,11 @@ export class PlaylistsController {
 	@UseGuards(JwtAuthGuard)
 	public removeMusicFromPlaylist(@CurrentUser() authUser: AuthUser) {
 		return tsRestHandler(
-			playlistsContract.removeMusicFromPlaylist, async ({ params }) => {
+			playlistsContract.removeMusicFromPlaylist, async ({ params, body }) => {
 				await this.playlistsService.removeMusicFromPlaylist(
 					params.uuid,
-					params.musicUUID,
+					body.musicUUID,
+					body.providerUUID,
 					authUser.uuid,
 				);
 

@@ -148,7 +148,7 @@ model Provider {
     users          ProviderUser[]
     accessRequests ProviderAccessRequest[]
     owner          User                    @relation(fields: [ownerUUID], references: [uuid], onDelete: Cascade)
-    // musics         Music[]
+    musics         PlaylistMusic[]
 }
 
 model ProviderUser {
@@ -219,39 +219,24 @@ model PlaylistMusic {
     id           Int      @id @default(autoincrement())
     playlistUUID String
     musicUUID    String
+    providerUUID String
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
 
     playlist Playlist @relation(fields: [playlistUUID], references: [uuid], onDelete: Cascade)
-    music    Music    @relation(fields: [musicUUID], references: [uuid], onDelete: Cascade)
+    provider Provider @relation(fields: [providerUUID], references: [uuid], onDelete: Cascade)
 
     @@unique([playlistUUID, musicUUID])
 }
 
-// model PlaylistFollower {
-//     id           Int      @id @default(autoincrement())
-//     playlistUUID String
-//     userUUID     String
-//     createdAt    DateTime @default(now())
-//     updatedAt    DateTime @updatedAt
-
-//     playlist Playlist @relation(fields: [playlistUUID], references: [uuid], onDelete: Cascade)
-//     user     User     @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
-
-//     @@unique([playlistUUID, userUUID])
-// }
-
 model Music {
     id          Int      @id @default(autoincrement())
     uuid        String   @unique @default(uuid())
-    // providerId  Int 
     title       String
     artist      String
     duration    Int
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
-    playlistMusics          PlaylistMusic[]
     currentlyListeningUsers User[]
-    // provider                Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
 }
