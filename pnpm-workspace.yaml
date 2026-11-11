@@ -7,8 +7,10 @@ catalog:
   '@nestjs/core': '^11.0.1'
   '@nestjs/jwt': '^11.0.2'
   '@nestjs/platform-express': '^11.0.1'
+  '@nestjs/platform-socket.io': '^11.0.1'
   '@nestjs/schematics': '^11.0.0'
   '@nestjs/swagger': '^11.2.6'
+  '@nestjs/websockets': '^11.0.1'
   '@prisma/adapter-pg': '7.4.2'
   '@prisma/client': '7.4.2'
   '@stylistic/eslint-plugin': '^5.10.0'
@@ -27,6 +29,7 @@ catalog:
   'prisma': '7.4.2'
   'reflect-metadata': '^0.2.2'
   'rxjs': '^7.8.1'
+  'socket.io': '^4.8.4'
   'ts-node': '^10.9.2'
   tsconfig-paths: ^4.2.0
   'typescript': '^5.9.3'
