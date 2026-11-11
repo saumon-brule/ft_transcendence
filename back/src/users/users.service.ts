@@ -57,7 +57,7 @@ export class UsersService {
 				providers: {
 					where: {
 						publicDisplay: true,
-						provider: { is: { publicDisplay: true } },
+						provider: { is: { publicDisplay: true, ownerUUID: { not: uuid } } },
 					},
 					include: { provider: true },
 				},

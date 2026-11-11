@@ -10,7 +10,7 @@ export class RoleController {
 	constructor(private readonly roleService: RoleService) {}
 
 	@TsRestHandler(providerContract.role.list)
-	@RequirePermission("MANAGE_ROLES")
+	@RequirePermission("ADMIN")
 	list() {
 		return tsRestHandler(providerContract.role.list, async () => ({
 			status: 200,
@@ -19,7 +19,7 @@ export class RoleController {
 	}
 
 	@TsRestHandler(providerContract.role.create)
-	@RequirePermission("MANAGE_ROLES")
+	@RequirePermission("ADMIN")
 	create(@CurrentMember() member: MemberContext) {
 		return tsRestHandler(providerContract.role.create, async ({ body }) => ({
 			status: 201,
@@ -28,7 +28,7 @@ export class RoleController {
 	}
 
 	@TsRestHandler(providerContract.role.update)
-	@RequirePermission("MANAGE_ROLES")
+	@RequirePermission("ADMIN")
 	update() {
 		return tsRestHandler(providerContract.role.update, async ({ params, body }) => ({
 			status: 200,
@@ -37,7 +37,7 @@ export class RoleController {
 	}
 
 	@TsRestHandler(providerContract.role.remove)
-	@RequirePermission("MANAGE_ROLES")
+	@RequirePermission("ADMIN")
 	remove() {
 		return tsRestHandler(providerContract.role.remove, async ({ params }) => {
 			await this.roleService.remove(params.uuid);

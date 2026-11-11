@@ -17,6 +17,7 @@ export type ProviderStatus = "pinging" | "online" | "offline";
 type ProviderCardProps = {
 	provider: User["ownedProviders"][number];
 	mine: boolean;
+	small?: boolean;
 };
 
 export default function ProviderCard(props: ProviderCardProps) {
@@ -68,7 +69,7 @@ export default function ProviderCard(props: ProviderCardProps) {
 		return "Checking";
 	};
 
-	return <div class="provider-card" onClick={() => navigate(`/provider/${props.provider.uuid}`)}>
+	return <div class={`provider-card ${props.small ? "small" : ""}`} onClick={() => navigate(`/provider/${props.provider.uuid}`)}>
 		<div class="provider-details">
 			<div class="provider-info">
 				<h4><A href={`/provider/${props.provider.uuid}`}>
@@ -84,7 +85,7 @@ export default function ProviderCard(props: ProviderCardProps) {
 		</div>
 		<div class={`provider-status ${status()}`}>
 			<span class="provider-status-dot" aria-hidden="true" />
-			<span>{statusLabel()}</span>
+			<span class="provider-status-label">{statusLabel()}</span>
 		</div>
 	</div>;
 }
