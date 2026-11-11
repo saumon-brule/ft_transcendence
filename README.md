@@ -14,7 +14,7 @@ The server and the provider are two independent stacks, each started with `docke
 ### Server (database, migrations, back, front)
 
 ```bash
-cp .env.example .env        # fill in the public URL, ADMIN_EMAIL, the SMTP server and the 42 application
+cp .env.example .env        # fill in the public URL, the SMTP server and the 42 application
 make secrets         # creates secrets/ (see below)
 make server           # docker compose up -d --build --wait
 ```
@@ -27,13 +27,12 @@ mounted in `/run/secrets` (the `NAME_FILE` variables are resolved by [docker/ent
 
 | File | Content |
 | --- | --- |
-| `postgres_password`, `jwt_secret`, `jwt_refresh_secret`, `admin_password` | random, generated |
+| `postgres_password`, `jwt_secret`, `jwt_refresh_secret` | random, generated |
 | `provider.pem` | RSA key signing the provider tokens, generated |
 | `tls.crt`, `tls.key` | certificate and key of nginx: self-signed when generated, **replace them with a real certificate** in production (`DOMAIN=example.com make secrets` adds a name to the self-signed one) |
 | `smtp_pass`, `api42_client_secret` | to fill in by hand |
 
-Existing files are never overwritten. On the first start, the account `ADMIN_EMAIL` is created with the password of
-`secrets/admin_password` and the `bigboss` role (an existing account keeps its password). Test accounts exist in `dev` only.
+Existing files are never overwritten. Test accounts are seeded in `dev` only.
 
 `GET /api/health` answers 503 when the back cannot reach the database.
 
