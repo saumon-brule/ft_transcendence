@@ -9,10 +9,12 @@ import TextInput from "~/components/inputs/TextInput";
 import Toggle from "~/components/inputs/Toggle/Toggle";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { useTranslation } from "~/i18n/context";
 import { validateFromZod } from "~/utils/validateFromZod";
 
 export const summonEditProviderPopUp = (provider: Provider, onClose?: () => void) => summonPopUp((popUpControls) => {
 	const editProviderMutation = client.providers.edit.createMutation();
+	const { t } = useTranslation();
 
 	let nameInput!: HTMLInputElement;
 	let addressInput!: HTMLInputElement;
@@ -42,8 +44,14 @@ export const summonEditProviderPopUp = (provider: Provider, onClose?: () => void
 					summonSuccessToast(() => "Provider updated successfully");
 					popUpControls.close();
 				},
-				onError: () => {
-					summonErrorToast(() => "Failed to update provider");
+				onError: (e) => {
+					if (e.status === 409) {
+						summonErrorToast(() => t("pages.providers.popUps.edit.conflictError"));
+					} else if (e.status === 404) {
+						summonErrorToast(() => t("pages.providers.popUps.edit.notFoundError"));
+					} else {
+						summonErrorToast(() => t("pages.providers.popUps.edit.unknownError"));
+					}
 				},
 			},
 		);

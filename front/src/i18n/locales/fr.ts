@@ -56,6 +56,27 @@ export default {
 				confirmNewPassword: "Confirmer le nouveau mot de passe",
 			},
 		},
+		providers: {
+			popUps: {
+				create: {
+					conflictError: "Un provider avec cet URL existe déjà",
+					unknownError: "Nous n'avons pas pu créer le provider",
+				},
+				edit: {
+					conflictError: "Un provider avec cet URL existe déjà",
+					notFoundError: "Le provider aue vous essayez de modifier n'existe pas",
+					unknownError: "Nous n'avons pas pu modifier le provider",
+				},
+				regenerateKey: {
+					notFoundError: "Le provider auquel vous essayez de regénérer la clé n'existe pas",
+					unknownError: "Nous n'avons pas pu regénérer la clé du provider",
+				},
+				delete: {
+					notFoundError: "Le provider que vous essayez de modifier n'existe pas",
+					unknownError: "Nous n'avons pas pu supprimer le provider",
+				},
+			},
+		},
 		settings: {
 			profileLink: "Profil",
 			accountLink: "Compte",

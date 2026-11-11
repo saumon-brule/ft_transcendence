@@ -11,9 +11,12 @@ import { summonPopUp } from "~/components/ui/Overlay";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { validateFromZod } from "~/utils/validateFromZod";
 import { summonProviderKeyPopUp } from "./providerKeyPopUp";
+import { useTranslation } from "~/i18n/context";
 
 export const summonNewProviderPopUp = (onClose?: () => void) => summonPopUp((popUpControls) => {
 	const newProviderMutation = client.providers.create.createMutation();
+
+	const { t } = useTranslation();
 
 	let nameInput!: HTMLInputElement;
 	let addressInput!: HTMLInputElement;
@@ -35,8 +38,12 @@ export const summonNewProviderPopUp = (onClose?: () => void) => summonPopUp((pop
 					popUpControls.close();
 					summonProviderKeyPopUp(apiKey);
 				},
-				onError: () => {
-					summonErrorToast(() => "Failed to create provider");
+				onError: (e) => {
+					if (e.status === 409) {
+						summonErrorToast(() => t("pages.providers.popUps.create.conflictError"));
+					} else {
+						summonErrorToast(() => t("pages.providers.popUps.create.unknownError"));
+					}
 				},
 			},
 		);

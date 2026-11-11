@@ -11,6 +11,7 @@ import { summonErrorToast } from "~/components/ui/Toaster";
 import { getProviderClient } from "~/api/providerClients";
 import { createMemo } from "solid-js";
 import { createQuery } from "@tanstack/solid-query";
+import { useTranslation } from "~/i18n/context";
 
 export type ProviderStatus = "pinging" | "online" | "offline";
 
@@ -32,6 +33,7 @@ export default function ProviderCard(props: ProviderCardProps) {
 		},
 	});
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 
 	createEffect(() => {
 		if (health.isSuccess) {
@@ -56,8 +58,12 @@ export default function ProviderCard(props: ProviderCardProps) {
 				onSuccess: (data) => {
 					summonProviderKeyPopUp(data.body.apiKey);
 				},
-				onError: () => {
-					summonErrorToast(() => "Failed to regenerate provider key");
+				onError: (e) => {
+					if (e.status === 404) {
+						summonErrorToast(() => t("pages.providers.popUps.regenerateKey.notFoundError"));
+					} else {
+						summonErrorToast(() => t("pages.providers.popUps.regenerateKey.unknownError"));
+					}
 				},
 			},
 		);

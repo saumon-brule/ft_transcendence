@@ -6,9 +6,11 @@ import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { useTranslation } from "~/i18n/context";
 
 export const summonDeleteProviderPopUp = (providerUUID: string, onClose?: () => void) => summonPopUp((popUpControls) => {
 	const deleteProviderMutation = client.providers.delete.createMutation();
+	const { t } = useTranslation();
 
 	function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
@@ -30,8 +32,12 @@ export const summonDeleteProviderPopUp = (providerUUID: string, onClose?: () => 
 					summonSuccessToast(() => "Provider deleted successfully");
 					popUpControls.close();
 				},
-				onError: () => {
-					summonErrorToast(() => "Failed to delete provider");
+				onError: (e) => {
+					if (e.status === 404) {
+						summonErrorToast(() => t("pages.providers.popUps.delete.notFoundError"));
+					} else {
+						summonErrorToast(() => t("pages.providers.popUps.delete.unknownError"));
+					}
 				},
 			},
 		);

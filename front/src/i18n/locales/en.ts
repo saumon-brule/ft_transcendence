@@ -54,6 +54,27 @@ export default {
 				confirmNewPassword: "Confirm password",
 			},
 		},
+		providers: {
+			popUps: {
+				create: {
+					conflictError: "A provider with this URL already exist",
+					unknownError: "Failed to create provider",
+				},
+				edit: {
+					conflictError: "A provider with this URL already exists",
+					notFoundError: "The provider you're trying to edit doesn't exist",
+					unknownError: "Failed to edit provider",
+				},
+				regenerateKey: {
+					notFoundError: "The provider you're trying to regenerate the key doesn't exist",
+					unknownError: "Failed to regenerate provider's key",
+				},
+				delete: {
+					notFoundError: "The provider you're trying to delete doesn't exist",
+					unknownError: "Failed to delete provider",
+				},
+			},
+		},
 		settings: {
 			profileLink: "Profile",
 			accountLink: "Account",
