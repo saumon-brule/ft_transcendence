@@ -97,7 +97,7 @@ export default function Search() {
 				<Show when={results().musics.length > 0}>
 					<section class="musics">
 						<h2>Musics</h2>
-						<MusicSection music={{ musics: results().musics.slice(0, 6), total: results().musics.length }} providers={results().providers}/>
+						<MusicSection musics={results().musics.slice(0, 6)} providers={results().providers}/>
 						<A href={`/search/${encodeURIComponent(search())}?tab=Musics`} class="white-variant see-more">See more</A>
 					</section>
 				</Show>
@@ -121,7 +121,7 @@ export default function Search() {
 				<Show when={results().musics.length > 0}>
 					<section class="musics">
 						<h2>Musics</h2>
-						<MusicSection music={{ musics: results().musics, total: results().musics.length }} providers={results().providers}/>
+						<MusicSection musics={results().musics} providers={results().providers}/>
 					</section>
 				</Show>
 				<NoResult show={results().musics.length === 0} />

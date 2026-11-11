@@ -15,7 +15,7 @@ export default function ProviderTabMusics(props: { providerUrl: string; provider
 		<Show when={m.total > 0}>
 			<section class="musics">
 				{/* <h2>Musics</h2> */}
-				<MusicSection music={m}/>
+				<MusicSection musics={m.musics}/>
 			</section>
 		</Show>
 		<Show when={musicsQuery.hasNextPage}>

@@ -34,7 +34,7 @@ export default function ProviderTabAll(props: { providerUrl: string; providerUui
 		<Show when={musics()?.total}>
 			<section class="musics">
 				<h2>Musics</h2>
-				<MusicSection music={musics()!}/>
+				<MusicSection musics={musics()!.musics}/>
 				<A href={seeMoreHref("Musics")} class="white-variant see-more">See more</A>
 			</section>
 		</Show>

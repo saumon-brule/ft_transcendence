@@ -6,7 +6,7 @@
 	height: 0;
 	overflow: hidden;
 	background-color: var(--background-page);
-	transition: height .3s ease;
+	transition: height 0.3s ease;
 	display: flex;
 	justify-content: center;
 
@@ -25,6 +25,7 @@
 	}
 
 	& > div {
+		overflow-y: auto;
 		width: 100%;
 		max-width: 1200px;
 		padding: 1rem;
@@ -43,13 +44,17 @@
 			.current-track {
 				width: 20%;
 
+				&.empty {
+					opacity: 0.5;
+				}
+
 				& > img {
 					width: 100%;
 					aspect-ratio: 1/1;
 				}
 			}
 
-			.queue-list {
+			.lists {
 				flex: 1;
 			}
 		}

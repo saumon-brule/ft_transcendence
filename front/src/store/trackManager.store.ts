@@ -2,16 +2,13 @@ import { createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import z from "zod";
 import { Music } from "~/class/Music";
-import { Track } from "~/class/Track";
 import { LocalStorageItem } from "~/utils/storageHelper";
 
-const MAX_HISTORY_SIZE = 64;
-
 const trackManagerStateSchema = z.object({
-	current: Track.zodSchema.nullable(),
-	queue: z.array(Track.zodSchema),
-	history: z.array(Track.zodSchema).max(MAX_HISTORY_SIZE).catch(() => []),
-	activePlaylist: z.array(Music.zodSchema).nullable(),
+	current: Music.zodSchema.nullable(),
+	queue: z.array(Music.zodSchema),
+	musicList: z.array(Music.zodSchema),
+	positon: z.number(),
 });
 
 export type TrackManagerState = z.infer<typeof trackManagerStateSchema>;
@@ -19,7 +16,7 @@ export type TrackManagerState = z.infer<typeof trackManagerStateSchema>;
 const trackProgressionItem = new LocalStorageItem("track-progression", () => 0, JSON.stringify);
 const trackStateItem = new LocalStorageItem<TrackManagerState>(
 	"track-state",
-	() => ({ current: null, queue: [], history: [], activePlaylist: null }),
+	() => ({ current: null, queue: [], musicList: [], positon: 0 }),
 	JSON.stringify,
 	(stored, defaultFactory) => {
 		try {
@@ -44,70 +41,47 @@ export function useTrackManager() {
 	});
 
 	function next() {
-		let nextTrack: Track | null = null;
+		let nextMusic: Music | null = null;
 		setTrackManager(produce((manager) => {
-			if (manager.current != null) {
-				if (manager.history.length >= MAX_HISTORY_SIZE) manager.history.shift();
-				if (!manager.current.temporary) manager.history.push(manager.current);
-				manager.current = manager.queue.shift() ?? null;
-
-				nextTrack = manager.current;
-			}
-		}));
-		return nextTrack;
-	}
-
-	function prev(): Track | null {
-		let historyTrack: Track | null = null;
-		setTrackManager(produce((manager) => {
-			if (manager.history.length > 0) {
-				if (manager.current) {
-					manager.queue.unshift(manager.current);
+			nextMusic = manager.queue.shift() || null;
+			if (!nextMusic) {
+				if (manager.positon < manager.musicList.length) {
+					manager.positon += 1;
+					nextMusic = manager.musicList[manager.positon];
+				} else {
+					nextMusic = null;
 				}
-				manager.current = manager.history.pop() ?? null;
-				historyTrack = manager.current;
-			} else {
-				historyTrack = null;
 			}
+			manager.current = nextMusic;
 		}));
-		return historyTrack;
+		return nextMusic;
 	}
 
-	function setCurrentTrack(track: Track): void;
-	function setCurrentTrack(music: Music): void;
-	function setCurrentTrack(element: Music | Track): void {
-		let track: Track;
-
-		if (element instanceof Track) {
-			track = element;
-		} else {
-			track = new Track(element);
-		}
-
+	function prev(): Music | null {
+		let prevMusic: Music | null = null;
 		setTrackManager(produce((manager) => {
-			if (manager.current != null && !manager.current.temporary) {
-				if (manager.history.length >= MAX_HISTORY_SIZE) manager.history.shift();
-				manager.history.push(manager.current);
+			if (manager.positon > 0) {
+				manager.positon -= 1;
+				prevMusic = manager.musicList[manager.positon];
+				manager.current = prevMusic;
+			} else {
+				prevMusic = null;
 			}
-			manager.current = track ?? null;
+		}));
+		return prevMusic;
+	}
+
+	function setCurrentMusic(music: Music): void {
+		setTrackManager(produce((manager) => {
+			manager.current = music;
 		}));
 	}
 
-	function pushTrackToQueue(track: Track): void;
-	function pushTrackToQueue(music: Music): void;
-	function pushTrackToQueue(element: Music | Track): void {
-		let track: Track;
-
-		if (element instanceof Track) {
-			track = element;
-		} else {
-			track = new Track(element);
-		}
-
+	function pushMusicToQueue(music: Music): void {
 		if (trackManager.current) {
-			setTrackManager("queue", produce((queue) => queue.push(track)));
+			setTrackManager("queue", produce((queue) => queue.push(music)));
 		} else {
-			setTrackManager("current", track);
+			setTrackManager("current", music);
 		}
 	}
 
@@ -117,11 +91,11 @@ export function useTrackManager() {
 		set progression(progression: number) { setProgression(progression); },
 		nextTrack: next,
 		prevTrack: prev,
-		setCurrentTrack,
-		pushTrackToQueue,
+		setCurrentMusic,
+		pushMusicToQueue,
 		setProgression,
 	};
 }
 
-export type PushTrackToQueueFn = ReturnType<typeof useTrackManager>["pushTrackToQueue"];
-export type SetCurrentTrackFn = ReturnType<typeof useTrackManager>["setCurrentTrack"];
+export type PushMusicToQueueFn = ReturnType<typeof useTrackManager>["pushMusicToQueue"];
+export type SetCurrentMusicFn = ReturnType<typeof useTrackManager>["setCurrentMusic"];

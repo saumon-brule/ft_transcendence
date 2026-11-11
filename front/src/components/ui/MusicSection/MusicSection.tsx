@@ -4,7 +4,6 @@ import { Music } from "~/class/Music";
 import "./MusicSection.scss";
 import { A } from "@solidjs/router";
 import Button from "~/components/inputs/Button";
-import { ProviderInfo } from "~/api/queryHooks/providerInfo";
 import MusicCover from "../MusicCover";
 import ArtistsLinks from "../ArtistLinks";
 import { formatTimer } from "~/components/common/MusicTimer/MusicTimer";
@@ -13,7 +12,7 @@ import { Provider } from "@flex/shared";
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
 export type MusicSectionProps = {
-	music: ProviderInfo["music"];
+	musics: Array<Music>;
 	hiddenColumns?: MusicSectionColumn[];
 	providers?: Provider[];
 };
@@ -27,12 +26,12 @@ export default function MusicSection(props: MusicSectionProps) {
 	}
 
 	function playMusic(music: Music) {
-		audioManager.setCurrentTrack(music);
+		audioManager.setCurrentMusic(music);
 		audioManager.play();
 	}
 
 	function addToQueue(music: Music) {
-		audioManager.pushTrackToQueue(music);
+		audioManager.pushMusicToQueue(music);
 	}
 
 	return <div class="music-section">
@@ -49,7 +48,7 @@ export default function MusicSection(props: MusicSectionProps) {
 				</tr>
 			</thead>
 			<tbody>
-				<For each={props.music.musics}>{(music) => <tr>
+				<For each={props.musics}>{(music) => <tr>
 					<td class="col-title">
 						<div class="music-title">
 							<MusicCover music={music} />

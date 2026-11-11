@@ -27,7 +27,7 @@ export function BestResult(props: BestResultProps) {
 	}
 
 	function playMusic(music: Music) {
-		audioManager.setCurrentTrack(music);
+		audioManager.setCurrentMusic(music);
 		audioManager.play();
 	}
 

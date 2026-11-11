@@ -2,10 +2,12 @@ import { Accessor, Setter, Show } from "solid-js";
 import Button from "~/components/inputs/Button";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import MusicCover from "../MusicCover";
-import TrackList from "../TrackList/TrackList";
+import ArtistsLinks from "../ArtistLinks";
+import { A } from "@solidjs/router";
+import MusicSection from "../MusicSection/MusicSection";
+import { ChevronDown } from "lucide-solid";
 
 import "./Queue.scss";
-import ArtistsLinks from "../ArtistLinks";
 
 export type QueueProps = {
 	show: Accessor<boolean>;
@@ -16,13 +18,15 @@ export default function Queue(props: QueueProps) {
 	const audioManager = useAudioManagerContext();
 
 	return <div id="queue" class={props.show() ? "show" : undefined}>
-		<Button class="hide-queue-button" onClick={() => props.setShow(false)} />
+		<Button class="hide-queue-button" icon onClick={() => props.setShow(false)} >
+			<ChevronDown/>
+		</Button>
 		<div>
 			<div class="queue-header">
 				<h1>Queue</h1>
 			</div>
 			<div class="queue-body">
-				<div class="current-track">
+				<div class={`current-track${audioManager.currentMusic === null ? " empty" : ""}`}>
 					<Show when={audioManager.currentMusic} fallback={<img src="/images/default_cover.png" />} keyed>
 						{(currentMusic) => <MusicCover music={currentMusic} />}
 					</Show>
@@ -37,8 +41,17 @@ export default function Queue(props: QueueProps) {
 						</Show>
 					</h3>
 				</div>
-				<div class="queue-list">
-					<TrackList tracks={audioManager.queue}/>
+				<div class="lists">
+					<Show when={audioManager.queue.length > 0}>
+						<h2>File d'attente</h2>
+						<div class="queue-list">
+							<MusicSection musics={audioManager.queue}/>
+						</div>
+					</Show>
+					<div class="following-list">
+						<h2>A suivre dans <A href="provider/xxxx/artist/xxxx">Ado</A></h2>
+						<MusicSection musics={audioManager.queue}/>
+					</div>
 				</div>
 			</div>
 		</div>
