@@ -1,4 +1,3 @@
-import { A } from "@solidjs/router";
 import PageNotFound from "~/components/ui/NoResult/PageNotFound";
 
 export default function NotFound() {
