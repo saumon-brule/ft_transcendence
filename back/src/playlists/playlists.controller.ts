@@ -48,13 +48,9 @@ export class PlaylistsController {
 		@CurrentUser() authUser: AuthUser,
 	) {
 		return tsRestHandler(playlistsContract.uploadCover, async ({ params }) => {
-			const playlist = await this.playlistsService.getPlaylistByUUID(params.uuid);
+			await this.playlistsService.assertPlaylistOwner(params.uuid, authUser.uuid);
 
-			if (playlist.owner.uuid !== authUser.uuid) {
-				throw new BadRequestException("You are not the owner of this playlist");
-			}
-
-			const filename = `${playlist.uuid}.webp`;
+			const filename = `${params.uuid}.webp`;
 			const filepath = join(COVER_DIR, filename);
 
 			await sharp(file.buffer)

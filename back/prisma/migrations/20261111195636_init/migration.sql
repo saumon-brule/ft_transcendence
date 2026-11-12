@@ -245,7 +245,7 @@ CREATE UNIQUE INDEX "Playlist_uuid_key" ON "Playlist"("uuid");
 CREATE UNIQUE INDEX "UserPlaylist_userUUID_playlistUUID_key" ON "UserPlaylist"("userUUID", "playlistUUID");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PlaylistMusic_playlistUUID_musicUUID_key" ON "PlaylistMusic"("playlistUUID", "musicUUID");
+CREATE UNIQUE INDEX "PlaylistMusic_playlistUUID_providerUUID_musicUUID_key" ON "PlaylistMusic"("playlistUUID", "providerUUID", "musicUUID");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Music_uuid_key" ON "Music"("uuid");

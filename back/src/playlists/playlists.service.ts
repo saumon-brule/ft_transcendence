@@ -27,7 +27,7 @@ export class PlaylistsService {
 		});
 	}
 
-	private async assertPlaylistOwner(uuid: string, ownerUUID: string) {
+	public async assertPlaylistOwner(uuid: string, ownerUUID: string) {
 		const playlist = await this.getPlaylistByUUID(uuid);
 		if (playlist.owner.uuid !== ownerUUID) {
 			throw new AppForbiddenException(
@@ -55,12 +55,6 @@ export class PlaylistsService {
 
 	public async addMusicToPlaylist(uuid: string, musicUUID: string, providerUUID: string, ownerUUID: string) {
 		await this.assertPlaylistOwner(uuid, ownerUUID);
-		// const music = await this.prisma.music.findUnique({
-		// 	where: { uuid: musicUUID },
-		// });
-		// if (!music) {
-		// 	throw new NotFoundException("Music not found");
-		// }
 		const existingLink = await this.prisma.playlistMusic.findFirst({
 			where: {
 				playlistUUID: uuid,

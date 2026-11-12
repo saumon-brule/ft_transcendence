@@ -76,14 +76,14 @@ export const playlistsContract = c.router(
 		},
 		followPlaylist: {
 			method: "POST",
-			path: "/playlists/:uuid/follow",
+			path: "/:uuid/follow",
 			pathParams: uuidParamSchema,
 			body: c.noBody(),
 			responses: { 204: null },
 		},
 		unfollowPlaylist: {
 			method: "POST",
-			path: "/playlists/:uuid/unfollow",
+			path: "/:uuid/unfollow",
 			pathParams: uuidParamSchema,
 			body: c.noBody(),
 			responses: { 204: null },

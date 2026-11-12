@@ -1,15 +1,11 @@
 import { z } from "zod";
-import { uuidParamSchema } from "../../../../schemas/common.schema";
+
+const playlistNameSchema = z.string().trim().min(1).
+	max(64);
 
 export const createPlaylistBodySchema = z.object({
-	name: z.string().trim().min(1).
-		max(64),
+	name: playlistNameSchema,
 	private: z.boolean().default(false),
-});
-
-export const musicPathParamsSchema = uuidParamSchema.extend({
-	musicUUID: z.string().uuid(),
-	providerUUID: z.string().uuid(),
 });
 
 export const createdPlaylistSchema = z.object({
@@ -24,7 +20,7 @@ export const MusicBodySchema = z.object({
 });
 
 export const updatePlaylistNameSchema = z.object({
-	name: z.string().min(1).max(64),
+	name: playlistNameSchema,
 });
 
 export const updatePlaylistPrivacySchema = z.object({
