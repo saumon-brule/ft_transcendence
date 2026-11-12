@@ -39,6 +39,20 @@ export class MusicService {
 		return { musics: rows.map(toMusicItem), total };
 	}
 
+	async getMany(requested: string[]) {
+		const uuids = [...new Set(requested)];
+		const rows = await this.prisma.music.findMany({
+			where: { uuid: { in: uuids } },
+			include: musicItemInclude,
+		});
+
+		const byUuid = new Map(rows.map((row) => [row.uuid, row]));
+		return {
+			musics: uuids.flatMap((uuid) => byUuid.get(uuid) ?? []).map(toMusicItem),
+			missing: uuids.filter((uuid) => !byUuid.has(uuid)),
+		};
+	}
+
 	async get(uuid: string) {
 		const music = await this.prisma.music.findUnique({
 			where: { uuid },
