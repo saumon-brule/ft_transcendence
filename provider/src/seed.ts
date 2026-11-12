@@ -4,6 +4,11 @@
  *   pnpm seed               -> refuses if the catalog already has data
  *   pnpm seed --reset       -> wipes Music / Album / Artist first
  *   pnpm seed --filler=300  -> number of generated artists (default 150, 0 to disable)
+ *   pnpm seed --no-audio    -> skip the playable tracks of the mock folder
+ *
+ * Unless --no-audio is given, the mp3 files of the mock folder are imported as well
+ * (the only musics with audio). MOCK_DIR and MEDIA_DIR can be set, they default to
+ * ./mock and ./media.
  *
  * The curated part is built to exercise the search: accents (Beyoncé, Sigur Rós),
  * features (Get Lucky), homonyms (two Nirvana), near names for fuzzy (Back in Black /
@@ -13,8 +18,10 @@
  */
 import "dotenv/config";
 import { randomUUID } from "node:crypto";
+import { resolve } from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../src/generated/prisma/client";
+import { PrismaClient } from "./generated/prisma/client";
+import { seedMockMusics } from "./core/prisma/mock-catalog";
 
 // title, then featured artists
 type Track = string | [string, ...string[]];
@@ -465,11 +472,20 @@ function fillerCatalog(count: number, featurable: string[]): SeedArtist[] {
 			year: between(1965, 2025),
 			tracks: Array.from({ length: between(4, 14) }, (): Track => {
 				const title = fillerTitle();
-				return rng() < 0.12 ? [title, pick([...featurable, ...used])] : title;
+				return rng() < 0.12
+					? [title, pick([...featurable, ...used])]
+					: title;
 			}),
 		}));
-		const singles = Array.from({ length: between(albums.length === 0 ? 1 : 0, 3) }, fillerTitle);
-		artists.push({ name, albums, singles, bio: rng() < 0.3 ? `${pick(FILLER_WORDS.adjectives)} sounds from ${pick(FILLER_WORDS.places)}.` : undefined });
+		const singles = Array.from({ length: between(albums.length === 0
+			? 1
+			: 0, 3) }, fillerTitle);
+		artists.push({ name,
+			albums,
+			singles,
+			bio: rng() < 0.3
+				? `${pick(FILLER_WORDS.adjectives)} sounds from ${pick(FILLER_WORDS.places)}.`
+				: undefined });
 	}
 	return artists;
 }
@@ -484,7 +500,9 @@ async function main() {
 	const args = process.argv.slice(2);
 	const reset = args.includes("--reset");
 	const fillerArg = args.find((arg) => arg.startsWith("--filler="));
-	const fillerCount = fillerArg ? Number(fillerArg.split("=")[1]) : 150;
+	const fillerCount = fillerArg
+		? Number(fillerArg.split("=")[1])
+		: 150;
 	if (!Number.isInteger(fillerCount) || fillerCount < 0) throw new Error(`Invalid --filler value: ${fillerArg}`);
 
 	const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env["DATABASE_URL"] }) });
@@ -518,11 +536,15 @@ async function main() {
 		const musicArtists: { musicUuid: string; artistUuid: string }[] = [];
 
 		const addTrack = (track: Track, mainUuid: string | null, album: { uuid: string; publishedAt: Date } | null) => {
-			const [name, ...featuring] = typeof track === "string" ? [track] : track;
+			const [name, ...featuring] = typeof track === "string"
+				? [track]
+				: track;
 			const uuid = randomUUID();
 			musics.push({ uuid, name, duration: between(90, 480), albumUuid: album?.uuid ?? null, publishedAt: album?.publishedAt ?? null });
 
-			const linked = new Set([...mainUuid ? [mainUuid] : [], ...featuring.map(artistUuid)]);
+			const linked = new Set([...mainUuid
+				? [mainUuid]
+				: [], ...featuring.map(artistUuid)]);
 			for (const artist of linked) musicArtists.push({ musicUuid: uuid, artistUuid: artist });
 		};
 
@@ -553,6 +575,16 @@ async function main() {
 		await insertChunks(musics, (data) => prisma.music.createMany({ data }));
 		await insertChunks(musicArtists, (data) => prisma.musicArtist.createMany({ data, skipDuplicates: true }));
 
+		if (!args.includes("--no-audio")) {
+			const imported = await seedMockMusics(
+				prisma,
+				resolve(process.cwd(), process.env["MOCK_DIR"] ?? "mock"),
+				resolve(process.cwd(), process.env["MEDIA_DIR"] ?? "media"),
+				(message) => { console.warn(message); },
+			);
+			console.log(`Imported ${imported} playable musics`);
+		}
+
 		console.log(`Seeded ${artists.length} artists, ${albums.length} albums, ${musics.length} musics (${musicArtists.length} music/artist links)`);
 	} finally {
 		await prisma.$disconnect();
@@ -560,6 +592,8 @@ async function main() {
 }
 
 main().catch((error: unknown) => {
-	console.error(error instanceof Error ? error.message : error);
+	console.error(error instanceof Error
+		? error.message
+		: error);
 	process.exit(1);
 });
