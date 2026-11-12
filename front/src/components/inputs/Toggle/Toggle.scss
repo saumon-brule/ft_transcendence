@@ -56,6 +56,7 @@
 
 .toggle:has(input:disabled) {
 	cursor: not-allowed;
+	opacity: 0.5;
 }
 
 .toggle input:focus-visible + .toggle-track {
