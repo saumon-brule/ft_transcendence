@@ -1,7 +1,8 @@
-import { A } from "@solidjs/router";
+import { A, useLocation } from "@solidjs/router";
 import "./Sidebar.scss";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
-import { createSignal, For, Show } from "solid-js";
+import { createEffect, createSignal, For, on, Show } from "solid-js";
+import { isSidebarOpen, sidebarActions } from "~/store/sidebar.store";
 import ProviderCard from "../ProviderCard/ProviderCard";
 import { DiscAlbum, Home, Server } from "lucide-solid";
 import { env } from "~/env";
@@ -14,7 +15,10 @@ export default function Sidebar() {
 	const [showAllPlaylists, setShowAllPlaylists] = createSignal(false);
 	const [showAllProviders, setShowAllProviders] = createSignal(false);
 
-	return <div id="app-sidebar">
+	const location = useLocation();
+	createEffect(on(() => location.pathname, () => sidebarActions.close(), { defer: true }));
+
+	return <div id="app-sidebar" classList={{ active: isSidebarOpen() }}>
 		<section>
 			<div class="link-container">
 				<A class="white-variant icon-link" href="/home" end><Home/> Home</A>
