@@ -29,7 +29,6 @@ import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
 import { createReadStream, existsSync } from "node:fs";
 import { ASSET_DIR, COVER_DIR } from "../core/utils/constants";
-import { AppForbiddenException } from "../core/error/forbidden";
 
 @Controller()
 export class PlaylistsController {

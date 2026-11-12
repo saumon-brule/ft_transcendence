@@ -2,7 +2,8 @@ import { z } from "zod";
 import { uuidParamSchema } from "../../../../schemas/common.schema";
 
 export const createPlaylistBodySchema = z.object({
-	name: z.string().trim().min(1).max(64),
+	name: z.string().trim().min(1).
+		max(64),
 	private: z.boolean().default(false),
 });
 
