@@ -164,23 +164,4 @@ export class UsersController {
 			},
 		);
 	}
-
-	@TsRestHandler(usersContract.followPlaylist)
-	@UseGuards(JwtAuthGuard)
-	public followPlaylist(@CurrentUser() authUser: AuthUser) {
-		return tsRestHandler(usersContract.followPlaylist, async ({ params }) => {
-			await this.usersService.followPlaylist(authUser.uuid, params.playlistUUID);
-			return { status: 204, body: null };
-		});
-	}
-
-	@TsRestHandler(usersContract.unfollowPlaylist)
-	@UseGuards(JwtAuthGuard)
-	public unfollowPlaylist(@CurrentUser() authUser: AuthUser) {
-		return tsRestHandler(usersContract.unfollowPlaylist, async ({ params }) => {
-			await this.usersService.unfollowPlaylist(authUser.uuid, params.playlistUUID);
-			return { status: 204, body: null };
-		});
-	}
-
 }

@@ -5,7 +5,6 @@ import {
 	meSchema,
 	searchUsersQuerySchema,
 	shortUserSchema,
-	ShortPlaylistSchema,
 	updateMeSchema,
 	userSchema,
 } from "./schemas/user.schema";
@@ -85,20 +84,6 @@ export const usersContract = c.router(
 			method: "DELETE",
 			path: "/:uuid/roles/:roleId",
 			pathParams: DeleteRoleParamSchema,
-			responses: { 204: null },
-		},
-		followPlaylist: {
-			method: "POST",
-			path: "/playlists/:uuid/follow",
-			pathParams: ShortPlaylistSchema,
-			body: c.noBody(),
-			responses: { 204: null },
-		},
-		unfollowPlaylist: {
-			method: "POST",
-			path: "/playlists/:uuid/unfollow",
-			pathParams: ShortPlaylistSchema,
-			body: c.noBody(),
 			responses: { 204: null },
 		},
 	},

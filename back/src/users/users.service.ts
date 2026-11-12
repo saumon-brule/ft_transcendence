@@ -278,33 +278,6 @@ export class UsersService {
 		return email.trim().toLowerCase();
 	}
 
-	public async followPlaylist(userUUID: string, playlistUUID: string) {
-		const playlist = await this.prisma.playlist.findUnique({
-			where: { uuid: playlistUUID },
-		});
-		if (!playlist) {
-			throw new NotFoundException("Playlist not found");
-		}
-		if (playlist.private && playlist.ownerUUID !== userUUID) {
-			throw new AppForbiddenException(
-				"FORBIDDEN",
-				"You are not allowed to follow this playlist",
-			);
-		}
-		await this.prisma.userPlaylist.create({
-			data: { userUUID, playlistUUID },
-		});
-	}
-
-	public async unfollowPlaylist(userUUID: string, playlistUUID: string) {
-		const result = await this.prisma.userPlaylist.deleteMany({
-			where: { userUUID, playlistUUID },
-		});
-		if (result.count === 0) {
-			throw new NotFoundException("Playlist not found");
-		}
-	}
-
 	public async searchUsers(userUUID: string, username: string) {
 		return this.prisma.user.findMany({
 			where: {

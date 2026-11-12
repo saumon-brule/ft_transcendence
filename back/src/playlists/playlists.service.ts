@@ -55,12 +55,12 @@ export class PlaylistsService {
 
 	public async addMusicToPlaylist(uuid: string, musicUUID: string, providerUUID: string, ownerUUID: string) {
 		await this.assertPlaylistOwner(uuid, ownerUUID);
-		const music = await this.prisma.music.findUnique({
-			where: { uuid: musicUUID },
-		});
-		if (!music) {
-			throw new NotFoundException("Music not found");
-		}
+		// const music = await this.prisma.music.findUnique({
+		// 	where: { uuid: musicUUID },
+		// });
+		// if (!music) {
+		// 	throw new NotFoundException("Music not found");
+		// }
 		const existingLink = await this.prisma.playlistMusic.findFirst({
 			where: {
 				playlistUUID: uuid,
@@ -90,10 +90,38 @@ export class PlaylistsService {
 		}
 	}
 
-	public async deletePlaylist(uuid: string) {
+	public async deletePlaylist(uuid: string, ownerUUID: string) {
+		await this.assertPlaylistOwner(uuid, ownerUUID);
 		const result = await this.prisma.playlist.deleteMany({
 			where: { uuid: uuid },
 		});
 		if (result.count === 0) throw new NotFoundException("Playlist Not Found");
+	}
+
+	public async followPlaylist(userUUID: string, playlistUUID: string) {
+		const playlist = await this.prisma.playlist.findUnique({
+			where: { uuid: playlistUUID },
+		});
+		if (!playlist) {
+			throw new NotFoundException("Playlist not found");
+		}
+		if (playlist.private && playlist.ownerUUID !== userUUID) {
+			throw new AppForbiddenException(
+				"FORBIDDEN",
+				"You are not allowed to follow this playlist",
+			);
+		}
+		await this.prisma.userPlaylist.create({
+			data: { userUUID, playlistUUID },
+		});
+	}
+
+	public async unfollowPlaylist(userUUID: string, playlistUUID: string) {
+		const result = await this.prisma.userPlaylist.deleteMany({
+			where: { userUUID, playlistUUID },
+		});
+		if (result.count === 0) {
+			throw new NotFoundException("Playlist not found");
+		}
 	}
 }

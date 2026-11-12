@@ -226,7 +226,7 @@ model PlaylistMusic {
     playlist Playlist @relation(fields: [playlistUUID], references: [uuid], onDelete: Cascade)
     provider Provider @relation(fields: [providerUUID], references: [uuid], onDelete: Cascade)
 
-    @@unique([playlistUUID, musicUUID])
+    @@unique([playlistUUID, providerUUID,musicUUID])
 }
 
 model Music {

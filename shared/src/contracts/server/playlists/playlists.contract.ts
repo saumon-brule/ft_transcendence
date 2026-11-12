@@ -47,6 +47,7 @@ export const playlistsContract = c.router(
 		addMusicToPlaylist: {
 			method: "POST",
 			path: "/:uuid/musics",
+			pathParams: uuidParamSchema,
 			body: MusicBodySchema,
 			responses: {
 				204: null,
@@ -56,6 +57,7 @@ export const playlistsContract = c.router(
 		removeMusicFromPlaylist: {
 			method: "DELETE",
 			path: "/:uuid/musics",
+			pathParams: uuidParamSchema,
 			body: MusicBodySchema,
 			responses: {
 				204: null,
@@ -71,6 +73,20 @@ export const playlistsContract = c.router(
 			responses: {
 				204: null,
 			},
+		},
+		followPlaylist: {
+			method: "POST",
+			path: "/playlists/:uuid/follow",
+			pathParams: uuidParamSchema,
+			body: c.noBody(),
+			responses: { 204: null },
+		},
+		unfollowPlaylist: {
+			method: "POST",
+			path: "/playlists/:uuid/unfollow",
+			pathParams: uuidParamSchema,
+			body: c.noBody(),
+			responses: { 204: null },
 		},
 	},
 	{ pathPrefix: "/playlists" },

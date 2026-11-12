@@ -85,17 +85,6 @@ export class PlaylistsController {
 		});
 	}
 
-	private async assertPlaylistOwner(uuid: string, ownerUUID: string) {
-		const playlist = await this.playlistsService.getPlaylistByUUID(uuid);
-
-		if (playlist.owner.uuid !== ownerUUID) {
-			throw new AppForbiddenException(
-				"FORBIDDEN",
-				"You are not the owner of this playlist",
-			);
-		}
-	}
-
 	@TsRestHandler(playlistsContract.updatePlaylistName)
 	@UseGuards(JwtAuthGuard)
 	public updatePlaylistName(@CurrentUser() authUser: AuthUser) {
@@ -184,11 +173,28 @@ export class PlaylistsController {
 	public deletePlaylist(@CurrentUser() authUser: AuthUser) {
 		return tsRestHandler(
 			playlistsContract.deletePlaylist, async ({ params }) => {
-				await this.assertPlaylistOwner(params.uuid, authUser.uuid);
-				await this.playlistsService.deletePlaylist(params.uuid);
+				await this.playlistsService.deletePlaylist(params.uuid, authUser.uuid);
 
 				return { status: 204, body: null };
 			},
 		);
+	}
+
+	@TsRestHandler(playlistsContract.followPlaylist)
+	@UseGuards(JwtAuthGuard)
+	public followPlaylist(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(playlistsContract.followPlaylist, async ({ params }) => {
+			await this.playlistsService.followPlaylist(authUser.uuid, params.uuid);
+			return { status: 204, body: null };
+		});
+	}
+
+	@TsRestHandler(playlistsContract.unfollowPlaylist)
+	@UseGuards(JwtAuthGuard)
+	public unfollowPlaylist(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(playlistsContract.unfollowPlaylist, async ({ params }) => {
+			await this.playlistsService.unfollowPlaylist(authUser.uuid, params.uuid);
+			return { status: 204, body: null };
+		});
 	}
 }

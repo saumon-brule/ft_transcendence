@@ -93,10 +93,6 @@ export const DeleteRoleParamSchema = z.object({
 	roleId: z.string().transform(Number),
 });
 
-export const ShortPlaylistSchema = z.object({
-	playlistUUID: z.string().uuid(),
-});
-
 export const searchUsersQuerySchema = z.object({
 	username: z.string().trim().min(1).
 		max(50),

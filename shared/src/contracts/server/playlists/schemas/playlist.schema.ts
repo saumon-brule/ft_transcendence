@@ -2,8 +2,7 @@ import { z } from "zod";
 import { uuidParamSchema } from "../../../../schemas/common.schema";
 
 export const createPlaylistBodySchema = z.object({
-	name: z.string().trim().min(1).
-		max(100),
+	name: z.string().trim().min(1).max(64),
 	private: z.boolean().default(false),
 });
 
@@ -24,7 +23,7 @@ export const MusicBodySchema = z.object({
 });
 
 export const updatePlaylistNameSchema = z.object({
-	name: z.string().min(1).max(32),
+	name: z.string().min(1).max(64),
 });
 
 export const updatePlaylistPrivacySchema = z.object({
