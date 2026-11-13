@@ -17,6 +17,7 @@ import { ProvidersModule } from "./providers/providers.module";
 import { FriendsModule } from "./users/friends/friends.module";
 import { HealthModule } from "./health/health.module";
 import { PresenceModule } from "./users/presence/presence.module";
+import { ChatModule } from "./users/chat/chat.module";
 
 @Module({
 	providers: [
@@ -42,6 +43,7 @@ import { PresenceModule } from "./users/presence/presence.module";
 		PlaylistsModule,
 		ProvidersModule,
 		PresenceModule,
+		ChatModule,
 		ThrottlerModule.forRoot({
 			throttlers: [{ ttl: 60000, limit: 100 }],
 		}),
