@@ -34,3 +34,30 @@ export const useRemoveMusicFromPlaylist = (playlistUuid: () => string) => {
 		onError: () => { summonErrorToast("Failed to remove the music from the playlist"); },
 	});
 };
+
+export const usePlaylistsQuery = () => createQuery({
+	queryKey: () => queryKeys.playlists.listPlaylists(),
+	queryFn: async () => {
+		const res = await client.playlists.listPlaylists.query();
+		if (res.status !== 200) throw new PlaylistRequestError(res.status);
+		return res.body;
+	},
+	staleTime: 30_000,
+});
+
+export const useCreatePlaylist = () => {
+	const queryClient = useQueryClient();
+
+	return createMutation({
+		mutationFn: async (body: { name: string; private: boolean }) => {
+			const res = await client.playlists.createPlaylist.mutation({ body });
+			if (res.status !== 201) throw new PlaylistRequestError(res.status);
+			return res.body;
+		},
+		onSuccess: () => Promise.all([
+			queryClient.invalidateQueries({ queryKey: queryKeys.playlists.listPlaylists() }),
+			queryClient.invalidateQueries({ queryKey: queryKeys.users.me() }),
+		]),
+		onError: () => { summonErrorToast("Failed to create the playlist"); },
+	});
+};

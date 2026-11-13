@@ -1,4 +1,6 @@
 import { Match, Show, Switch } from "solid-js";
+import { Dynamic } from "solid-js/web";
+import { CircleX, CloudOff, LoaderCircle, TriangleAlert } from "lucide-solid";
 import Button from "~/components/inputs/Button";
 import { useAccessRequestQuery, useJoinProvider } from "~/api/queryHooks/providerAccess";
 import { useRemoveMusicFromPlaylist } from "~/api/queryHooks/playlist";
@@ -52,23 +54,43 @@ function MissingActions(props: { track: UnavailableTrack; playlist?: PlaylistCon
 	</Show>;
 }
 
+const ICONS = {
+	loading: LoaderCircle,
+	offline: CloudOff,
+	restricted: TriangleAlert,
+	missing: CircleX,
+} as const;
+
 export default function UnavailableTrackRow(props: UnavailableTrackRowProps) {
+	const Icon = () => ICONS[props.track.state];
+	const title = () => ({
+		loading: "Loading…",
+		offline: "Unavailable track",
+		restricted: "Restricted track",
+		missing: "Track no longer exists",
+	})[props.track.state];
+	const description = () => ({
+		loading: props.track.provider.name,
+		offline: `${props.track.provider.name} is offline`,
+		restricted: `You are not a member of ${props.track.provider.name}`,
+		missing: `It was removed from ${props.track.provider.name}`,
+	})[props.track.state];
+
 	return <tr class={`track-state track-state--${props.track.state}`}>
 		<td colSpan={props.columns}>
 			<div class="track-state-content">
+				<div class="music-title">
+					<span class="track-state-icon"><Dynamic component={Icon()} size={20} /></span>
+					<div class="music-title-text">
+						<span class="track-state-title">{title()}</span>
+						<span class="track-state-description">{description()}</span>
+					</div>
+				</div>
 				<Switch>
-					<Match when={props.track.state === "loading"}>
-						<span class="track-state-text">Loading…</span>
-					</Match>
-					<Match when={props.track.state === "offline"}>
-						<span class="track-state-text">Unavailable, {props.track.provider.name} is offline</span>
-					</Match>
 					<Match when={props.track.state === "restricted"}>
-						<span class="track-state-text">You are not a member of {props.track.provider.name}</span>
 						<RestrictedActions track={props.track} />
 					</Match>
 					<Match when={props.track.state === "missing"}>
-						<span class="track-state-text">This music no longer exists on {props.track.provider.name}</span>
 						<MissingActions track={props.track} playlist={props.playlist} />
 					</Match>
 				</Switch>

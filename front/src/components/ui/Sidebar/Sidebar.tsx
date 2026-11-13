@@ -5,12 +5,19 @@ import { createEffect, createSignal, For, on, Show } from "solid-js";
 import { isSidebarOpen, sidebarActions } from "~/store/sidebar.store";
 import ProviderCard from "../ProviderCard/ProviderCard";
 import { DiscAlbum, Home, Server } from "lucide-solid";
-import { env } from "~/env";
+import { usePlaylistsQuery } from "~/api/queryHooks/playlist";
+import PlaylistCard from "../PlaylistCard/PlaylistCard";
 
 export default function Sidebar() {
 	const profileQuery = useMeProfileQuery();
 	const providers = () => profileQuery.data?.body ? [...profileQuery.data.body.ownedProviders, ...profileQuery.data.body.connectedProviders] : [];
-	const playlists = () => profileQuery.data?.body ? profileQuery.data.body.ownedPlaylists : [];
+	const playlistsQuery = usePlaylistsQuery();
+	const playlists = () => playlistsQuery.data
+		? [
+			...playlistsQuery.data.owned.map((playlist) => ({ playlist, showOwner: false })),
+			...playlistsQuery.data.followed.map((playlist) => ({ playlist, showOwner: true })),
+		]
+		: [];
 
 	const [showAllPlaylists, setShowAllPlaylists] = createSignal(false);
 	const [showAllProviders, setShowAllProviders] = createSignal(false);
@@ -36,14 +43,8 @@ export default function Sidebar() {
 						</a>
 					</Show>
 				</div>
-				<div class="list paylists-container">
-					<For each={showAllPlaylists() ? playlists() : playlists().slice(0, 4)}>{(playlist) => <A class="playlist-card" href={`/playlist/${playlist.uuid}`}>
-						<img src={`${env.VITE_API_URL}/playlists/${playlist.uuid}/cover`} alt="playlist logo" />
-						<div class="playlist-info">
-							<h4>{playlist.name}</h4>
-							<p>{playlist._count.musics} musics</p>
-						</div>
-					</A>}</For>
+				<div class="list">
+					<For each={showAllPlaylists() ? playlists() : playlists().slice(0, 4)}>{(item) => <PlaylistCard playlist={item.playlist} showOwner={item.showOwner} variant="row" />}</For>
 				</div>
 			</section>
 		</Show>

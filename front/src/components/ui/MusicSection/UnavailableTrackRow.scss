@@ -34,20 +34,41 @@
 		min-width: 0;
 	}
 
-	.track-state-text {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+	.track-state-icon {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 4px;
+		background: color-mix(in srgb, var(--state-color) 20%, transparent);
+	}
+
+	.track-state-title {
+		color: var(--text-primary);
+	}
+
+	.track-state-description {
+		font-size: 0.85em;
+	}
+
+	.track-state-icon .lucide-loader-circle {
+		animation: track-state-spin 1s linear infinite;
+	}
+
+	.btn {
+		flex-shrink: 0;
 	}
 
 	.track-state-note {
 		flex-shrink: 0;
 		font-size: 0.85em;
 	}
+}
 
-	.btn {
-		flex-shrink: 0;
-	}
+@keyframes track-state-spin {
+	to { transform: rotate(360deg); }
 }
 
 @container (max-width: 520px) {
