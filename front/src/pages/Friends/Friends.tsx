@@ -9,6 +9,7 @@ import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import { SendHorizontalIcon, ArrowLeft, MessagesCircle } from "lucide-solid";
+import { PresenceAvatar } from "~/components/ui/PresenceDot/PresenceDot";
 import { addMessage, hasUnreadMessages, markAsRead, openChat, setDraft } from "~/store/messages.store";
 
 export default function Friends() {
@@ -84,7 +85,9 @@ export default function Friends() {
 					<div class="friend-list">
 						<For each={data.body.friends}>{(friend) => <div class="friend-card">
 							<div class="friend-info">
-								<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
+								<PresenceAvatar uuid={friend.uuid}>
+									<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
+								</PresenceAvatar>
 								<A href={`/user/${friend.uuid}`} class="white-variant">{friend.username}</A>
 							</div>
 							<div class="friend-actions">
@@ -107,7 +110,9 @@ export default function Friends() {
 			<div class="chat">
 				<Show when={friend()} keyed>{(friend) => <>
 					<div class="chat-header">
-						<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.info.uuid}/avatar`} alt={`${friend.info.username}'s avatar`} />
+						<PresenceAvatar uuid={friend.info.uuid}>
+							<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.info.uuid}/avatar`} alt={`${friend.info.username}'s avatar`} />
+						</PresenceAvatar>
 						<span class="friend-username">{friend.info.username}</span>
 					</div>
 					<div class="chat-messages">

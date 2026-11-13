@@ -20,7 +20,20 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "./generated/prisma/client";
 
 const MOCK_PREFIX = "[mock] ";
-const MOCK_USER_EMAIL = "mock-listener@flex.invalid";
+const MOCK_EMAIL_SUFFIX = "@flex.invalid";
+const MOCK_USER_EMAIL = `mock-listener${MOCK_EMAIL_SUFFIX}`;
+const mockAccounts = { AND: [{ email: { startsWith: "mock-" } }, { email: { endsWith: MOCK_EMAIL_SUFFIX } }] };
+
+const MOCK_PEOPLE: { name: string; askedByThem?: boolean; playlist?: "public" | "public-and-private"; provider?: boolean; friendOf?: string }[] = [
+	{ name: "Alice", playlist: "public-and-private", provider: true },
+	{ name: "Bob", askedByThem: true, playlist: "public", friendOf: "Alice" },
+	{ name: "Carol" },
+	{ name: "Dave", askedByThem: true, playlist: "public" },
+	{ name: "Frank" },
+	{ name: "Erin", askedByThem: true, playlist: "public" },
+];
+const mockEmail = (name: string) => `mock-${name.toLowerCase()}${MOCK_EMAIL_SUFFIX}`;
+const mockProviderName = (name: string) => `Mock provider of ${name}`;
 const OFFLINE_PROVIDER = { name: "Mock offline provider", address: "https://mock-offline.invalid" };
 
 const PLAYABLE = [
@@ -38,16 +51,71 @@ const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: proc
 
 async function clean() {
 	const playlists = await prisma.playlist.deleteMany({ where: { name: { startsWith: MOCK_PREFIX } } });
-	const users = await prisma.user.deleteMany({ where: { email: MOCK_USER_EMAIL } });
-	const providers = await prisma.provider.deleteMany({ where: { name: OFFLINE_PROVIDER.name } });
-	console.log(`Removed ${playlists.count} playlists, ${users.count} mock user, ${providers.count} mock provider`);
+	const providerNames = [OFFLINE_PROVIDER.name, ...MOCK_PEOPLE.map(({ name }) => mockProviderName(name))];
+	const providers = await prisma.provider.deleteMany({ where: { name: { in: providerNames } } });
+	const users = await prisma.user.deleteMany({ where: mockAccounts });
+	console.log(`Removed ${playlists.count} playlists, ${users.count} mock accounts (and their friendships), ${providers.count} mock providers`);
+}
+
+type CreatePlaylist = (ownerUUID: string, name: string, isPrivate: boolean, tracks: [string, string][]) => Promise<unknown>;
+
+async function seedPeople(viewerUUID: string, liveProviderUUID: string, create: CreatePlaylist) {
+	const password = await bcrypt.hash(randomBytes(24).toString("hex"), 10);
+	const people = new Map<string, { uuid: string }>();
+	for (const { name } of MOCK_PEOPLE) {
+		const person = await prisma.user.upsert({
+			where: { email: mockEmail(name) },
+			update: { username: name },
+			create: { email: mockEmail(name), username: name, password, emailValidated: true },
+		});
+		people.set(name, person);
+	}
+
+	const befriend = async (requesterUUID: string, receiverUUID: string) => {
+		await prisma.friendRequest.deleteMany({
+			where: { OR: [
+				{ userUUID: requesterUUID, friendUUID: receiverUUID },
+				{ userUUID: receiverUUID, friendUUID: requesterUUID },
+			] },
+		});
+		await prisma.friendRequest.create({ data: { userUUID: requesterUUID, friendUUID: receiverUUID, status: "ACCEPTED" } });
+	};
+
+	const tracks = PLAYABLE.map((uuid): [string, string] => [uuid, liveProviderUUID]);
+	console.log("Mock friends (open their profile, none of them can log in):");
+	for (const { name, askedByThem, playlist, provider, friendOf } of MOCK_PEOPLE) {
+		const person = people.get(name)!;
+		if (askedByThem) {
+			await befriend(person.uuid, viewerUUID);
+		} else {
+			await befriend(viewerUUID, person.uuid);
+		}
+		if (friendOf) await befriend(person.uuid, people.get(friendOf)!.uuid);
+
+		if (playlist) await create(person.uuid, `${name}'s favorites`, false, tracks.slice(0, 2));
+		if (playlist === "public-and-private") await create(person.uuid, `${name}'s secret mix`, true, tracks);
+		if (provider) {
+			await prisma.provider.upsert({
+				where: { name: mockProviderName(name) },
+				update: {},
+				create: {
+					name: mockProviderName(name),
+					address: `https://mock-${name.toLowerCase()}.invalid`,
+					ownerUUID: person.uuid,
+					hashedKey: randomBytes(32).toString("hex"),
+					publicDisplay: true,
+				},
+			});
+		}
+		console.log(`  /user/${person.uuid}  ${name}`);
+	}
 }
 
 async function seed() {
 	const email = option("user");
 	const viewer = email
 		? await prisma.user.findUnique({ where: { email } })
-		: await prisma.user.findFirst({ where: { email: { not: MOCK_USER_EMAIL } }, orderBy: { id: "asc" } });
+		: await prisma.user.findFirst({ where: { NOT: mockAccounts }, orderBy: { id: "asc" } });
 	if (!viewer) throw new Error(email
 		? `No account with the email ${email}`
 		: "No account yet: register one first, or pass --user=<email>");
@@ -127,6 +195,8 @@ async function seed() {
 	]);
 	await prisma.userPlaylist.create({ data: { userUUID: viewer.uuid, playlistUUID: followed.uuid } });
 	console.log("  (the last playlist belongs to the mock listener and is followed by the account)");
+
+	await seedPeople(viewer.uuid, live.uuid, create);
 
 	if (!restricted) {
 		console.log("No provider found that this account has not joined, so there is no restricted track.");
