@@ -3,6 +3,7 @@ export { authContract } from "./contracts/server/auth/auth.contract";
 export { usersContract } from "./contracts/server/users/users.contract";
 export { appConfigContract } from "./contracts/server/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/server/playlists/playlists.contract";
+export type { PlaylistDetailDto } from "./contracts/server/playlists/schemas/playlist.schema";
 export { providersContract } from "./contracts/server/providers/providers.contract";
 export { providerContract } from "./contracts/provider/provider.contract";
 export { friendsContract } from "./contracts/server/users/friends.contract";
