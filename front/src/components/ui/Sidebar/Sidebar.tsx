@@ -1,4 +1,4 @@
-import { A, useLocation } from "@solidjs/router";
+import { A, useLocation, useNavigate } from "@solidjs/router";
 import "./Sidebar.scss";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import { createEffect, createSignal, For, on, Show } from "solid-js";
@@ -6,7 +6,8 @@ import { isSidebarOpen, sidebarActions } from "~/store/sidebar.store";
 import ProviderCard from "../ProviderCard/ProviderCard";
 import { DiscAlbum, Home, Server } from "lucide-solid";
 import { usePlaylistsQuery } from "~/api/queryHooks/playlist";
-import PlaylistCard from "../PlaylistCard/PlaylistCard";
+import PlaylistCard, { NewPlaylistCard } from "../PlaylistCard/PlaylistCard";
+import { summonNewPlaylistPopUp } from "~/pages/Playlists/popUps/newPlaylistPopUp";
 
 export default function Sidebar() {
 	const profileQuery = useMeProfileQuery();
@@ -23,6 +24,7 @@ export default function Sidebar() {
 	const [showAllProviders, setShowAllProviders] = createSignal(false);
 
 	const location = useLocation();
+	const navigate = useNavigate();
 	createEffect(on(() => location.pathname, () => sidebarActions.close(), { defer: true }));
 
 	return <div id="app-sidebar" classList={{ active: isSidebarOpen() }}>
@@ -33,21 +35,20 @@ export default function Sidebar() {
 				<A class="white-variant icon-link" href="/playlists" end><DiscAlbum/> Playlists</A>
 			</div>
 		</section>
-		<Show when={playlists().length > 0}>
-			<section>
-				<div class="section-heading">
-					<h2>Playlists</h2>
-					<Show when={playlists().length > 4}>
-						<a href="#" onClick={(event) => { event.preventDefault(); setShowAllPlaylists((value) => !value); }}>
-							{showAllPlaylists() ? "Show less" : "Show more"}
-						</a>
-					</Show>
-				</div>
-				<div class="list">
-					<For each={showAllPlaylists() ? playlists() : playlists().slice(0, 4)}>{(item) => <PlaylistCard playlist={item.playlist} showOwner={item.showOwner} variant="row" />}</For>
-				</div>
-			</section>
-		</Show>
+		<section>
+			<div class="section-heading">
+				<h2>Playlists</h2>
+				<Show when={playlists().length > 4}>
+					<a href="#" onClick={(event) => { event.preventDefault(); setShowAllPlaylists((value) => !value); }}>
+						{showAllPlaylists() ? "Show less" : "Show more"}
+					</a>
+				</Show>
+			</div>
+			<div class="list">
+				<NewPlaylistCard variant="row" onClick={() => summonNewPlaylistPopUp((uuid) => navigate(`/playlist/${uuid}`))} />
+				<For each={showAllPlaylists() ? playlists() : playlists().slice(0, 4)}>{(item) => <PlaylistCard playlist={item.playlist} showOwner={item.showOwner} variant="row" />}</For>
+			</div>
+		</section>
 		<Show when={providers().length > 0}>
 			<section>
 				<div class="section-heading">

@@ -27,9 +27,11 @@ export default function PlaylistCard(props: PlaylistCardProps) {
 	</A>;
 }
 
-export function NewPlaylistCard(props: { onClick: () => void }) {
-	return <button type="button" class="playlist-card playlist-card-new" onClick={() => props.onClick()}>
-		<span class="playlist-card-new-icon"><Plus size={40} /></span>
+export function NewPlaylistCard(props: { onClick: () => void; variant?: "card" | "row" }) {
+	const row = () => props.variant === "row";
+
+	return <button type="button" class={`playlist-card playlist-card-new ${row() ? "playlist-card--row" : ""}`} onClick={() => props.onClick()}>
+		<span class="playlist-card-new-icon"><Plus size={row() ? 24 : 40} /></span>
 		<div class="playlist-card-info">
 			<h4>New playlist</h4>
 			<p>Create an empty playlist</p>
