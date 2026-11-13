@@ -4,21 +4,31 @@ import { Music } from "~/class/Music";
 import "./MusicSection.scss";
 import { A } from "@solidjs/router";
 import Button from "~/components/inputs/Button";
-import { ProviderInfo } from "~/api/queryHooks/providerInfo";
 import MusicCover from "../MusicCover";
 import ArtistsLinks from "../ArtistLinks";
 import { formatTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { Provider } from "@flex/shared";
+import { MusicGroup } from "~/store/trackManager.store";
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
+function isGroupMusicSection(props: MusicSectionProps | GroupMusicSectionProps): props is GroupMusicSectionProps {
+	return "musicGroup" in props;
+}
+
 export type MusicSectionProps = {
-	music: ProviderInfo["music"];
 	hiddenColumns?: MusicSectionColumn[];
 	providers?: Provider[];
+	musics: Array<Music>;
 };
 
-export default function MusicSection(props: MusicSectionProps) {
+export type GroupMusicSectionProps = {
+	hiddenColumns?: MusicSectionColumn[];
+	providers?: Provider[];
+	musicGroup: MusicGroup;
+};
+
+export default function MusicSection(props: MusicSectionProps | GroupMusicSectionProps) {
 	const audioManager = useAudioManagerContext();
 	const shown = (column: MusicSectionColumn) => !props.hiddenColumns?.includes(column);
 
@@ -26,14 +36,21 @@ export default function MusicSection(props: MusicSectionProps) {
 		return value instanceof Date ? value : new Date(value);
 	}
 
-	function playMusic(music: Music) {
-		audioManager.setCurrentTrack(music);
+	function handleMusicClick(index: number) {
+		if (isGroupMusicSection(props)) {
+			audioManager.setMusicGroup(props.musicGroup);
+			audioManager.position = index;
+		} else {
+			audioManager.setCurrentMusic(props.musics[index]);
+		}
 		audioManager.play();
 	}
 
 	function addToQueue(music: Music) {
-		audioManager.pushTrackToQueue(music);
+		audioManager.pushMusicToQueue(music);
 	}
+
+	const musicList = () => isGroupMusicSection(props) ? props.musicGroup.musics : props.musics;
 
 	return <div class="music-section">
 		<table class="data">
@@ -49,12 +66,12 @@ export default function MusicSection(props: MusicSectionProps) {
 				</tr>
 			</thead>
 			<tbody>
-				<For each={props.music.musics}>{(music) => <tr>
+				<For each={musicList()}>{(music, i) => <tr>
 					<td class="col-title">
 						<div class="music-title">
 							<MusicCover music={music} />
 							<div class="music-title-text">
-								<Button variant="text" onClick={() => void playMusic(music)}>{music.name}</Button>
+								<Button variant="text" onClick={() => handleMusicClick(i())}>{music.name}</Button>
 								<Show when={shown("artists")}>
 									<span class="music-title-artists">
 										<ArtistsLinks artists={music.artists} providerUUID={music.providerUuid} />

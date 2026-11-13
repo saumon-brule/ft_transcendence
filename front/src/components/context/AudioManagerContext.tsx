@@ -1,9 +1,8 @@
 import { createContext, useContext, ParentComponent, createEffect, onCleanup, onMount, untrack } from "solid-js";
 import { createSignal } from "solid-js";
 import { Music } from "~/class/Music";
-import { PushTrackToQueueFn, SetCurrentTrackFn, useTrackManager } from "~/store/trackManager.store";
+import { ClearQueueFn, MusicGroup, PushMusicToQueueFn, SetCurrentMusicFn, SetMusicGroupFn, useTrackManager } from "~/store/trackManager.store";
 import { setupMediaSession, updateMediaMetadata } from "./mediaSession";
-import { Track } from "~/class/Track";
 import { summonErrorToast } from "../ui/Toaster";
 import { LocalStorageItem } from "~/utils/storageHelper";
 import { getMediaToken } from "~/api/providerClients";
@@ -13,6 +12,8 @@ const BACK_TIMER_THRESHOLD = 3; // secondesw
 export type AudioManager = {
 	get playing(): boolean;
 	get currentMusic(): Music | null;
+	get musicGroup(): MusicGroup | null;
+	get queue(): Array<Music>;
 	get duration(): number;
 	get progression(): number;
 	set progression(time: number);
@@ -20,15 +21,21 @@ export type AudioManager = {
 	set volume(value: number);
 	get muted(): boolean;
 	set muted(value: boolean);
-	get history(): Array<Track>;
+	get position(): number;
+	set position(value: number);
+	get loop(): boolean;
+	set loop(value: boolean);
+	get isCurrentTemporary(): boolean;
 	play: () => void;
 	pause: () => void;
 	stop: () => void;
 	toggle: () => void;
 	forward: () => void;
 	back: () => void;
-	pushTrackToQueue: PushTrackToQueueFn;
-	setCurrentTrack: SetCurrentTrackFn;
+	setCurrentMusic: SetCurrentMusicFn;
+	setMusicGroup: SetMusicGroupFn;
+	pushMusicToQueue: PushMusicToQueueFn;
+	clearQueue: ClearQueueFn;
 };
 
 const AudioManagerContext = createContext<AudioManager>();
@@ -77,6 +84,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	function forward() {
 		setIsPlaying(true);
 		trackManager.nextTrack();
+		audio.currentTime = 0;
 	}
 
 	function back() {
@@ -102,7 +110,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		trackManager.nextTrack();
 		setIsPlaying(true);
 	};
-	const handleTimeUpdate = () => trackManager.setProgression(audio.currentTime);
+	const handleTimeUpdate = () => trackManager.progression = audio.currentTime;
 	const handleLoadedMetadata = () => setDuration(audio.duration);
 
 	window.addEventListener("keydown", handleKeyDown);
@@ -119,23 +127,24 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	});
 
 	createEffect(() => {
-		const currentTrack = trackManager.manager.current;
+		const currentMusic = trackManager.manager.current;
 		const id = ++loadId;
-		if (currentTrack !== null) {
+		if (currentMusic !== null) {
 			loading = true;
-			currentTrack.music.audioUrl()
+			currentMusic.audioUrl()
 				.then((url) => {
 					if (id !== loadId) return;
 					loading = false;
 					audio.src = url;
+					audio.currentTime = 0;
 					if (playWhenLoaded || untrack(isPlaying)) {
 						playWhenLoaded = false;
 						play();
 					}
-					void getMediaToken(currentTrack.music.providerUrl, currentTrack.music.providerUuid)
+					void getMediaToken(currentMusic.providerUrl, currentMusic.providerUuid)
 						.catch(() => null)
 						.then((token) => {
-							if (id === loadId) updateMediaMetadata(currentTrack.music, token);
+							if (id === loadId) updateMediaMetadata(currentMusic, token);
 						});
 				})
 				.catch((e) => {
@@ -186,9 +195,11 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		favicon.href = "/images/icons/logo-favicon-pink.svg";
 	});
 
-	const audioManager = {
+	const audioManager: AudioManager = {
 		get playing() { return isPlaying(); },
-		get currentMusic() { return trackManager.manager.current?.music ?? null; },
+		get currentMusic() { return trackManager.manager.current; },
+		get musicGroup() { return trackManager.manager.musicGroup; },
+		get queue() { return trackManager.manager.queue; },
 		get duration() { return duration(); },
 		get progression() { return trackManager.progression; },
 		set progression(time: number) { audio.currentTime = time; },
@@ -199,15 +210,24 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		set volume(volume: number) { setVolume(Math.pow(Math.min(Math.max(volume, 0), 1), 2)); },
 		get muted() { return muted(); },
 		set muted(muted: boolean) { setMuted(muted); },
-		get history() { return trackManager.manager.history; },
+		get position() { return trackManager.manager.position; },
+		set position(position: number) { audio.currentTime = 0; trackManager.setPosition(position); },
+		get loop() { return trackManager.manager.loop; },
+		set loop(loop: boolean) { trackManager.setLoop(loop); },
+		get isCurrentTemporary() { return trackManager.manager.isCurrentTemporary; },
 		play,
 		pause,
 		stop,
 		toggle,
 		forward,
 		back,
-		pushTrackToQueue: trackManager.pushTrackToQueue,
-		setCurrentTrack: trackManager.setCurrentTrack,
+		setCurrentMusic: (...args) => {
+			audio.currentTime = 0;
+			trackManager.setCurrentMusic(...args);
+		},
+		setMusicGroup: trackManager.setMusicGroup,
+		pushMusicToQueue: trackManager.pushMusicToQueue,
+		clearQueue: trackManager.clearQueue,
 	};
 
 	(window as (typeof window & { audioManager: typeof audioManager })).audioManager = audioManager;

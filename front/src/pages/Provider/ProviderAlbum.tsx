@@ -36,19 +36,28 @@ export default function ProviderAlbum() {
 	});
 
 	return <div class="page" id="provider">
-		<Show when={data()} keyed>{(data) => <>
-			<ProviderAlbumHeader album={data.info} providerBack={data.back} musicTotal={musics()?.total} />
-			<section>
-				<h2>Musiques</h2>
-				<Show when={musics()} keyed>{(music) => <MusicSection music={music} hiddenColumns={["album"]} />}</Show>
-				<Show when={musicsQuery.hasNextPage}>
-					<Button onClick={() => void musicsQuery.fetchNextPage()} disabled={musicsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
-				</Show>
-			</section>
-			<section>
-				<h2>Artists</h2>
-				<ArtistSection artist={{ total: data.info.artists.length, artists: data.info.artists }}/>
-			</section>
-		</>}</Show>
+		<Show when={data()} keyed>{(data) => {
+			const musicGroup = () => {
+				const music = musics();
+				return music ? { name: data.info.name, musics: music.musics, route: `/provider/${data.back.uuid}/album/${data.info.uuid}` } : null;
+			};
+
+			return <>
+				<ProviderAlbumHeader musicGroup={musicGroup} album={data.info} providerBack={data.back} musicTotal={musics()?.total} />
+				<section>
+					<h2>Musiques</h2>
+					<Show when={musicGroup()} keyed>
+						{(musicGroup) => <MusicSection musicGroup={musicGroup} hiddenColumns={["album"]} />}
+					</Show>
+					<Show when={musicsQuery.hasNextPage}>
+						<Button onClick={() => void musicsQuery.fetchNextPage()} disabled={musicsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
+					</Show>
+				</section>
+				<section>
+					<h2>Artists</h2>
+					<ArtistSection artist={{ total: data.info.artists.length, artists: data.info.artists }} />
+				</section>
+			</>;
+		}}</Show>
 	</div>;
 }

@@ -130,6 +130,12 @@ export default {
 				},
 			},
 		},
+		queue: {
+			title: "You're listening to ...",
+			queue: "Queue",
+			queueClear: "clear",
+			following: "Following in ",
+		},
 	},
 	errors: {
 		rateLimit: "You are being rate limited",

@@ -27,7 +27,7 @@ export default function ArtistSection(props: ArtistSectionProps) {
 		<For each={props.artist.artists}>{(artist) => <div class="artist">
 			<ArtistAvatar artist={artist}/>
 			<div class="artist-info">
-				<A href={`/provider/${artist.providerUuid}/artist/${artist.uuid}`} class="white-variant artist-name">{artist.name}</A>
+				<A href={artist.route()} class="white-variant artist-name">{artist.name}</A>
 				<Show when={props.providers?.length}><div class="album-provider">From <A href={`/provider/${artist.providerUuid}`}>{props.providers?.find((provider) => provider.uuid === artist.providerUuid)?.name}</A></div></Show>
 			</div>
 		</div>}</For>

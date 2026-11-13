@@ -8,7 +8,7 @@ type MusicAlbumDto = ProviderDataMusicDto["album"];
 type MusicWithAlbum = Music & { album: NonNullable<MusicAlbumDto> };
 
 export class Music {
-	private constructor(
+	protected constructor(
 		public readonly uuid: string,
 		public readonly name: string,
 		public providerUuid: string,

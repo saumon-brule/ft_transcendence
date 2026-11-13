@@ -164,6 +164,8 @@ export const useProviderArtistQuery = (providerUrl: () => string, providerUuid: 
 	});
 };
 
+export type ProviderArtistQueryBody = Exclude<ReturnType<typeof useProviderArtistQuery>["data"], undefined>["body"];
+
 export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: () => string, albumUUID: () => string) => {
 	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
 	return createQuery({
@@ -183,6 +185,8 @@ export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: (
 		}),
 	});
 };
+
+export type ProviderAlbumQueryBody = Exclude<ReturnType<typeof useProviderAlbumQuery>["data"], undefined>["body"];
 
 const providerSearchOptions = (providerUrl: string, providerUuid: string, searchTerm: string) => {
 	const provider = getProviderClient(providerUrl, providerUuid);
