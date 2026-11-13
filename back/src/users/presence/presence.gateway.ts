@@ -5,42 +5,15 @@ import {
 	OnGatewayInit,
 	WebSocketGateway,
 } from "@nestjs/websockets";
-<<<<<<< HEAD
 import { presenceListSchema, presenceSchema, type JwtPayload } from "@flex/shared";
-=======
-import { type JwtPayload } from "@flex/shared";
-import {
-	type DefaultEventsMap,
-	type Server,
-	type Socket,
-} from "socket.io";
->>>>>>> 0b461119941051ed02a5d3af2fe76dafebffdd44
 import { env } from "../../core/env";
 import { FriendsService } from "../friends/friends.service";
 import { PresenceService } from "./presence.service";
 import { type DefaultEventsMap, type Server, type Socket } from "socket.io";
 
-export type PresenceSocketData = {
+type PresenceSocketData = {
 	userUUID?: string;
 };
-
-export type PresenceSocket = Socket<
-	DefaultEventsMap,
-	DefaultEventsMap,
-	DefaultEventsMap,
-	PresenceSocketData
->;
-
-export type PresenceServer = Server<
-	DefaultEventsMap,
-	DefaultEventsMap,
-	DefaultEventsMap,
-	PresenceSocketData
->;
-
-interface PresenceSocketData {
-	userUUID?: string;
-}
 
 type PresenceSocket = Socket<
 	DefaultEventsMap,
@@ -48,6 +21,7 @@ type PresenceSocket = Socket<
 	DefaultEventsMap,
 	PresenceSocketData
 >;
+
 type PresenceServer = Server<
 	DefaultEventsMap,
 	DefaultEventsMap,
@@ -91,7 +65,6 @@ export class PresenceGateway implements
 		}
 
 		const friends = await this.friendsService.getFriends(userUUID);
-<<<<<<< HEAD
 		if(!client.connected) return;
 
 		await client.join(this.userRoom(userUUID));
@@ -100,22 +73,12 @@ export class PresenceGateway implements
 		const becameOnline = this.presenceService.connect(userUUID, client.id);
 
 		const snapshot = presenceListSchema.parse(
-=======
-
-		await client.join(this.userRoom(userUUID));
-
-		const becameOnline = this.presenceService.connect(userUUID, client.id);
-
-		client.emit(
-			"presence:snapshot",
->>>>>>> 0b461119941051ed02a5d3af2fe76dafebffdd44
 			friends.map((friend) => ({
 				...friend,
 				online: this.presenceService.isOnline(friend.uuid),
 			})),
 		);
 
-<<<<<<< HEAD
 		client.emit("presence:snapshot", snapshot);
 
 		if (becameOnline) {
@@ -171,58 +134,6 @@ export class PresenceGateway implements
 		}
 	}
 
-=======
-		if (becameOnline) {
-			this.notifyFriends(friends, userUUID, true);
-		}
-	}
-
-	async handleDisconnect(client: PresenceSocket): Promise<void> {
-		const userUUID = client.data.userUUID;
-		if (typeof userUUID !== "string") {
-			return;
-		}
-
-		const becameOffline = this.presenceService.disconnect(userUUID, client.id);
-		if (!becameOffline) {
-			return;
-		}
-
-		const friends = await this.friendsService.getFriends(userUUID);
-		this.notifyFriends(friends, userUUID, false);
-	}
-
-	private async authenticate(socket: PresenceSocket): Promise<void> {
-		const token: unknown = socket.handshake.auth?.token;
-		if (typeof token !== "string" || token.length === 0) {
-			throw new Error("Missing token");
-		}
-
-		const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
-			secret: env.JWT_SECRET,
-		});
-
-		if (typeof payload.sub !== "string" || payload.emailVerified !== true) {
-			throw new Error("Invalid token payload");
-		}
-
-		socket.data.userUUID = payload.sub;
-	}
-
-	private notifyFriends(
-		friends: Array<{ uuid: string }>,
-		userUUID: string,
-		online: boolean,
-	): void {
-		for (const friend of friends) {
-			this.server.to(this.userRoom(friend.uuid)).emit("presence:changed", {
-				uuid: userUUID,
-				online,
-			});
-		}
-	}
-
->>>>>>> 0b461119941051ed02a5d3af2fe76dafebffdd44
 	private userRoom(userUUID: string): string {
 		return `user:${userUUID}`;
 	}
