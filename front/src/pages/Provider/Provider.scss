@@ -1,5 +1,4 @@
 #provider {
-
 	.provider-header {
 		display: flex;
 		margin-bottom: 20px;
@@ -96,7 +95,6 @@
 			margin-top: 8px;
 			display: block;
 		}
-
 	}
 
 	.provider-image-header {
@@ -106,12 +104,12 @@
 		padding: 20px;
 		padding-top: 40px;
 		padding-left: 40px;
+		gap: 1.5rem;
 
 		img {
 			width: 150px;
 			height: 150px;
 			border-radius: 50%;
-			margin-right: 20px;
 		}
 
 		.header-info {
@@ -157,8 +155,6 @@
 				margin-top: 10px;
 				font-size: 14px;
 			}
-
 		}
 	}
-
 }

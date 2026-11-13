@@ -3,9 +3,20 @@ import { Show } from "solid-js";
 import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
 import { A } from "@solidjs/router";
+import { ProviderArtistQueryBody } from "~/api/queryHooks/providerInfo";
+import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
+import Button from "~/components/inputs/Button";
+import { Play } from "lucide-solid";
 
-export default function ProviderArtistHeader(props: { artist: ArtistDetailedItemDto; providerBack: Provider }) {
+export default function ProviderArtistHeader(props: { artist: ProviderArtistQueryBody; providerBack: Provider }) {
 	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
+	const audioManager = useAudioManagerContext();
+
+	function onPlayClick() {
+		audioManager.setMusicList(props.artist.music.musics);
+		audioManager.position = 0;
+		audioManager.play();
+	}
 
 	function getAvatar(artist: ArtistDetailedItemDto) {
 		const token = mediaToken();
@@ -28,6 +39,9 @@ export default function ProviderArtistHeader(props: { artist: ArtistDetailedItem
 				<p class="bio">{props.artist.biography}</p>
 			</Show>
 			<p>From <A href={`/provider/${props.providerBack.uuid}`}>{props.providerBack.name}</A></p>
+		</div>
+		<div class="header-controls">
+			<Button icon onClick={onPlayClick}><Play /></Button>
 		</div>
 	</header>;
 }
