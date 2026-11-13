@@ -1,6 +1,3 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
 -- CreateEnum
 CREATE TYPE "FriendStatus" AS ENUM ('ACCEPTED', 'DENIED', 'PENDING');
 
@@ -173,6 +170,7 @@ CREATE TABLE "PlaylistMusic" (
     "id" SERIAL NOT NULL,
     "playlistUUID" TEXT NOT NULL,
     "musicUUID" TEXT NOT NULL,
+    "providerUUID" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -247,6 +245,9 @@ CREATE UNIQUE INDEX "Playlist_uuid_key" ON "Playlist"("uuid");
 CREATE UNIQUE INDEX "UserPlaylist_userUUID_playlistUUID_key" ON "UserPlaylist"("userUUID", "playlistUUID");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "PlaylistMusic_playlistUUID_providerUUID_musicUUID_key" ON "PlaylistMusic"("playlistUUID", "providerUUID", "musicUUID");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Music_uuid_key" ON "Music"("uuid");
 
 -- AddForeignKey
@@ -301,5 +302,4 @@ ALTER TABLE "UserPlaylist" ADD CONSTRAINT "UserPlaylist_playlistUUID_fkey" FOREI
 ALTER TABLE "PlaylistMusic" ADD CONSTRAINT "PlaylistMusic_playlistUUID_fkey" FOREIGN KEY ("playlistUUID") REFERENCES "Playlist"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PlaylistMusic" ADD CONSTRAINT "PlaylistMusic_musicUUID_fkey" FOREIGN KEY ("musicUUID") REFERENCES "Music"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
-
+ALTER TABLE "PlaylistMusic" ADD CONSTRAINT "PlaylistMusic_providerUUID_fkey" FOREIGN KEY ("providerUUID") REFERENCES "Provider"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;

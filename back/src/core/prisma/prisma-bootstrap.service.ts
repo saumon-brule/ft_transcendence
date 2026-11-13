@@ -387,20 +387,20 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			},
 		});
 
-		const addMusicToPlaylist = async (playlistUUID: string, musicUUID: string) => {
-			const existingLink = await this.prisma.playlistMusic.findFirst({
-				where: { playlistUUID, musicUUID },
-			});
-			if (!existingLink) {
-				await this.prisma.playlistMusic.create({ data: { playlistUUID, musicUUID } });
-			}
-		};
-		for (const music of musics.slice(0, 2)) {
-			await addMusicToPlaylist(liamPrivatePlaylist.uuid, music.uuid);
-		}
-		for (const music of musics.slice(2)) {
-			await addMusicToPlaylist(liamPublicPlaylist.uuid, music.uuid);
-		}
+		// const addMusicToPlaylist = async (playlistUUID: string, musicUUID: string, providerUUID: string) => {
+		// 	const existingLink = await this.prisma.playlistMusic.findFirst({
+		// 		where: { playlistUUID, musicUUID },
+		// 	});
+		// 	if (!existingLink) {
+		// 		await this.prisma.playlistMusic.create({ data: { playlistUUID, musicUUID, providerUUID } });
+		// 	}
+		// };
+		// for (const music of musics.slice(0, 2)) {
+		// 	await addMusicToPlaylist(liamPrivatePlaylist.uuid, music.uuid, playlistmusic.providerUUID);
+		// }
+		// for (const music of musics.slice(2)) {
+		// 	await addMusicToPlaylist(liamPublicPlaylist.uuid, music.uuid);
+		// }
 
 		await this.prisma.user.update({
 			where: { uuid: liamUser.uuid },
