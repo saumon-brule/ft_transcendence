@@ -1,7 +1,7 @@
 import { Controller } from "@nestjs/common";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { providerContract } from "@flex/shared";
-import { Authenticated, CurrentMember, CurrentUser, MemberOnly, RequirePermission } from "../core/auth/auth.decorators";
+import { Authenticated, CurrentMember, CurrentUser, RequirePermission } from "../core/auth/auth.decorators";
 import type { CurrentUserData, MemberContext } from "../core/auth/auth.types";
 import { AccessRequestService } from "./access-request.service";
 
@@ -19,7 +19,7 @@ export class AccessRequestController {
 	}
 
 	@TsRestHandler(providerContract.accessRequest.me)
-	@MemberOnly()
+	@Authenticated()
 	getMine(@CurrentUser() user: CurrentUserData) {
 		return tsRestHandler(providerContract.accessRequest.me, async () => ({
 			status: 200,

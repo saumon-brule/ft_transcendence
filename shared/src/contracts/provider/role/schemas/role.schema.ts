@@ -3,7 +3,7 @@ import { z } from "zod";
 export const providerPermissions = [
 	"MANAGE_CATALOG",
 	"MANAGE_MEMBERS",
-	"MANAGE_ROLES",
+	"ADMIN",
 ] as const;
 
 export type ProviderPermission = (typeof providerPermissions)[number];

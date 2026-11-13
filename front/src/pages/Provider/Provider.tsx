@@ -32,7 +32,7 @@ export default function Provider() {
 
 	const [tab, setTab] = useTabParam<Tab>(TABS, "All");
 	const [searchParams, setSearchParams] = useSearchParams<{ q?: string }>();
-	const search = () => searchParams.q ?? "";
+	const search = () => decodeURIComponent(searchParams.q ?? "");
 	const setSearch = (value: string) => setSearchParams({ q: encodeURIComponent(value) || undefined }, { replace: true });
 
 	return <div class="page" id="provider">

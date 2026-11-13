@@ -19,6 +19,9 @@
 	}
 
 	.provider-details {
+		flex: 1 1 auto;
+		min-width: 0;
+
 		.provider-info {
 			min-width: 0;
 	
@@ -84,5 +87,18 @@
 		height: 7px;
 		border-radius: 50%;
 		background-color: currentColor;
+	}
+
+	&.small {
+		width: 100%;
+		min-width: 0;
+
+		.provider-status {
+			padding: 3px;
+
+			.provider-status-label {
+				display: none;
+			}
+		}
 	}
 }

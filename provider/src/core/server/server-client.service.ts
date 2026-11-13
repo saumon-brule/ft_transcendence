@@ -90,6 +90,13 @@ export class ServerClientService {
 		});
 	}
 
+	async revokeMember(userUuid: string) {
+		await this.request("member revocation", async () => {
+			const response = await this.client.providersAPI.revokeMember({ params: { userUuid }, ...this.timeout() });
+			if (response.status !== 204) this.fail("member revocation", response.status);
+		});
+	}
+
 	async decideAccessRequest(userUuid: string, decision: "APPROVED" | "REJECTED") {
 		await this.request("access request decision", async () => {
 			const response = await this.client.providersAPI.decideAccessRequest({
