@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
+import type { ArtistFilters } from "../core/catalog/catalog.filters";
 import { artistDetailInclude, toArtistDetail, toArtistItem } from "../core/catalog/catalog.mappers";
 import { MediaService } from "../media/media.service";
 import { SearchService } from "../search/search.service";
 
-interface ListQuery {
+interface ListQuery extends ArtistFilters {
 	limit: number;
 	offset: number;
 	search?: string;
@@ -26,23 +27,10 @@ export class ArtistService {
 		private readonly search: SearchService,
 	) {}
 
-	async list({ limit, offset, search }: ListQuery) {
-		if (search) {
-			const { rows, total } = await this.search.page("Artist", search, { limit, offset }, (ids) => this.prisma.artist.findMany({
-				where: { id: { in: ids } },
-			}));
-			return { artists: rows.map(toArtistItem), total };
-		}
-
-		const [rows, total] = await this.prisma.$transaction([
-			this.prisma.artist.findMany({
-				orderBy: [{ name: "asc" }, { id: "asc" }],
-				take: limit,
-				skip: offset,
-			}),
-			this.prisma.artist.count(),
-		]);
-
+	async list({ limit, offset, search, ...filters }: ListQuery) {
+		const { rows, total } = await this.search.page("Artist", { search, filters, limit, offset }, (ids) => this.prisma.artist.findMany({
+			where: { id: { in: ids } },
+		}));
 		return { artists: rows.map(toArtistItem), total };
 	}
 

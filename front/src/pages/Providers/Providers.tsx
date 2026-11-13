@@ -12,7 +12,7 @@ export default function Providers() {
 	return <div id="providers-page" class="page">
 		<div class="providers-header">
 			<h1>My Providers</h1>
-			<Button onClick={() => summonNewProviderPopUp()}><Plus/>New provider</Button>
+			<Button onClick={() => summonNewProviderPopUp()} aria-label="New provider"><Plus/><span class="btn-label">New provider</span></Button>
 		</div>
 		<Show when={me.data} keyed>{(data) => <div class="providers-list">
 			<For each={data.body.ownedProviders}>{(provider) => <ProviderCard provider={provider} mine={true} />}</For>

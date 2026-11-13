@@ -21,7 +21,7 @@ export default function AppearanceSettings() {
 					</div>
 					<div class="setting-field-value">
 						<div>
-							<Toggle checked={appearanceStore.theme === "dark"} onChange={(e) => { changeTheme(e.currentTarget.checked ? "dark" : "light"); }} label={t("pages.settings.appearance.theme.darkMode")} />
+							<Toggle disabled={appearanceStore.useDevice} checked={appearanceStore.theme === "dark"} onChange={(e) => { changeTheme(e.currentTarget.checked ? "dark" : "light"); }} label={t("pages.settings.appearance.theme.darkMode")} />
 						</div>
 						<div>
 							<Toggle checked={appearanceStore.useDevice} onChange={(e) => { changeUseDevice(e.currentTarget.checked); }} label={t("pages.settings.appearance.theme.useSystem")} />

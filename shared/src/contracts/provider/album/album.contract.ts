@@ -5,7 +5,7 @@ import {
 	createAlbumSchema,
 	updateAlbumSchema,
 } from "./schemas/album.schema";
-import { listQuerySchema, uuidParamSchema } from "../../../schemas/common.schema";
+import { albumListQuerySchema, uuidParamSchema } from "../../../schemas/common.schema";
 import { commonError404Schema, commonError413Schema, commonError415Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
@@ -15,7 +15,7 @@ export const albumContract = c.router(
 		list: {
 			method: "GET",
 			path: "/",
-			query: listQuerySchema,
+			query: albumListQuerySchema,
 			responses: { 200: albumListResponseSchema },
 		},
 		get: {

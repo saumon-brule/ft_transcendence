@@ -1,3 +1,5 @@
+@use "../../styles/breakpoints" as breakpoints;
+
 #user-profile {
 	.profile-header {
 		display: flex;
@@ -5,17 +7,48 @@
 		margin-bottom: 20px;
 		padding-bottom: 20px;
 
+		@include breakpoints.respond-to("mobile") {
+			flex-direction: column;
+			text-align: center;
+			gap: 12px;
+			margin-bottom: 8px;
+		}
+
 		img {
 			width: 150px;
 			height: 150px;
 			border-radius: 50%;
 			margin-right: 20px;
+			object-fit: cover;
+
+			@include breakpoints.respond-to("mobile") {
+				width: 100px;
+				height: 100px;
+				margin-right: 0;
+			}
 		}
 
 		.header-info {
+			min-width: 0;
+
+			@include breakpoints.respond-to("mobile") {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				width: 100%;
+			}
+
 			h2 {
 				font-size: 28px;
 				margin: 0;
+
+				@include breakpoints.respond-to("mobile") {
+					font-size: 24px;
+					max-width: 100%;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 			}
 
 			.user-stats {
@@ -26,11 +59,21 @@
 				align-items: center;
 				color: var(--text-secondary);
 
+				@include breakpoints.respond-to("mobile") {
+					flex-wrap: wrap;
+					justify-content: center;
+					row-gap: 4px;
+				}
+
 				.stat {
 					display: flex;
 					align-items: center;
 					gap: 10px;
 					font-size: 14px;
+
+					@include breakpoints.respond-to("mobile") {
+						font-size: 13px;
+					}
 				}
 
 				.separator {
@@ -53,6 +96,23 @@
 				padding: 8px 12px;
 				border-radius: 32px;
 				border: 1px solid var(--background-accent-hover);
+
+				@include breakpoints.respond-to("mobile") {
+					max-width: 100%;
+					font-size: 13px;
+					text-align: left;
+
+					svg {
+						flex-shrink: 0;
+					}
+				}
+			}
+		}
+
+		.friendship-actions {
+			@include breakpoints.respond-to("mobile") {
+				align-items: center;
+				margin-left: 0;
 			}
 		}
 	}
@@ -64,11 +124,19 @@
 			display: flex;
 			align-items: baseline;
 			gap: 12px;
+
+			@include breakpoints.respond-to("mobile") {
+				justify-content: space-between;
+			}
 		}
 
 		h3 {
 			font-size: 20px;
 			margin: 0 0 10px;
+
+			@include breakpoints.respond-to("mobile") {
+				font-size: 18px;
+			}
 		}
 
 	}
@@ -79,6 +147,10 @@
 			flex-direction: column;
 			gap: 12px;
 			padding-right: 8px;
+
+			@include breakpoints.respond-to("mobile") {
+				padding-right: 0;
+			}
 		}
 
 		.section-heading a {
@@ -93,6 +165,12 @@
 			flex-wrap: wrap;
 			gap: 16px;
 			align-items: stretch;
+
+			@include breakpoints.respond-to("mobile") {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+				gap: 12px;
+			}
 		}
 
 		.playlist-card {
@@ -110,6 +188,11 @@
 			text-decoration: none;
 			transition: background-color .2s ease;
 
+			@include breakpoints.respond-to("mobile") {
+				gap: 10px;
+				padding: 10px;
+			}
+
 			&:hover {
 				background-color: var(--background-overlay);
 			}
@@ -120,6 +203,13 @@
 				flex: 0 0 72px;
 				object-fit: cover;
 				border-radius: 6px;
+
+				@include breakpoints.respond-to("mobile") {
+					width: 100%;
+					height: auto;
+					flex: none;
+					aspect-ratio: 1;
+				}
 			}
 
 			.playlist-info {
@@ -152,6 +242,19 @@
 			overflow-x: auto;
 			padding-bottom: 8px;
 			scrollbar-width: thin;
+
+			@include breakpoints.respond-to("mobile") {
+				gap: 12px;
+				scrollbar-width: none;
+
+				margin-inline: -16px;
+				padding-inline: 16px;
+				scroll-padding-inline: 16px;
+
+				&::-webkit-scrollbar {
+					display: none;
+				}
+			}
 		}
 
 		.friend-card {
@@ -163,12 +266,21 @@
 			color: inherit;
 			text-align: center;
 
+			@include breakpoints.respond-to("mobile") {
+				flex-basis: 72px;
+			}
+
 			img {
 				width: 64px;
 				height: 64px;
 				border-radius: 50%;
 				object-fit: cover;
 				background-color: var(--background-card);
+
+				@include breakpoints.respond-to("mobile") {
+					width: 56px;
+					height: 56px;
+				}
 			}
 
 			span {

@@ -1,6 +1,5 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { PrismaService } from "./prisma.service";
-import { PERMISSIONS } from "@flex/shared";
 import * as bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
 import { env } from "../env";
@@ -11,47 +10,9 @@ function providerCredentials() {
 	return { uuid, hashedKey: generateApiKey(uuid).keyHash };
 }
 
-const MANAGER_PERMISSIONS = [
-	PERMISSIONS.MEMBERS.MY_PROFILE,
-	PERMISSIONS.MEMBERS.ANY_PROFILE,
-	PERMISSIONS.MEMBERS.ALL_PROFILES,
-	PERMISSIONS.MEMBERS.GET_ROLES,
-	PERMISSIONS.MEMBERS.GET_ROLES_DETAILED,
-	PERMISSIONS.ROLES.LIST,
-	PERMISSIONS.ROLES.DETAILS,
-	PERMISSIONS.ROLES.LIST_MEMBERS,
-];
-
-const USER_PERMISSIONS = [
-	PERMISSIONS.MEMBERS.MY_PROFILE,
-	PERMISSIONS.ROLES.LIST,
-];
-
 @Injectable()
 export class DatabaseBootstrapService implements OnModuleInit {
 	constructor(private readonly prisma: PrismaService) {}
-
-	private async ensureAdmin(bigbossId: number): Promise<void> {
-		const email = env.ADMIN_EMAIL!;
-		const admin = await this.prisma.user.upsert({
-			where: { email },
-			update: {},
-			create: {
-				email,
-				username: "admin",
-				password: await bcrypt.hash(env.ADMIN_PASSWORD!, 10),
-				emailValidated: true,
-			},
-		});
-
-		await this.prisma.userRole.upsert({
-			where: { userUUID_roleId: { userUUID: admin.uuid, roleId: bigbossId } },
-			update: {},
-			create: { userUUID: admin.uuid, roleId: bigbossId },
-		});
-
-		console.log(`Administrator: ${email}`);
-	}
 
 	public async onModuleInit(): Promise<void> {
 		console.log("Seeding...");
@@ -70,60 +31,7 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			create: { key: "42api-secret", value: env.API42_CLIENT_SECRET ?? "" },
 		});
 
-		// ─── Roles ───────────────────────────────────────────────────────────────────
-
-		const bigboss = await this.prisma.role.upsert({
-			where: { name: "bigboss" },
-			update: {},
-			create: { name: "bigboss", superRole: true },
-		});
-
-		const manager = await this.prisma.role.upsert({
-			where: { name: "manager" },
-			update: {},
-			create: { name: "manager", superRole: false },
-		});
-
-		const user = await this.prisma.role.upsert({
-			where: { name: "user" },
-			update: {},
-			create: { name: "user", superRole: false, defaultRole: true },
-		});
-
-		// ─── Permissions ─────────────────────────────────────────────────────────────
-
-		await this.prisma.rolePermission.deleteMany({
-			where: { roleId: manager.id },
-		});
-		await this.prisma.rolePermission.deleteMany({ where: { roleId: user.id } });
-
-		await this.prisma.rolePermission.createMany({
-			data: MANAGER_PERMISSIONS.map((permission) => ({
-				roleId: manager.id,
-				permission,
-			})),
-			skipDuplicates: true,
-		});
-
-		await this.prisma.rolePermission.createMany({
-			data: USER_PERMISSIONS.map((permission) => ({
-				roleId: user.id,
-				permission,
-			})),
-			skipDuplicates: true,
-		});
-
-		console.log("Roles created : bigboss (superRole), manager, user");
-		console.log("  bigboss     : every permissions (superRole)");
-		console.log(`  manager     : ${MANAGER_PERMISSIONS.length} permissions`);
-		console.log(`  user        : ${USER_PERMISSIONS.length} permissions`);
-
-
-		if (env.NODE_ENV !== "dev") {
-			await this.ensureAdmin(bigboss.id);
-			console.log("Seed finished (no test data outside of dev)");
-			return;
-		}
+		if (env.NODE_ENV !== "dev") return;
 
 		// ─── Users ───────────────────────────────────────────────────────────────────
 
@@ -165,34 +73,6 @@ export class DatabaseBootstrapService implements OnModuleInit {
 		console.log(
 			"Users created : liam@test.com, chantal@test.com, machin@test.com",
 		);
-
-		// ─── User roles ─────────────────────────────────────────────────────────────
-
-		await this.prisma.userRole.upsert({
-			where: {
-				userUUID_roleId: { userUUID: liamUser.uuid, roleId: bigboss.id },
-			},
-			update: {},
-			create: { userUUID: liamUser.uuid, roleId: bigboss.id },
-		});
-
-		await this.prisma.userRole.upsert({
-			where: {
-				userUUID_roleId: { userUUID: chantalUser.uuid, roleId: manager.id },
-			},
-			update: {},
-			create: { userUUID: chantalUser.uuid, roleId: manager.id },
-		});
-
-		await this.prisma.userRole.upsert({
-			where: {
-				userUUID_roleId: { userUUID: machinUser.uuid, roleId: user.id },
-			},
-			update: {},
-			create: { userUUID: machinUser.uuid, roleId: user.id },
-		});
-
-		console.log("Roles asignated : liam→bigboss, chantal→manager, machin→user");
 
 		// ─── Friends ─────────────────────────────────────────────────────────────────
 
@@ -387,20 +267,20 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			},
 		});
 
-		const addMusicToPlaylist = async (playlistUUID: string, musicUUID: string) => {
-			const existingLink = await this.prisma.playlistMusic.findFirst({
-				where: { playlistUUID, musicUUID },
-			});
-			if (!existingLink) {
-				await this.prisma.playlistMusic.create({ data: { playlistUUID, musicUUID } });
-			}
-		};
-		for (const music of musics.slice(0, 2)) {
-			await addMusicToPlaylist(liamPrivatePlaylist.uuid, music.uuid);
-		}
-		for (const music of musics.slice(2)) {
-			await addMusicToPlaylist(liamPublicPlaylist.uuid, music.uuid);
-		}
+		// const addMusicToPlaylist = async (playlistUUID: string, musicUUID: string, providerUUID: string) => {
+		// 	const existingLink = await this.prisma.playlistMusic.findFirst({
+		// 		where: { playlistUUID, musicUUID },
+		// 	});
+		// 	if (!existingLink) {
+		// 		await this.prisma.playlistMusic.create({ data: { playlistUUID, musicUUID, providerUUID } });
+		// 	}
+		// };
+		// for (const music of musics.slice(0, 2)) {
+		// 	await addMusicToPlaylist(liamPrivatePlaylist.uuid, music.uuid, playlistmusic.providerUUID);
+		// }
+		// for (const music of musics.slice(2)) {
+		// 	await addMusicToPlaylist(liamPublicPlaylist.uuid, music.uuid);
+		// }
 
 		await this.prisma.user.update({
 			where: { uuid: liamUser.uuid },

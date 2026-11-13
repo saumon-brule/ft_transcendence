@@ -1,8 +1,6 @@
 export { serverContract } from "./contracts/server/server.contract";
 export { authContract } from "./contracts/server/auth/auth.contract";
 export { usersContract } from "./contracts/server/users/users.contract";
-export { rolesContract } from "./contracts/server/roles/roles.contract";
-export { permissionsContract } from "./contracts/server/permissions/permissions.contract";
 export { appConfigContract } from "./contracts/server/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/server/playlists/playlists.contract";
 export { providersContract } from "./contracts/server/providers/providers.contract";
@@ -17,13 +15,10 @@ export { registerSchema, type RegisterDto } from "./contracts/server/auth/schema
 export { resetPasswordSchema, changePasswordSchema, type RequestPasswordResetDto, type ChangePasswordDto } from "./contracts/server/auth/schemas/password.schema";
 export { userSchema, meSchema, updateMeSchema, type User, type ShortUser, type Profile, type UpdateMeDto } from "./contracts/server/users/schemas/user.schema";
 export { createProviderSchema, editProviderSchema, type CreateProviderDto, type Provider } from "./contracts/server/providers/schemas/provider.schema";
-export { createRoleSchema, roleUsersResponseSchema, roleResponseSchema, rolesListDetailedResponseSchema, rolesListResponseSchema } from "./contracts/server/roles/schemas/role.schema";
 export { getAppVariables } from "./contracts/server/appConfig/schemas/app-config.schema";
 
 export * from "./core/constants";
 export { createJwtPayload, type JwtPayload } from "./core/jwt.payload";
-export { PERMISSIONS } from "./core/permissions";
-export { type Permission } from "./core/permissions";
 
 export { providerPermissions, providerPermissionSchema, type ProviderPermission } from "./contracts/provider/role/schemas/role.schema";
 

@@ -1,3 +1,5 @@
+@use "../../styles/breakpoints" as breakpoints;
+
 #provider {
 
 	.provider-header {
@@ -107,17 +109,47 @@
 		padding-top: 40px;
 		padding-left: 40px;
 
+		@include breakpoints.respond-to("mobile") {
+			flex-direction: column;
+			text-align: center;
+			gap: 12px;
+			margin-bottom: 8px;
+			padding: 12px 0 0;
+		}
+
 		img {
 			width: 150px;
 			height: 150px;
 			border-radius: 50%;
 			margin-right: 20px;
+			object-fit: cover;
+
+			@include breakpoints.respond-to("mobile") {
+				width: 128px;
+				height: 128px;
+				margin-right: 0;
+			}
 		}
 
 		.header-info {
+			min-width: 0;
+
+			@include breakpoints.respond-to("mobile") {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				width: 100%;
+			}
+
 			h2 {
 				font-size: 28px;
 				margin: 0;
+
+				@include breakpoints.respond-to("mobile") {
+					font-size: 24px;
+					max-width: 100%;
+					overflow-wrap: anywhere;
+				}
 			}
 
 			.biography {
@@ -134,11 +166,22 @@
 				align-items: center;
 				color: var(--text-secondary);
 
+				@include breakpoints.respond-to("mobile") {
+					flex-wrap: wrap;
+					justify-content: center;
+					row-gap: 4px;
+					margin-bottom: 4px;
+				}
+
 				.stat {
 					display: flex;
 					align-items: center;
 					gap: 10px;
 					font-size: 14px;
+
+					@include breakpoints.respond-to("mobile") {
+						font-size: 13px;
+					}
 				}
 
 				.separator {
@@ -151,6 +194,10 @@
 
 			.bio {
 				font-size: 18px;
+
+				@include breakpoints.respond-to("mobile") {
+					font-size: 15px;
+				}
 			}
 
 			p {

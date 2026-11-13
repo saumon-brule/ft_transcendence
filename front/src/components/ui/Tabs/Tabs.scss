@@ -1,13 +1,46 @@
+@use "../../../styles/breakpoints" as breakpoints;
+
 .tabs {
 	position: relative;
 	display: flex;
 	justify-content: flex-start;
 	gap: 24px;
 	margin-bottom: 16px;
+	border-bottom: 1px solid var(--background-overlay);
+
+	@include breakpoints.respond-to("mobile") {
+		border-bottom: none;
+		gap: 8px;
+		overflow-x: auto;
+		scrollbar-width: none;
+		margin-inline: -16px;
+		padding-inline: 16px;
+		scroll-padding-inline: 16px;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		&::after {
+			display: none;
+		}
+	}
 
 	.btn {
 		font-weight: 600;
-		overflow: visible;
+
+		@include breakpoints.respond-to("mobile") {
+			flex-shrink: 0;
+			border-radius: 20px !important;
+			border: 1px solid var(--background-overlay);
+			padding: 6px 10px;
+			padding-inline: 10px !important;
+
+			&:active {
+				text-decoration: none;
+			}
+		}
+
 	}
 
 	.btn:hover {
@@ -21,6 +54,10 @@
 
 	.btn[aria-selected=true] {
 		color: var(--text-primary);
+
+		@include breakpoints.respond-to("mobile") {
+			border-color: var(--background-accent);
+		}
 	}
 
 	&::after {
@@ -35,5 +72,4 @@
 		transition: transform 0.3s ease, width 0.3s ease;
 	}
 
-	border-bottom: 1px solid var(--background-overlay);
 }

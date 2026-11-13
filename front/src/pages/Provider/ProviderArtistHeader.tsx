@@ -4,7 +4,7 @@ import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
 import { A } from "@solidjs/router";
 
-export default function ProviderArtistHeader(props: { artist: ArtistDetailedItemDto; providerBack: Provider }) {
+export default function ProviderArtistHeader(props: { artist: ArtistDetailedItemDto; providerBack: Provider; musicTotal?: number; albumTotal?: number }) {
 	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
 
 	function getAvatar(artist: ArtistDetailedItemDto) {
@@ -20,9 +20,9 @@ export default function ProviderArtistHeader(props: { artist: ArtistDetailedItem
 		<div class="header-info">
 			<h2>{props.artist.name}</h2>
 			<div class="stats">
-				<div class="stat">{props.artist.music.total} tracks</div>
+				<div class="stat">{props.musicTotal ?? "-"} tracks</div>
 				<div class="separator" />
-				<div class="stat">{props.artist.album.total} albums</div>
+				<div class="stat">{props.albumTotal ?? "-"} albums</div>
 			</div>
 			<Show when={props.artist.biography}>
 				<p class="bio">{props.artist.biography}</p>

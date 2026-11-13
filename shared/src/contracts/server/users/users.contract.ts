@@ -1,18 +1,14 @@
 import { initContract } from "@ts-rest/core";
 import {
-	addRoleUserSchema,
-	DeleteRoleParamSchema,
 	meSchema,
+	searchUsersQuerySchema,
+	shortUserSchema,
 	updateMeSchema,
 	userSchema,
 } from "./schemas/user.schema";
-import {
-	rolesListDetailedResponseSchema,
-	rolesListResponseSchema,
-} from "../roles/schemas/role.schema";
 import z from "zod";
 import { uuidParamSchema } from "../../../schemas/common.schema";
-import { commonError404Schema, commonError413Schema } from "../../../errors/error-schemas";
+import { commonError413Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -28,6 +24,12 @@ export const usersContract = c.router(
 			path: "/me",
 			body: updateMeSchema,
 			responses: { 200: meSchema },
+		},
+		searchUsers: {
+			method: "GET",
+			path: "/search",
+			query: searchUsersQuerySchema,
+			responses: { 200: z.array(shortUserSchema) },
 		},
 		getUser: {
 			method: "GET",
@@ -49,34 +51,6 @@ export const usersContract = c.router(
 				}),
 				413: commonError413Schema,
 			},
-		},
-		getUserRoles: {
-			method: "GET",
-			path: "/:uuid/roles",
-			pathParams: uuidParamSchema,
-			responses: { 200: rolesListResponseSchema },
-		},
-		getUserRolesDetailed: {
-			method: "GET",
-			path: "/:uuid/roles/detailed",
-			pathParams: uuidParamSchema,
-			responses: { 200: rolesListDetailedResponseSchema },
-		},
-		addUserRole: {
-			method: "POST",
-			path: "/:uuid/roles",
-			pathParams: uuidParamSchema,
-			body: addRoleUserSchema,
-			responses: {
-				204: null,
-				404: commonError404Schema,
-			},
-		},
-		removeUserRole: {
-			method: "DELETE",
-			path: "/:uuid/roles/:roleId",
-			pathParams: DeleteRoleParamSchema,
-			responses: { 204: null },
 		},
 	},
 	{ pathPrefix: "/users" },

@@ -4,7 +4,7 @@ import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
 import { A } from "@solidjs/router";
 
-export default function ProviderAlbumHeader(props: { album: AlbumDetailedItemDto; providerBack: Provider }) {
+export default function ProviderAlbumHeader(props: { album: AlbumDetailedItemDto; providerBack: Provider; musicTotal?: number }) {
 	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
 
 	function getCover(album: AlbumDetailedItemDto) {
@@ -20,7 +20,7 @@ export default function ProviderAlbumHeader(props: { album: AlbumDetailedItemDto
 		<div class="header-info">
 			<h2>{props.album.name}</h2>
 			<div class="stats">
-				<div class="stat">{props.album.music.total} tracks</div>
+				<div class="stat">{props.musicTotal ?? "-"} tracks</div>
 				<div class="separator" />
 				<div class="stat">{props.album.artists.length} artists</div>
 			</div>

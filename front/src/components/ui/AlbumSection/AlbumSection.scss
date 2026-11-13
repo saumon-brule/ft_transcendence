@@ -1,11 +1,18 @@
+@use "../../../styles/breakpoints" as breakpoints;
+
 .album-section {
 	width: 100%;
 	display: grid;
-	grid-template-columns: repeat(auto-fill, 230px);
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 	gap: 16px;
 
+	@include breakpoints.respond-to("mobile") {
+		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+		gap: 12px;
+	}
+
 	.album {
-		width: 230px;
+		min-width: 0;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -15,9 +22,14 @@
 		border: 1px solid var(--background-overlay);
 		border-radius: 9px;
 
+		@include breakpoints.respond-to("mobile") {
+			gap: 10px;
+			padding: 10px;
+		}
+
 		img {
 			width: 100%;
-			height: 200px;
+			aspect-ratio: 1;
 			object-fit: cover;
 			border-radius: 4px;
 		}
@@ -32,6 +44,11 @@
 			.album-name {
 				font-size: 16px;
 				font-weight: 600;
+				overflow-wrap: anywhere;
+
+				@include breakpoints.respond-to("mobile") {
+					font-size: 14px;
+				}
 			}
 
 			.album-date {

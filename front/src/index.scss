@@ -2,12 +2,14 @@
 @use "styles/tokens/semantic";
 @use "styles/tokens/components";
 @use "styles/variables" as vars;
+@use "styles/breakpoints" as breakpoints;
 
 @use "@fontsource-variable/inter";
 @use "@fontsource/gasoek-one";
 
+
 :root {
-	height: 100vh;
+	height: 100dvh;
 	width: 100vw;
 	color-scheme: light dark;
 }
@@ -95,6 +97,10 @@ ul {
 .page {
 	width: 100%;
 	padding: 20px 40px;
+
+	@include breakpoints.respond-to("mobile") {
+		padding: 10px 16px;
+	}
 }
 
 code {
