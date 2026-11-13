@@ -1,7 +1,6 @@
 import { buildMediaUrl, musicItemSchema, type ProviderDataMusicDto, type ProviderDataArtistDto } from "@flex/shared";
 import z from "zod";
 import { getMediaToken } from "~/api/providerClients";
-import { summonErrorToast } from "~/components/ui/Toaster";
 
 type MusicAlbumDto = ProviderDataMusicDto["album"];
 
