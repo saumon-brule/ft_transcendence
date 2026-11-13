@@ -38,6 +38,17 @@ CREATE TABLE "FriendRequest" (
 );
 
 -- CreateTable
+CREATE TABLE "ChatMessage" (
+    "id" SERIAL NOT NULL,
+    "senderUUID" TEXT NOT NULL,
+    "recipientUUID" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ChatMessage_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Session" (
     "id" SERIAL NOT NULL,
     "userUUID" TEXT NOT NULL,
@@ -61,35 +72,6 @@ CREATE TABLE "Token" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Token_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Role" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "superRole" BOOLEAN NOT NULL DEFAULT false,
-    "defaultRole" BOOLEAN NOT NULL DEFAULT false,
-    "displayColor" TEXT,
-
-    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "RolePermission" (
-    "id" SERIAL NOT NULL,
-    "roleId" INTEGER NOT NULL,
-    "permission" TEXT NOT NULL,
-
-    CONSTRAINT "RolePermission_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "UserRole" (
-    "id" SERIAL NOT NULL,
-    "userUUID" TEXT NOT NULL,
-    "roleId" INTEGER NOT NULL,
-
-    CONSTRAINT "UserRole_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -203,19 +185,16 @@ CREATE UNIQUE INDEX "User_intraId_key" ON "User"("intraId");
 CREATE UNIQUE INDEX "FriendRequest_user_uuid_friend_uuid_key" ON "FriendRequest"("user_uuid", "friend_uuid");
 
 -- CreateIndex
+CREATE INDEX "ChatMessage_senderUUID_recipientUUID_createdAt_id_idx" ON "ChatMessage"("senderUUID", "recipientUUID", "createdAt", "id");
+
+-- CreateIndex
+CREATE INDEX "ChatMessage_recipientUUID_senderUUID_createdAt_id_idx" ON "ChatMessage"("recipientUUID", "senderUUID", "createdAt", "id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Session_userUUID_jti_key" ON "Session"("userUUID", "jti");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Token_token_key" ON "Token"("token");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "RolePermission_roleId_permission_key" ON "RolePermission"("roleId", "permission");
-
--- CreateIndex
-CREATE UNIQUE INDEX "UserRole_userUUID_roleId_key" ON "UserRole"("userUUID", "roleId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Provider_uuid_key" ON "Provider"("uuid");
@@ -260,19 +239,16 @@ ALTER TABLE "FriendRequest" ADD CONSTRAINT "FriendRequest_user_uuid_fkey" FOREIG
 ALTER TABLE "FriendRequest" ADD CONSTRAINT "FriendRequest_friend_uuid_fkey" FOREIGN KEY ("friend_uuid") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_senderUUID_fkey" FOREIGN KEY ("senderUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_recipientUUID_fkey" FOREIGN KEY ("recipientUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userUUID_fkey" FOREIGN KEY ("userUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Token" ADD CONSTRAINT "Token_userUUID_fkey" FOREIGN KEY ("userUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "RolePermission" ADD CONSTRAINT "RolePermission_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_userUUID_fkey" FOREIGN KEY ("userUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Provider" ADD CONSTRAINT "Provider_ownerUUID_fkey" FOREIGN KEY ("ownerUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
