@@ -57,7 +57,7 @@ export default function Queue(props: QueueProps) {
 					<Show when={audioManager.queue.length > 0}>
 						<div class="list-title">
 							<h2>{t("pages.queue.queue")}</h2>
-							<Button variant="text" onClick={() => audioManager.clearQueue()}>{t("pages.queue.queueClear")}</Button>
+							<Button class="clear-queue-button" variant="text" onClick={() => audioManager.clearQueue()}>{t("pages.queue.queueClear")}</Button>
 						</div>
 						<div class="queue-list">
 							<MusicSection musics={audioManager.queue}/>
