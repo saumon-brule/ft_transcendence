@@ -40,6 +40,7 @@
 		"@tsparticles/preset-links": "^4.4.0",
 		"jwt-decode": "^4.0.0",
 		"lucide-solid": "^1.47.0",
+		"socket.io-client": "catalog:",
 		"solid-js": "^1.9.5",
 		"solid-transition-group": "^0.3.0",
 		"zod": "catalog:"
