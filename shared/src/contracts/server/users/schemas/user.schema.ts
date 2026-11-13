@@ -46,12 +46,14 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>;
 
+const languageEnum = z.enum(["en", "fr"]);
+
 export const meSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
 	email: z.string().email(),
 	intraId: z.number().nullable(),
-	language: z.enum(["en", "fr"]),
+	language: languageEnum,
 	hasPassword: z.boolean(),
 	listeningPrivate: z.boolean(),
 	createdAt: z.coerce.date(),
@@ -73,7 +75,7 @@ export type Profile = z.infer<typeof meSchema>;
 export const updateMeSchema = z.object({
 	username: z.string().min(3).max(32).
 		optional(),
-	language: z.string().optional(),
+	language: languageEnum.optional(),
 	listeningPrivate: z.boolean().optional(),
 });
 export type UpdateMeDto = z.infer<typeof updateMeSchema>;
