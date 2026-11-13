@@ -38,17 +38,6 @@ CREATE TABLE "FriendRequest" (
 );
 
 -- CreateTable
-CREATE TABLE "ChatMessage" (
-    "id" SERIAL NOT NULL,
-    "senderUUID" TEXT NOT NULL,
-    "recipientUUID" TEXT NOT NULL,
-    "content" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "ChatMessage_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Session" (
     "id" SERIAL NOT NULL,
     "userUUID" TEXT NOT NULL,
@@ -185,12 +174,6 @@ CREATE UNIQUE INDEX "User_intraId_key" ON "User"("intraId");
 CREATE UNIQUE INDEX "FriendRequest_user_uuid_friend_uuid_key" ON "FriendRequest"("user_uuid", "friend_uuid");
 
 -- CreateIndex
-CREATE INDEX "ChatMessage_senderUUID_recipientUUID_createdAt_id_idx" ON "ChatMessage"("senderUUID", "recipientUUID", "createdAt", "id");
-
--- CreateIndex
-CREATE INDEX "ChatMessage_recipientUUID_senderUUID_createdAt_id_idx" ON "ChatMessage"("recipientUUID", "senderUUID", "createdAt", "id");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Session_userUUID_jti_key" ON "Session"("userUUID", "jti");
 
 -- CreateIndex
@@ -237,12 +220,6 @@ ALTER TABLE "FriendRequest" ADD CONSTRAINT "FriendRequest_user_uuid_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "FriendRequest" ADD CONSTRAINT "FriendRequest_friend_uuid_fkey" FOREIGN KEY ("friend_uuid") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_senderUUID_fkey" FOREIGN KEY ("senderUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_recipientUUID_fkey" FOREIGN KEY ("recipientUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userUUID_fkey" FOREIGN KEY ("userUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
