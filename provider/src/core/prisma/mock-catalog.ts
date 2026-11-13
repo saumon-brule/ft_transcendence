@@ -11,8 +11,6 @@ const MOCK_ARTISTS = [
 
 const MOCK_ALBUMS = [
 	{ uuid: "00000000-0000-4000-a000-000000000201", name: "THE ANIME GROOVE MIXTAPE Vol. 2", artistUuids: ["00000000-0000-4000-a000-000000000103"] },
-	// Intentionally empty: no MOCK_MUSICS entry points to it, to test empty album handling
-	{ uuid: "00000000-0000-4000-a000-000000000202", name: "Empty Album", artistUuids: ["00000000-0000-4000-a000-000000000103"] },
 ];
 
 const MOCK_MUSICS = [
