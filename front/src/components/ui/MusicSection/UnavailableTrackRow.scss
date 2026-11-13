@@ -1,0 +1,57 @@
+.music-section .data tbody tr.track-state {
+	td {
+		border-radius: 8px;
+		color: var(--state-color);
+		background: color-mix(in srgb, var(--state-color) 12%, transparent);
+	}
+
+	&:hover td {
+		background: color-mix(in srgb, var(--state-color) 12%, transparent);
+	}
+
+	&--loading {
+		--state-color: var(--text-muted);
+	}
+
+	&--offline {
+		--state-color: var(--text-muted);
+		opacity: 0.6;
+	}
+
+	&--restricted {
+		--state-color: var(--text-warning);
+	}
+
+	&--missing {
+		--state-color: var(--text-danger);
+	}
+
+	.track-state-content {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		min-width: 0;
+	}
+
+	.track-state-text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.track-state-note {
+		flex-shrink: 0;
+		font-size: 0.85em;
+	}
+
+	.btn {
+		flex-shrink: 0;
+	}
+}
+
+@container (max-width: 520px) {
+	.music-section .data tbody tr.track-state {
+		display: block;
+	}
+}
