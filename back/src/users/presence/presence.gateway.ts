@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import {
 	OnGatewayConnection,
 	OnGatewayDisconnect,
@@ -40,6 +41,7 @@ export class PresenceGateway implements
     OnGatewayConnection,
     OnGatewayDisconnect {
 	private server!: PresenceServer;
+	private readonly logger = new Logger(PresenceGateway.name);
 
 	constructor(
 		private readonly socketAuthService: SocketAuthService,
@@ -67,25 +69,30 @@ export class PresenceGateway implements
 			return;
 		}
 
-		const friends = await this.friendsService.getFriends(userUUID);
-		if(!client.connected) return;
+		try {
+			const friends = await this.friendsService.getFriends(userUUID);
+			if (!client.connected) return;
 
-		await client.join(this.userRoom(userUUID));
-		if (!client.connected) return;
+			await client.join(this.userRoom(userUUID));
+			if (!client.connected) return;
 
-		const becameOnline = this.presenceService.connect(userUUID, client.id);
+			const becameOnline = this.presenceService.connect(userUUID, client.id);
 
-		const snapshot = presenceListSchema.parse(
-			friends.map((friend) => ({
-				...friend,
-				online: this.presenceService.isOnline(friend.uuid),
-			})),
-		);
+			const snapshot = presenceListSchema.parse(
+				friends.map((friend) => ({
+					...friend,
+					online: this.presenceService.isOnline(friend.uuid),
+				})),
+			);
 
-		client.emit("presence:snapshot", snapshot);
+			client.emit("presence:snapshot", snapshot);
 
-		if (becameOnline) {
-			this.notifyFriends(friends, userUUID, true);
+			if (becameOnline) {
+				this.notifyFriends(friends, userUUID, true);
+			}
+		} catch (error) {
+			this.logger.error(`Presence connection failed for ${userUUID}`, error);
+			client.disconnect(true);
 		}
 	}
 
@@ -100,11 +107,15 @@ export class PresenceGateway implements
 			return;
 		}
 
-		const friends = await this.friendsService.getFriends(userUUID);
-		if (this.presenceService.isOnline(userUUID)) {
-			return;
+		try {
+			const friends = await this.friendsService.getFriends(userUUID);
+			if (this.presenceService.isOnline(userUUID)) {
+				return;
+			}
+			this.notifyFriends(friends, userUUID, false);
+		} catch (error) {
+			this.logger.error(`Presence disconnection failed for ${userUUID}`, error);
 		}
-		this.notifyFriends(friends, userUUID, false);
 	}
 
 	private notifyFriends(
