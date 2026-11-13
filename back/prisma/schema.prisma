@@ -36,8 +36,6 @@ model User {
     currentlyListening     Music?                  @relation(fields: [currentlyListeningUUID], references: [uuid], onDelete: SetNull)
     friendsRequests        FriendRequest[]         @relation("Requester")
     friendsReceive         FriendRequest[]         @relation("Receiver")
-    sentChatMessages       ChatMessage[]           @relation("ChatMessageSender")
-    receivedChatMessages   ChatMessage[]           @relation("ChatMessageRecipient")
 }
 
 enum FriendStatus {
@@ -56,20 +54,6 @@ model FriendRequest {
     friend User @relation("Receiver", fields: [friendUUID], references: [uuid], onDelete: Cascade)
 
     @@unique([userUUID, friendUUID])
-}
-
-model ChatMessage {
-    id            Int      @id @default(autoincrement())
-    senderUUID    String
-    recipientUUID String
-    content       String
-    createdAt     DateTime @default(now())
-
-    sender    User @relation("ChatMessageSender", fields: [senderUUID], references: [uuid], onDelete: Cascade)
-    recipient User @relation("ChatMessageRecipient", fields: [recipientUUID], references: [uuid], onDelete: Cascade)
-
-    @@index([senderUUID, recipientUUID, createdAt, id])
-    @@index([recipientUUID, senderUUID, createdAt, id])
 }
 
 model Session {

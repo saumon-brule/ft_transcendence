@@ -39,19 +39,6 @@ const sendMessageSchema = z.object({
 		.max(256),
 });
 
-const historyRequestSchema = z.object({
-	otherUserUUID: z.string().uuid(),
-	beforeMessageId: z.number()
-		.int()
-		.positive()
-		.optional(),
-	limit: z.number()
-		.int()
-		.positive()
-		.max(100)
-		.optional(),
-});
-
 @WebSocketGateway({
 	cors: {
 		origin: env.BASE_FRONT_URL,
@@ -121,45 +108,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
 				throw error;
 			}
 			this.emitError(client, "chat:send", error.getError());
-		}
-	}
-
-	@SubscribeMessage("chat:history")
-	async getHistory(
-		@MessageBody() payload: unknown,
-		@ConnectedSocket() client: ChatSocket,
-	): Promise<void> {
-		const parsed = historyRequestSchema.safeParse(payload);
-		if (!parsed.success) {
-			this.emitError(client, "chat:history", {
-				code: "CHAT_INVALID_PAYLOAD",
-				message: "Invalid history request",
-			});
-			return;
-		}
-
-		const userUUID = client.data.userUUID;
-		if (typeof userUUID !== "string") {
-			client.disconnect(true);
-			return;
-		}
-
-		try {
-			const history = await this.chatService.getHistory(
-				userUUID,
-				parsed.data.otherUserUUID,
-				parsed.data.beforeMessageId,
-				parsed.data.limit,
-			);
-			client.emit("chat:history:result", {
-				otherUserUUID: parsed.data.otherUserUUID,
-				...history,
-			});
-		} catch (error) {
-			if (!(error instanceof WsException)) {
-				throw error;
-			}
-			this.emitError(client, "chat:history", error.getError());
 		}
 	}
 
