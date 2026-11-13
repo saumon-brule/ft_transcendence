@@ -92,3 +92,8 @@ export const DeleteRoleParamSchema = z.object({
 	uuid: z.string().uuid(),
 	roleId: z.string().transform(Number),
 });
+
+export const searchUsersQuerySchema = z.object({
+	username: z.string().trim().min(1).
+		max(50),
+});

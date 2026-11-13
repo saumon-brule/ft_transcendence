@@ -1,4 +1,5 @@
 @use "../../../styles/variables" as vars;
+@use "../../../styles/breakpoints" as breakpoints;
 
 #app-header {
 	position: sticky;
@@ -18,6 +19,11 @@
 		gap: 24px;
 		height: 100%;
 		padding: 0 28px;
+
+		@include breakpoints.respond-to("mobile") {
+			gap: 16px;
+			padding: 0 14px;
+		}
 	}
 
 	.header-leading {
@@ -25,6 +31,10 @@
 		align-items: center;
 		gap: 24px;
 		min-width: 0;
+
+		@include breakpoints.respond-to("mobile") {
+			gap: 16px;
+		}
 	}
 
 	.header-brand {
@@ -32,6 +42,28 @@
 		color: var(--logo-main);
 		font-size: 1.35rem;
 		font-weight: 400;
+	}
+
+	.sidebar-toggle {
+		display: none;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		padding: 0;
+		border: 0;
+		color: var(--logo-main);
+		background: transparent;
+		cursor: pointer;
+	}
+
+	@include breakpoints.respond-to("mobile") {
+		.header-brand {
+			display: none;
+		}
+
+		.sidebar-toggle {
+			display: flex;
+		}
 	}
 
 	.header-search {
@@ -97,6 +129,11 @@
 
 		&:hover, &:focus-visible {
 			background-color: var(--background-overlay);
+		}
+
+		@include breakpoints.respond-to("mobile") {
+			padding-left: 0;
+			padding-right: 0;
 		}
 	}
 

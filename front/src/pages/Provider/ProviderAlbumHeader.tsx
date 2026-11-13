@@ -1,4 +1,4 @@
-import type { AlbumDetailedItemDto, Provider } from "@flex/shared";
+import type { Provider } from "@flex/shared";
 import { Show } from "solid-js";
 import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
@@ -8,7 +8,7 @@ import { Play } from "lucide-solid";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import { ProviderAlbumQueryBody } from "~/api/queryHooks/providerInfo";
 
-export default function ProviderAlbumHeader(props: { album: ProviderAlbumQueryBody; providerBack: Provider }) {
+export default function ProviderAlbumHeader(props: { album: ProviderAlbumQueryBody; providerBack: Provider; musicTotal?: number }) {
 	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
 	const audioManager = useAudioManagerContext();
 	const location = useLocation();
@@ -36,7 +36,7 @@ export default function ProviderAlbumHeader(props: { album: ProviderAlbumQueryBo
 		<div class="header-info">
 			<h2>{props.album.name}</h2>
 			<div class="stats">
-				<div class="stat">{props.album.music.total} tracks</div>
+				<div class="stat">{props.musicTotal ?? "-"} tracks</div>
 				<div class="separator" />
 				<div class="stat">{props.album.artists.length} artists</div>
 			</div>

@@ -1,7 +1,9 @@
+@use "../../../styles/breakpoints" as breakpoints;
+
 #overlay-container {
 	transition: background-color 0.2s;
 	width: 100vw;
-	height: 100vh;
+	height: 100dvh;
 	pointer-events: none;
 	position: fixed;
 	z-index: 9999;
@@ -43,6 +45,14 @@
 			background-color: var(--background-card);
 			padding: 1.5rem 2rem;
 			border-radius: 1rem;
+
+			min-width: 40%;
+
+			@include breakpoints.respond-to("mobile") {
+				min-width: 90%;
+				max-width: 90%;
+				padding: 1rem 1.5rem;
+			}
 		}
 	}
 }

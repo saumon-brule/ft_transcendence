@@ -1,4 +1,4 @@
-import { ChevronDown, LogOut, Search, Settings, X, User, Server, Users } from "lucide-solid";
+import { ChevronDown, LogOut, Search, Settings, X, User, Server, Users, SquareChevronLeft, SquareChevronRight } from "lucide-solid";
 import { createEffect, createMemo, createSignal, onCleanup, onMount, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
@@ -10,6 +10,7 @@ import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import "./Header.scss";
 import { hasUnreadMessages } from "~/store/messages.store";
 import { Tab } from "~/pages/Search/Search";
+import { isSidebarOpen, sidebarActions } from "~/store/sidebar.store";
 
 export default function Header() {
 	const meProfileQuery = useMeProfileQuery();
@@ -58,6 +59,18 @@ export default function Header() {
 		<div class="header-content">
 			<div class="header-leading">
 				<a class="header-brand" href="/home" aria-label="Flex home">Flex</a>
+				<button
+					class="sidebar-toggle"
+					type="button"
+					aria-label={isSidebarOpen() ? "Close sidebar" : "Open sidebar"}
+					aria-expanded={isSidebarOpen()}
+					aria-controls="app-sidebar"
+					onClick={() => sidebarActions.toggle()}
+				>
+					<Show when={isSidebarOpen()} fallback={<SquareChevronRight size={26} aria-hidden="true" />}>
+						<SquareChevronLeft size={26} aria-hidden="true" />
+					</Show>
+				</button>
 
 				<Form class="header-search" role="search">
 					<Search class="search-icon" size={18}/>

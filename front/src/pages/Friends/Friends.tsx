@@ -61,7 +61,7 @@ export default function Friends() {
 	}
 
 	return <div class="page" id="friends">
-		<div class="friends-left">
+		<div class="friends-left" classList={{ "no-friend-list": !!friend() }}>
 			<Show when={profileQuery.data} keyed>{(data) => <>
 				<Show when={data.body.friendRequests.length > 0}>
 					<section>
@@ -100,7 +100,7 @@ export default function Friends() {
 				</section>
 			</>}</Show>
 		</div>
-		<div class="friends-right">
+		<div class="friends-right" classList={{ "no-chat-box": !friend() }}>
 			<div class="back">
 				<A href="/friends" class="white-variant"><ArrowLeft/> Back to friends list</A>
 			</div>

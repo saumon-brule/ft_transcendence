@@ -1,4 +1,4 @@
-import type { ArtistDetailedItemDto, Provider } from "@flex/shared";
+import type { Provider } from "@flex/shared";
 import { Show } from "solid-js";
 import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
@@ -8,7 +8,7 @@ import { useAudioManagerContext } from "~/components/context/AudioManagerContext
 import Button from "~/components/inputs/Button";
 import { Play } from "lucide-solid";
 
-export default function ProviderArtistHeader(props: { artist: ProviderArtistQueryBody; providerBack: Provider }) {
+export default function ProviderArtistHeader(props: { artist: ProviderArtistQueryBody; providerBack: Provider; musicTotal?: number; albumTotal?: number }) {
 	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
 	const audioManager = useAudioManagerContext();
 	const location = useLocation();
@@ -36,9 +36,9 @@ export default function ProviderArtistHeader(props: { artist: ProviderArtistQuer
 		<div class="header-info">
 			<h2>{props.artist.name}</h2>
 			<div class="stats">
-				<div class="stat">{props.artist.music.total} tracks</div>
+				<div class="stat">{props.musicTotal ?? "-"} tracks</div>
 				<div class="separator" />
-				<div class="stat">{props.artist.album.total} albums</div>
+				<div class="stat">{props.albumTotal ?? "-"} albums</div>
 			</div>
 			<Show when={props.artist.biography}>
 				<p class="bio">{props.artist.biography}</p>
