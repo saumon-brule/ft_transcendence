@@ -1,15 +1,15 @@
-import { JwtService } from "@nestjs/jwt";
 import {
 	OnGatewayConnection,
 	OnGatewayDisconnect,
 	OnGatewayInit,
 	WebSocketGateway,
 } from "@nestjs/websockets";
-import { presenceListSchema, presenceSchema, type JwtPayload } from "@flex/shared";
+import { presenceListSchema, presenceSchema } from "@flex/shared";
 import { env } from "../../core/env";
 import { FriendsService } from "../friends/friends.service";
 import { PresenceService } from "./presence.service";
 import { type DefaultEventsMap, type Server, type Socket } from "socket.io";
+import { SocketAuthService } from "../../auth/auth-socket.service";
 
 type PresenceSocketData = {
 	userUUID?: string;
@@ -42,7 +42,7 @@ export class PresenceGateway implements
 	private server!: PresenceServer;
 
 	constructor(
-		private readonly jwtService: JwtService,
+		private readonly socketAuthService: SocketAuthService,
 		private readonly friendsService: FriendsService,
 		private readonly presenceService: PresenceService,
 	) {}
@@ -51,8 +51,11 @@ export class PresenceGateway implements
 		this.server = server;
 
 		server.use((socket, next) => {
-			void this.authenticate(socket)
-				.then(() => next())
+			void this.socketAuthService.authenticate(socket.handshake.auth?.token)
+				.then((result) => {
+					socket.data.userUUID = result.userUUID;
+					next();
+				})
 				.catch(() => next(new Error("Unauthorized")));
 		});
 	}
@@ -102,23 +105,6 @@ export class PresenceGateway implements
 			return;
 		}
 		this.notifyFriends(friends, userUUID, false);
-	}
-
-	private async authenticate(socket: PresenceSocket): Promise<void> {
-		const token: unknown = socket.handshake.auth?.token;
-		if (typeof token !== "string" || token.length === 0) {
-			throw new Error("Missing token");
-		}
-
-		const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
-			secret: env.JWT_SECRET,
-		});
-
-		if (typeof payload.sub !== "string" || payload.emailVerified !== true) {
-			throw new Error("Invalid token payload");
-		}
-
-		socket.data.userUUID = payload.sub;
 	}
 
 	private notifyFriends(
