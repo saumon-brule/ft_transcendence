@@ -26,7 +26,6 @@ model User {
     updatedAt              DateTime? @updatedAt
     createdAt              DateTime? @default(now())
 
-    userRoles              UserRole[]
     sessions               Session[]
     tokens                 Token[]
     ownedProviders         Provider[]
@@ -89,40 +88,6 @@ model Token {
     createdAt DateTime     @default(now())
 
     user User? @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
-}
-
-// ─── Roles & Permissions ──────────────────────────────────────────────────────
-
-model Role {
-    id           Int     @id @default(autoincrement())
-    name         String  @unique
-    superRole    Boolean @default(false)
-    defaultRole  Boolean @default(false)
-    displayColor String?
-
-    rolePermissions RolePermission[]
-    userRoles       UserRole[]
-}
-
-model RolePermission {
-    id         Int    @id @default(autoincrement())
-    roleId     Int
-    permission String
-
-    roleRef Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
-
-    @@unique([roleId, permission])
-}
-
-model UserRole {
-    id       Int    @id @default(autoincrement())
-    userUUID String
-    roleId   Int
-
-    userRef User @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
-    roleRef Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
-
-    @@unique([userUUID, roleId])
 }
 
 // ─── Settings ─────────────────────────────────────────────────────────────────

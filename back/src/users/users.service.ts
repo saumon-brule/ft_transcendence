@@ -1,8 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { User } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
-import { Permission } from "@flex/shared";
-import { RolesService } from "../roles/roles.service";
 import * as bcrypt from "bcrypt";
 import { Cron } from "@nestjs/schedule";
 import { WinstonLoggerService } from "../core/logging/logger.service";
@@ -12,7 +10,6 @@ import { LogBuilder } from "../core/logging/log-builder";
 export class UsersService {
 	constructor(
 		private readonly prisma: PrismaService,
-		private readonly roles: RolesService,
 		private readonly logger: WinstonLoggerService,
 	) {}
 
@@ -113,8 +110,6 @@ export class UsersService {
 			data: { email: this.normalizeEmail(email), username: login, emailValidated: true, intraId },
 		});
 
-		await this.setDefaultUserRoles(newUser.uuid);
-
 		return newUser;
 	}
 
@@ -127,99 +122,7 @@ export class UsersService {
 			data: { email: this.normalizeEmail(email), password: await bcrypt.hash(password, 10), username },
 		});
 
-		await this.setDefaultUserRoles(newUser.uuid);
-
 		return newUser;
-	}
-
-	private async setDefaultUserRoles(userUUID: string) {
-		const defaultRoles = await this.roles.getDefaultRoles();
-		await this.prisma.userRole.createMany({
-			data: defaultRoles.map((role) => ({
-				roleId: role.id,
-				userUUID,
-			})),
-		});
-	}
-
-	public async getUserRoles(userUUID: string) {
-		const userRoles = await this.prisma.userRole.findMany({
-			where: { userUUID },
-			include: {
-				roleRef: true,
-			},
-		});
-		return userRoles.map((role) => role.roleRef);
-	}
-
-	public async getUserRolesDetailed(userUUID: string) {
-		const userRoles = await this.prisma.userRole.findMany({
-			where: { userUUID },
-			include: {
-				roleRef: {
-					include: {
-						rolePermissions: {
-							select: { permission: true },
-						},
-					},
-				},
-			},
-		});
-
-		return userRoles.map(({ roleRef }) => {
-			const { rolePermissions, ...rest } = roleRef;
-			return {
-				...rest,
-				permissions: rolePermissions.map((rp) => rp.permission),
-			};
-		});
-	}
-
-	public async addRoleToUser(userUUID: string, roleId: number) {
-		await this.prisma.userRole.create({
-			data: {
-				userUUID: userUUID,
-				roleId: roleId,
-			},
-		});
-	}
-
-	public async removeRoleFromUser(userUUID: string, roleId: number) {
-		await this.prisma.userRole.deleteMany({
-			where: {
-				userUUID: userUUID,
-				roleId: roleId,
-			},
-		});
-	}
-
-	public async doUserBypassPermission(userUUID: string) {
-		const userSuperRole = await this.prisma.userRole.findFirst({
-			where: {
-				userUUID: userUUID,
-				roleRef: { superRole: true },
-			},
-		});
-		return userSuperRole !== null;
-	}
-
-	public async doUserHavePermission(
-		userUUID: string,
-		permission: Permission,
-	) {
-		if (await this.doUserBypassPermission(userUUID)) return true;
-
-		const userPerm = await this.prisma.userRole.findFirst({
-			where: {
-				userUUID: userUUID,
-				roleRef: {
-					rolePermissions: {
-						some: { permission },
-					},
-				},
-			},
-		});
-		return userPerm !== null;
 	}
 
 	public async verifyEmail(userUUID: string) {

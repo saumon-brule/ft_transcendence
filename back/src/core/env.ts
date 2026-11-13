@@ -17,17 +17,12 @@ const EnvSchema = z.object({
 	UPLOADS_DIR: z.string().default("uploads"),
 	PROVIDER_KEY_PATH: z.string().default("provider.pem"),
 	LOG_DIR: z.string().default("logs"),
-	ADMIN_EMAIL: z.string().email().optional(),
-	ADMIN_PASSWORD: z.string().min(8).optional(),
 	TRUST_PROXY: z.string().default("1")
 		.transform((value) => {
 			if (/^\d+$/.test(value)) return Number(value);
 			if (value === "true" || value === "false") return value === "true";
 			return value;
 		}),
-}).refine((data) => data.NODE_ENV !== "prod" || (data.ADMIN_EMAIL && data.ADMIN_PASSWORD), {
-	message: "ADMIN_EMAIL and ADMIN_PASSWORD (8 characters min) are required in prod",
-	path: ["ADMIN_EMAIL"],
 });
 
 const result = EnvSchema.safeParse(process.env);
