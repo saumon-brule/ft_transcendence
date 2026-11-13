@@ -53,14 +53,14 @@ export default function Queue(props: QueueProps) {
 				</div>
 				<div class="lists">
 					<Show when={audioManager.queue.length > 0}>
-						<h2>File d'attente</h2>
+						<div class="list-title"><h2>File d'attente</h2><Button variant="text" onClick={() => audioManager.clearQueue()}>clear</Button></div>
 						<div class="queue-list">
 							<MusicSection musics={audioManager.queue}/>
 						</div>
 					</Show>
 					<Show when={audioManager.musicGroup} keyed>
 						{(musicGroup) => <div class="following-list">
-							<h2>A suivre dans <A href={musicGroup.route}>{musicGroup.name}</A></h2>
+							<div class="list-title"><h2>A suivre dans <A href={musicGroup.route}>{musicGroup.name}</A></h2></div>
 							<MusicSection musics={musicGroup.musics.slice(audioManager.position + 1)} />
 						</div>}
 					</Show>

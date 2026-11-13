@@ -1,7 +1,7 @@
 import { createContext, useContext, ParentComponent, createEffect, onCleanup, onMount, untrack } from "solid-js";
 import { createSignal } from "solid-js";
 import { Music } from "~/class/Music";
-import { MusicGroup, PushMusicToQueueFn, SetCurrentMusicFn, SetMusicGroupFn, useTrackManager } from "~/store/trackManager.store";
+import { ClearQueueFn, MusicGroup, PushMusicToQueueFn, SetCurrentMusicFn, SetMusicGroupFn, useTrackManager } from "~/store/trackManager.store";
 import { setupMediaSession, updateMediaMetadata } from "./mediaSession";
 import { summonErrorToast } from "../ui/Toaster";
 import { LocalStorageItem } from "~/utils/storageHelper";
@@ -35,6 +35,7 @@ export type AudioManager = {
 	setCurrentMusic: SetCurrentMusicFn;
 	setMusicGroup: SetMusicGroupFn;
 	pushMusicToQueue: PushMusicToQueueFn;
+	clearQueue: ClearQueueFn;
 };
 
 const AudioManagerContext = createContext<AudioManager>();
@@ -226,6 +227,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		},
 		setMusicGroup: trackManager.setMusicGroup,
 		pushMusicToQueue: trackManager.pushMusicToQueue,
+		clearQueue: trackManager.clearQueue,
 	};
 
 	(window as (typeof window & { audioManager: typeof audioManager })).audioManager = audioManager;

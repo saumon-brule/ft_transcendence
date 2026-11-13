@@ -152,7 +152,8 @@ export function useTrackManager() {
 	};
 }
 
-export type PushMusicToQueueFn = ReturnType<typeof useTrackManager>["pushMusicToQueue"];
 export type SetPositionFn = ReturnType<typeof useTrackManager>["setPosition"];
 export type SetMusicGroupFn = ReturnType<typeof useTrackManager>["setMusicGroup"];
 export type SetCurrentMusicFn = ReturnType<typeof useTrackManager>["setCurrentMusic"];
+export type PushMusicToQueueFn = ReturnType<typeof useTrackManager>["pushMusicToQueue"];
+export type ClearQueueFn = ReturnType<typeof useTrackManager>["clearQueue"];
