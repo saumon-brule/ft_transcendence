@@ -8,7 +8,7 @@ $compact-below: 520px;
 	.data {
 		width: 100%;
 		table-layout: fixed;
-		border-spacing: 0;
+		border-spacing: 0 2px;
 
 		th, td {
 			padding: 8px;
@@ -101,6 +101,8 @@ $compact-below: 520px;
 
 			tbody {
 				display: block;
+
+				tr + tr { margin-top: 2px; }
 
 				tr {
 					display: grid;
