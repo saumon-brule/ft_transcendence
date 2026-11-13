@@ -1,116 +1,140 @@
 import { JwtService } from "@nestjs/jwt";
 import {
-    OnGatewayConnection,
-    OnGatewayDisconnect,
-    OnGatewayInit,
-    WebSocketGateway,
+	OnGatewayConnection,
+	OnGatewayDisconnect,
+	OnGatewayInit,
+	WebSocketGateway,
 } from "@nestjs/websockets";
-import { type JwtPayload } from "@flex/shared";
-import { type Server, type Socket } from "socket.io";
+import { presenceListSchema, presenceSchema, type JwtPayload } from "@flex/shared";
 import { env } from "../../core/env";
 import { FriendsService } from "../friends/friends.service";
 import { PresenceService } from "./presence.service";
+import { type DefaultEventsMap, type Server, type Socket } from "socket.io";
+
+export type PresenceSocketData = {
+	userUUID?: string;
+};
+
+export type PresenceSocket = Socket<
+	DefaultEventsMap,
+	DefaultEventsMap,
+	DefaultEventsMap,
+	PresenceSocketData
+>;
+
+export type PresenceServer = Server<
+	DefaultEventsMap,
+	DefaultEventsMap,
+	DefaultEventsMap,
+	PresenceSocketData
+>;
 
 @WebSocketGateway({
-    cors: {
-        origin: env.BASE_FRONT_URL,
-        credentials: true,
-    },
+	cors: {
+		origin: env.BASE_FRONT_URL,
+		credentials: true,
+	},
 })
 export class PresenceGateway implements
     OnGatewayInit,
     OnGatewayConnection,
     OnGatewayDisconnect {
-    private server!: Server;
+	private server!: PresenceServer;
 
-    constructor(
-        private readonly jwtService: JwtService,
-        private readonly friendsService: FriendsService,
-        private readonly presenceService: PresenceService,
-    ) {}
+	constructor(
+		private readonly jwtService: JwtService,
+		private readonly friendsService: FriendsService,
+		private readonly presenceService: PresenceService,
+	) {}
 
-    afterInit(server: Server): void {
-        this.server = server;
+	afterInit(server: PresenceServer): void {
+		this.server = server;
 
-        server.use((socket, next) => {
-            void this.authenticate(socket)
-                .then(() => next())
-                .catch(() => next(new Error("Unauthorized")));
-        });
-    }
+		server.use((socket, next) => {
+			void this.authenticate(socket)
+				.then(() => next())
+				.catch(() => next(new Error("Unauthorized")));
+		});
+	}
 
-    async handleConnection(client: Socket): Promise<void> {
-        const userUUID = client.data.userUUID;
-        if (typeof userUUID !== "string") {
-            client.disconnect(true);
-            return;
-        }
+	async handleConnection(client: PresenceSocket): Promise<void> {
+		const userUUID = client.data.userUUID;
+		if (typeof userUUID !== "string") {
+			client.disconnect(true);
+			return;
+		}
 
-        const friends = await this.friendsService.getFriends(userUUID);
+		const friends = await this.friendsService.getFriends(userUUID);
+		if(!client.connected) return;
 
-        await client.join(this.userRoom(userUUID));
+		await client.join(this.userRoom(userUUID));
+		if (!client.connected) return;
 
-        const becameOnline = this.presenceService.connect(userUUID, client.id);
+		const becameOnline = this.presenceService.connect(userUUID, client.id);
 
-        client.emit(
-            "presence:snapshot",
-            friends.map((friend) => ({
-                ...friend,
-                online: this.presenceService.isOnline(friend.uuid),
-            })),
-        );
+		const snapshot = presenceListSchema.parse(
+			friends.map((friend) => ({
+				...friend,
+				online: this.presenceService.isOnline(friend.uuid),
+			})),
+		);
 
-        if (becameOnline) {
-            this.notifyFriends(friends, userUUID, true);
-        }
-    }
+		client.emit("presence:snapshot", snapshot);
 
-    async handleDisconnect(client: Socket): Promise<void> {
-        const userUUID = client.data.userUUID;
-        if (typeof userUUID !== "string") {
-            return;
-        }
+		if (becameOnline) {
+			this.notifyFriends(friends, userUUID, true);
+		}
+	}
 
-        const becameOffline = this.presenceService.disconnect(userUUID, client.id);
-        if (!becameOffline) {
-            return;
-        }
+	async handleDisconnect(client: PresenceSocket): Promise<void> {
+		const userUUID = client.data.userUUID;
+		if (typeof userUUID !== "string") {
+			return;
+		}
 
-        const friends = await this.friendsService.getFriends(userUUID);
-        this.notifyFriends(friends, userUUID, false);
-    }
+		const becameOffline = this.presenceService.disconnect(userUUID, client.id);
+		if (!becameOffline) {
+			return;
+		}
 
-    private async authenticate(socket: Socket): Promise<void> {
-        const token: unknown = socket.handshake.auth?.token;
-        if (typeof token !== "string" || token.length === 0) {
-            throw new Error("Missing token");
-        }
+		const friends = await this.friendsService.getFriends(userUUID);
+		if (this.presenceService.isOnline(userUUID)) {
+			return;
+		}
+		this.notifyFriends(friends, userUUID, false);
+	}
 
-        const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
-            secret: env.JWT_SECRET,
-        });
+	private async authenticate(socket: PresenceSocket): Promise<void> {
+		const token: unknown = socket.handshake.auth?.token;
+		if (typeof token !== "string" || token.length === 0) {
+			throw new Error("Missing token");
+		}
 
-        if (typeof payload.sub !== "string" || payload.emailVerified !== true) {
-            throw new Error("Invalid token payload");
-        }
+		const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
+			secret: env.JWT_SECRET,
+		});
 
-        socket.data.userUUID = payload.sub;
-    }
+		if (typeof payload.sub !== "string" || payload.emailVerified !== true) {
+			throw new Error("Invalid token payload");
+		}
 
-    private notifyFriends(
-        friends: Array<{ uuid: string }>,
-        userUUID: string,
-        online: boolean,
-    ): void {
-        for (const friend of friends) {
-            this.server.to(this.userRoom(friend.uuid)).emit("presence:changed", {
-                uuid: userUUID,
-                online,
-            });
-        }
-    }
+		socket.data.userUUID = payload.sub;
+	}
 
-    private userRoom(userUUID: string): string {
-        return `user:${userUUID}`;
-    }
+	private notifyFriends(
+		friends: Array<{ uuid: string }>,
+		userUUID: string,
+		online: boolean,
+	): void {
+		for (const friend of friends) {
+			this.server.to(this.userRoom(friend.uuid)).emit(
+				"presence:changed",
+				presenceSchema.parse({ uuid: userUUID, online }),
+			);
+		}
+	}
+
+	private userRoom(userUUID: string): string {
+		return `user:${userUUID}`;
+	}
 }

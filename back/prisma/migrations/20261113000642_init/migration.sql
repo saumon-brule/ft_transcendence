@@ -1,6 +1,3 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
 -- CreateEnum
 CREATE TYPE "FriendStatus" AS ENUM ('ACCEPTED', 'DENIED', 'PENDING');
 
@@ -302,4 +299,3 @@ ALTER TABLE "PlaylistMusic" ADD CONSTRAINT "PlaylistMusic_playlistUUID_fkey" FOR
 
 -- AddForeignKey
 ALTER TABLE "PlaylistMusic" ADD CONSTRAINT "PlaylistMusic_musicUUID_fkey" FOREIGN KEY ("musicUUID") REFERENCES "Music"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
-
