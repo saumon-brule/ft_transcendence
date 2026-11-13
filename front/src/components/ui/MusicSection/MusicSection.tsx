@@ -25,6 +25,7 @@ export type MusicSectionProps = {
 export type GroupMusicSectionProps = {
 	hiddenColumns?: MusicSectionColumn[];
 	providers?: Provider[];
+	showCurrent?: boolean;
 	musicGroup: MusicGroup;
 };
 

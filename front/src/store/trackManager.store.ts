@@ -106,7 +106,7 @@ export function useTrackManager() {
 	}
 
 	function setPosition(position: number) {
-		if (!trackManager.musicGroup) {
+		if (!trackManager.musicGroup || trackManager.musicGroup.musics.length === 0) {
 			setTrackManager("position", 0);
 			return;
 		}

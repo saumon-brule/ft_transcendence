@@ -51,7 +51,7 @@ export default function ProviderArtistHeader(props: ProviderArtistHeaderProps) {
 		</div>
 		<div class="header-controls">
 			<Show when={props.musicGroup()} fallback={<Button icon disabled><Play /></Button>}>
-				{(musicGroup) => <Button icon onClick={() => playMusicGroup(musicGroup())}><Play /></Button>}
+				{(musicGroup) => <Button icon disabled={musicGroup().musics.length === 0} onClick={() => playMusicGroup(musicGroup())}><Play /></Button>}
 			</Show>
 		</div>
 	</header>;
