@@ -33,7 +33,7 @@ export default function ProviderAlbum() {
 			<ProviderAlbumHeader album={data.info} providerBack={data.back} />
 			<section>
 				<h2>Musiques</h2>
-				<MusicSection musics={data.info.music.musics} hiddenColumns={["album"]} />
+				<MusicSection isMusicGroup musics={data.info.music.musics} hiddenColumns={["album"]} />
 			</section>
 			<section>
 				<h2>Artists</h2>

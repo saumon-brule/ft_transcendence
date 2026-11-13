@@ -25,6 +25,7 @@ export type AudioManager = {
 	set position(value: number);
 	get loop(): boolean;
 	set loop(value: boolean);
+	get isCurrentTemporary(): boolean;
 	play: () => void;
 	pause: () => void;
 	stop: () => void;
@@ -82,6 +83,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	function forward() {
 		setIsPlaying(true);
 		trackManager.nextTrack();
+		audio.currentTime = 0;
 	}
 
 	function back() {
@@ -133,6 +135,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 					if (id !== loadId) return;
 					loading = false;
 					audio.src = url;
+					audio.currentTime = 0;
 					if (playWhenLoaded || untrack(isPlaying)) {
 						playWhenLoaded = false;
 						play();
@@ -210,6 +213,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		set position(position: number) { trackManager.setPosition(position); },
 		get loop() { return trackManager.manager.loop; },
 		set loop(loop: boolean) { trackManager.setLoop(loop); },
+		get isCurrentTemporary() { return trackManager.manager.isCurrentTemporary; },
 		play,
 		pause,
 		stop,

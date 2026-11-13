@@ -47,34 +47,44 @@ export function useTrackManager() {
 		setTrackManager(produce((manager) => {
 			nextMusic = manager.queue.shift() ?? null;
 			if (!nextMusic) {
-				manager.position += 1;
-				const nextMusicIndex = manager.loop
-					? manager.position % manager.musicList.length
-					: manager.position;
-				nextMusic = manager.musicList[nextMusicIndex];
+				if (manager.loop) {
+					manager.position = (manager.position + 1) % manager.musicList.length;
+					nextMusic = manager.musicList[manager.position];
+				} else {
+					if (manager.position < manager.musicList.length - 1) {
+						manager.position += 1;
+						nextMusic = manager.musicList[manager.position];
+					} else {
+						nextMusic = null;
+					}
+				}
 				manager.isCurrentTemporary = false;
 			} else {
 				manager.isCurrentTemporary = true;
 			}
 			manager.current = nextMusic;
 		}));
-		console.log(nextMusic);
 		return nextMusic;
 	}
 
 	function prev() {
 		let prevMusic: Music | null = null;
 		setTrackManager(produce((manager) => {
-			if (manager.position > 0) {
-				manager.position -= 1;
+			if (manager.loop) {
+				if (!manager.isCurrentTemporary) {
+					manager.position = (manager.position - 1) % manager.musicList.length;
+				}
 				prevMusic = manager.musicList[manager.position];
-				manager.current = prevMusic;
-			} else if (manager.loop) {
-				prevMusic = manager.musicList[manager.position];
-				manager.current = prevMusic;
 			} else {
-				prevMusic = null;
+				if (!manager.isCurrentTemporary && manager.position > 0) {
+					manager.position -= 1;
+					prevMusic = manager.musicList[manager.position];
+				} else {
+					prevMusic = null;
+				}
 			}
+			manager.isCurrentTemporary = false;
+			if (prevMusic) manager.current = prevMusic;
 		}));
 		return prevMusic;
 	}
@@ -82,7 +92,6 @@ export function useTrackManager() {
 	function setCurrentMusic(music: Music): void {
 		setTrackManager(produce((manager) => {
 			manager.current = music;
-			if (!manager.isCurrentTemporary) manager.position += 1;
 			manager.isCurrentTemporary = true;
 		}));
 	}

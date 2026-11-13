@@ -15,6 +15,14 @@ export type MusicSectionProps = {
 	musics: Array<Music>;
 	hiddenColumns?: MusicSectionColumn[];
 	providers?: Provider[];
+	/** * `IsMusicGroup` tells if a MusicSection is supposed to
+		* be considered as a "playable list" of Music. For instance,
+		* playlists, albums, and artists lists are "playable lists"
+		* while search results are not.
+		* It will define if when a music of the list is clicked it
+		* should add the full list to the queue or if it should only
+		* play the Music alone */
+	isMusicGroup?: boolean;
 };
 
 export default function MusicSection(props: MusicSectionProps) {
@@ -28,6 +36,11 @@ export default function MusicSection(props: MusicSectionProps) {
 	function playMusicListFromPosition(position: number) {
 		audioManager.setMusicList(props.musics);
 		audioManager.position = position;
+		audioManager.play();
+	}
+
+	function playMusic(music: Music) {
+		audioManager.setCurrentMusic(music);
 		audioManager.play();
 	}
 
@@ -54,7 +67,7 @@ export default function MusicSection(props: MusicSectionProps) {
 						<div class="music-title">
 							<MusicCover music={music} />
 							<div class="music-title-text">
-								<Button variant="text" onClick={() => void playMusicListFromPosition(i())}>{music.name}</Button>
+								<Button variant="text" onClick={() => props.isMusicGroup ? playMusicListFromPosition(i()) : playMusic(music)}>{music.name}</Button>
 								<Show when={shown("artists")}>
 									<span class="music-title-artists">
 										<ArtistsLinks artists={music.artists} providerUUID={music.providerUuid} />

@@ -1,9 +1,9 @@
-import { Accessor, Setter, Show } from "solid-js";
+import { Accessor, createEffect, on, Setter, Show } from "solid-js";
 import Button from "~/components/inputs/Button";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import MusicCover from "../MusicCover";
 import ArtistsLinks from "../ArtistLinks";
-import { A } from "@solidjs/router";
+import { A, useLocation } from "@solidjs/router";
 import MusicSection from "../MusicSection/MusicSection";
 import { ChevronDown } from "lucide-solid";
 
@@ -15,7 +15,12 @@ export type QueueProps = {
 };
 
 export default function Queue(props: QueueProps) {
+	const location = useLocation();
 	const audioManager = useAudioManagerContext();
+
+	createEffect(on(() => [location.query, location.pathname], () => {
+		props.setShow(false);
+	}));
 
 	const followingMusics = () => audioManager.musicList.slice(audioManager.position + 1);
 
