@@ -8,6 +8,7 @@ import MusicSection from "../MusicSection/MusicSection";
 import { ChevronDown } from "lucide-solid";
 
 import "./Queue.scss";
+import { useTranslation } from "~/i18n/context";
 
 export type QueueProps = {
 	show: Accessor<boolean>;
@@ -16,6 +17,7 @@ export type QueueProps = {
 
 export default function Queue(props: QueueProps) {
 	const location = useLocation();
+	const { t } = useTranslation();
 	const audioManager = useAudioManagerContext();
 
 	createEffect(on(() => location.pathname, () => {
@@ -28,7 +30,7 @@ export default function Queue(props: QueueProps) {
 		</Button>
 		<div>
 			<div class="queue-header">
-				<h1>Queue</h1>
+				<h1>{t("pages.queue.title")}</h1>
 			</div>
 			<div class="queue-body">
 				<div class="queue-current-track" classList={{ "empty": audioManager.currentMusic === null }}>
@@ -53,14 +55,17 @@ export default function Queue(props: QueueProps) {
 				</div>
 				<div class="lists">
 					<Show when={audioManager.queue.length > 0}>
-						<div class="list-title"><h2>File d'attente</h2><Button variant="text" onClick={() => audioManager.clearQueue()}>clear</Button></div>
+						<div class="list-title">
+							<h2>{t("pages.queue.queue")}</h2>
+							<Button variant="text" onClick={() => audioManager.clearQueue()}>{t("pages.queue.queueClear")}</Button>
+						</div>
 						<div class="queue-list">
 							<MusicSection musics={audioManager.queue}/>
 						</div>
 					</Show>
 					<Show when={audioManager.musicGroup} keyed>
 						{(musicGroup) => <div class="following-list">
-							<div class="list-title"><h2>A suivre dans <A href={musicGroup.route}>{musicGroup.name}</A></h2></div>
+							<div class="list-title"><h2>{t("pages.queue.following")}<A href={musicGroup.route}>{musicGroup.name}</A></h2></div>
 							<MusicSection musics={musicGroup.musics.slice(audioManager.position + 1)} />
 						</div>}
 					</Show>

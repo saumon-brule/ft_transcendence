@@ -132,6 +132,12 @@ export default {
 				},
 			},
 		},
+		queue: {
+			title: "Vous écoutez ...",
+			queue: "File d'attente",
+			queueClear: "vider",
+			following: "À suivre dans ",
+		},
 	},
 	errors: {
 		rateLimit: "Euh... Bro tu vas trop vite là !",
