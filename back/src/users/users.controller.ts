@@ -57,6 +57,15 @@ export class UsersController {
 		});
 	}
 
+	@TsRestHandler(usersContract.searchUsers)
+	@UseGuards(JwtAuthGuard)
+	public searchUsers(@CurrentUser() authuser: AuthUser) {
+		return tsRestHandler(usersContract.searchUsers, async ({ query }) => {
+			const users = await this.usersService.searchUsers(authuser.uuid, query.username);
+			return { status: 200, body: users };
+		});
+	}
+
 	@TsRestHandler(usersContract.getUser)
 	@UseGuards(JwtAuthGuard)
 	public getUser() {

@@ -277,4 +277,20 @@ export class UsersService {
 		return email.trim().toLowerCase();
 	}
 
+	public async searchUsers(userUUID: string, username: string) {
+		return this.prisma.user.findMany({
+			where: {
+				uuid: { not: userUUID },
+				username: {
+					contains: username,
+					mode: "insensitive",
+				},
+			},
+			select: {
+				uuid: true,
+				username: true,
+			},
+			take: 25,
+		});
+	}
 }
