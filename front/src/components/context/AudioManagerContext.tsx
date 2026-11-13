@@ -1,4 +1,4 @@
-import { createContext, useContext, ParentComponent, createEffect, onCleanup, onMount, untrack } from "solid-js";
+import { createContext, useContext, ParentComponent, createEffect, onCleanup, onMount, untrack, on } from "solid-js";
 import { createSignal } from "solid-js";
 import { Music } from "~/class/Music";
 import { ClearQueueFn, MusicGroup, PushMusicToQueueFn, SetCurrentMusicFn, SetMusicGroupFn, useTrackManager } from "~/store/trackManager.store";
@@ -211,7 +211,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		get muted() { return muted(); },
 		set muted(muted: boolean) { setMuted(muted); },
 		get position() { return trackManager.manager.position; },
-		set position(position: number) { trackManager.setPosition(position); },
+		set position(position: number) { audio.currentTime = 0; trackManager.setPosition(position); },
 		get loop() { return trackManager.manager.loop; },
 		set loop(loop: boolean) { trackManager.setLoop(loop); },
 		get isCurrentTemporary() { return trackManager.manager.isCurrentTemporary; },

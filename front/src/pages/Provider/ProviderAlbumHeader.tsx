@@ -2,28 +2,32 @@ import type { Provider } from "@flex/shared";
 import { Show } from "solid-js";
 import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
-import { A, useLocation } from "@solidjs/router";
+import { A } from "@solidjs/router";
 import Button from "~/components/inputs/Button";
 import { Play } from "lucide-solid";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import { ProviderAlbumQueryBody } from "~/api/queryHooks/providerInfo";
+import { MusicGroup } from "~/store/trackManager.store";
+import { Accessor } from "solid-js";
 
-export default function ProviderAlbumHeader(props: { album: ProviderAlbumQueryBody; providerBack: Provider; musicTotal?: number }) {
+export type ProviderAlbumHeaderProps = {
+	album: ProviderAlbumQueryBody;
+	providerBack: Provider;
+	musicGroup: Accessor<MusicGroup | null>;
+	musicTotal?: number;
+};
+
+export default function ProviderAlbumHeader(props: ProviderAlbumHeaderProps) {
 	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
 	const audioManager = useAudioManagerContext();
-	const location = useLocation();
 
-	function onPlayClick() {
-		audioManager.setMusicGroup({
-			name: props.album.name,
-			route: location.pathname,
-			musics: props.album.music.musics,
-		});
+	function playMusicGroup(musicGroup: MusicGroup) {
+		audioManager.setMusicGroup(musicGroup);
 		audioManager.position = 0;
 		audioManager.play();
 	}
 
-	function getCover(album: AlbumDetailedItemDto) {
+	function getCover(album: ProviderAlbumQueryBody) {
 		const token = mediaToken();
 		if (album.hasCover && token) {
 			return buildMediaUrl(props.providerBack.address, "albumCover", album.uuid, token);
@@ -44,7 +48,9 @@ export default function ProviderAlbumHeader(props: { album: ProviderAlbumQueryBo
 			<p>From <A href={`/provider/${props.providerBack.uuid}`}>{props.providerBack.name}</A></p>
 		</div>
 		<div class="header-controls">
-			<Button icon onClick={onPlayClick}><Play /></Button>
+			<Show when={props.musicGroup()} fallback={<Button icon disabled><Play /></Button>}>
+				{(musicGroup) => <Button icon onClick={() => playMusicGroup(musicGroup())}><Play /></Button>}
+			</Show>
 		</div>
 	</header>;
 }
