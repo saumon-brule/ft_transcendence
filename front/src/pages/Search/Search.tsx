@@ -25,7 +25,12 @@ export default function Search() {
 	const params = useParams<{ search: string }>();
 	const profileQuery = useMeProfileQuery();
 
-	const providers = () => profileQuery.data?.body.connectedProviders ?? [];
+	const providers = createMemo(() => {
+		const body = profileQuery.data?.body;
+		if (!body) return [];
+		const all = [...body.ownedProviders, ...body.connectedProviders];
+		return all.filter((provider, i) => all.findIndex((p) => p.uuid === provider.uuid) === i);
+	});
 	const search = () => decodeURIComponent(params.search ?? "");
 	const searches = useProvidersSearchQueries(providers, search);
 

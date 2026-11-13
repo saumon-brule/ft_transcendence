@@ -1,8 +1,6 @@
 import { initContract } from "@ts-rest/core";
 import { authContract } from "./auth/auth.contract";
 import { usersContract } from "./users/users.contract";
-import { rolesContract } from "./roles/roles.contract";
-import { permissionsContract } from "./permissions/permissions.contract";
 import { playlistsContract } from "./playlists/playlists.contract";
 import { commonError400Schema, commonError429Schema, serverBaseError401Schema, serverError403Schema } from "../../errors/error-schemas";
 import { appConfigContract } from "./appConfig/app-config.contract";
@@ -17,8 +15,6 @@ export const serverContract = c.router(
 	{
 		auth: authContract,
 		users: usersContract,
-		roles: rolesContract,
-		permissions: permissionsContract,
 		config: appConfigContract,
 		playlists: playlistsContract,
 		providersAPI: providersAPIContract,

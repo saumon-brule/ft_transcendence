@@ -1,4 +1,4 @@
-$mobile: 1200px;
+@use "../../styles/breakpoints" as breakpoints;
 
 // change it for this page so we can have an inner scrollable area
 #app-body:has(> #friends) {
@@ -95,6 +95,10 @@ $mobile: 1200px;
 			padding: 10px;
 			display: none;
 
+			@include breakpoints.respond-to("mobile") {
+				display: block;
+			}
+
 			a {
 				display: flex;
 				align-items: center;
@@ -102,11 +106,7 @@ $mobile: 1200px;
 			}
 		}
 
-		@media (max-width: $mobile) {
-			.back {
-				display: block;
-			}
-		}
+		
 
 		.chat {
 			display: flex;
@@ -212,6 +212,16 @@ $mobile: 1200px;
 					}
 				}
 			}
+		}
+	}
+
+	@include breakpoints.respond-to("mobile") {
+		.no-chat-box, .no-friend-list {
+			display: none;
+		}
+
+		.friends-left, .friends-right {
+			width: 100%;
 		}
 	}
 }

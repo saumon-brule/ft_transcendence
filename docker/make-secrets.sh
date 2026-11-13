@@ -50,7 +50,6 @@ create_certificate
 if [ "$1" = server ]; then
 	create jwt_secret random
 	create jwt_refresh_secret random
-	create admin_password random
 	create provider.pem rsa_key
 	create smtp_pass empty
 	create api42_client_secret empty

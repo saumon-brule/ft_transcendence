@@ -65,7 +65,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
       BASE_FRONT_URL: ${BASE_FRONT_URL:?set BASE_FRONT_URL in .env}
-      ADMIN_EMAIL: ${ADMIN_EMAIL:?set ADMIN_EMAIL in .env}
       SMTP_HOST: ${SMTP_HOST:?set SMTP_HOST in .env}
       SMTP_PORT: ${SMTP_PORT:-465}
       SMTP_USER: ${SMTP_USER:?set SMTP_USER in .env}
@@ -77,7 +76,6 @@ services:
       JWT_REFRESH_SECRET_FILE: /run/secrets/jwt_refresh_secret
       SMTP_PASS_FILE: /run/secrets/smtp_pass
       API42_CLIENT_SECRET_FILE: /run/secrets/api42_client_secret
-      ADMIN_PASSWORD_FILE: /run/secrets/admin_password
     secrets:
       - postgres_password
       - provider_key
@@ -85,7 +83,6 @@ services:
       - jwt_refresh_secret
       - smtp_pass
       - api42_client_secret
-      - admin_password
     volumes:
       - uploads:/data/uploads
       - logs:/data/logs
@@ -142,8 +139,6 @@ secrets:
     file: ./secrets/smtp_pass
   api42_client_secret:
     file: ./secrets/api42_client_secret
-  admin_password:
-    file: ./secrets/admin_password
   tls_cert:
     file: ./secrets/tls.crt
   tls_key:
