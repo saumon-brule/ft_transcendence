@@ -1,6 +1,6 @@
 import { initContract } from "@ts-rest/core";
 import { uuidParamSchema } from "../../../schemas/common.schema";
-import { createdPlaylistSchema, createPlaylistBodySchema, MusicBodySchema, playlistDetailSchema, updatePlaylistNameSchema, updatePlaylistPrivacySchema } from "./schemas/playlist.schema";
+import { createdPlaylistSchema, createPlaylistBodySchema, MusicBodySchema, playlistDetailSchema, playlistListSchema, updatePlaylistNameSchema, updatePlaylistPrivacySchema } from "./schemas/playlist.schema";
 import { commonError404Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
@@ -14,6 +14,11 @@ export const playlistsContract = c.router(
 			responses: {
 				201: createdPlaylistSchema,
 			},
+		},
+		listPlaylists: {
+			method: "GET",
+			path: "/",
+			responses: { 200: playlistListSchema },
 		},
 		getPlaylist: {
 			method: "GET",
