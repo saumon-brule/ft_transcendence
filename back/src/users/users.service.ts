@@ -44,22 +44,29 @@ export class UsersService {
 		return user;
 	}
 
-	public async getExposedInfoByUUID(uuid: string) {
+	public async getExposedInfoByUUID(uuid: string, viewerUUID: string) {
+		const isSelf = uuid === viewerUUID;
 		const user = await this.prisma.user.findUnique({
 			where: { uuid: uuid },
 			include: {
 				_count: { select: { ownedProviders: true, ownedPlaylists: true } },
-				ownedProviders: { where: { publicDisplay: true } },
+				ownedProviders: isSelf
+					? true
+					: { where: { publicDisplay: true } },
 				providers: {
-					where: {
-						publicDisplay: true,
-						provider: { is: { publicDisplay: true, ownerUUID: { not: uuid } } },
-					},
+					where: isSelf
+						? { provider: { is: { ownerUUID: { not: uuid } } } }
+						: {
+							publicDisplay: true,
+							provider: { is: { publicDisplay: true, ownerUUID: { not: uuid } } },
+						},
 					include: { provider: true },
 				},
 				currentlyListening: true,
 				ownedPlaylists: {
-					where: { private: false },
+					where: isSelf
+						? {}
+						: { private: false },
 					include: {
 						_count: {
 							select: { musics: true },
@@ -152,7 +159,7 @@ export class UsersService {
 			data,
 		});
 
-		return this.getExposedInfoByUUID(uuid);
+		return this.getExposedInfoByUUID(uuid, uuid);
 	}
 
 	public async updateAvatarTimestamp(uuid: string) {
