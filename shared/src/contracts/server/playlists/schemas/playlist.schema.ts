@@ -26,3 +26,46 @@ export const updatePlaylistNameSchema = z.object({
 export const updatePlaylistPrivacySchema = z.object({
 	private: z.boolean(),
 });
+
+export const playlistDetailSchema = z.object({
+	uuid: z.string().uuid(),
+	name: z.string(),
+	private: z.boolean(),
+	createdAt: z.coerce.date(),
+	owner: z.object({
+		uuid: z.string().uuid(),
+		username: z.string(),
+	}),
+	isOwner: z.boolean(),
+	isFollowing: z.boolean(),
+	musics: z.array(z.object({
+		musicUuid: z.string().uuid(),
+		providerUuid: z.string().uuid(),
+		addedAt: z.coerce.date(),
+	})),
+	providers: z.array(z.object({
+		uuid: z.string().uuid(),
+		name: z.string(),
+		address: z.string(),
+	})),
+});
+export type PlaylistDetailDto = z.infer<typeof playlistDetailSchema>;
+
+export const playlistSummarySchema = z.object({
+	uuid: z.string().uuid(),
+	name: z.string(),
+	private: z.boolean(),
+	createdAt: z.coerce.date(),
+	owner: z.object({
+		uuid: z.string().uuid(),
+		username: z.string(),
+	}),
+	musicCount: z.number(),
+});
+export type PlaylistSummaryDto = z.infer<typeof playlistSummarySchema>;
+
+export const playlistListSchema = z.object({
+	owned: z.array(playlistSummarySchema),
+	followed: z.array(playlistSummarySchema),
+});
+export type PlaylistListDto = z.infer<typeof playlistListSchema>;

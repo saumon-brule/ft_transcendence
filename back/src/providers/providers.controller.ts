@@ -60,7 +60,6 @@ export class ProvidersController {
 		});
 	}
 
-	@Throttle({ default: { limit: 30, ttl: 60000 } })
 	@UseGuards(JwtAuthGuard)
 	@TsRestHandler(serverContract.providers.accessToken)
 	public accessToken(@CurrentUser() user: AuthUser) {
@@ -70,7 +69,6 @@ export class ProvidersController {
 		});
 	}
 
-	@Throttle({ default: { limit: 30, ttl: 60000 } })
 	@UseGuards(JwtAuthGuard)
 	@TsRestHandler(serverContract.providers.requestAccess)
 	public requestAccess(@CurrentUser() user: AuthUser) {

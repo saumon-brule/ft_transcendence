@@ -138,11 +138,10 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 							if (id === loadId) updateMediaMetadata(currentTrack.music, token);
 						});
 				})
-				.catch((e) => {
+				.catch(() => {
 					if (id !== loadId) return;
 					loading = false;
 					playWhenLoaded = false;
-					console.error(e);
 					summonErrorToast(() => "This music is not avaible right now :(");
 				});
 		} else {

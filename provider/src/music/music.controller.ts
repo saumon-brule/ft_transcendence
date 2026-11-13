@@ -28,6 +28,15 @@ export class MusicController {
 		}));
 	}
 
+	@TsRestHandler(providerContract.music.getMany)
+	@MemberOnly()
+	getMany() {
+		return tsRestHandler(providerContract.music.getMany, async ({ body }) => ({
+			status: 200,
+			body: await this.musicService.getMany(body.uuids),
+		}));
+	}
+
 	@TsRestHandler(providerContract.music.get)
 	@MemberOnly()
 	get() {

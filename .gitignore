@@ -1,12 +1,15 @@
 /.vscode
 node_modules
 .env
+.env.*
+!.env.example
 dist/
 *.tsbuildinfo
 back/src/generated/prisma/
 provider/src/generated/prisma/
 
 secrets/
+secrets.*/
 
 provider/mock/**/*.mp3
 provider/mock/**/*.jpg

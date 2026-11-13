@@ -1,7 +1,6 @@
 import { buildMediaUrl, musicItemSchema, type ProviderDataMusicDto, type ProviderDataArtistDto } from "@flex/shared";
 import z from "zod";
 import { getMediaToken } from "~/api/providerClients";
-import { summonErrorToast } from "~/components/ui/Toaster";
 
 type MusicAlbumDto = ProviderDataMusicDto["album"];
 
@@ -23,7 +22,6 @@ export class Music {
 	public async audioUrl(): Promise<string> {
 		const token = await getMediaToken(this.providerUrl, this.providerUuid);
 		if (!token) {
-			summonErrorToast("Failed to get media token for provider");
 			throw new Error("Failed to get media token for provider");
 		}
 		return buildMediaUrl(this.providerUrl, "audio", this.uuid, token);

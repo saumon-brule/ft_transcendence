@@ -18,6 +18,18 @@ export const musicListResponseSchema = z.object({
 	total: z.number(),
 });
 
+export const MUSIC_BATCH_MAX = 100;
+
+export const musicBatchSchema = z.object({
+	uuids: z.array(z.string().uuid()).min(1).
+		max(MUSIC_BATCH_MAX),
+});
+
+export const musicBatchResponseSchema = z.object({
+	musics: z.array(musicItemSchema),
+	missing: z.array(z.string().uuid()),
+});
+
 export const createMusicSchema = z.object({
 	name: z.string().trim().min(1).
 		max(200),

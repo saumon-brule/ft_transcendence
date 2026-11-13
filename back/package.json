@@ -11,6 +11,7 @@
 		"start:dev": "nodemon",
 		"start:debug": "nest start --debug --watch",
 		"start:prod": "node dist/main",
+		"seed": "ts-node --transpile-only src/seed.ts",
 		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\" --fix",
 		"check": "tsc --noEmit && eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\""
 	},

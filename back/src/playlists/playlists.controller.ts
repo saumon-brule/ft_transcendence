@@ -80,6 +80,24 @@ export class PlaylistsController {
 		});
 	}
 
+	@TsRestHandler(playlistsContract.listPlaylists)
+	@UseGuards(JwtAuthGuard)
+	public listPlaylists(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(playlistsContract.listPlaylists, async () => ({
+			status: 200,
+			body: await this.playlistsService.listPlaylists(authUser.uuid),
+		}));
+	}
+
+	@TsRestHandler(playlistsContract.getPlaylist)
+	@UseGuards(JwtAuthGuard)
+	public getPlaylist(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(playlistsContract.getPlaylist, async ({ params }) => ({
+			status: 200,
+			body: await this.playlistsService.getPlaylist(params.uuid, authUser.uuid),
+		}));
+	}
+
 	@TsRestHandler(playlistsContract.updatePlaylistName)
 	@UseGuards(JwtAuthGuard)
 	public updatePlaylistName(@CurrentUser() authUser: AuthUser) {
