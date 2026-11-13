@@ -17,6 +17,39 @@ export class PlaylistsService {
 		return playlist;
 	}
 
+	public async listPlaylists(viewerUUID: string) {
+		const select = {
+			uuid: true,
+			name: true,
+			private: true,
+			createdAt: true,
+			owner: { select: { uuid: true, username: true } },
+			_count: { select: { musics: true } },
+		} as const;
+		const toSummary = <T extends { _count: { musics: number } }>({ _count, ...playlist }: T) => ({
+			...playlist,
+			musicCount: _count.musics,
+		});
+
+		const [owned, followed] = await Promise.all([
+			this.prisma.playlist.findMany({
+				where: { ownerUUID: viewerUUID },
+				select,
+				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			}),
+			this.prisma.userPlaylist.findMany({
+				where: { userUUID: viewerUUID, playlist: { ownerUUID: { not: viewerUUID }, private: false } },
+				select: { playlist: { select } },
+				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			}),
+		]);
+
+		return {
+			owned: owned.map(toSummary),
+			followed: followed.map((link) => toSummary(link.playlist)),
+		};
+	}
+
 	public async getPlaylist(uuid: string, viewerUUID: string) {
 		const playlist = await this.prisma.playlist.findUnique({
 			where: { uuid },
