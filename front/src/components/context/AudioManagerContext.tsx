@@ -1,7 +1,7 @@
 import { createContext, useContext, ParentComponent, createEffect, onCleanup, onMount, untrack } from "solid-js";
 import { createSignal } from "solid-js";
 import { Music } from "~/class/Music";
-import { PushMusicToQueueFn, SetCurrentMusicFn, SetMusicListFn, useTrackManager } from "~/store/trackManager.store";
+import { MusicGroup, PushMusicToQueueFn, SetCurrentMusicFn, SetMusicGroupFn, useTrackManager } from "~/store/trackManager.store";
 import { setupMediaSession, updateMediaMetadata } from "./mediaSession";
 import { summonErrorToast } from "../ui/Toaster";
 import { LocalStorageItem } from "~/utils/storageHelper";
@@ -12,7 +12,7 @@ const BACK_TIMER_THRESHOLD = 3; // secondesw
 export type AudioManager = {
 	get playing(): boolean;
 	get currentMusic(): Music | null;
-	get musicList(): Array<Music>;
+	get musicGroup(): MusicGroup | null;
 	get queue(): Array<Music>;
 	get duration(): number;
 	get progression(): number;
@@ -33,7 +33,7 @@ export type AudioManager = {
 	forward: () => void;
 	back: () => void;
 	setCurrentMusic: SetCurrentMusicFn;
-	setMusicList: SetMusicListFn;
+	setMusicGroup: SetMusicGroupFn;
 	pushMusicToQueue: PushMusicToQueueFn;
 };
 
@@ -197,7 +197,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	const audioManager: AudioManager = {
 		get playing() { return isPlaying(); },
 		get currentMusic() { return trackManager.manager.current; },
-		get musicList() { return trackManager.manager.musicList; },
+		get musicGroup() { return trackManager.manager.musicGroup; },
 		get queue() { return trackManager.manager.queue; },
 		get duration() { return duration(); },
 		get progression() { return trackManager.progression; },
@@ -224,7 +224,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 			audio.currentTime = 0;
 			trackManager.setCurrentMusic(...args);
 		},
-		setMusicList: trackManager.setMusicList,
+		setMusicGroup: trackManager.setMusicGroup,
 		pushMusicToQueue: trackManager.pushMusicToQueue,
 	};
 

@@ -8,17 +8,22 @@ const trackManagerStateSchema = z.object({
 	current: Music.zodSchema.nullable(),
 	isCurrentTemporary: z.boolean(),
 	queue: z.array(Music.zodSchema),
-	musicList: z.array(Music.zodSchema),
+	musicGroup: z.object({
+		name: z.string(),
+		route: z.string(),
+		musics: z.array(Music.zodSchema),
+	}).nullable(),
 	position: z.number(),
 	loop: z.boolean(),
 });
 
 export type TrackManagerState = z.infer<typeof trackManagerStateSchema>;
+export type MusicGroup = NonNullable<TrackManagerState["musicGroup"]>;
 
 const trackProgressionItem = new LocalStorageItem("track-progression", () => 0, JSON.stringify);
 const trackStateItem = new LocalStorageItem<TrackManagerState>(
 	"track-state",
-	() => ({ current: null, isCurrentTemporary: false, queue: [], musicList: [], position: 0, loop: false }),
+	() => ({ current: null, isCurrentTemporary: false, queue: [], musicGroup: null, position: 0, loop: false }),
 	JSON.stringify,
 	(stored, defaultFactory) => {
 		try {
@@ -47,13 +52,15 @@ export function useTrackManager() {
 		setTrackManager(produce((manager) => {
 			nextMusic = manager.queue.shift() ?? null;
 			if (!nextMusic) {
-				if (manager.loop) {
-					manager.position = (manager.position + 1) % manager.musicList.length;
-					nextMusic = manager.musicList[manager.position];
+				if (!manager.musicGroup) {
+					nextMusic = null;
+				} else if (manager.loop) {
+					manager.position = (manager.position + 1) % manager.musicGroup.musics.length;
+					nextMusic = manager.musicGroup.musics[manager.position];
 				} else {
-					if (manager.position < manager.musicList.length - 1) {
+					if (manager.position < manager.musicGroup.musics.length - 1) {
 						manager.position += 1;
-						nextMusic = manager.musicList[manager.position];
+						nextMusic = manager.musicGroup.musics[manager.position];
 					} else {
 						nextMusic = null;
 					}
@@ -70,15 +77,17 @@ export function useTrackManager() {
 	function prev() {
 		let prevMusic: Music | null = null;
 		setTrackManager(produce((manager) => {
-			if (manager.loop) {
+			if (!manager.musicGroup) {
+				prevMusic = null;
+			} else if (manager.loop) {
 				if (!manager.isCurrentTemporary) {
-					manager.position = (manager.position - 1) % manager.musicList.length;
+					manager.position = (manager.position - 1) % (manager.musicGroup.musics.length ?? 0);
 				}
-				prevMusic = manager.musicList[manager.position];
+				prevMusic = manager.musicGroup.musics[manager.position];
 			} else {
 				if (!manager.isCurrentTemporary && manager.position > 0) {
 					manager.position -= 1;
-					prevMusic = manager.musicList[manager.position];
+					prevMusic = manager.musicGroup.musics[manager.position];
 				} else {
 					prevMusic = null;
 				}
@@ -97,12 +106,16 @@ export function useTrackManager() {
 	}
 
 	function setPosition(position: number) {
+		if (!trackManager.musicGroup) {
+			setTrackManager("position", 0);
+			return;
+		}
 		setTrackManager("position", position);
-		setCurrentMusic(trackManager.musicList[position]);
+		setCurrentMusic(trackManager.musicGroup.musics[position]);
 	}
 
-	function setMusicList(musics: Array<Music>): void {
-		setTrackManager("musicList", [...musics]);
+	function setMusicGroup(musicGroup: MusicGroup): void {
+		setTrackManager("musicGroup", { ...musicGroup, musics: [...musicGroup.musics] });
 	}
 
 	function setLoop(loop: boolean): void {
@@ -120,6 +133,10 @@ export function useTrackManager() {
 		}
 	}
 
+	function clearQueue(): void {
+		setTrackManager("queue", []);
+	}
+
 	return {
 		manager: trackManager,
 		get progression() { return progression(); },
@@ -128,13 +145,14 @@ export function useTrackManager() {
 		prevTrack: prev,
 		setCurrentMusic,
 		setPosition,
-		setMusicList,
+		setMusicGroup,
 		setLoop,
 		pushMusicToQueue,
+		clearQueue,
 	};
 }
 
 export type PushMusicToQueueFn = ReturnType<typeof useTrackManager>["pushMusicToQueue"];
 export type SetPositionFn = ReturnType<typeof useTrackManager>["setPosition"];
-export type SetMusicListFn = ReturnType<typeof useTrackManager>["setMusicList"];
+export type SetMusicGroupFn = ReturnType<typeof useTrackManager>["setMusicGroup"];
 export type SetCurrentMusicFn = ReturnType<typeof useTrackManager>["setCurrentMusic"];

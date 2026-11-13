@@ -8,24 +8,27 @@ import MusicCover from "../MusicCover";
 import ArtistsLinks from "../ArtistLinks";
 import { formatTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { Provider } from "@flex/shared";
+import { MusicGroup } from "~/store/trackManager.store";
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
+function isGroupMusicSection(props: MusicSectionProps | GroupMusicSectionProps): props is GroupMusicSectionProps {
+	return "musicGroup" in props;
+}
+
 export type MusicSectionProps = {
-	musics: Array<Music>;
 	hiddenColumns?: MusicSectionColumn[];
 	providers?: Provider[];
-	/** * `IsMusicGroup` tells if a MusicSection is supposed to
-		* be considered as a "playable list" of Music. For instance,
-		* playlists, albums, and artists lists are "playable lists"
-		* while search results are not.
-		* It will define if when a music of the list is clicked it
-		* should add the full list to the queue or if it should only
-		* play the Music alone */
-	isMusicGroup?: boolean;
+	musics: Array<Music>;
 };
 
-export default function MusicSection(props: MusicSectionProps) {
+export type GroupMusicSectionProps = {
+	hiddenColumns?: MusicSectionColumn[];
+	providers?: Provider[];
+	musicGroup: MusicGroup;
+};
+
+export default function MusicSection(props: MusicSectionProps | GroupMusicSectionProps) {
 	const audioManager = useAudioManagerContext();
 	const shown = (column: MusicSectionColumn) => !props.hiddenColumns?.includes(column);
 
@@ -33,20 +36,21 @@ export default function MusicSection(props: MusicSectionProps) {
 		return value instanceof Date ? value : new Date(value);
 	}
 
-	function playMusicListFromPosition(position: number) {
-		audioManager.setMusicList(props.musics);
-		audioManager.position = position;
-		audioManager.play();
-	}
-
-	function playMusic(music: Music) {
-		audioManager.setCurrentMusic(music);
+	function handleMusicClick(index: number) {
+		if (isGroupMusicSection(props)) {
+			audioManager.setMusicGroup(props.musicGroup);
+			audioManager.position = index;
+		} else {
+			audioManager.setCurrentMusic(props.musics[index]);
+		}
 		audioManager.play();
 	}
 
 	function addToQueue(music: Music) {
 		audioManager.pushMusicToQueue(music);
 	}
+
+	const musicList = () => isGroupMusicSection(props) ? props.musicGroup.musics : props.musics;
 
 	return <div class="music-section">
 		<table class="data">
@@ -62,12 +66,12 @@ export default function MusicSection(props: MusicSectionProps) {
 				</tr>
 			</thead>
 			<tbody>
-				<For each={props.musics}>{(music, i) => <tr>
+				<For each={musicList()}>{(music, i) => <tr>
 					<td class="col-title">
 						<div class="music-title">
 							<MusicCover music={music} />
 							<div class="music-title-text">
-								<Button variant="text" onClick={() => props.isMusicGroup ? playMusicListFromPosition(i()) : playMusic(music)}>{music.name}</Button>
+								<Button variant="text" onClick={() => handleMusicClick(i())}>{music.name}</Button>
 								<Show when={shown("artists")}>
 									<span class="music-title-artists">
 										<ArtistsLinks artists={music.artists} providerUUID={music.providerUuid} />

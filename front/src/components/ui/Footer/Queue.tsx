@@ -18,11 +18,9 @@ export default function Queue(props: QueueProps) {
 	const location = useLocation();
 	const audioManager = useAudioManagerContext();
 
-	createEffect(on(() => [location.query, location.pathname], () => {
+	createEffect(on(() => location.pathname, () => {
 		props.setShow(false);
-	}));
-
-	const followingMusics = () => audioManager.musicList.slice(audioManager.position + 1);
+	}, { defer: true }));
 
 	return <div id="queue" class={props.show() ? "show" : undefined}>
 		<Button class="hide-queue-button" icon onClick={() => props.setShow(false)} >
@@ -33,7 +31,7 @@ export default function Queue(props: QueueProps) {
 				<h1>Queue</h1>
 			</div>
 			<div class="queue-body">
-				<div class={`current-track${audioManager.currentMusic === null ? " empty" : ""}`}>
+				<div class="queue-current-track" classList={{ "empty": audioManager.currentMusic === null }}>
 					<Show when={audioManager.currentMusic} fallback={<img src="/images/default_cover.png" />} keyed>
 						{(currentMusic) => <MusicCover music={currentMusic} />}
 					</Show>
@@ -42,11 +40,16 @@ export default function Queue(props: QueueProps) {
 							{(currentMusic) => currentMusic.name}
 						</Show>
 					</h2>
-					<h3 class="track-name">
+					<h3 class="track-artists">
 						<Show when={audioManager.currentMusic} fallback="-" keyed>
 							{(currentMusic) => <ArtistsLinks artists={currentMusic.artists} providerUUID={currentMusic.providerUuid} />}
 						</Show>
 					</h3>
+					<Show when={audioManager.currentMusic?.hasAlbum() && audioManager.currentMusic} fallback="-" keyed>
+						{(music) => <h3 class="track-album">
+							<A href={music.albumRoute()}>{music.album.name}</A>
+						</h3>}
+					</Show>
 				</div>
 				<div class="lists">
 					<Show when={audioManager.queue.length > 0}>
@@ -55,10 +58,17 @@ export default function Queue(props: QueueProps) {
 							<MusicSection musics={audioManager.queue}/>
 						</div>
 					</Show>
-					<div class="following-list">
-						<h2>A suivre dans <A href="provider/xxxx/artist/xxxx">Ado</A></h2>
-						<MusicSection musics={followingMusics()}/>
-					</div>
+					<Show when={audioManager.musicGroup} keyed>
+						{(musicGroup) => <div class="following-list">
+							<h2>A suivre dans <A href={musicGroup.route}>{musicGroup.name}</A></h2>
+							<MusicSection musics={musicGroup.musics.slice(audioManager.position + 1)} />
+						</div>}
+					</Show>
+					<Show when={!audioManager.musicGroup && audioManager.queue.length === 0} keyed>
+						<div>
+							Rien à écouter ? :(
+						</div>
+					</Show>
 				</div>
 			</div>
 		</div>

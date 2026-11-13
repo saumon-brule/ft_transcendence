@@ -33,11 +33,15 @@ export default function ProviderAlbum() {
 			<ProviderAlbumHeader album={data.info} providerBack={data.back} />
 			<section>
 				<h2>Musiques</h2>
-				<MusicSection isMusicGroup musics={data.info.music.musics} hiddenColumns={["album"]} />
+				<MusicSection musicGroup={{
+					name: data.info.name,
+					musics: data.info.music.musics,
+					route: `/provider/${data.back.uuid}/album/${data.info.uuid}`,
+				}} hiddenColumns={["album"]} />
 			</section>
 			<section>
 				<h2>Artists</h2>
-				<ArtistSection artist={{ total: data.info.artists.length, artists: data.info.artists }}/>
+				<ArtistSection artist={{ total: data.info.artists.length, artists: data.info.artists }} />
 			</section>
 		</>}</Show>
 	</div>;

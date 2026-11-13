@@ -63,7 +63,7 @@ export default function Controller() {
 
 	return <div class={"controller"}>
 		<div class="controller-buttons">
-			<Button disabled={audioManager.isCurrentTemporary ? audioManager.musicList.length === 0 : audioManager.position === 0} class="controller" onClick={audioManager.back} size="sm" ><SkipBack/></Button>
+			<Button disabled={audioManager.isCurrentTemporary ? audioManager.musicGroup === null : audioManager.position === 0} class="controller" onClick={audioManager.back} size="sm" ><SkipBack/></Button>
 			<Button disabled={!musicSelected()} class="controller" onClick={audioManager.toggle} size="sm">{musicSelected() ? audioManager.playing ? <Pause/> : <Play/> : <Square/>}</Button>
 			<Button disabled={!musicSelected()} class="controller" onClick={audioManager.forward} size="sm"><SkipForward/></Button>
 		</div>

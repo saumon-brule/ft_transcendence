@@ -2,7 +2,7 @@ import type { ArtistDetailedItemDto, Provider } from "@flex/shared";
 import { Show } from "solid-js";
 import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
-import { A } from "@solidjs/router";
+import { A, useLocation } from "@solidjs/router";
 import { ProviderArtistQueryBody } from "~/api/queryHooks/providerInfo";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import Button from "~/components/inputs/Button";
@@ -11,9 +11,14 @@ import { Play } from "lucide-solid";
 export default function ProviderArtistHeader(props: { artist: ProviderArtistQueryBody; providerBack: Provider }) {
 	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
 	const audioManager = useAudioManagerContext();
+	const location = useLocation();
 
 	function onPlayClick() {
-		audioManager.setMusicList(props.artist.music.musics);
+		audioManager.setMusicGroup({
+			name: props.artist.name,
+			route: location.pathname,
+			musics: props.artist.music.musics,
+		});
 		audioManager.position = 0;
 		audioManager.play();
 	}
