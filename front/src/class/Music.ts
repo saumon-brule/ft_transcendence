@@ -23,7 +23,6 @@ export class Music {
 	public async audioUrl(): Promise<string> {
 		const token = await getMediaToken(this.providerUrl, this.providerUuid);
 		if (!token) {
-			summonErrorToast("Failed to get media token for provider");
 			throw new Error("Failed to get media token for provider");
 		}
 		return buildMediaUrl(this.providerUrl, "audio", this.uuid, token);

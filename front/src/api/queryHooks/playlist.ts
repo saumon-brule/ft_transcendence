@@ -1,4 +1,6 @@
 import { createMutation, createQuery, useQueryClient } from "@tanstack/solid-query";
+import type { ClientInferResponses } from "@ts-rest/core";
+import { serverContract, type PlaylistListDto } from "@flex/shared";
 import { client, queryKeys } from "../client";
 import { summonErrorToast } from "~/components/ui/Toaster";
 
@@ -45,6 +47,8 @@ export const usePlaylistsQuery = () => createQuery({
 	staleTime: 30_000,
 });
 
+type MeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
+
 export const useCreatePlaylist = () => {
 	const queryClient = useQueryClient();
 
@@ -54,10 +58,34 @@ export const useCreatePlaylist = () => {
 			if (res.status !== 201) throw new PlaylistRequestError(res.status);
 			return res.body;
 		},
-		onSuccess: () => Promise.all([
-			queryClient.invalidateQueries({ queryKey: queryKeys.playlists.listPlaylists() }),
-			queryClient.invalidateQueries({ queryKey: queryKeys.users.me() }),
-		]),
+		onSuccess: (created) => {
+			const me = queryClient.getQueryData<MeResponse>(queryKeys.users.me());
+
+			queryClient.setQueryData<PlaylistListDto>(queryKeys.playlists.listPlaylists(), (old) => {
+				if (!old || !me) return old;
+				return {
+					...old,
+					owned: [...old.owned, {
+						...created,
+						createdAt: new Date(),
+						owner: { uuid: me.body.uuid, username: me.body.username },
+						musicCount: 0,
+					}],
+				};
+			});
+
+			queryClient.setQueryData<MeResponse>(queryKeys.users.me(), (old) => {
+				if (!old) return old;
+				return {
+					...old,
+					body: {
+						...old.body,
+						ownedPlaylists: [...old.body.ownedPlaylists, { ...created, _count: { musics: 0 } }],
+						_count: { ...old.body._count, ownedPlaylists: old.body._count.ownedPlaylists + 1 },
+					},
+				};
+			});
+		},
 		onError: () => { summonErrorToast("Failed to create the playlist"); },
 	});
 };

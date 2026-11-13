@@ -3,7 +3,7 @@ import { createQueries } from "@tanstack/solid-query";
 import type { PlaylistDetailDto } from "@flex/shared";
 import { Music } from "~/class/Music";
 import { getProviderClient } from "../providerClients";
-import { buildTracks, chunkEntries, type Chunk, type ChunkResult } from "~/utils/playlistTracks";
+import { buildTracks, chunkEntries, type Chunk, type ChunkResult, type UnavailableTrack } from "~/utils/playlistTracks";
 
 type RawChunk
 	= | { kind: "ok"; musics: Parameters<typeof Music.fromRawObject>[0][]; missing: string[] }
@@ -16,7 +16,20 @@ async function fetchChunk(provider: { uuid: string; address: string }, uuids: st
 	throw new Error(`Provider batch failed with status ${res.status}`);
 }
 
+const musicsByData = new WeakMap<RawChunk, Music[]>();
+
+function musicsOf(data: Extract<RawChunk, { kind: "ok" }>, provider: { uuid: string; address: string }) {
+	let musics = musicsByData.get(data);
+	if (!musics) {
+		musics = data.musics.map((music) => Music.fromRawObject(music, provider.address, provider.uuid));
+		musicsByData.set(data, musics);
+	}
+	return musics;
+}
+
 export const usePlaylistTracks = (playlist: () => PlaylistDetailDto | undefined) => {
+	const unavailableTracks = new Map<string, UnavailableTrack>();
+
 	const jobs = createMemo(() => {
 		const current = playlist();
 		if (!current) return [];
@@ -55,13 +68,27 @@ export const usePlaylistTracks = (playlist: () => PlaylistDetailDto | undefined)
 				result = {
 					status: "ok",
 					missing: query.data.missing,
-					musics: query.data.musics.map((music) => Music.fromRawObject(music, job.provider.address, job.provider.uuid)),
+					musics: musicsOf(query.data, job.provider),
 				};
 			}
 			return { providerUuid: job.providerUuid, uuids: job.uuids, result };
 		});
 
-		return buildTracks(current.musics, current.providers, chunks);
+		const used = new Set<string>();
+		const stable = buildTracks(current.musics, current.providers, chunks).map((track) => {
+			if (track instanceof Music) return track;
+
+			const key = `${track.state}|${track.provider.uuid}|${track.provider.name}|${track.provider.address}|${track.musicUuid}`;
+			used.add(key);
+			const known = unavailableTracks.get(key);
+			if (known) return known;
+
+			unavailableTracks.set(key, track);
+			return track;
+		});
+		for (const key of unavailableTracks.keys()) if (!used.has(key)) unavailableTracks.delete(key);
+
+		return stable;
 	});
 
 	return { tracks, isLoading: () => tracks().some((track) => !(track instanceof Music) && track.state === "loading") };
