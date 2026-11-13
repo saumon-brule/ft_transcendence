@@ -50,16 +50,9 @@ export class UsersService {
 			where: { uuid: uuid },
 			include: {
 				_count: { select: { ownedProviders: true, ownedPlaylists: true } },
-				ownedProviders: isSelf
-					? true
-					: { where: { publicDisplay: true } },
+				ownedProviders: true,
 				providers: {
-					where: isSelf
-						? { provider: { is: { ownerUUID: { not: uuid } } } }
-						: {
-							publicDisplay: true,
-							provider: { is: { publicDisplay: true, ownerUUID: { not: uuid } } },
-						},
+					where: { provider: { is: { ownerUUID: { not: uuid } } } },
 					include: { provider: true },
 				},
 				currentlyListening: true,

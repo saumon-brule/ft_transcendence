@@ -31,17 +31,15 @@ export class ProvidersService {
 					uuid,
 					name: dto.name,
 					address: normalizeAddress(dto.address),
-					publicDisplay: dto.publicDisplay,
 					owner: { connect: { uuid: ownerUUID } },
 					hashedKey: keyHash,
 					users: {
 						create: {
-							publicDisplay: dto.publicDisplay,
 							user: { connect: { uuid: ownerUUID } },
 						},
 					},
 				},
-				select: { uuid: true, name: true, address: true, publicDisplay: true },
+				select: { uuid: true, name: true, address: true },
 			});
 
 			this.logger.log(LogBuilder.provider.created(provider.uuid, ownerUUID));
@@ -61,7 +59,6 @@ export class ProvidersService {
 				uuid: true,
 				name: true,
 				address: true,
-				publicDisplay: true,
 				owner: { select: { uuid: true, username: true } },
 			},
 		});
@@ -87,9 +84,8 @@ export class ProvidersService {
 				address: dto.address
 					? normalizeAddress(dto.address)
 					: provider.address,
-				publicDisplay: dto.publicDisplay ?? provider.publicDisplay,
 			},
-			select: { uuid: true, name: true, address: true, publicDisplay: true },
+			select: { uuid: true, name: true, address: true },
 		});
 
 		return updatedProvider;
