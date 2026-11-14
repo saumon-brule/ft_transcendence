@@ -3,11 +3,11 @@ import { A } from "@solidjs/router";
 import type { PlaylistDetailDto } from "@flex/shared";
 import { env } from "~/env";
 import { Music } from "~/class/Music";
-import type { MusicSectionItem } from "~/components/ui/MusicSection/MusicSection";
+import { MusicGroup } from "~/store/trackManager.store";
 
 type PlaylistHeaderProps = {
 	playlist: PlaylistDetailDto;
-	tracks: MusicSectionItem[];
+	musicGroup: MusicGroup;
 };
 
 function formatTotalDuration(seconds: number): string {
@@ -19,9 +19,9 @@ function formatTotalDuration(seconds: number): string {
 }
 
 export default function PlaylistHeader(props: PlaylistHeaderProps) {
-	const musics = () => props.tracks.filter((track): track is Music => track instanceof Music);
-	const loading = () => props.tracks.some((track) => !(track instanceof Music) && track.state === "loading");
-	const unavailable = () => props.tracks.length - musics().length;
+	const musics = () => props.musicGroup.musics.filter((music): music is Music => music instanceof Music);
+	const loading = () => props.musicGroup.musics.some((music) => music.isLoading());
+	const unavailable = () => props.musicGroup.musics.length - musics().length;
 	const totalDuration = () => musics().reduce((total, music) => total + music.duration, 0);
 
 	return <header class="playlist-header">
