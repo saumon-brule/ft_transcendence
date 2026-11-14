@@ -14,6 +14,7 @@ import { ChevronLeft, ChevronRight, EighthNote, Ellipsis, ListEnd, ListStart, Se
 import TextInput from "~/components/inputs/TextInput";
 import Form from "~/components/inputs/Form/Form";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useAddMusicToPlaylist } from "~/api/queryHooks/playlist";
 import { env } from "~/env";
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
@@ -151,6 +152,7 @@ function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 	const [currentMenu, setCurrentMenu] = createSignal<MusicActionMenus>("main");
 	const meProfileQuery = useMeProfileQuery();
 	const [searchQuery, setSearchQuery] = createSignal("");
+	const addMusicToPlaylist = useAddMusicToPlaylist();
 
 	function addToQueue(music: Music) {
 		audioManager.pushMusicToQueue(music);
@@ -159,6 +161,15 @@ function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 
 	function playNext(music: Music) {
 		audioManager.pushMusicToQueueTop(music);
+		props.onClose();
+	}
+
+	function addToPlaylist(playlistUUID: string) {
+		addMusicToPlaylist.mutate({
+			playlistUuid: playlistUUID,
+			musicUuid: props.music.uuid,
+			providerUuid: props.music.provider.uuid,
+		});
 		props.onClose();
 	}
 
@@ -195,7 +206,7 @@ function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 						<TextInput value={searchQuery()} placeholder="Search playlist" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 					</Form>
 					<Show when={meProfileQuery.data?.body} keyed>{(meProfile) => <For each={meProfile.ownedPlaylists.filter((p) => p.name.toLowerCase().includes(searchQuery().toLowerCase())).slice(0, 5)}>{(playlist) =>
-						<button type="button" role="menuitem" onClick={() => setCurrentMenu("main") }>
+						<button type="button" role="menuitem" onClick={() => addToPlaylist(playlist.uuid) }>
 							<img src={`${env.VITE_API_URL}/playlists/${playlist.uuid}/cover`} alt="Playlist cover" />
 							<span>{playlist.name}</span>
 						</button>

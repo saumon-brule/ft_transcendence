@@ -2,7 +2,7 @@ import { createMutation, createQuery, useQueryClient } from "@tanstack/solid-que
 import type { ClientInferResponses } from "@ts-rest/core";
 import { serverContract, type PlaylistListDto } from "@flex/shared";
 import { client, queryKeys } from "../client";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 
 export class PlaylistRequestError extends Error {
 	constructor(public readonly status: number) {
@@ -34,6 +34,54 @@ export const useRemoveMusicFromPlaylist = (playlistUuid: () => string) => {
 		},
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.playlists.getPlaylist([playlistUuid()]) }),
 		onError: () => { summonErrorToast("Failed to remove the music from the playlist"); },
+	});
+};
+
+export const useAddMusicToPlaylist = () => {
+	const queryClient = useQueryClient();
+
+	return createMutation({
+		mutationFn: async (vars: { playlistUuid: string; musicUuid: string; providerUuid: string }) => {
+			const res = await client.playlists.addMusicToPlaylist.mutation({
+				params: { uuid: vars.playlistUuid },
+				body: { musicUUID: vars.musicUuid, providerUUID: vars.providerUuid },
+			});
+			if (res.status !== 204) throw new PlaylistRequestError(res.status);
+		},
+		onSuccess: (_, vars) => {
+			summonSuccessToast("Music added to the playlist");
+			void queryClient.invalidateQueries({ queryKey: queryKeys.playlists.getPlaylist([vars.playlistUuid]) });
+
+			queryClient.setQueryData<PlaylistListDto>(queryKeys.playlists.listPlaylists(), (old) => {
+				if (!old) return old;
+				return {
+					...old,
+					owned: old.owned.map((playlist) => playlist.uuid === vars.playlistUuid
+						? { ...playlist, musicCount: playlist.musicCount + 1 }
+						: playlist),
+				};
+			});
+
+			queryClient.setQueryData<MeResponse>(queryKeys.users.me(), (old) => {
+				if (!old) return old;
+				return {
+					...old,
+					body: {
+						...old.body,
+						ownedPlaylists: old.body.ownedPlaylists.map((playlist) => playlist.uuid === vars.playlistUuid
+							? { ...playlist, _count: { ...playlist._count, musics: playlist._count.musics + 1 } }
+							: playlist),
+					},
+				};
+			});
+		},
+		onError: (error) => {
+			if (error instanceof PlaylistRequestError && error.status === 409) {
+				summonErrorToast("This music is already in the playlist");
+				return;
+			}
+			summonErrorToast("Failed to add the music to the playlist");
+		},
 	});
 };
 
