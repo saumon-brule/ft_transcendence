@@ -8,7 +8,9 @@ export { providersContract } from "./contracts/server/providers/providers.contra
 export { providerContract } from "./contracts/provider/provider.contract";
 export { friendsContract } from "./contracts/server/users/friends.contract";
 export { type FriendRelation, type FriendRequestAnswer } from "./contracts/server/users/schemas/friends.schema";
-export { presenceSchema, presenceListSchema, type PresenceSnapshot, type PresenceChange, type ServerToClientEvents } from "./contracts/server/users/schemas/presence.schema";
+export { presenceSchema, presenceListSchema, type PresenceSnapshot, type PresenceChange } from "./contracts/server/users/schemas/presence.schema";
+export type { ServerToClientEvents, ClientToServerEvents } from "./contracts/server/users/schemas/socket-events";
+export { CHAT_MAX_MESSAGE_LENGTH, chatErrorCodeSchema, sendChatMessageSchema, chatMessageSchema, chatErrorSchema, type ChatErrorCode, type SendChatMessageDto, type ChatMessage, type ChatError } from "./contracts/server/users/schemas/chat.schema";
 
 export { loginSchema, type LoginDto } from "./contracts/server/auth/schemas/login.schema";
 export { requestEmailResetSchema, resetEmailSchema, type RequestEmailResetDto, type ResetEmailDto } from "./contracts/server/auth/schemas/email.schema";

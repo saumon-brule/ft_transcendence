@@ -5,12 +5,14 @@ import "./Friends.scss";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import FriendshipActions from "~/components/ui/FriendshipAction/FriendshipActions";
 import { env } from "~/env";
+import { CHAT_MAX_MESSAGE_LENGTH } from "@flex/shared";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
-import { SendHorizontalIcon, ArrowLeft, MessagesCircle } from "lucide-solid";
+import { SendHorizontalIcon, ArrowLeft } from "lucide-solid";
 import { PresenceAvatar } from "~/components/ui/PresenceDot/PresenceDot";
-import { addMessage, hasUnreadMessages, markAsRead, openChat, setDraft } from "~/store/messages.store";
+import { endChat, hasUnreadMessages, markAsRead, openChat, sendMessage as sendChatMessage, setDraft } from "~/store/messages.store";
+import { isOnline } from "~/store/presence.store";
 
 export default function Friends() {
 	const navigate = useNavigate();
@@ -30,9 +32,24 @@ export default function Friends() {
 		return null;
 	});
 
+	let openedFriendUuid: string | undefined;
 	createEffect(() => {
-		if (params.uuid && !friend()) {
-			navigate("/friends");
+		if (!profileQuery.data || !params.uuid) {
+			openedFriendUuid = undefined;
+			return;
+		}
+
+		if (friend()) {
+			openedFriendUuid = params.uuid;
+			return;
+		}
+
+		const removed = openedFriendUuid === params.uuid;
+		openedFriendUuid = undefined;
+		navigate("/friends");
+		if (removed) {
+			endChat(params.uuid);
+		} else {
 			summonErrorToast(() => "You are not friends with this user");
 		}
 	});
@@ -43,22 +60,14 @@ export default function Friends() {
 		}
 	});
 
-	function navigateChat(friendUuid: string) {
-		navigate(`/friends/${friendUuid}`);
-	}
-
 	function sendMessage(e: SubmitEvent) {
 		e.preventDefault();
 
 		const f = friend();
-		if (!f) return;
+		if (!f || !isOnline(f.info.uuid, f.info.status) || f.chat.draft.trim() === "") return;
 
-		addMessage(f.info.uuid, { author: "me", content: f.chat.draft, timestamp: new Date() });
+		sendChatMessage(f.info.uuid, f.chat.draft);
 		setDraft(f.info.uuid, "");
-
-		setTimeout(() => {
-			addMessage(f.info.uuid, { author: "friend", content: "COUCOU !", timestamp: new Date() });
-		}, 1000);
 	}
 
 	return <div class="page" id="friends">
@@ -83,19 +92,16 @@ export default function Friends() {
 				<section>
 					<h2>Friends</h2>
 					<div class="friend-list">
-						<For each={data.body.friends}>{(friend) => <div class="friend-card">
+						<For each={data.body.friends}>{(friend) => <div class="friend-card chat-link" classList={{ active: params.uuid === friend.uuid }}>
+							<A class="friend-card-link" href={`/friends/${friend.uuid}`} aria-label={`Chat with ${friend.username}`} />
 							<div class="friend-info">
 								<PresenceAvatar uuid={friend.uuid} status={friend.status}>
 									<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
 								</PresenceAvatar>
-								<A href={`/user/${friend.uuid}`} class="white-variant">{friend.username}</A>
+								<span class="friend-name">{friend.username}</span>
+								<Show when={hasUnreadMessages(friend.uuid)}><span class="unread-dot" role="img" aria-label="Unread messages" /></Show>
 							</div>
 							<div class="friend-actions">
-								<Button icon size="sm" variant="text" onClick={() => navigateChat(friend.uuid)}>
-									<span class="icon-badge" classList={{ notification: hasUnreadMessages(friend.uuid) }}>
-										<MessagesCircle/>
-									</span>
-								</Button>
 								<FriendshipActions meUuid={data.body.uuid} targetUuid={friend.uuid} />
 							</div>
 						</div>}</For>
@@ -113,7 +119,7 @@ export default function Friends() {
 						<PresenceAvatar uuid={friend.info.uuid} status={friend.info.status}>
 							<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.info.uuid}/avatar`} alt={`${friend.info.username}'s avatar`} />
 						</PresenceAvatar>
-						<span class="friend-username">{friend.info.username}</span>
+						<A href={`/user/${friend.info.uuid}`} class="white-variant friend-username">{friend.info.username}</A>
 					</div>
 					<div class="chat-messages">
 						<div class="chat-messages-inner">
@@ -127,8 +133,8 @@ export default function Friends() {
 					</div>
 					<div class="chat-input">
 						<Form onSubmit={(e) => sendMessage(e)}>
-							<TextInput value={friend.chat.draft} onInput={(e) => setDraft(friend.info.uuid, e.currentTarget.value)} type="text" placeholder="Type a message..."/>
-							<Button disabled={friend.chat.draft === ""} type="submit"><SendHorizontalIcon/></Button>
+							<TextInput value={friend.chat.draft} onInput={(e) => setDraft(friend.info.uuid, e.currentTarget.value)} type="text" maxlength={CHAT_MAX_MESSAGE_LENGTH} disabled={!isOnline(friend.info.uuid, friend.info.status)} placeholder={isOnline(friend.info.uuid, friend.info.status) ? "Type a message..." : `${friend.info.username} is offline`}/>
+							<Button disabled={friend.chat.draft.trim() === "" || !isOnline(friend.info.uuid, friend.info.status)} type="submit"><SendHorizontalIcon/></Button>
 						</Form>
 					</div>
 				</>}</Show>

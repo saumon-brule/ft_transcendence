@@ -131,7 +131,7 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 			</Match>
 			<Match when={status() === "friends"}>
 				<div class="friendship-status friends">Friends</div>
-				<Button icon type="button" onClick={removeFriend} disabled={pending()} variant="danger" size="sm"><UserRoundX/></Button>
+				<Button type="button" class="remove-friend" onClick={removeFriend} disabled={pending()} variant="danger" size="sm">Remove friend <UserRoundX/></Button>
 			</Match>
 		</Switch>
 	</div>;

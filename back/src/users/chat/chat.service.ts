@@ -1,28 +1,37 @@
 import { Injectable } from "@nestjs/common";
 import { WsException } from "@nestjs/websockets";
+import { CHAT_MAX_MESSAGE_LENGTH, type ChatError, type ChatMessage } from "@flex/shared";
 import { FriendsService } from "../friends/friends.service";
+import { PresenceService } from "../presence/presence.service";
+
+function chatException(code: ChatError["error"]["code"], message: string) {
+	return new WsException({ code, message } satisfies ChatError["error"]);
+}
 
 @Injectable()
 export class ChatService {
-	private static readonly MAX_MESSAGE_LENGTH = 256;
 	private nextMessageId = 0;
 
-	constructor(private readonly friendsService: FriendsService) {}
+	constructor(
+		private readonly friendsService: FriendsService,
+		private readonly presenceService: PresenceService,
+	) {}
 
-	public async sendMessage(senderUUID: string, recipientUUID: string, content: string) {
+	public async sendMessage(senderUUID: string, recipientUUID: string, content: string): Promise<ChatMessage> {
 		if (senderUUID === recipientUUID) {
-			throw new WsException({ code: "CHAT_SELF_MESSAGE", message: "You cannot message yourself" });
+			throw chatException("CHAT_SELF_MESSAGE", "You cannot message yourself");
 		}
 
 		const normalizedContent = content.trim();
-		if (normalizedContent.length === 0 || normalizedContent.length > ChatService.MAX_MESSAGE_LENGTH) {
-			throw new WsException({
-				code: "CHAT_INVALID_MESSAGE",
-				message: `Message must contain between 1 and ${ChatService.MAX_MESSAGE_LENGTH} characters`,
-			});
+		if (normalizedContent.length === 0 || normalizedContent.length > CHAT_MAX_MESSAGE_LENGTH) {
+			throw chatException("CHAT_INVALID_MESSAGE", `Message must contain between 1 and ${CHAT_MAX_MESSAGE_LENGTH} characters`);
 		}
 
 		await this.assertFriends(senderUUID, recipientUUID);
+
+		if (!this.presenceService.isOnline(recipientUUID)) {
+			throw chatException("CHAT_RECIPIENT_OFFLINE", "This friend is offline");
+		}
 
 		return {
 			id: this.nextMessageId++,
@@ -35,10 +44,7 @@ export class ChatService {
 
 	private async assertFriends(userUUID: string, otherUserUUID: string): Promise<void> {
 		if (await this.friendsService.isFriendWith(userUUID, otherUserUUID) !== "YES") {
-			throw new WsException({
-				code: "CHAT_NOT_FRIENDS",
-				message: "Chat is only available between friends",
-			});
+			throw chatException("CHAT_NOT_FRIENDS", "Chat is only available between friends");
 		}
 	}
 }

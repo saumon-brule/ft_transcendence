@@ -43,6 +43,39 @@
 			border: 1px solid var(--background-overlay);
 			border-radius: 9px;
 	
+			&.chat-link {
+				position: relative;
+
+				&:hover {
+					border-color: var(--text-muted);
+				}
+
+				&.active {
+					border-color: var(--text-accent);
+				}
+
+				.friend-card-link {
+					position: absolute;
+					inset: 0;
+					border-radius: inherit;
+				}
+
+				.friend-info {
+					pointer-events: none;
+				}
+
+				.friend-actions {
+					position: relative;
+				}
+
+				.unread-dot {
+					width: 8px;
+					height: 8px;
+					border-radius: 50%;
+					background-color: var(--background-danger);
+				}
+			}
+
 			.friend-info {
 				display: flex;
 				align-items: center;
