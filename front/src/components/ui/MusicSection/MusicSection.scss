@@ -18,10 +18,10 @@ $compact-below: 520px;
 			overflow: hidden;
 		}
 
-		.col-title { width: 30%; }
-		.col-actions { width: 5%; }
+		.col-title { width: auto; }
+		.col-actions { width: 48px; }
 		.col-artists { width: 20%; }
-		.col-album { width: 20%; }
+		.col-album { width: 25%; }
 		.col-provider { width: 10%; }
 		.col-published { width: 10%; }
 		.col-duration { width: 10%; }
@@ -82,6 +82,72 @@ $compact-below: 520px;
 			display: none;
 			font-size: 0.85em;
 			color: var(--text-secondary);
+		}
+
+		.col-actions {
+			position: relative;
+			overflow: visible;
+
+			.action-button {
+				border-radius: 32px !important;
+				width: 32px;
+				height: 32px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				svg {
+					width: 16px;
+					height: 16px;
+				}
+
+				&:hover {
+					background: var(--background-card);
+				}
+			}
+
+			.music-action-menu {
+				position: absolute;
+				top: 8px;
+				right: 42px;
+				width: 240px;
+				padding: 6px;
+				background-color: var(--background-card);
+				border-radius: 8px;
+				border: 1px solid var(--background-overlay);
+				display: flex;
+				flex-direction: column;
+
+				button {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+					width: 100%;
+					padding: 8px;
+					border-radius: 5px;
+					color: var(--text-primary);
+					background: transparent;
+					font: inherit;
+					text-align: left;
+					cursor: pointer;
+					font-size: 0.8em;
+
+					svg {
+						width: 15px;
+						height: 15px;
+					}
+
+					&:hover, &:focus-visible {
+						background-color: var(--background-overlay);
+					}
+
+					.icon-badge {
+						position: relative;
+						display: inline-flex;
+					}
+
+				}
+			}
 		}
 	}
 

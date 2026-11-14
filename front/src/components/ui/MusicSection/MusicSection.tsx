@@ -10,7 +10,7 @@ import { formatTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { Provider } from "@flex/shared";
 import { MusicGroup } from "~/store/trackManager.store";
 import UnavailableMusicRow, { type PlaylistContext } from "./UnavailableTrackRow";
-import { Ellipsis } from "lucide-solid";
+import { Ellipsis, ListEnd, ListStart } from "lucide-solid";
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
@@ -70,7 +70,7 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 			<thead>
 				<tr>
 					<th class="col-title" scope="col">Title</th>
-					<Show when={shown("actions")}><th class="col-actions" scope="col">Actions</th></Show>
+					<Show when={shown("actions")}><th class="col-actions" scope="col"></th></Show>
 					<Show when={shown("artists")}><th class="col-artists" scope="col">Artists</th></Show>
 					<Show when={shown("album")}><th class="col-album" scope="col">Album</th></Show>
 					<Show when={props.providers?.length}><th class="col-provider" scope="col">Provider</th></Show>
@@ -99,7 +99,7 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 										</div>
 									</div>
 								</td>
-								<Show when={shown("actions")}><td class="col-actions"><Button icon={true} variant="text" onClick={() => void addToQueue(music)}><Ellipsis/></Button></td></Show>
+								<Show when={shown("actions")}><td class="col-actions"><Button class="action-button" icon={true} variant="text" ><Ellipsis/></Button><MusicActionMenu music={music} /></td></Show>
 								<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks artists={music.artists} providerUUID={music.provider.uuid} /></td></Show>
 								<Show when={shown("album")}><td class="col-album">{music.hasAlbum() ? <A href={music.albumRoute()} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
 								<Show when={props.providers?.length}><td class="col-provider"><A href={`/provider/${music.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === music.provider.uuid)?.name}</A></td></Show>
@@ -115,5 +115,20 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 }
 
 function MusicActionMenu(props: { music: Music }) {
+	const audioManager = useAudioManagerContext();
 
+	function addToQueue(music: Music) {
+		audioManager.pushMusicToQueue(music);
+	}
+
+	return <div class="music-action-menu">
+		<button type="button" role="menuitem" onClick={() => void addToQueue(props.music) }>
+			<ListStart size={17} aria-hidden="true" />
+			<span>Écouter après</span>
+		</button>
+		<button type="button" role="menuitem" onClick={() => void addToQueue(props.music) }>
+			<ListEnd size={17} aria-hidden="true" />
+			<span>Ajouter à la file d'attente</span>
+		</button>
+	</div>;
 }
