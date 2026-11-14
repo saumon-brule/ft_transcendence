@@ -10,6 +10,7 @@ import { formatTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { Provider } from "@flex/shared";
 import { MusicGroup } from "~/store/trackManager.store";
 import UnavailableMusicRow, { type PlaylistContext } from "./UnavailableTrackRow";
+import { Ellipsis } from "lucide-solid";
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
@@ -98,7 +99,7 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 										</div>
 									</div>
 								</td>
-								<Show when={shown("actions")}><td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td></Show>
+								<Show when={shown("actions")}><td class="col-actions"><Button icon={true} variant="text" onClick={() => void addToQueue(music)}><Ellipsis/></Button></td></Show>
 								<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks artists={music.artists} providerUUID={music.provider.uuid} /></td></Show>
 								<Show when={shown("album")}><td class="col-album">{music.hasAlbum() ? <A href={music.albumRoute()} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
 								<Show when={props.providers?.length}><td class="col-provider"><A href={`/provider/${music.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === music.provider.uuid)?.name}</A></td></Show>
@@ -111,4 +112,8 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 			</tbody>
 		</table>
 	</div>;
+}
+
+function MusicActionMenu(props: { music: Music }) {
+
 }

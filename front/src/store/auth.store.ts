@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { createSignal, untrack } from "solid-js";
 import { doRefresh } from "~/api/doRefresh";
 import { JwtPayload } from "@flex/shared";
-import { queryClient } from "~/App";
+import { queryClient } from "~/api/queryClient";
 import { client, queryKeys } from "~/api/client";
 import { createStore, reconcile } from "solid-js/store";
 import { clearChats } from "./messages.store";
