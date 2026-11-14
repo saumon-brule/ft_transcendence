@@ -10,7 +10,11 @@ import { formatTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { Provider } from "@flex/shared";
 import { MusicGroup } from "~/store/trackManager.store";
 import UnavailableMusicRow, { type PlaylistContext } from "./UnavailableTrackRow";
-import { Ellipsis, ListEnd, ListStart } from "lucide-solid";
+import { ChevronLeft, ChevronRight, EighthNote, Ellipsis, ListEnd, ListStart, Search } from "lucide-solid";
+import TextInput from "~/components/inputs/TextInput";
+import Form from "~/components/inputs/Form/Form";
+import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { env } from "~/env";
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
@@ -142,7 +146,11 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 }
 
 function MusicActionMenu(props: { music: Music; onClose: () => void }) {
+	type MusicActionMenus = "main" | "playlist";
 	const audioManager = useAudioManagerContext();
+	const [currentMenu, setCurrentMenu] = createSignal<MusicActionMenus>("main");
+	const meProfileQuery = useMeProfileQuery();
+	const [searchQuery, setSearchQuery] = createSignal("");
 
 	function addToQueue(music: Music) {
 		audioManager.pushMusicToQueue(music);
@@ -155,13 +163,45 @@ function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 	}
 
 	return <div class="music-action-menu" role="menu">
-		<button type="button" role="menuitem" onClick={() => void playNext(props.music) }>
-			<ListStart size={17} aria-hidden="true" />
-			<span>Écouter après</span>
-		</button>
-		<button type="button" role="menuitem" onClick={() => void addToQueue(props.music) }>
-			<ListEnd size={17} aria-hidden="true" />
-			<span>Ajouter à la file d'attente</span>
-		</button>
+		<Switch>
+			<Match when={currentMenu() === "main"}>
+				<div class="menu-content main-menu">
+					<button type="button" role="menuitem" onClick={() => void playNext(props.music) }>
+						<ListStart size={15} aria-hidden="true" />
+						<span>Écouter après</span>
+					</button>
+					<button type="button" role="menuitem" onClick={() => void addToQueue(props.music) }>
+						<ListEnd size={15} aria-hidden="true" />
+						<span>Ajouter à la file d'attente</span>
+					</button>
+					<button type="button" role="menuitem" onClick={() => setCurrentMenu("playlist") }>
+						<EighthNote size={15} aria-hidden="true" />
+						<span>Ajouter à une playlist</span>
+						<ChevronRight class="right" size={17} aria-hidden="true" />
+					</button>
+				</div>
+			</Match>
+			<Match when={currentMenu() === "playlist"}>
+				<div class="menu-content playlist-submenu">
+					<button type="button" role="menuitem" onClick={() => setCurrentMenu("main") }>
+						<ChevronLeft size={15} aria-hidden="true" />
+						<span>Back</span>
+					</button>
+					<span class="separator"/>
+					<Form class="playlist-form" onSubmit={(e) => {
+						e.preventDefault();
+					}}>
+						<Search class="search-icon" size={15}/>
+						<TextInput value={searchQuery()} placeholder="Search playlist" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
+					</Form>
+					<Show when={meProfileQuery.data?.body} keyed>{(meProfile) => <For each={meProfile.ownedPlaylists.filter((p) => p.name.toLowerCase().includes(searchQuery().toLowerCase())).slice(0, 5)}>{(playlist) =>
+						<button type="button" role="menuitem" onClick={() => setCurrentMenu("main") }>
+							<img src={`${env.VITE_API_URL}/playlists/${playlist.uuid}/cover`} alt="Playlist cover" />
+							<span>{playlist.name}</span>
+						</button>
+					}</For>}</Show>
+				</div>
+			</Match>
+		</Switch>
 	</div>;
 }

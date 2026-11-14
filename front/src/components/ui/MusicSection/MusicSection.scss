@@ -111,42 +111,89 @@ $compact-below: 520px;
 				top: 8px;
 				right: 42px;
 				width: 240px;
-				z-index: 10;
 				padding: 6px;
 				background-color: var(--background-card);
 				border-radius: 8px;
 				border: 1px solid var(--background-overlay);
-				display: flex;
-				flex-direction: column;
+				z-index: 10;
 
-				button {
+				.menu-content {
 					display: flex;
-					align-items: center;
-					gap: 8px;
+					flex-direction: column;
 					width: 100%;
-					padding: 8px;
-					border-radius: 5px;
-					color: var(--text-primary);
-					background: transparent;
-					font: inherit;
-					text-align: left;
-					cursor: pointer;
-					font-size: 0.8em;
+					height: 100%;
 
-					svg {
-						width: 15px;
-						height: 15px;
+					button {
+						display: flex;
+						align-items: center;
+						gap: 8px;
+						width: 100%;
+						padding: 8px;
+						border-radius: 5px;
+						color: var(--text-primary);
+						background: transparent;
+						font: inherit;
+						text-align: left;
+						cursor: pointer;
+						font-size: 0.8em;
+	
+						.right {
+							margin-left: auto;
+						}
+	
+						&:hover, &:focus-visible {
+							background-color: var(--background-overlay);
+						}
+	
+						.icon-badge {
+							position: relative;
+							display: inline-flex;
+						}
+
+						img {
+							width: 23px;
+							height: 23px;
+							object-fit: cover;
+							border-radius: 4px;
+							margin: -4px 0 -4px -4px;
+						}
+	
 					}
 
-					&:hover, &:focus-visible {
-						background-color: var(--background-overlay);
-					}
-
-					.icon-badge {
+					
+					.playlist-form {
 						position: relative;
-						display: inline-flex;
+						margin-bottom: 4px;
+
+						.search-icon {
+							position: absolute;
+							left: 8px;
+							top: 50%;
+							transform: translateY(-50%);
+							color: var(--text-secondary);
+						}
+
+						.text-input {
+	
+							input {
+								padding: 6px 8px;
+								border-radius: 5px;
+								font-size: 0.8em;
+								padding-left: 28px;
+							}
+	
+							.invalid-message {
+								font-size: 0.8em;
+							}
+						}
 					}
 
+					.separator {
+						height: 1px;
+						width: 100%;
+						background-color: var(--background-overlay);
+						margin: 4px 0;
+					}
 				}
 			}
 		}
