@@ -79,7 +79,7 @@ async function seed() {
 	const offline = await prisma.provider.upsert({
 		where: { name: OFFLINE_PROVIDER.name },
 		update: {},
-		create: { ...OFFLINE_PROVIDER, ownerUUID: viewer.uuid, hashedKey: randomBytes(32).toString("hex"), publicDisplay: false },
+		create: { ...OFFLINE_PROVIDER, ownerUUID: viewer.uuid, hashedKey: randomBytes(32).toString("hex") },
 	});
 	const listener = await prisma.user.upsert({
 		where: { email: MOCK_USER_EMAIL },
