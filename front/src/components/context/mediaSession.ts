@@ -2,7 +2,7 @@ import { AudioManager } from "./AudioManagerContext";
 import { Music } from "~/class/Music";
 
 const DEFAULT_SEEK_OFFSET = 3; // seconds
-const DEFAULT_COVER = "/images/default_cover.png";
+const DEFAULT_COVER = "/images/default_cover.webp";
 
 export function updateMediaMetadata(music: Music | null, token: string | null) {
 	if (!("mediaSession" in navigator)) return;

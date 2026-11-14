@@ -12,7 +12,7 @@ export function AlbumCover(props: { album: ProviderInfo["album"]["albums"][numbe
 	const src = () => {
 		const token = mediaToken();
 		if (token && props.album.hasCover) return buildMediaUrl(props.album.providerUrl, "albumCover", props.album.uuid, token);
-		return "/images/default_album.png";
+		return "/images/default_album.webp";
 	};
 
 	return <img src={src()} alt={props.album.name} />;
