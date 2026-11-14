@@ -32,7 +32,7 @@ export default function ProviderAlbumHeader(props: ProviderAlbumHeaderProps) {
 		if (album.hasCover && token) {
 			return buildMediaUrl(props.providerBack.address, "albumCover", album.uuid, token);
 		}
-		return "/images/default_album.png";
+		return "/images/default_album.webp";
 	}
 
 	return <header class="provider-image-header">

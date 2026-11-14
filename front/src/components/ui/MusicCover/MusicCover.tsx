@@ -16,7 +16,7 @@ export default function MusicCover(props: MusicCoverProps) {
 	const src = () => {
 		const token = mediaToken();
 		if (token && local.music.hasCover) return local.music.coverUrl(token);
-		return "/images/default_cover.png";
+		return "/images/default_cover.webp";
 	};
 
 	return <img class={`music-cover ${local.class ?? ""}`} src={src()} alt={local.music.name} {...rest} />;

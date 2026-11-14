@@ -3,6 +3,7 @@ import { Show, type Component } from "solid-js";
 import { AppRouter } from "./routes";
 import { I18nProvider } from "./i18n/context";
 import { initialized } from "./store/auth.store";
+import "./store/presence.store";
 import LoadingSplash from "./pages/Loading/LoadingSplash";
 import { ToasterAnchor } from "./components/ui/Toaster";
 import { OverlayRoot } from "./components/ui/Overlay";
