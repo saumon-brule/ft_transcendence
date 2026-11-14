@@ -4,7 +4,6 @@ export const providerSchema = z.object({
 	uuid: z.string().uuid(),
 	name: z.string(),
 	address: z.string(),
-	publicDisplay: z.boolean(),
 });
 export type Provider = z.infer<typeof providerSchema>;
 
@@ -32,7 +31,6 @@ export const createProviderSchema = z.object({
 		max(50),
 	address: z.string().trim().max(255).
 		refine(isPlainHttpUrl, { message: "The address must be an https:// URL, without credentials" }),
-	publicDisplay: z.boolean().default(true),
 });
 export type CreateProviderDto = z.infer<typeof createProviderSchema>;
 

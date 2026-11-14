@@ -113,13 +113,11 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			update: {
 				ownerUUID: liamUser.uuid,
 				address: "https://liam-private-provider",
-				publicDisplay: false,
 			},
 			create: {
 				name: "Liam's Private Provider",
 				address: "https://liam-private-provider",
 				ownerUUID: liamUser.uuid,
-				publicDisplay: false,
 				...providerCredentials(),
 			},
 		});
@@ -129,13 +127,11 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			update: {
 				ownerUUID: liamUser.uuid,
 				address: "https://liam-public-providerr",
-				publicDisplay: true,
 			},
 			create: {
 				name: "Liam's Public Provider",
 				address: "https://liam-public-providerr",
 				ownerUUID: liamUser.uuid,
-				publicDisplay: true,
 				...providerCredentials(),
 			},
 		});
@@ -164,11 +160,10 @@ export class DatabaseBootstrapService implements OnModuleInit {
 					userUUID: liamUser.uuid,
 				},
 			},
-			update: { publicDisplay: false },
+			update: { },
 			create: {
 				providerUUID: privateProvider.uuid,
 				userUUID: liamUser.uuid,
-				publicDisplay: false,
 			},
 		});
 
@@ -179,11 +174,10 @@ export class DatabaseBootstrapService implements OnModuleInit {
 					userUUID: liamUser.uuid,
 				},
 			},
-			update: { publicDisplay: true },
+			update: { },
 			create: {
 				providerUUID: publicProvider.uuid,
 				userUUID: liamUser.uuid,
-				publicDisplay: true,
 			},
 		});
 

@@ -6,7 +6,6 @@ import { client, queryKeys } from "~/api/client";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
-import Toggle from "~/components/inputs/Toggle/Toggle";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { validateFromZod } from "~/utils/validateFromZod";
@@ -17,13 +16,12 @@ export const summonNewProviderPopUp = (onClose?: () => void) => summonPopUp((pop
 
 	let nameInput!: HTMLInputElement;
 	let addressInput!: HTMLInputElement;
-	let publicDisplayInput!: HTMLInputElement;
 
 	function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
 
 		newProviderMutation.mutate(
-			{ body: { name: nameInput.value, address: addressInput.value, publicDisplay: publicDisplayInput.checked } },
+			{ body: { name: nameInput.value, address: addressInput.value } },
 			{
 				onSuccess: (data) => {
 					const { apiKey, ...provider } = data.body;
@@ -51,7 +49,6 @@ export const summonNewProviderPopUp = (onClose?: () => void) => summonPopUp((pop
 		<div class="pop-up-inputs">
 			<TextInput ref={(e) => nameInput = e.htmlElement} name="providerName" placeholder="My provider" type="text" validator={(e) => validateFromZod(createProviderSchema.shape.name, e.value)} required/>
 			<TextInput ref={(e) => addressInput = e.htmlElement} name="providerAddress" placeholder="https://my-provider.com" type="url" validator={(e) => validateFromZod(createProviderSchema.shape.address, e.value)} required/>
-			<Toggle ref={(e) => publicDisplayInput = e} name="providerPublicDisplay" label="Public display" checked={true} />
 		</div>
 		<div class="pop-up-buttons">
 			<Button type="button" onClick={popUpControls.close} variant="text" size="md">Cancel</Button>
