@@ -5,12 +5,14 @@ import * as bcrypt from "bcrypt";
 import { Cron } from "@nestjs/schedule";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 import { LogBuilder } from "../core/logging/log-builder";
+import { PresenceService } from "./presence/presence.service";
 
 @Injectable()
 export class UsersService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly logger: WinstonLoggerService,
+		private readonly presence: PresenceService,
 	) {}
 
 	@Cron("0 * * * *")
@@ -94,11 +96,18 @@ export class UsersService {
 				.filter((request) => request.status === "ACCEPTED")
 				.map((request) => request.user),
 		];
+		const isFriend = friends.some((friend) => friend.uuid === viewerUUID);
+		const status = isFriend
+			? this.presence.getStatus(uuid)
+			: undefined;
+		const friendsWithStatus = isSelf
+			? friends.map((friend) => ({ ...friend, status: this.presence.getStatus(friend.uuid) }))
+			: friends;
 		const friendRequests = user.friendsReceive
 			.filter((request) => request.status === "PENDING")
 			.map((request) => request.user);
 
-		return { ...user, hasPassword: !!user.password, connectedProviders: user.providers.map((p) => p.provider), friends, friendRequests };
+		return { ...user, hasPassword: !!user.password, connectedProviders: user.providers.map((p) => p.provider), friends: friendsWithStatus, friendRequests, status };
 	}
 
 	public async createFromIntra(
