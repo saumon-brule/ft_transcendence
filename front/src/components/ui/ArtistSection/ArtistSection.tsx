@@ -16,7 +16,7 @@ export function ArtistAvatar(props: { artist: ProviderInfo["artist"]["artists"][
 	const src = () => {
 		const token = mediaToken();
 		if (token && props.artist.hasAvatar) return buildMediaUrl(props.artist.providerUrl, "artistAvatar", props.artist.uuid, token);
-		return "/images/default_artist.png";
+		return "/images/default_artist.webp";
 	};
 
 	return <img src={src()} alt={props.artist.name} class="artist-img"/>;

@@ -12,7 +12,7 @@ export default function ProviderArtistHeader(props: { artist: ArtistDetailedItem
 		if (artist.hasAvatar && token) {
 			return buildMediaUrl(props.providerBack.address, "artistAvatar", artist.uuid, token);
 		}
-		return "/images/default_artist.png";
+		return "/images/default_artist.webp";
 	}
 
 	return <header class="provider-image-header">
