@@ -12,7 +12,7 @@ export default function FriendsSection(props: FriendsSectionProps) {
 			<h3>Friends</h3>
 			<div class="friends-list">
 				<For each={props.friends}>{(friend) => <A class="friend-card" href={`/user/${friend.uuid}`}>
-					<PresenceAvatar uuid={friend.uuid}>
+					<PresenceAvatar uuid={friend.uuid} status={friend.status}>
 						<img src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username} profile picture`} />
 					</PresenceAvatar>
 					<span>{friend.username}</span>
