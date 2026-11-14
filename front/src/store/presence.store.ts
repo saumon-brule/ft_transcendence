@@ -1,6 +1,6 @@
 import { createStore, reconcile } from "solid-js/store";
-import { presenceListSchema, presenceSchema } from "@flex/shared";
-import { socket } from "~/api/socket";
+import { presenceListSchema, presenceSchema, type OnlineStatus } from "@flex/shared";
+import { socket, socketConnected } from "~/api/socket";
 
 const [onlineByUuid, setOnlineByUuid] = createStore<Record<string, boolean>>({});
 
@@ -18,4 +18,13 @@ socket.on("presence:changed", (payload) => {
 
 socket.on("disconnect", () => setOnlineByUuid(reconcile({})));
 
-export const presenceOf = (userUuid: string): boolean | undefined => onlineByUuid[userUuid];
+export function presenceOf(userUuid: string, fetchedStatus?: OnlineStatus): boolean | undefined {
+	const known = userUuid in onlineByUuid;
+	if (!known && fetchedStatus === undefined) return undefined;
+	if (!socketConnected()) return false;
+	return known
+		? onlineByUuid[userUuid]
+		: fetchedStatus === "online";
+}
+
+export const isOnline = (userUuid: string, fetchedStatus?: OnlineStatus): boolean => presenceOf(userUuid, fetchedStatus) === true;

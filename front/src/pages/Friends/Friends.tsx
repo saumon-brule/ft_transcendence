@@ -85,7 +85,7 @@ export default function Friends() {
 					<div class="friend-list">
 						<For each={data.body.friends}>{(friend) => <div class="friend-card">
 							<div class="friend-info">
-								<PresenceAvatar uuid={friend.uuid}>
+								<PresenceAvatar uuid={friend.uuid} status={friend.status}>
 									<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
 								</PresenceAvatar>
 								<A href={`/user/${friend.uuid}`} class="white-variant">{friend.username}</A>
@@ -110,7 +110,7 @@ export default function Friends() {
 			<div class="chat">
 				<Show when={friend()} keyed>{(friend) => <>
 					<div class="chat-header">
-						<PresenceAvatar uuid={friend.info.uuid}>
+						<PresenceAvatar uuid={friend.info.uuid} status={friend.info.status}>
 							<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.info.uuid}/avatar`} alt={`${friend.info.username}'s avatar`} />
 						</PresenceAvatar>
 						<span class="friend-username">{friend.info.username}</span>

@@ -103,7 +103,6 @@ async function seedPeople(viewerUUID: string, liveProviderUUID: string, create: 
 					address: `https://mock-${name.toLowerCase()}.invalid`,
 					ownerUUID: person.uuid,
 					hashedKey: randomBytes(32).toString("hex"),
-					publicDisplay: true,
 				},
 			});
 		}
