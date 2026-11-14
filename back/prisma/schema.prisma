@@ -102,7 +102,7 @@ model Provider {
     id            Int      @id @default(autoincrement())
     uuid          String   @unique @default(uuid())
     name          String   @unique
-    address       String   @unique
+    address       String
     ownerUUID     String
     hashedKey     String   @unique
     //note      Int?

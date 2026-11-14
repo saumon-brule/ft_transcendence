@@ -46,7 +46,7 @@ export class ProvidersService {
 			return { ...provider, apiKey: key };
 		} catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-				throw new ConflictException("A provider with this name or address already exists");
+				throw new ConflictException("A provider with this name already exists");
 			}
 			throw error;
 		}
