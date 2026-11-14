@@ -133,6 +133,14 @@ export function useTrackManager() {
 		}
 	}
 
+	function pushMusicToQueueTop(music: Music): void {
+		if (trackManager.current) {
+			setTrackManager("queue", produce((queue) => queue.unshift(music)));
+		} else {
+			setTrackManager("current", music);
+		}
+	}
+
 	function clearQueue(): void {
 		setTrackManager("queue", []);
 	}
@@ -148,6 +156,7 @@ export function useTrackManager() {
 		setMusicGroup,
 		setLoop,
 		pushMusicToQueue,
+		pushMusicToQueueTop,
 		clearQueue,
 	};
 }
@@ -156,4 +165,5 @@ export type SetPositionFn = ReturnType<typeof useTrackManager>["setPosition"];
 export type SetMusicGroupFn = ReturnType<typeof useTrackManager>["setMusicGroup"];
 export type SetCurrentMusicFn = ReturnType<typeof useTrackManager>["setCurrentMusic"];
 export type PushMusicToQueueFn = ReturnType<typeof useTrackManager>["pushMusicToQueue"];
+export type PushMusicToQueueTopFn = ReturnType<typeof useTrackManager>["pushMusicToQueueTop"];
 export type ClearQueueFn = ReturnType<typeof useTrackManager>["clearQueue"];
