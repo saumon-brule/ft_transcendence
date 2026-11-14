@@ -1,6 +1,6 @@
 import { createEffect, createMemo, createRoot, createSignal } from "solid-js";
 import { io, type Socket } from "socket.io-client";
-import type { ServerToClientEvents } from "@flex/shared";
+import type { ClientToServerEvents, ServerToClientEvents } from "@flex/shared";
 import { env } from "~/env";
 import { auth, authActions } from "~/store/auth.store";
 import { doRefresh } from "./doRefresh";
@@ -11,7 +11,7 @@ const TOKEN_REFRESH_COOLDOWN_MS = 30_000;
 
 const apiUrl = new URL(env.VITE_API_URL, window.location.href);
 
-export const socket: Socket<ServerToClientEvents> = io(apiUrl.origin, {
+export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(apiUrl.origin, {
 	path: `${apiUrl.pathname.replace(/\/$/, "")}/socket.io`,
 	autoConnect: false,
 	transports: ["websocket"],

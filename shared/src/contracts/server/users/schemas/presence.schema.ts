@@ -14,8 +14,3 @@ export const presenceListSchema = z.array(presenceSnapshotSchema);
 export type PresenceSnapshot = z.infer<typeof presenceListSchema>;
 
 export type PresenceChange = z.infer<typeof presenceSchema>;
-
-export interface ServerToClientEvents {
-	"presence:snapshot": (snapshot: PresenceSnapshot) => void;
-	"presence:changed": (presence: PresenceChange) => void;
-}

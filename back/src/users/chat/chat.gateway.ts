@@ -8,7 +8,7 @@ import {
 	WsException,
 } from "@nestjs/websockets";
 import { type DefaultEventsMap, type Server, type Socket } from "socket.io";
-import { z } from "zod";
+import { sendChatMessageSchema, type ChatError } from "@flex/shared";
 import { SocketAuthService } from "../../auth/auth-socket.service";
 import { env } from "../../core/env";
 import { ChatService } from "./chat.service";
@@ -30,14 +30,6 @@ type ChatServer = Server<
 	DefaultEventsMap,
 	ChatSocketData
 >;
-
-const sendMessageSchema = z.object({
-	recipientUUID: z.string().uuid(),
-	content: z.string()
-		.trim()
-		.min(1)
-		.max(256),
-});
 
 @WebSocketGateway({
 	cors: {
@@ -80,7 +72,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
 		@MessageBody() payload: unknown,
 		@ConnectedSocket() client: ChatSocket,
 	): Promise<void> {
-		const parsed = sendMessageSchema.safeParse(payload);
+		const parsed = sendChatMessageSchema.safeParse(payload);
 		if (!parsed.success) {
 			this.emitError(client, "chat:send", {
 				code: "CHAT_INVALID_PAYLOAD",
@@ -107,12 +99,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
 			if (!(error instanceof WsException)) {
 				throw error;
 			}
-			this.emitError(client, "chat:send", error.getError());
+			this.emitError(client, "chat:send", error.getError() as ChatError["error"]);
 		}
 	}
 
-	private emitError(client: ChatSocket, event: string, error: unknown): void {
-		client.emit("chat:error", { event, error });
+	private emitError(client: ChatSocket, event: string, error: ChatError["error"]): void {
+		client.emit("chat:error", { event, error } satisfies ChatError);
 	}
 
 	private userRoom(userUUID: string): string {
