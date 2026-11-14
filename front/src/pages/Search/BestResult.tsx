@@ -52,10 +52,10 @@ export function BestResult(props: BestResultProps) {
 			<Match when={best.item instanceof Music && best.item}>{(music) => <>
 				<MusicCover music={music()}/>
 				<div class="info">
-					<A href={`/provider/${music().providerUuid}${music().album?.uuid ? `/album/${music().album!.uuid}` : ""}`} class="white-variant name">{music().name}</A>
-					<div class="artist">Titre • <ArtistsLinks artists={music().artists} providerUUID={music().providerUuid}/></div>
+					<A href={`/provider/${music().provider.uuid}${music().album?.uuid ? `/album/${music().album!.uuid}` : ""}`} class="white-variant name">{music().name}</A>
+					<div class="artist">Titre • <ArtistsLinks artists={music().artists} providerUUID={music().provider.uuid}/></div>
 					<Show when={music().publishedAt} keyed>{(musicDate) => <div class="date">Sorti le {toDate(musicDate).toLocaleDateString()}</div>}</Show>
-					<p>From <A href={`/provider/${music().providerUuid}`}>{best.providerName}</A></p>
+					<p>From <A href={`/provider/${music().provider.uuid}`}>{best.providerName}</A></p>
 				</div>
 				<Button onclick={() => playMusic(music())}><Play/> Listen</Button>
 			</>}</Match>

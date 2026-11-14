@@ -28,6 +28,14 @@ export const shortUserSchema = z.object({
 });
 export type ShortUser = z.infer<typeof shortUserSchema>;
 
+export const onlineStatusSchema = z.enum(["online", "offline"]);
+export type OnlineStatus = z.infer<typeof onlineStatusSchema>;
+
+export const friendSchema = shortUserSchema.extend({
+	status: onlineStatusSchema,
+});
+export type Friend = z.infer<typeof friendSchema>;
+
 export const userSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
@@ -37,7 +45,8 @@ export const userSchema = z.object({
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
-	friends: z.array(shortUserSchema),
+	friends: z.array(friendSchema.partial({ status: true })),
+	status: onlineStatusSchema.optional(),
 	_count: z.object({
 		ownedProviders: z.number(),
 		ownedPlaylists: z.number(),
@@ -46,12 +55,14 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>;
 
+const languageEnum = z.enum(["en", "fr"]);
+
 export const meSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
 	email: z.string().email(),
 	intraId: z.number().nullable(),
-	language: z.enum(["en", "fr"]),
+	language: languageEnum,
 	hasPassword: z.boolean(),
 	listeningPrivate: z.boolean(),
 	createdAt: z.coerce.date(),
@@ -61,7 +72,7 @@ export const meSchema = z.object({
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
-	friends: z.array(shortUserSchema),
+	friends: z.array(friendSchema),
 	friendRequests: z.array(shortUserSchema),
 	_count: z.object({
 		ownedProviders: z.number(),
@@ -73,7 +84,7 @@ export type Profile = z.infer<typeof meSchema>;
 export const updateMeSchema = z.object({
 	username: z.string().min(3).max(32).
 		optional(),
-	language: z.string().optional(),
+	language: languageEnum.optional(),
 	listeningPrivate: z.boolean().optional(),
 });
 export type UpdateMeDto = z.infer<typeof updateMeSchema>;

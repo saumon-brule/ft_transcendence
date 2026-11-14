@@ -141,17 +141,16 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 						playWhenLoaded = false;
 						play();
 					}
-					void getMediaToken(currentMusic.providerUrl, currentMusic.providerUuid)
+					void getMediaToken(currentMusic.provider.address, currentMusic.provider.uuid)
 						.catch(() => null)
 						.then((token) => {
 							if (id === loadId) updateMediaMetadata(currentMusic, token);
 						});
 				})
-				.catch((e) => {
+				.catch(() => {
 					if (id !== loadId) return;
 					loading = false;
 					playWhenLoaded = false;
-					console.error(e);
 					summonErrorToast(() => "This music is not avaible right now :(");
 				});
 		} else {

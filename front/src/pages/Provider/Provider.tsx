@@ -21,7 +21,8 @@ export default function Provider() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string }>();
 	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { uuid: params.uuid } });
-	const provider = useProviderInfoQuery(() => providerBack.data?.body.address ?? "", () => params.uuid);
+	const providerInfo = () => providerBack.data?.body ?? null;
+	const provider = useProviderInfoQuery(() => params.uuid, providerInfo);
 
 	createEffect(() => {
 		if (providerBack.isError) {
@@ -36,7 +37,7 @@ export default function Provider() {
 	const setSearch = (value: string) => setSearchParams({ q: encodeURIComponent(value) || undefined }, { replace: true });
 
 	return <div class="page" id="provider">
-		<Show when={providerBack.data?.body} keyed>{(backData) => <>
+		<Show when={providerInfo()} keyed>{(backData) => <>
 			<ProviderHeader provider={provider.data?.body} providerBack={backData} />
 			<OfflineProvider show={provider.isError} />
 			<Show when={provider.data?.body}>
@@ -44,10 +45,10 @@ export default function Provider() {
 				<ProviderSearchBar value={search()} onSearch={setSearch} />
 				<Switch>
 					<Match when={tab() === "All"}>
-						<ProviderTabAll providerUrl={backData.address} providerUuid={params.uuid} search={search()} />
+						<ProviderTabAll providerInfo={backData} search={search()} />
 					</Match>
 					<Match when={tab() === "Musics"}>
-						<ProviderTabMusics providerUrl={backData.address} providerUuid={params.uuid} search={search()} />
+						<ProviderTabMusics providerInfo={backData} search={search()} />
 					</Match>
 					<Match when={tab() === "Albums"}>
 						<ProviderTabAlbums providerUrl={backData.address} providerUuid={params.uuid} search={search()} />

@@ -103,7 +103,7 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 					const requester = me.data?.body.friendRequests.find((f) => f.uuid === targetUuid);
 					updateMe((body) => ({
 						friendRequests: body.friendRequests.filter((f) => f.uuid !== targetUuid),
-						friends: requester ? [...body.friends, requester] : body.friends,
+						friends: requester ? [...body.friends, { ...requester, status: "offline" as const }] : body.friends,
 					}));
 					if (me.data) {
 						updateTargetFriends(targetUuid, (friends) => [...friends, { uuid: me.data.body.uuid, username: me.data.body.username }]);

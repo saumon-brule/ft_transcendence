@@ -17,6 +17,74 @@ export class PlaylistsService {
 		return playlist;
 	}
 
+	public async listPlaylists(viewerUUID: string) {
+		const select = {
+			uuid: true,
+			name: true,
+			private: true,
+			createdAt: true,
+			owner: { select: { uuid: true, username: true } },
+			_count: { select: { musics: true } },
+		} as const;
+		const toSummary = <T extends { _count: { musics: number } }>({ _count, ...playlist }: T) => ({
+			...playlist,
+			musicCount: _count.musics,
+		});
+
+		const [owned, followed] = await Promise.all([
+			this.prisma.playlist.findMany({
+				where: { ownerUUID: viewerUUID },
+				select,
+				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			}),
+			this.prisma.userPlaylist.findMany({
+				where: { userUUID: viewerUUID, playlist: { ownerUUID: { not: viewerUUID }, private: false } },
+				select: { playlist: { select } },
+				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			}),
+		]);
+
+		return {
+			owned: owned.map(toSummary),
+			followed: followed.map((link) => toSummary(link.playlist)),
+		};
+	}
+
+	public async getPlaylist(uuid: string, viewerUUID: string) {
+		const playlist = await this.prisma.playlist.findUnique({
+			where: { uuid },
+			include: {
+				owner: { select: { uuid: true, username: true } },
+				musics: {
+					orderBy: { id: "asc" },
+					include: { provider: { select: { uuid: true, name: true, address: true } } },
+				},
+				userPlaylists: { where: { userUUID: viewerUUID }, select: { id: true } },
+			},
+		});
+		const isOwner = playlist?.ownerUUID === viewerUUID;
+		if (!playlist || (playlist.private && !isOwner)) {
+			throw new NotFoundException("Playlist not found");
+		}
+
+		const providers = new Map(playlist.musics.map((entry) => [entry.provider.uuid, entry.provider]));
+		return {
+			uuid: playlist.uuid,
+			name: playlist.name,
+			private: playlist.private,
+			createdAt: playlist.createdAt,
+			owner: playlist.owner,
+			isOwner,
+			isFollowing: playlist.userPlaylists.length > 0,
+			musics: playlist.musics.map((entry) => ({
+				musicUuid: entry.musicUUID,
+				providerUuid: entry.providerUUID,
+				addedAt: entry.createdAt,
+			})),
+			providers: [...providers.values()],
+		};
+	}
+
 	public async createPlaylist(name: string, ownerUUID: string, isPrivate = false) {
 		return this.prisma.playlist.create({
 			data: {
@@ -55,6 +123,14 @@ export class PlaylistsService {
 
 	public async addMusicToPlaylist(uuid: string, musicUUID: string, providerUUID: string, ownerUUID: string) {
 		await this.assertPlaylistOwner(uuid, ownerUUID);
+		const provider = await this.prisma.provider.findUnique({
+			where: { uuid: providerUUID },
+			select: { uuid: true },
+		});
+		if (!provider) {
+			throw new NotFoundException("Provider not found");
+		}
+
 		const existingLink = await this.prisma.playlistMusic.findFirst({
 			where: {
 				playlistUUID: uuid,

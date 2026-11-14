@@ -5,12 +5,14 @@ import * as bcrypt from "bcrypt";
 import { Cron } from "@nestjs/schedule";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 import { LogBuilder } from "../core/logging/log-builder";
+import { PresenceService } from "./presence/presence.service";
 
 @Injectable()
 export class UsersService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly logger: WinstonLoggerService,
+		private readonly presence: PresenceService,
 	) {}
 
 	@Cron("0 * * * *")
@@ -44,22 +46,22 @@ export class UsersService {
 		return user;
 	}
 
-	public async getExposedInfoByUUID(uuid: string) {
+	public async getExposedInfoByUUID(uuid: string, viewerUUID: string) {
+		const isSelf = uuid === viewerUUID;
 		const user = await this.prisma.user.findUnique({
 			where: { uuid: uuid },
 			include: {
 				_count: { select: { ownedProviders: true, ownedPlaylists: true } },
-				ownedProviders: { where: { publicDisplay: true } },
+				ownedProviders: true,
 				providers: {
-					where: {
-						publicDisplay: true,
-						provider: { is: { publicDisplay: true, ownerUUID: { not: uuid } } },
-					},
+					where: { provider: { is: { ownerUUID: { not: uuid } } } },
 					include: { provider: true },
 				},
 				currentlyListening: true,
 				ownedPlaylists: {
-					where: { private: false },
+					where: isSelf
+						? {}
+						: { private: false },
 					include: {
 						_count: {
 							select: { musics: true },
@@ -94,11 +96,18 @@ export class UsersService {
 				.filter((request) => request.status === "ACCEPTED")
 				.map((request) => request.user),
 		];
+		const isFriend = friends.some((friend) => friend.uuid === viewerUUID);
+		const status = isFriend
+			? this.presence.getStatus(uuid)
+			: undefined;
+		const friendsWithStatus = isSelf
+			? friends.map((friend) => ({ ...friend, status: this.presence.getStatus(friend.uuid) }))
+			: friends;
 		const friendRequests = user.friendsReceive
 			.filter((request) => request.status === "PENDING")
 			.map((request) => request.user);
 
-		return { ...user, hasPassword: !!user.password, connectedProviders: user.providers.map((p) => p.provider), friends, friendRequests };
+		return { ...user, hasPassword: !!user.password, connectedProviders: user.providers.map((p) => p.provider), friends: friendsWithStatus, friendRequests, status };
 	}
 
 	public async createFromIntra(
@@ -152,7 +161,7 @@ export class UsersService {
 			data,
 		});
 
-		return this.getExposedInfoByUUID(uuid);
+		return this.getExposedInfoByUUID(uuid, uuid);
 	}
 
 	public async updateAvatarTimestamp(uuid: string) {

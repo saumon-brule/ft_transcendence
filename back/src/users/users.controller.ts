@@ -39,7 +39,7 @@ export class UsersController {
 	@UseGuards(JwtAuthGuardWithoutEmailVerif)
 	public me(@CurrentUser() authUser: AuthUser) {
 		return tsRestHandler(usersContract.me, async () => {
-			const user = await this.usersService.getExposedInfoByUUID(authUser.uuid);
+			const user = await this.usersService.getExposedInfoByUUID(authUser.uuid, authUser.uuid);
 			return { status: 200, body: meSchema.parse(user) };
 		});
 	}
@@ -64,9 +64,9 @@ export class UsersController {
 
 	@TsRestHandler(usersContract.getUser)
 	@UseGuards(JwtAuthGuard)
-	public getUser() {
+	public getUser(@CurrentUser() authUser: AuthUser) {
 		return tsRestHandler(usersContract.getUser, async ({ params }) => {
-			const user = await this.usersService.getExposedInfoByUUID(params.uuid);
+			const user = await this.usersService.getExposedInfoByUUID(params.uuid, authUser.uuid);
 			return { status: 200, body: userSchema.parse(user) };
 		});
 	}

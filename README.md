@@ -56,6 +56,14 @@ The `provider` URL registered on the server is the one browsers use to reach it 
 
 `make server-down` / `provider-down` stop a stack (the volumes are kept), `server-logs` / `provider-logs` follow its logs.
 
+### Several providers on one machine
+
+`make provider NAME=1` runs a second provider next to the default one: its own Docker project (`flex-provider-1`, so its own
+database volume), its settings in `provider/.env.1` (copy `provider/.env.example` and change `PROVIDER_PORT`,
+`PROVIDER_HTTP_PORT` and `PROVIDER_URL`) and its secrets in `provider/secrets.1` (`make secrets-provider NAME=1`, then put the
+API key of this provider in `flex_api_key`). `NAME` works the same way with `provider-down`, `provider-logs`, `provider-seed`
+and `provider-reset`. Without `NAME`, they act on the default provider.
+
 ### Hardening and logs
 
 Every container drops all Linux capabilities (Postgres keeps the few it needs to start), cannot gain new privileges and has a

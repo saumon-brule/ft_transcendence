@@ -5,13 +5,14 @@ import MusicSection from "~/components/ui/MusicSection/MusicSection";
 import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
 import NoResult from "~/components/ui/NoResult/NoResult";
+import { Provider } from "@flex/shared";
 
 const PREVIEW_SIZE = 6;
 
-export default function ProviderTabAll(props: { providerUrl: string; providerUuid: string; search: string }) {
-	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerUrl, () => props.providerUuid, () => props.search);
-	const albumsQuery = useProviderAlbumsInfiniteQuery(() => props.providerUrl, () => props.providerUuid, () => props.search);
-	const artistsQuery = useProviderArtistsInfiniteQuery(() => props.providerUrl, () => props.providerUuid, () => props.search);
+export default function ProviderTabAll(props: { providerInfo: Provider; search: string }) {
+	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerInfo.uuid, () => props.providerInfo, () => props.search);
+	const albumsQuery = useProviderAlbumsInfiniteQuery(() => props.providerInfo.address, () => props.providerInfo.uuid, () => props.search);
+	const artistsQuery = useProviderArtistsInfiniteQuery(() => props.providerInfo.address, () => props.providerInfo.uuid, () => props.search);
 
 	const musics = createMemo(() => musicsQuery.data?.pages[0] && {
 		musics: musicsQuery.data.pages[0].musics.slice(0, PREVIEW_SIZE),

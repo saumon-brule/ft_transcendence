@@ -28,6 +28,8 @@ import Friends from "./pages/Friends";
 import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
 import TermsOfService from "./pages/Legal/TermsOfService";
 import Search from "./pages/Search";
+import Playlist from "./pages/Playlist";
+import Playlists from "./pages/Playlists";
 import NotFound from "./pages/NotFound/NotFound";
 
 export const AppRouter = () => {
@@ -56,6 +58,8 @@ export const AppRouter = () => {
 						<Route path="/home" component={Home} />
 						<Route path="/search/:search" component={Search} />
 						<Route path="/user/:uuid" component={Profile} />
+						<Route path="/playlists" component={Playlists} />
+						<Route path="/playlist/:uuid" component={Playlist} />
 						<Route path="/friends" component={Friends} />
 						<Route path="/friends/:uuid" component={Friends} />
 						<Route path="/providers" component={Providers} />

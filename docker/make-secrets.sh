@@ -6,8 +6,8 @@ todo=""
 
 case "${1:-}" in
 	server) dir="$root/secrets" ;;
-	provider) dir="$root/provider/secrets" ;;
-	*) echo "usage: $0 server|provider" >&2; exit 1 ;;
+	provider) dir="$root/provider/secrets${2:+.$2}" ;;
+	*) echo "usage: $0 server|provider [instance]" >&2; exit 1 ;;
 esac
 
 mkdir -p "$dir"

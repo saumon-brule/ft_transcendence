@@ -44,7 +44,7 @@ export default function Queue(props: QueueProps) {
 					</h2>
 					<h3 class="track-artists">
 						<Show when={audioManager.currentMusic} fallback="-" keyed>
-							{(currentMusic) => <ArtistsLinks artists={currentMusic.artists} providerUUID={currentMusic.providerUuid} />}
+							{(currentMusic) => <ArtistsLinks artists={currentMusic.artists} providerUUID={currentMusic.provider.uuid} />}
 						</Show>
 					</h3>
 					<Show when={audioManager.currentMusic?.hasAlbum() && audioManager.currentMusic} fallback="-" keyed>

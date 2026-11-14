@@ -11,7 +11,7 @@ export type MusicCoverProps = JSX.IntrinsicElements["img"] & {
 export default function MusicCover(props: MusicCoverProps) {
 	const [local, rest] = splitProps(props, ["music", "class"]);
 
-	const mediaToken = useMediaToken(() => local.music.providerUrl, () => local.music.providerUuid);
+	const mediaToken = useMediaToken(() => local.music.provider.address, () => local.music.provider.uuid);
 
 	const src = () => {
 		const token = mediaToken();

@@ -4,15 +4,15 @@ import { getProviderClient } from "../providerClients";
 import { Music } from "~/class/Music";
 import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
-import { DEFAULT_PAGINATION_LIMIT, type ProviderDataDto } from "@flex/shared";
+import { DEFAULT_PAGINATION_LIMIT, Provider, type ProviderDataDto } from "@flex/shared";
 
-export const useProviderInfoQuery = (providerUrl: () => string, providerUuid: () => string) => {
-	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
+export const useProviderInfoQuery = (providerUuid: () => string, providerInfo: () => Provider | null) => {
+	const providerClient = createMemo(() => getProviderClient(providerInfo()?.address ?? "", providerUuid()));
 	return createQuery({
-		queryKey: () => provider().keys.info.all(),
-		get enabled() { return providerUrl() !== ""; },
+		queryKey: () => providerClient().keys.info.all(),
+		get enabled() { return providerInfo() !== null; },
 		queryFn: async () => {
-			const res = await provider().client.info.all.query();
+			const res = await providerClient().client.info.all.query();
 			if (res.status !== 200) throw new Error(`Provider info failed with status ${res.status}`);
 			return res;
 		},
@@ -22,15 +22,15 @@ export const useProviderInfoQuery = (providerUrl: () => string, providerUuid: ()
 				...response.body,
 				music: {
 					...response.body.music,
-					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerUrl(), providerUuid())),
+					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerInfo() ?? { uuid: providerUuid(), address: "", name: "" })),
 				},
 				artist: {
 					...response.body.artist,
-					artists: response.body.artist.artists.map((artist) => Artist.fromRawObject(artist, providerUrl(), providerUuid())),
+					artists: response.body.artist.artists.map((artist) => Artist.fromRawObject(artist, providerInfo()?.address ?? "", providerUuid())),
 				},
 				album: {
 					...response.body.album,
-					albums: response.body.album.albums.map((album) => Album.fromRawObject(album, providerUrl(), providerUuid())),
+					albums: response.body.album.albums.map((album) => Album.fromRawObject(album, providerInfo()?.address ?? "", providerUuid())),
 				},
 			},
 		}),
@@ -42,15 +42,15 @@ export type ProviderInfo = Exclude<ReturnType<typeof useProviderInfoQuery>["data
 export type MusicRelationFilter = { artistUuid?: string; albumUuid?: string };
 export type AlbumRelationFilter = { artistUuid?: string };
 
-export const useProviderMusicsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "", filter: () => MusicRelationFilter = () => ({})) => {
-	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
+export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, providerInfo: () => Provider | null, search: () => string = () => "", filter: () => MusicRelationFilter = () => ({})) => {
+	const providerClient = createMemo(() => getProviderClient(providerInfo()?.address ?? "", providerUuid()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
-		queryKey: () => provider().keys.music.list([search(), JSON.stringify(filter())]),
-		get enabled() { return providerUrl() !== ""; },
+		queryKey: () => providerClient().keys.music.list([search(), JSON.stringify(filter())]),
+		get enabled() { return providerInfo() !== null; },
 		queryFn: async ({ pageParam }) => {
-			const res = await provider().client.music.list.query({
+			const res = await providerClient().client.music.list.query({
 				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, ...filter() },
 			});
 			if (res.status !== 200) throw new Error(`Provider musics failed with status ${res.status}`);
@@ -62,17 +62,17 @@ export const useProviderMusicsInfiniteQuery = (providerUrl: () => string, provid
 		},
 		initialData: () => {
 			if (search() || Object.keys(filter()).length > 0) return undefined;
-			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(provider().keys.info.all());
+			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(providerClient().keys.info.all());
 			return all ? { pages: [all.body.music], pageParams: [0] } : undefined;
 		},
-		initialDataUpdatedAt: () => queryClient.getQueryState(provider().keys.info.all())?.dataUpdatedAt,
+		initialDataUpdatedAt: () => queryClient.getQueryState(providerClient().keys.info.all())?.dataUpdatedAt,
 		staleTime: 30_000,
 		keepPreviousData: true,
 		select: (data) => ({
 			...data,
 			pages: data.pages.map((page) => ({
 				...page,
-				musics: page.musics.map((music) => Music.fromRawObject(music, providerUrl(), providerUuid())),
+				musics: page.musics.map((music) => Music.fromRawObject(music, providerInfo() ?? { uuid: providerUuid(), address: "", name: "" })),
 			})),
 		}),
 	});
@@ -188,33 +188,33 @@ export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: (
 
 export type ProviderAlbumQueryBody = Exclude<ReturnType<typeof useProviderAlbumQuery>["data"], undefined>["body"];
 
-const providerSearchOptions = (providerUrl: string, providerUuid: string, searchTerm: string) => {
-	const provider = getProviderClient(providerUrl, providerUuid);
+const providerSearchOptions = (providerInfo: Provider, searchTerm: string) => {
+	const providerClient = getProviderClient(providerInfo.address, providerInfo.uuid);
 	return {
-		queryKey: () => provider.keys.search.search([searchTerm]),
-		enabled: providerUrl !== "" && searchTerm !== "",
+		queryKey: () => providerClient.keys.search.search([searchTerm]),
+		enabled: providerInfo.address !== "" && searchTerm !== "",
 		queryFn: async () => {
-			const res = await provider.client.search.search.query({ query: { query: searchTerm } });
+			const res = await providerClient.client.search.search.query({ query: { query: searchTerm } });
 			if (res.status !== 200) throw new Error(`Provider search failed with status ${res.status}`);
 			return res;
 		},
 		keepPreviousData: true,
-		select: (response: Awaited<ReturnType<typeof provider.client.search.search.query>> & { status: 200 }) => ({
+		select: (response: Awaited<ReturnType<typeof providerClient.client.search.search.query>> & { status: 200 }) => ({
 			...response,
 			body: {
 				...response.body,
-				musics: response.body.musics.map((music) => Music.fromRawObject(music, providerUrl, providerUuid)),
-				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, providerUrl, providerUuid)),
-				albums: response.body.albums.map((album) => Album.fromRawObject(album, providerUrl, providerUuid)),
+				musics: response.body.musics.map((music) => Music.fromRawObject(music, providerInfo)),
+				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, providerInfo.address, providerInfo.uuid)),
+				albums: response.body.albums.map((album) => Album.fromRawObject(album, providerInfo.address, providerInfo.uuid)),
 			},
 		}),
 	};
 };
 
-export const useProvidersSearchQueries = (providers: () => { address: string; uuid: string }[], searchTerm: () => string) => {
+export const useProvidersSearchQueries = (providersInfos: () => Provider[], searchTerm: () => string) => {
 	return createQueries({
 		get queries() {
-			return providers().map((provider) => providerSearchOptions(provider.address, provider.uuid, searchTerm()));
+			return providersInfos().map((provider) => providerSearchOptions(provider, searchTerm()));
 		},
 	});
 };

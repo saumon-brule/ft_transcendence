@@ -20,7 +20,7 @@ export default function CurrentTrack() {
 						{currentMusic.name}
 					</div>
 					<div class="track-artists" >
-						<ArtistsLinks artists={currentMusic.artists} providerUUID={currentMusic.providerUuid}/>
+						<ArtistsLinks artists={currentMusic.artists} providerUUID={currentMusic.provider.uuid}/>
 					</div>
 				</div>
 			</div>}

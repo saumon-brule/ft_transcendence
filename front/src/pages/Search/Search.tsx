@@ -32,7 +32,7 @@ export default function Search() {
 		return all.filter((provider, i) => all.findIndex((p) => p.uuid === provider.uuid) === i);
 	});
 	const search = () => decodeURIComponent(params.search ?? "");
-	const searches = useProvidersSearchQueries(providers, search);
+	const searches = useProvidersSearchQueries(() => providers(), search);
 
 	const results = createMemo(() => {
 		const data = providers().map((provider, i) => ({
@@ -70,7 +70,7 @@ export default function Search() {
 			if (organizedData.musics[0]) {
 				organizedData.best = {
 					item: organizedData.musics[0],
-					providerName: organizedData.providers.find((p) => p.uuid === organizedData.musics[0].providerUuid)?.name ?? "",
+					providerName: organizedData.providers.find((p) => p.uuid === organizedData.musics[0].provider.uuid)?.name ?? "",
 				};
 			}
 		} else if (bestScores.albums > bestScores.artists) {

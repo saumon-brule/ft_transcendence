@@ -3,16 +3,18 @@ export { authContract } from "./contracts/server/auth/auth.contract";
 export { usersContract } from "./contracts/server/users/users.contract";
 export { appConfigContract } from "./contracts/server/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/server/playlists/playlists.contract";
+export { createPlaylistBodySchema, type PlaylistDetailDto, type PlaylistListDto, type PlaylistSummaryDto } from "./contracts/server/playlists/schemas/playlist.schema";
 export { providersContract } from "./contracts/server/providers/providers.contract";
 export { providerContract } from "./contracts/provider/provider.contract";
 export { friendsContract } from "./contracts/server/users/friends.contract";
 export { type FriendRelation, type FriendRequestAnswer } from "./contracts/server/users/schemas/friends.schema";
+export { presenceSchema, presenceListSchema, type PresenceSnapshot } from "./contracts/server/users/schemas/presence.schema";
 
 export { loginSchema, type LoginDto } from "./contracts/server/auth/schemas/login.schema";
 export { requestEmailResetSchema, resetEmailSchema, type RequestEmailResetDto, type ResetEmailDto } from "./contracts/server/auth/schemas/email.schema";
 export { registerSchema, type RegisterDto } from "./contracts/server/auth/schemas/register.schema";
 export { resetPasswordSchema, changePasswordSchema, type RequestPasswordResetDto, type ChangePasswordDto } from "./contracts/server/auth/schemas/password.schema";
-export { userSchema, meSchema, updateMeSchema, type User, type ShortUser, type Profile, type UpdateMeDto } from "./contracts/server/users/schemas/user.schema";
+export { userSchema, meSchema, updateMeSchema, type User, type ShortUser, onlineStatusSchema, friendSchema, type OnlineStatus, type Friend, type Profile, type UpdateMeDto } from "./contracts/server/users/schemas/user.schema";
 export { createProviderSchema, editProviderSchema, type CreateProviderDto, type Provider } from "./contracts/server/providers/schemas/provider.schema";
 export { getAppVariables } from "./contracts/server/appConfig/schemas/app-config.schema";
 
@@ -30,6 +32,7 @@ export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/bu
 export { type ProviderDataDto, type ProviderDataMusicDto, type ProviderDataAlbumDto, type ProviderDataArtistDto } from "./contracts/provider/info/schemas/info.schema";
 export { DEFAULT_PAGINATION_LIMIT, healthResponseSchema, healthUnavailableSchema, type HealthResponseDto, type HealthUnavailableDto } from "./schemas/common.schema";
 export { musicItemSchema, artistItemSchema, albumItemSchema } from "./contracts/provider/schemas/items.schema";
+export * from "./contracts/server/providers/schemas/provider.schema";
 
 export { type ArtistDetailedItemDto } from "./contracts/provider/artist/schemas/artist.schema";
 export { type AlbumDetailedItemDto } from "./contracts/provider/album/schemas/album.schema";

@@ -114,15 +114,15 @@ services:
 
 secrets:
   postgres_password:
-    file: ./secrets/postgres_password
+    file: ./${PROVIDER_SECRETS_DIR:-secrets}/postgres_password
   flex_api_key:
-    file: ./secrets/flex_api_key
+    file: ./${PROVIDER_SECRETS_DIR:-secrets}/flex_api_key
   server_ca:
-    file: ./secrets/server_ca.crt
+    file: ./${PROVIDER_SECRETS_DIR:-secrets}/server_ca.crt
   tls_cert:
-    file: ./secrets/tls.crt
+    file: ./${PROVIDER_SECRETS_DIR:-secrets}/tls.crt
   tls_key:
-    file: ./secrets/tls.key
+    file: ./${PROVIDER_SECRETS_DIR:-secrets}/tls.key
 
 networks:
   db:

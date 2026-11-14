@@ -1,0 +1,29 @@
+@use "../../styles/breakpoints" as breakpoints;
+
+#playlists-page {
+	width: 100%;
+
+	section {
+		margin-bottom: 32px;
+
+		h2 {
+			font-size: 20px;
+			margin: 0 0 12px;
+		}
+	}
+
+	.playlists-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+		gap: 16px;
+
+		@include breakpoints.respond-to("mobile") {
+			grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+			gap: 12px;
+		}
+	}
+
+	.playlists-empty, .playlists-error {
+		color: var(--text-secondary);
+	}
+}

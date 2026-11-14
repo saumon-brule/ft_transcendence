@@ -11,8 +11,10 @@
 		"start:dev": "nodemon",
 		"start:debug": "nest start --debug --watch",
 		"start:prod": "node dist/main",
+		"seed": "ts-node --transpile-only src/seed.ts",
 		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\" --fix",
-		"check": "tsc --noEmit && eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\""
+		"check": "tsc --noEmit && eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\"",
+		"mail:preview": "node scripts/preview-mail.mjs --watch"
 	},
 	"dependencies": {
 		"@flex/shared": "workspace:*",
@@ -22,9 +24,11 @@
 		"@nestjs/jwt": "catalog:",
 		"@nestjs/passport": "^11.0.5",
 		"@nestjs/platform-express": "catalog:",
+		"@nestjs/platform-socket.io": "catalog:",
 		"@nestjs/schedule": "^6.1.1",
 		"@nestjs/swagger": "catalog:",
 		"@nestjs/throttler": "^6.5.0",
+		"@nestjs/websockets": "catalog:",
 		"@prisma/adapter-pg": "catalog:",
 		"@prisma/client": "catalog:",
 		"@ts-rest/core": "catalog:",
@@ -41,6 +45,7 @@
 		"reflect-metadata": "catalog:",
 		"rxjs": "catalog:",
 		"sharp": "^0.35.4",
+		"socket.io": "catalog:",
 		"winston": "^3.19.0",
 		"zod": "catalog:"
 	},

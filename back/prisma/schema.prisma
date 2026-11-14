@@ -102,10 +102,9 @@ model Provider {
     id            Int      @id @default(autoincrement())
     uuid          String   @unique @default(uuid())
     name          String   @unique
-    address       String   @unique
+    address       String
     ownerUUID     String
     hashedKey     String   @unique
-    publicDisplay Boolean  @default(true)
     //note      Int?
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
@@ -120,7 +119,6 @@ model ProviderUser {
     id            Int      @id @default(autoincrement())
     providerUUID  String
     userUUID      String
-    publicDisplay Boolean  @default(true)
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 

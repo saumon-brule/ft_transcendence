@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js";
+import { For, Match, Show, Switch } from "solid-js";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import { Music } from "~/class/Music";
 import "./MusicSection.scss";
@@ -9,6 +9,7 @@ import ArtistsLinks from "../ArtistLinks";
 import { formatTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { Provider } from "@flex/shared";
 import { MusicGroup } from "~/store/trackManager.store";
+import UnavailableMusicRow, { type PlaylistContext } from "./UnavailableTrackRow";
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
@@ -19,6 +20,7 @@ function isGroupMusicSection(props: MusicSectionProps | GroupMusicSectionProps):
 export type MusicSectionProps = {
 	hiddenColumns?: MusicSectionColumn[];
 	providers?: Provider[];
+	playlist?: PlaylistContext;
 	musics: Array<Music>;
 };
 
@@ -26,6 +28,7 @@ export type GroupMusicSectionProps = {
 	hiddenColumns?: MusicSectionColumn[];
 	providers?: Provider[];
 	showCurrent?: boolean;
+	playlist?: PlaylistContext;
 	musicGroup: MusicGroup;
 };
 
@@ -47,6 +50,14 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 		audioManager.play();
 	}
 
+	const columnCount = () => 1
+		+ (shown("actions") ? 1 : 0)
+		+ (shown("artists") ? 1 : 0)
+		+ (shown("album") ? 1 : 0)
+		+ (props.providers?.length ? 1 : 0)
+		+ (shown("published") ? 1 : 0)
+		+ (shown("duration") ? 1 : 0);
+
 	function addToQueue(music: Music) {
 		audioManager.pushMusicToQueue(music);
 	}
@@ -67,27 +78,36 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 				</tr>
 			</thead>
 			<tbody>
-				<For each={musicList()}>{(music, i) => <tr>
-					<td class="col-title">
-						<div class="music-title">
-							<MusicCover music={music} />
-							<div class="music-title-text">
-								<Button variant="text" onClick={() => handleMusicClick(i())}>{music.name}</Button>
-								<Show when={shown("artists")}>
-									<span class="music-title-artists">
-										<ArtistsLinks artists={music.artists} providerUUID={music.providerUuid} />
-									</span>
-								</Show>
-							</div>
-						</div>
-					</td>
-					<Show when={shown("actions")}><td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td></Show>
-					<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks artists={music.artists} providerUUID={music.providerUuid} /></td></Show>
-					<Show when={shown("album")}><td class="col-album">{music.hasAlbum() ? <A href={music.albumRoute()} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
-					<Show when={props.providers?.length}><td class="col-provider"><A href={`/provider/${music.providerUuid}`}>{props.providers?.find((provider) => provider.uuid === music.providerUuid)?.name}</A></td></Show>
-					<Show when={shown("published")}><td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString() : "-"}</td></Show>
-					<Show when={shown("duration")}><td class="col-duration">{formatTimer(music.duration)}</td></Show>
-				</tr>}</For>
+				<For each={musicList()}>
+					{(music, i) => <Switch>
+						<Match when={music.isUnavailable() && music} keyed>
+							{(unavailableMusic) => <UnavailableMusicRow music={unavailableMusic} columns={columnCount()} playlist={props.playlist} />}
+						</Match>
+						<Match when={!music.isUnavailable() && music}>
+							<tr>
+								<td class="col-title">
+									<div class="music-title">
+										<MusicCover music={music} />
+										<div class="music-title-text">
+											<Button variant="text" onClick={() => handleMusicClick(i())}>{music.name}</Button>
+											<Show when={shown("artists")}>
+												<span class="music-title-artists">
+													<ArtistsLinks artists={music.artists} providerUUID={music.provider.uuid} />
+												</span>
+											</Show>
+										</div>
+									</div>
+								</td>
+								<Show when={shown("actions")}><td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td></Show>
+								<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks artists={music.artists} providerUUID={music.provider.uuid} /></td></Show>
+								<Show when={shown("album")}><td class="col-album">{music.hasAlbum() ? <A href={music.albumRoute()} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
+								<Show when={props.providers?.length}><td class="col-provider"><A href={`/provider/${music.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === music.provider.uuid)?.name}</A></td></Show>
+								<Show when={shown("published")}><td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString() : "-"}</td></Show>
+								<Show when={shown("duration")}><td class="col-duration">{formatTimer(music.duration)}</td></Show>
+							</tr>
+						</Match>
+					</Switch>}
+				</For>
 			</tbody>
 		</table>
 	</div>;

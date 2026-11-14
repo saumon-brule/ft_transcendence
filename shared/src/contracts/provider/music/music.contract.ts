@@ -1,6 +1,8 @@
 import { initContract } from "@ts-rest/core";
 import {
 	createMusicSchema,
+	musicBatchResponseSchema,
+	musicBatchSchema,
 	musicDetailedItemSchema,
 	musicListResponseSchema,
 	updateMusicSchema,
@@ -17,6 +19,12 @@ export const musicContract = c.router(
 			path: "/",
 			query: musicListQuerySchema,
 			responses: { 200: musicListResponseSchema },
+		},
+		getMany: {
+			method: "POST",
+			path: "/batch",
+			body: musicBatchSchema,
+			responses: { 200: musicBatchResponseSchema },
 		},
 		get: {
 			method: "GET",
