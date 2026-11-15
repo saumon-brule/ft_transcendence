@@ -11,8 +11,7 @@ export default function AppearanceSettings() {
 
 	const profileQuery = useMeProfileQuery();
 
-	return <main class="appearance-settings">
-		<h1>{t("pages.settings.appearance.title")}</h1>
+	return <section class="appearance-settings">
 		<Show when={profileQuery.data ? profileQuery.data.body : undefined}>
 			<div class="settings-content">
 				<div class="setting-field">
@@ -30,5 +29,5 @@ export default function AppearanceSettings() {
 				</div>
 			</div>
 		</Show>
-	</main>;
+	</section>;
 }

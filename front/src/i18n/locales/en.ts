@@ -55,6 +55,7 @@ export default {
 			},
 		},
 		settings: {
+			title: "Settings",
 			profileLink: "Profile",
 			accountLink: "Account",
 			appearanceLink: "Appearance",
