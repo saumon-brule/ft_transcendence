@@ -27,7 +27,7 @@ export default function Playlist() {
 
 	return <div class="page" id="playlist">
 		<Show when={playlistQuery.data} keyed>{(playlist) => {
-			const musicGroup = { name: playlist.name, musics: musics(), route: `/playlist/${playlist.uuid}` };
+			const musicGroup = { name: playlist.name, get musics() { return musics(); }, route: `/playlist/${playlist.uuid}` };
 
 			return <>
 				<PlaylistHeader playlist={playlist} musicGroup={musicGroup} />
