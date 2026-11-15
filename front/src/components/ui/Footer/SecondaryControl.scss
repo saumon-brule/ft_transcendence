@@ -1,4 +1,6 @@
-.volume-control {
+@use "../../../styles/breakpoints" as breakpoints;
+
+.secondary-control {
 	width: 100%;
 	max-width: 185px;
 	padding-inline: 1rem;
@@ -9,6 +11,9 @@
 	justify-content: center;
 	gap: .75rem;
 
+	@include breakpoints.respond-to("mobile") {
+		display: none;
+	}
 
 	& > svg {
 		flex-shrink: 0;

@@ -41,7 +41,7 @@ export default function SecondaryControl(props: SecondaryControlsProps) {
 		document.removeEventListener("mouseup", handleMouseUp);
 	});
 
-	return <div class="volume-control">
+	return <div class="secondary-control">
 		<ListMusic onClick={() => props.setShowQueue((old) => !old)} />
 		<Switch>
 			<Match when={audioManager.muted} >
