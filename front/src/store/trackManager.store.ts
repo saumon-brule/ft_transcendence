@@ -85,8 +85,10 @@ export function useTrackManager() {
 				}
 				prevMusic = manager.musicGroup.musics[manager.position];
 			} else {
-				if (!manager.isCurrentTemporary && manager.position > 0) {
+				if (manager.position > 0 && !manager.isCurrentTemporary) {
 					manager.position -= 1;
+					prevMusic = manager.musicGroup.musics[manager.position];
+				} else if (manager.current === null) {
 					prevMusic = manager.musicGroup.musics[manager.position];
 				} else {
 					prevMusic = null;
@@ -106,15 +108,20 @@ export function useTrackManager() {
 	}
 
 	function setPosition(position: number) {
-		if (!trackManager.musicGroup || trackManager.musicGroup.musics.length === 0) {
-			setTrackManager("position", 0);
-			return;
-		}
-		setTrackManager("position", position);
-		setCurrentMusic(trackManager.musicGroup.musics[position]);
+		setTrackManager(produce((manager) => {
+			if (!manager.musicGroup || manager.musicGroup.musics.length === 0) {
+				manager.position = 0;
+				return;
+			}
+			manager.position = position;
+			manager.current = manager.musicGroup.musics[position];
+			manager.isCurrentTemporary = false;
+		}));
 	}
 
 	function setMusicGroup(musicGroup: MusicGroup): void {
+		console.log(musicGroup);
+		console.log(musicGroup.musics);
 		setTrackManager("musicGroup", { ...musicGroup, musics: [...musicGroup.musics] });
 	}
 
@@ -144,6 +151,8 @@ export function useTrackManager() {
 	function clearQueue(): void {
 		setTrackManager("queue", []);
 	}
+
+	window.test = () => trackManager;
 
 	return {
 		manager: trackManager,

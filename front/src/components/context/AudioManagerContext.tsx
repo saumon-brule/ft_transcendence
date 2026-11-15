@@ -83,8 +83,8 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	}
 
 	function forward() {
-		setIsPlaying(true);
 		trackManager.nextTrack();
+		setIsPlaying(true);
 		audio.currentTime = 0;
 	}
 
@@ -108,7 +108,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	const handlePlay = () => setIsPlaying(true);
 	const handlePause = () => setIsPlaying(false);
 	const handleEnded = () => {
-		trackManager.nextTrack();
+		forward();
 		setIsPlaying(true);
 	};
 	const handleTimeUpdate = () => trackManager.progression = audio.currentTime;
