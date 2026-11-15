@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "@solidjs/router";
 import { createEffect, Show } from "solid-js";
-import { PlaylistRequestError, usePlaylistQuery } from "~/api/queryHooks/playlist";
+import { usePlaylistQuery } from "~/api/queryHooks/playlist";
 import { usePlaylistMusics } from "~/api/queryHooks/playlistTracks";
 import MusicSection from "~/components/ui/MusicSection/MusicSection";
 import { summonErrorToast } from "~/components/ui/Toaster";
@@ -16,7 +16,7 @@ export default function Playlist() {
 	createEffect(() => {
 		if (!playlistQuery.isError) return;
 
-		if (playlistQuery.error instanceof PlaylistRequestError && playlistQuery.error.status === 404) {
+		if (playlistQuery.error.status === 404) {
 			navigate("/home");
 			summonErrorToast("Unknown playlist");
 		} else {

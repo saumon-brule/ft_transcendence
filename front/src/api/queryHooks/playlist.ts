@@ -4,17 +4,11 @@ import { serverContract } from "@flex/shared";
 import { client, queryKeys } from "../client";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 
-export class PlaylistRequestError extends Error {
-	constructor(public readonly status: number) {
-		super(`Playlist request failed with status ${status}`);
-	}
-}
-
 export const usePlaylistQuery = (uuid: () => string) => client.playlists.getPlaylist.createQuery(
 	() => queryKeys.playlists.getPlaylist([uuid()]),
 	{ params: { get uuid() { return uuid(); } } },
 	{
-		retry: (count, error) => !(error instanceof PlaylistRequestError) && count < 2,
+		retry: (count) => count < 2,
 		staleTime: 30_000,
 	},
 );
