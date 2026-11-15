@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, EighthNote, ListEnd, ListStart, Search } fro
 import TextInput from "~/components/inputs/TextInput";
 import Form from "~/components/inputs/Form/Form";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
-import { useAddMusicToPlaylist } from "~/api/queryHooks/playlist";
+import { useAddMusicToPlaylistMutation } from "~/api/queryHooks/playlist";
 import { env } from "~/env";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { Music } from "~/class/Music";
@@ -14,7 +14,7 @@ export function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 	const [currentMenu, setCurrentMenu] = createSignal<MusicActionMenus>("main");
 	const meProfileQuery = useMeProfileQuery();
 	const [searchQuery, setSearchQuery] = createSignal("");
-	const addMusicToPlaylist = useAddMusicToPlaylist();
+	const addMusicToPlaylistMutation = useAddMusicToPlaylistMutation();
 
 	function addToQueue(music: Music) {
 		audioManager.pushMusicToQueue(music);
@@ -27,10 +27,9 @@ export function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 	}
 
 	function addToPlaylist(playlistUUID: string) {
-		addMusicToPlaylist.mutate({
-			playlistUuid: playlistUUID,
-			musicUuid: props.music.uuid,
-			providerUuid: props.music.provider.uuid,
+		addMusicToPlaylistMutation.mutate({
+			params: { uuid: playlistUUID },
+			body: { musicUUID: props.music.uuid, providerUUID: props.music.provider.uuid },
 		});
 		props.onClose();
 	}

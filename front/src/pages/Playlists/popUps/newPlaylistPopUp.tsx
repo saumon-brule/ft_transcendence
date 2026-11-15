@@ -1,6 +1,6 @@
 import { onMount } from "solid-js";
 import { createPlaylistBodySchema } from "@flex/shared";
-import { useCreatePlaylist } from "~/api/queryHooks/playlist";
+import { useCreatePlaylistMutation } from "~/api/queryHooks/playlist";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
@@ -10,7 +10,7 @@ import { summonSuccessToast } from "~/components/ui/Toaster";
 import { validateFromZod } from "~/utils/validateFromZod";
 
 export const summonNewPlaylistPopUp = (onCreated?: (playlistUuid: string) => void) => summonPopUp((popUpControls) => {
-	const createPlaylist = useCreatePlaylist();
+	const createPlaylist = useCreatePlaylistMutation();
 
 	let nameInput!: HTMLInputElement;
 	let privateInput!: HTMLInputElement;
@@ -19,12 +19,12 @@ export const summonNewPlaylistPopUp = (onCreated?: (playlistUuid: string) => voi
 		e.preventDefault();
 
 		createPlaylist.mutate(
-			{ name: nameInput.value, private: privateInput.checked },
+			{ body: { name: nameInput.value, private: privateInput.checked } },
 			{
 				onSuccess: (playlist) => {
 					summonSuccessToast(() => "Playlist created");
 					popUpControls.close();
-					onCreated?.(playlist.uuid);
+					onCreated?.(playlist.body.uuid);
 				},
 			},
 		);

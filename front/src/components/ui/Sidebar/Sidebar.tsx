@@ -15,8 +15,8 @@ export default function Sidebar() {
 	const playlistsQuery = usePlaylistsQuery();
 	const playlists = () => playlistsQuery.data
 		? [
-			...playlistsQuery.data.owned.map((playlist) => ({ playlist, showOwner: false })),
-			...playlistsQuery.data.followed.map((playlist) => ({ playlist, showOwner: true })),
+			...playlistsQuery.data.body.owned.map((playlist) => ({ playlist, showOwner: false })),
+			...playlistsQuery.data.body.followed.map((playlist) => ({ playlist, showOwner: true })),
 		]
 		: [];
 

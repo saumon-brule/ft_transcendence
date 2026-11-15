@@ -13,7 +13,7 @@ export default function Playlists() {
 		<Show when={playlists.isError}>
 			<p class="playlists-error">Failed to load your playlists</p>
 		</Show>
-		<Show when={playlists.data} keyed>{(data) => <>
+		<Show when={playlists.data?.body} keyed>{(data) => <>
 			<section>
 				<h2>My playlists</h2>
 				<div class="playlists-grid">
