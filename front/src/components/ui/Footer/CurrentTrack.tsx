@@ -15,7 +15,7 @@ export default function CurrentTrack() {
 				<div class="track-name">-</div>
 				<div class="track-artists" >-</div>
 			</div></div>
-			}>
+		}>
 			{(currentMusic) => <div class="track-display">
 				<Show when={currentMusic.hasAlbum() && currentMusic} keyed fallback={<MusicCover music={currentMusic} />}>
 					{(music) => <A class="album-link" href={music.albumRoute()} ><MusicCover music={currentMusic} /></A>}
