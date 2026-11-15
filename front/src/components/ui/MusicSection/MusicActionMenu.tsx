@@ -1,20 +1,22 @@
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
-import { ChevronLeft, ChevronRight, EighthNote, ListEnd, ListStart, Search } from "lucide-solid";
+import { ChevronLeft, ChevronRight, EighthNote, ListEnd, ListStart, Search, Trash } from "lucide-solid";
 import TextInput from "~/components/inputs/TextInput";
 import Form from "~/components/inputs/Form/Form";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
-import { useAddMusicToPlaylistMutation } from "~/api/queryHooks/playlist";
+import { useAddMusicToPlaylistMutation, useRemoveMusicFromPlaylistMutation } from "~/api/queryHooks/playlist";
 import { env } from "~/env";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { Music } from "~/class/Music";
+import { PlaylistContext } from "./UnavailableTrackRow";
 
-export function MusicActionMenu(props: { music: Music; onClose: () => void }) {
+export function MusicActionMenu(props: { music: Music; playlist?: PlaylistContext; onClose: () => void }) {
 	type MusicActionMenus = "main" | "playlist";
 	const audioManager = useAudioManagerContext();
 	const [currentMenu, setCurrentMenu] = createSignal<MusicActionMenus>("main");
 	const meProfileQuery = useMeProfileQuery();
 	const [searchQuery, setSearchQuery] = createSignal("");
 	const addMusicToPlaylistMutation = useAddMusicToPlaylistMutation();
+	const removeMusicFromPlaylistMutation = useRemoveMusicFromPlaylistMutation();
 
 	function addToQueue(music: Music) {
 		audioManager.pushMusicToQueue(music);
@@ -34,6 +36,15 @@ export function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 		props.onClose();
 	}
 
+	function removeMusicFromPlaylist() {
+		if (!props.playlist) return;
+		removeMusicFromPlaylistMutation.mutate({
+			params: { uuid: props.playlist?.uuid },
+			body: { musicUUID: props.music.uuid, providerUUID: props.music.provider.uuid },
+		});
+		props.onClose();
+	}
+
 	return <div class="music-action-menu" role="menu">
 		<Switch>
 			<Match when={currentMenu() === "main"}>
@@ -46,11 +57,19 @@ export function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 						<ListEnd size={15} aria-hidden="true" />
 						<span>Ajouter à la file d'attente</span>
 					</button>
-					<button type="button" role="menuitem" onClick={() => setCurrentMenu("playlist")}>
-						<EighthNote size={15} aria-hidden="true" />
-						<span>Ajouter à une playlist</span>
-						<ChevronRight class="right" size={17} aria-hidden="true" />
-					</button>
+					<Show when={props.playlist && props.playlist.isOwner === true} keyed>
+						<button class="red-button" type="button" role="menuitem" onClick={() => removeMusicFromPlaylist()}>
+							<Trash size={15} aria-hidden="true" />
+							<span>Retirer de la playlist</span>
+						</button>
+					</Show>
+					<Show when={!(props.playlist && props.playlist.isOwner === true)}>
+						<button type="button" role="menuitem" onClick={() => setCurrentMenu("playlist")}>
+							<EighthNote size={15} aria-hidden="true" />
+							<span>Ajouter à une playlist</span>
+							<ChevronRight class="right" size={17} aria-hidden="true" />
+						</button>
+					</Show>
 				</div>
 			</Match>
 			<Match when={currentMenu() === "playlist"}>

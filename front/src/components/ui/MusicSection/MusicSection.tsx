@@ -125,7 +125,7 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 									<td class="col-actions">
 										<Button class="action-button" icon={true} variant="text" onClick={() => toggleMenu(music)}><Ellipsis /></Button>
 										<Show when={isMenuOpen(music)}>
-											<MusicActionMenu music={music} onClose={() => setOpenMenu(null)} />
+											<MusicActionMenu music={music} onClose={() => setOpenMenu(null)} playlist={props.playlist} />
 										</Show>
 									</td>
 								</Show>
