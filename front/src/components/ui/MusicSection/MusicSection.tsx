@@ -95,7 +95,7 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 			<thead>
 				<tr>
 					<th class="col-title" scope="col">Title</th>
-					<Show when={shown("actions")}><th class="col-actions" scope="col"></th></Show>
+					<Show when={shown("actions")}><th class="col-actions" scope="col" /></Show>
 					<Show when={shown("artists")}><th class="col-artists" scope="col">Artists</th></Show>
 					<Show when={shown("album")}><th class="col-album" scope="col">Album</th></Show>
 					<Show when={props.providers?.length}><th class="col-provider" scope="col">Provider</th></Show>
@@ -177,15 +177,15 @@ function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 		<Switch>
 			<Match when={currentMenu() === "main"}>
 				<div class="menu-content main-menu">
-					<button type="button" role="menuitem" onClick={() => void playNext(props.music) }>
+					<button type="button" role="menuitem" onClick={() => void playNext(props.music)}>
 						<ListStart size={15} aria-hidden="true" />
 						<span>Écouter après</span>
 					</button>
-					<button type="button" role="menuitem" onClick={() => void addToQueue(props.music) }>
+					<button type="button" role="menuitem" onClick={() => void addToQueue(props.music)}>
 						<ListEnd size={15} aria-hidden="true" />
 						<span>Ajouter à la file d'attente</span>
 					</button>
-					<button type="button" role="menuitem" onClick={() => setCurrentMenu("playlist") }>
+					<button type="button" role="menuitem" onClick={() => setCurrentMenu("playlist")}>
 						<EighthNote size={15} aria-hidden="true" />
 						<span>Ajouter à une playlist</span>
 						<ChevronRight class="right" size={17} aria-hidden="true" />
@@ -194,7 +194,7 @@ function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 			</Match>
 			<Match when={currentMenu() === "playlist"}>
 				<div class="menu-content playlist-submenu">
-					<button type="button" role="menuitem" onClick={() => setCurrentMenu("main") }>
+					<button type="button" role="menuitem" onClick={() => setCurrentMenu("main")}>
 						<ChevronLeft size={15} aria-hidden="true" />
 						<span>Back</span>
 					</button>
@@ -205,11 +205,10 @@ function MusicActionMenu(props: { music: Music; onClose: () => void }) {
 						<Search class="search-icon" size={15}/>
 						<TextInput value={searchQuery()} placeholder="Search playlist" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 					</Form>
-					<Show when={meProfileQuery.data?.body} keyed>{(meProfile) => <For each={meProfile.ownedPlaylists.filter((p) => p.name.toLowerCase().includes(searchQuery().toLowerCase())).slice(0, 5)}>{(playlist) =>
-						<button type="button" role="menuitem" onClick={() => addToPlaylist(playlist.uuid) }>
-							<img src={`${env.VITE_API_URL}/playlists/${playlist.uuid}/cover`} alt="Playlist cover" />
-							<span>{playlist.name}</span>
-						</button>
+					<Show when={meProfileQuery.data?.body} keyed>{(meProfile) => <For each={meProfile.ownedPlaylists.filter((p) => p.name.toLowerCase().includes(searchQuery().toLowerCase())).slice(0, 5)}>{(playlist) => <button type="button" role="menuitem" onClick={() => addToPlaylist(playlist.uuid)}>
+						<img src={`${env.VITE_API_URL}/playlists/${playlist.uuid}/cover`} alt="Playlist cover" />
+						<span>{playlist.name}</span>
+					</button>
 					}</For>}</Show>
 				</div>
 			</Match>
