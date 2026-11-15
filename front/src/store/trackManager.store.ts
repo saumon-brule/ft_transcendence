@@ -120,8 +120,6 @@ export function useTrackManager() {
 	}
 
 	function setMusicGroup(musicGroup: MusicGroup): void {
-		console.log(musicGroup);
-		console.log(musicGroup.musics);
 		setTrackManager("musicGroup", { ...musicGroup, musics: [...musicGroup.musics] });
 	}
 
@@ -152,7 +150,6 @@ export function useTrackManager() {
 		setTrackManager("queue", []);
 	}
 
-	window.test = () => trackManager;
 
 	return {
 		manager: trackManager,
