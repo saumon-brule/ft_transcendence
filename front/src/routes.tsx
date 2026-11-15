@@ -19,7 +19,7 @@ import Profile from "./pages/Profile";
 import AppContainer from "./components/ui/RoutedLayout/AppContainer";
 import ChangeEmailValidation from "./pages/auth/changeEmail/ChangeEmailValidation";
 import SidebarRoute from "./components/ui/RoutedLayout/SidebarRoute";
-import SettingsRoutes from "./pages/Settings/SettingsRoutes";
+import Settings from "./pages/Settings";
 import Providers from "./pages/Providers";
 import Provider from "./pages/Provider";
 import ProviderArtist from "./pages/Provider/ProviderArtist";
@@ -62,13 +62,13 @@ export const AppRouter = () => {
 						<Route path="/playlist/:uuid" component={Playlist} />
 						<Route path="/friends" component={Friends} />
 						<Route path="/friends/:uuid" component={Friends} />
+						<Route path="/settings" component={Settings} />
 						<Route path="/providers" component={Providers} />
 						<Route path="/provider/:uuid" component={Provider} />
 						<Route path="/provider/:uuid/artist/:artistUUID" component={ProviderArtist} />
 						<Route path="/provider/:uuid/album/:albumUUID" component={ProviderAlbum} />
 						<Route path="*" component={NotFound} />
 					</Route>
-					<SettingsRoutes/>
 				</Route>
 			</Route>
 		</Route>

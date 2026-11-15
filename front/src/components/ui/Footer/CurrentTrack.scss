@@ -1,15 +1,29 @@
+@use "../../../styles/breakpoints" as breakpoints;
+
 .current-track {
 	height: 100%;
 	justify-self: stretch;
 	min-height: 0;
+
+	@include breakpoints.respond-to("mobile") {
+		height: auto;
+	}
 
 	.track-display {
 		height: 100%;
 		position: relative;
 		display: flex;
 
+		@include breakpoints.respond-to("mobile") {
+			flex-direction: column;
+		}
+
 		.album-link {
 			flex: 0;
+
+			@include breakpoints.respond-to("mobile") {
+				width: 100%;
+			}
 		}
 
 		img {
@@ -17,6 +31,12 @@
 			height: 100%;
 			aspect-ratio: 1/1;
 			object-fit: cover;
+			border-radius: 4px;
+
+			@include breakpoints.respond-to("mobile") {
+				width: 100%;
+				height: 100%;
+			}
 		}
 
 		.track-details {
@@ -27,6 +47,10 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-evenly;
+
+			@include breakpoints.respond-to("mobile") {
+				height: auto;
+			}
 
 			.track-name {
 				font-weight: 800;

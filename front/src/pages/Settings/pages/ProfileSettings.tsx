@@ -1,6 +1,8 @@
 
 import { /* createSignal,*/ JSX, onCleanup, Show } from "solid-js";
-import { client } from "~/api/client";
+import { client, queryKeys } from "~/api/client";
+import { queryClient } from "~/api/queryClient";
+import { ClientInferResponses } from "@ts-rest/core";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import Button from "~/components/inputs/Button";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
@@ -10,8 +12,9 @@ import "./ProfileSettings.scss";
 import { OverlayControls } from "~/components/ui/Overlay";
 import { summonUsernameEditPopUp } from "./editionPopUps/usernamePopUp";
 import MusicBars from "~/components/graphics/icons/MusicBars";
-import { MAX_SIZE } from "@flex/shared";
+import { MAX_SIZE, serverContract } from "@flex/shared";
 
+type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
 type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;
 
 function toDate(value: Date | string): Date {
@@ -46,6 +49,13 @@ export default function ProfileSettings() {
 			body: { avatar: file },
 		}, {
 			onSuccess: () => {
+				queryClient.setQueryData<UserMeResponse>(queryKeys.users.me(), (old) => {
+					if (!old) return old;
+					return {
+						...old,
+						body: { ...old.body, avatarUpdatedAt: new Date() },
+					};
+				});
 				summonSuccessToast(() => t("pages.settings.profile.profilePictureUpdated"));
 			},
 			onError: (e) => {
@@ -66,7 +76,6 @@ export default function ProfileSettings() {
 
 
 	return <main class="profile-settings">
-		<h1>{t("pages.settings.profile.title")}</h1>
 		<Show when={profileQuery.data?.body} keyed>
 			{(user) => <div class="profile-settings-content">
 				{/* <img src={user().avatarUrl} alt="Profile picture" />*/}

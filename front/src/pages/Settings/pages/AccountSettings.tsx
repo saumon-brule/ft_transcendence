@@ -95,8 +95,7 @@ export default function AccountSettings() {
 		emailEditPopUpControls?.close();
 	});
 
-	return <main class="account-settings">
-		<h1>{t("pages.settings.account.title")}</h1>
+	return <section class="account-settings">
 		<Show when={profileQuery.data ? profileQuery.data.body : undefined}>
 			{(user) => <div class="settings-content">
 				<div class="setting-field">
@@ -146,5 +145,5 @@ export default function AccountSettings() {
 				</div>
 			</div>}
 		</Show>
-	</main>;
+	</section>;
 }
