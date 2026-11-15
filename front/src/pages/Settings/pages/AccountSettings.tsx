@@ -8,7 +8,7 @@ import { client, queryKeys } from "~/api/client";
 import { useTranslation } from "~/i18n/context";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import Select from "~/components/inputs/Select/Select";
-import { queryClient } from "~/App";
+import { queryClient } from "~/api/queryClient";
 import { ClientInferResponses } from "@ts-rest/core";
 import { serverContract } from "@flex/shared";
 import IntraButton from "~/components/common/IntraButton/IntraButton";

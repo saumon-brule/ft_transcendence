@@ -11,7 +11,7 @@ export default function Playlist() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string }>();
 	const playlistQuery = usePlaylistQuery(() => params.uuid);
-	const { musics: musics } = usePlaylistMusics(() => playlistQuery.data);
+	const { musics: musics } = usePlaylistMusics(() => playlistQuery.data?.body);
 
 	createEffect(() => {
 		if (!playlistQuery.isError) return;
@@ -26,8 +26,8 @@ export default function Playlist() {
 
 
 	return <div class="page" id="playlist">
-		<Show when={playlistQuery.data} keyed>{(playlist) => {
-			const musicGroup = { name: playlist.name, musics: musics(), route: `/playlist/${playlist.uuid}` };
+		<Show when={playlistQuery.data?.body} keyed>{(playlist) => {
+			const musicGroup = { name: playlist.name, get musics() { return musics(); }, route: `/playlist/${playlist.uuid}` };
 
 			return <>
 				<PlaylistHeader playlist={playlist} musicGroup={musicGroup} />

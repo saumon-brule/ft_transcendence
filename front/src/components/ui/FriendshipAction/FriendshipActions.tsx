@@ -1,7 +1,7 @@
 import { createMemo, Match, Switch } from "solid-js";
 import { serverContract, type FriendRelation, type FriendRequestAnswer, type ShortUser } from "@flex/shared";
 import { type ClientInferResponses } from "@ts-rest/core";
-import { queryClient } from "~/App";
+import { queryClient } from "~/api/queryClient";
 import { client, queryKeys } from "~/api/client";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import Button from "~/components/inputs/Button";

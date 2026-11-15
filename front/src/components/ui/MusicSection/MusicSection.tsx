@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch } from "solid-js";
+import { createSelector, createSignal, For, Match, onCleanup, onMount, Show, Switch } from "solid-js";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import { Music } from "~/class/Music";
 import "./MusicSection.scss";
@@ -10,6 +10,9 @@ import { formatTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { Provider } from "@flex/shared";
 import { MusicGroup } from "~/store/trackManager.store";
 import UnavailableMusicRow, { type PlaylistContext } from "./UnavailableTrackRow";
+import { MusicActionMenu } from "./MusicActionMenu";
+import { Ellipsis } from "lucide-solid";
+
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
 
@@ -35,6 +38,8 @@ export type GroupMusicSectionProps = {
 export default function MusicSection(props: MusicSectionProps | GroupMusicSectionProps) {
 	const audioManager = useAudioManagerContext();
 	const shown = (column: MusicSectionColumn) => !props.hiddenColumns?.includes(column);
+	const [openMenu, setOpenMenu] = createSignal<Music | null>(null);
+	const isMenuOpen = createSelector(openMenu);
 
 	function toDate(value: Date | string): Date {
 		return value instanceof Date ? value : new Date(value);
@@ -58,9 +63,27 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 		+ (shown("published") ? 1 : 0)
 		+ (shown("duration") ? 1 : 0);
 
-	function addToQueue(music: Music) {
-		audioManager.pushMusicToQueue(music);
+
+	function toggleMenu(music: Music) {
+		setOpenMenu((current) => current === music ? null : music);
 	}
+
+	onMount(() => {
+		const onPointerDown = (e: PointerEvent) => {
+			if (!(e.target as Element | null)?.closest(".col-actions")) {
+				setOpenMenu(null);
+			}
+		};
+		const onKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") setOpenMenu(null);
+		};
+		document.addEventListener("pointerdown", onPointerDown);
+		document.addEventListener("keydown", onKeyDown);
+		onCleanup(() => {
+			document.removeEventListener("pointerdown", onPointerDown);
+			document.removeEventListener("keydown", onKeyDown);
+		});
+	});
 
 	const musicList = () => isGroupMusicSection(props) ? props.musicGroup.musics : props.musics;
 
@@ -69,7 +92,7 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 			<thead>
 				<tr>
 					<th class="col-title" scope="col">Title</th>
-					<Show when={shown("actions")}><th class="col-actions" scope="col">Actions</th></Show>
+					<Show when={shown("actions")}><th class="col-actions" scope="col" /></Show>
 					<Show when={shown("artists")}><th class="col-artists" scope="col">Artists</th></Show>
 					<Show when={shown("album")}><th class="col-album" scope="col">Album</th></Show>
 					<Show when={props.providers?.length}><th class="col-provider" scope="col">Provider</th></Show>
@@ -98,7 +121,14 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 										</div>
 									</div>
 								</td>
-								<Show when={shown("actions")}><td class="col-actions"><button onClick={() => void addToQueue(music)}>AddToQueue</button></td></Show>
+								<Show when={shown("actions")}>
+									<td class="col-actions">
+										<Button class="action-button" icon={true} variant="text" onClick={() => toggleMenu(music)}><Ellipsis /></Button>
+										<Show when={isMenuOpen(music)}>
+											<MusicActionMenu music={music} onClose={() => setOpenMenu(null)} />
+										</Show>
+									</td>
+								</Show>
 								<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks artists={music.artists} providerUUID={music.provider.uuid} /></td></Show>
 								<Show when={shown("album")}><td class="col-album">{music.hasAlbum() ? <A href={music.albumRoute()} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
 								<Show when={props.providers?.length}><td class="col-provider"><A href={`/provider/${music.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === music.provider.uuid)?.name}</A></td></Show>

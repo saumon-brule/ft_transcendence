@@ -1,7 +1,7 @@
 import { serverContract, editProviderSchema, Provider } from "@flex/shared";
 import { type ClientInferResponses } from "@ts-rest/core";
 import { onMount } from "solid-js";
-import { queryClient } from "~/App";
+import { queryClient } from "~/api/queryClient";
 import { client, queryKeys } from "~/api/client";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";

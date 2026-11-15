@@ -3,7 +3,7 @@ import { Dynamic } from "solid-js/web";
 import { CircleX, CloudOff, LoaderCircle, TriangleAlert } from "lucide-solid";
 import Button from "~/components/inputs/Button";
 import { useAccessRequestQuery, useJoinProvider } from "~/api/queryHooks/providerAccess";
-import { useRemoveMusicFromPlaylist } from "~/api/queryHooks/playlist";
+import { useRemoveMusicFromPlaylistMutation } from "~/api/queryHooks/playlist";
 import "./UnavailableTrackRow.scss";
 import { Music, UnavailableMusic } from "~/class/Music";
 
@@ -40,14 +40,17 @@ function RestrictedActions(props: { track: Music }) {
 }
 
 function MissingActions(props: { music: Music; playlist?: PlaylistContext }) {
-	const remove = useRemoveMusicFromPlaylist(() => props.playlist?.uuid ?? "");
+	const remove = useRemoveMusicFromPlaylistMutation();
 
 	return <Show when={props.playlist?.isOwner}>
 		<Button
 			size="sm"
 			variant="danger"
 			disabled={remove.isPending}
-			onClick={() => remove.mutate({ musicUuid: props.music.uuid, providerUuid: props.music.provider.uuid })}
+			onClick={() => remove.mutate({
+				params: { uuid: props.playlist?.uuid ?? "" },
+				body: { musicUUID: props.music.uuid, providerUUID: props.music.provider.uuid },
+			})}
 		>
 			Remove
 		</Button>

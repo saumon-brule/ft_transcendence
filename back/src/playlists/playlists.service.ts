@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { AppForbiddenException } from "../core/error/forbidden";
 
@@ -139,7 +139,7 @@ export class PlaylistsService {
 			},
 		});
 		if (existingLink) {
-			return existingLink;
+			throw new ConflictException({ message: "Music already in playlist", code: "CONFLICT" });
 		}
 		return this.prisma.playlistMusic.create({
 			data: { playlistUUID: uuid, musicUUID, providerUUID: providerUUID },
