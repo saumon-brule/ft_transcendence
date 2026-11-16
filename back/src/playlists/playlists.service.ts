@@ -2,6 +2,22 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { PrismaService } from "../core/prisma/prisma.service";
 import { AppForbiddenException } from "../core/error/forbidden";
 
+const SEARCH_LIMIT = 25;
+
+const SUMMARY_SELECT = {
+	uuid: true,
+	name: true,
+	private: true,
+	createdAt: true,
+	owner: { select: { uuid: true, username: true } },
+	_count: { select: { musics: true } },
+} as const;
+
+const toSummary = <T extends { _count: { musics: number } }>({ _count, ...playlist }: T) => ({
+	...playlist,
+	musicCount: _count.musics,
+});
+
 @Injectable()
 export class PlaylistsService {
 	constructor(private readonly prisma: PrismaService) {}
@@ -18,18 +34,7 @@ export class PlaylistsService {
 	}
 
 	public async listPlaylists(viewerUUID: string) {
-		const select = {
-			uuid: true,
-			name: true,
-			private: true,
-			createdAt: true,
-			owner: { select: { uuid: true, username: true } },
-			_count: { select: { musics: true } },
-		} as const;
-		const toSummary = <T extends { _count: { musics: number } }>({ _count, ...playlist }: T) => ({
-			...playlist,
-			musicCount: _count.musics,
-		});
+		const select = SUMMARY_SELECT;
 
 		const [owned, followed] = await Promise.all([
 			this.prisma.playlist.findMany({
@@ -48,6 +53,19 @@ export class PlaylistsService {
 			owned: owned.map(toSummary),
 			followed: followed.map((link) => toSummary(link.playlist)),
 		};
+	}
+
+	public async searchPlaylists(viewerUUID: string, name: string) {
+		const playlists = await this.prisma.playlist.findMany({
+			where: {
+				name: { contains: name, mode: "insensitive" },
+				OR: [{ private: false }, { ownerUUID: viewerUUID }],
+			},
+			select: SUMMARY_SELECT,
+			orderBy: [{ name: "asc" }, { id: "asc" }],
+			take: SEARCH_LIMIT,
+		});
+		return playlists.map(toSummary);
 	}
 
 	public async getPlaylist(uuid: string, viewerUUID: string) {

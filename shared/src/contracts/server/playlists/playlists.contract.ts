@@ -1,6 +1,7 @@
 import { initContract } from "@ts-rest/core";
+import { z } from "zod";
 import { uuidParamSchema } from "../../../schemas/common.schema";
-import { createdPlaylistSchema, createPlaylistBodySchema, MusicBodySchema, playlistDetailSchema, playlistListSchema, updatePlaylistNameSchema, updatePlaylistPrivacySchema } from "./schemas/playlist.schema";
+import { createdPlaylistSchema, createPlaylistBodySchema, MusicBodySchema, playlistDetailSchema, playlistListSchema, playlistSummarySchema, searchPlaylistsQuerySchema, updatePlaylistNameSchema, updatePlaylistPrivacySchema } from "./schemas/playlist.schema";
 import { commonError404Schema, commonError409Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
@@ -19,6 +20,12 @@ export const playlistsContract = c.router(
 			method: "GET",
 			path: "/",
 			responses: { 200: playlistListSchema },
+		},
+		searchPlaylists: {
+			method: "GET",
+			path: "/search",
+			query: searchPlaylistsQuerySchema,
+			responses: { 200: z.array(playlistSummarySchema) },
 		},
 		getPlaylist: {
 			method: "GET",

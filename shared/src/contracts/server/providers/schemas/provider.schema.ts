@@ -7,6 +7,11 @@ export const providerSchema = z.object({
 });
 export type Provider = z.infer<typeof providerSchema>;
 
+export const searchProvidersQuerySchema = z.object({
+	name: z.string().trim().min(1).
+		max(100),
+});
+
 export const createdProviderSchema = providerSchema.extend({
 	apiKey: z.string(),
 });
