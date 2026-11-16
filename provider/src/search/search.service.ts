@@ -7,8 +7,11 @@ import { albumItemInclude, musicItemInclude, toAlbumItem, toArtistItem, toMusicI
 interface SearchQuery {
 	query: string;
 	limit: number;
+	music?: string;
 	artist?: string;
 	album?: string;
+	artistUuid?: string;
+	albumUuid?: string;
 	dateBefore?: Date;
 	dateAfter?: Date;
 }
@@ -145,28 +148,33 @@ export class SearchService {
 		return { rows: ids.flatMap((id) => loaded.get(id) ?? []), total };
 	}
 
-	async search({ query, limit, artist, album, dateBefore, dateAfter }: SearchQuery) {
+	async search({ query, limit, music, artist, album, artistUuid, albumUuid, dateBefore, dateAfter }: SearchQuery) {
 		const base = { search: query, limit, offset: 0 };
 		const hasDate = dateBefore !== undefined || dateAfter !== undefined;
+		const none = { rows: [], total: 0 };
 
 		const [musics, artists, albums] = await Promise.all([
 			this.page(
 				"Music",
-				{ ...base, filters: { artist, album, dateBefore, dateAfter } },
+				{ ...base, filters: { name: music, artist, album, artistUuid, albumUuid, dateBefore, dateAfter } },
 				(ids) => this.prisma.music.findMany({ where: { id: { in: ids } }, include: musicItemInclude }),
 			),
-			album !== undefined || hasDate
-				? { rows: [], total: 0 }
+			// An artist has no music, album nor date: those filters can only exclude it.
+			music !== undefined || album !== undefined || albumUuid !== undefined || hasDate
+				? none
 				: this.page(
 					"Artist",
-					{ ...base, filters: { name: artist } },
+					{ ...base, filters: { uuid: artistUuid, name: artist } },
 					(ids) => this.prisma.artist.findMany({ where: { id: { in: ids } } }),
 				),
-			this.page(
-				"Album",
-				{ ...base, filters: { name: album, artist, dateBefore, dateAfter } },
-				(ids) => this.prisma.album.findMany({ where: { id: { in: ids } }, include: albumItemInclude }),
-			),
+			// An album is not a music: a music name can only exclude it.
+			music !== undefined
+				? none
+				: this.page(
+					"Album",
+					{ ...base, filters: { uuid: albumUuid, name: album, artist, artistUuid, dateBefore, dateAfter } },
+					(ids) => this.prisma.album.findMany({ where: { id: { in: ids } }, include: albumItemInclude }),
+				),
 		]);
 
 		return {

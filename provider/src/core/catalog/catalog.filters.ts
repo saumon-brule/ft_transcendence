@@ -14,12 +14,14 @@ export interface MusicFilters extends Dates {
 }
 
 export interface AlbumFilters extends Dates {
+	uuid?: string;
 	name?: string;
 	artist?: string;
 	artistUuid?: string;
 }
 
 export interface ArtistFilters {
+	uuid?: string;
 	name?: string;
 }
 
@@ -70,7 +72,10 @@ export const FILTER_CONDITIONS: { [T in keyof CatalogFilters]: (filters: Catalog
 			: [],
 		...published(dates),
 	],
-	Album: ({ name, artist, artistUuid, ...dates }) => [
+	Album: ({ uuid, name, artist, artistUuid, ...dates }) => [
+		...uuid
+			? [sameText("\"Album\".\"uuid\"", uuid)]
+			: [],
 		...name
 			? [sameText("\"Album\".\"name\"", name)]
 			: [],
@@ -82,7 +87,10 @@ export const FILTER_CONDITIONS: { [T in keyof CatalogFilters]: (filters: Catalog
 			: [],
 		...published(dates),
 	],
-	Artist: ({ name }) => [
+	Artist: ({ uuid, name }) => [
+		...uuid
+			? [sameText("\"Artist\".\"uuid\"", uuid)]
+			: [],
 		...name
 			? [sameText("\"Artist\".\"name\"", name)]
 			: [],
