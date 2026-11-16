@@ -5,6 +5,7 @@ import { join, resolve } from "node:path";
 import { env } from "../env";
 import { PrismaService } from "./prisma.service";
 import { importMockMusic, seedMockMusics } from "./mock-catalog";
+import { AccessRequestService } from "../../access-request/access-request.service";
 import { ServerAuthError, ServerClientService } from "../server/server-client.service";
 
 const MOCK_DIR = resolve(process.cwd(), "mock");
@@ -37,13 +38,23 @@ export class PrismaBootstrapService implements OnModuleInit {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly server: ServerClientService,
+		private readonly accessRequests: AccessRequestService,
 	) {}
 
 	async onModuleInit() {
 		await this.syncIdentity();
+		await this.acceptPendingRequests();
 
 		if (env.NODE_ENV === "dev" && env.MOCK_DISCOGRAPHY !== "2") await this.seedMocks();
 		if (env.NODE_ENV === "dev" && env.MOCK_DISCOGRAPHY) await this.seedDiscography(Number(env.MOCK_DISCOGRAPHY));
+	}
+
+	private async acceptPendingRequests() {
+		try {
+			await this.accessRequests.acceptAllPending();
+		} catch (error) {
+			this.logger.warn(`Could not accept the pending access requests: ${(error as Error).message}`);
+		}
 	}
 
 	private async syncIdentity() {

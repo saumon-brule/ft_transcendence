@@ -7,5 +7,6 @@ import { AccessRequestService } from "./access-request.service";
 	imports: [ServerClientModule],
 	controllers: [AccessRequestController],
 	providers: [AccessRequestService],
+	exports: [AccessRequestService],
 })
 export class AccessRequestModule {}

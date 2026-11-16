@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { retryOnWriteConflict } from "../core/prisma/write-conflict";
@@ -27,6 +27,8 @@ interface ListQuery {
 
 @Injectable()
 export class AccessRequestService {
+	private readonly logger = new Logger(AccessRequestService.name);
+
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly server: ServerClientService,
@@ -123,7 +125,30 @@ export class AccessRequestService {
 		return { accessRequests: rows.map(toAccessRequest), total };
 	}
 
-	decide(uuid: string, decision: "APPROVED" | "REJECTED", actorUuid: string) {
+	async acceptAllPending() {
+		const provider = await this.prisma.provider.findUnique({ where: { id: 1 } });
+		if (provider?.visibility !== "PUBLIC") return 0;
+
+		const pending = await this.prisma.accessRequest.findMany({
+			where: { status: "PENDING" },
+			orderBy: { createdAt: "asc" },
+		});
+
+		let accepted = 0;
+		for (const request of pending) {
+			try {
+				await this.decide(request.uuid, "APPROVED", null);
+				accepted++;
+			} catch (error) {
+				this.logger.warn(`Could not accept access request ${request.uuid}: ${(error as Error).message}`);
+			}
+		}
+
+		if (pending.length > 0) this.logger.log(`Accepted ${accepted}/${pending.length} pending access requests`);
+		return accepted;
+	}
+
+	decide(uuid: string, decision: "APPROVED" | "REJECTED", actorUuid: string | null) {
 		return retryOnWriteConflict(() => this.prisma.$transaction(async (tx) => {
 			const request = await tx.accessRequest.findUnique({ where: { uuid } });
 			if (!request) throw new NotFoundException("Access request not found");
