@@ -54,7 +54,7 @@ export class ProvidersService {
 		}
 	}
 
-	async search(name: string) {
+	async search(name?: string) {
 		return this.prisma.provider.findMany({
 			where: { name: { contains: name, mode: "insensitive" } },
 			select: { uuid: true, name: true, address: true },

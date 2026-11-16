@@ -4,7 +4,8 @@ import { artistItemSchema, musicItemSchema, albumItemSchema } from "../../schema
 
 export const searchQuerySchema = searchFiltersSchema.extend({
 	query: z.string().trim().min(1).
-		max(100),
+		max(100).
+		optional(),
 	limit: z.coerce.number().int().min(1).
 		max(50).
 		default(10),

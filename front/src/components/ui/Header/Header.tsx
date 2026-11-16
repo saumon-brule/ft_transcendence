@@ -17,7 +17,7 @@ export default function Header() {
 	const navigate = useNavigate();
 
 	const [isMenuOpen, setIsMenuOpen] = createSignal(false);
-	const searchMatch = useMatch(() => "/search/:search");
+	const searchMatch = useMatch(() => "/search/:search?");
 	const [searchValue, setSearchValue] = createSignal(searchMatch() ? decodeURIComponent(searchMatch()!.params.search ?? "") : "");
 	createEffect(() => {
 		setSearchValue(searchMatch() ? decodeURIComponent(searchMatch()!.params.search ?? "") : "");
@@ -38,18 +38,26 @@ export default function Header() {
 	let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 	const [searchParams] = useSearchParams<{ tab?: Tab }>();
 
+	function goToSearch() {
+		if (!searchBasePage && !searchMatch()) {
+			searchBasePage = window.location.pathname;
+		}
+
+		const term = searchValue().trim();
+		navigate(`/search${term ? `/${encodeURIComponent(term)}` : ""}${searchParams.tab ? `?tab=${searchParams.tab}` : ""}`, { replace: !!searchMatch() });
+	}
+
 	function search() {
 		clearTimeout(searchTimeout);
 
 		searchTimeout = setTimeout(() => {
-			if (!searchBasePage && !searchMatch()) {
-				searchBasePage = window.location.pathname;
-			}
-
-			if (searchValue()) {
-				navigate(`/search/${encodeURIComponent(searchValue())}${searchParams.tab ? `?tab=${searchParams.tab}` : ""}`, { replace: !!searchMatch() });
-			}
+			if (searchValue()) goToSearch();
 		}, 300);
+	}
+
+	function submitSearch() {
+		clearTimeout(searchTimeout);
+		goToSearch();
 	}
 
 	onMount(() => document.addEventListener("click", handleDocumentClick));
@@ -72,7 +80,7 @@ export default function Header() {
 					</Show>
 				</button>
 
-				<Form class="header-search" role="search">
+				<Form class="header-search" role="search" onSubmit={submitSearch}>
 					<Search class="search-icon" size={18}/>
 					<TextInput
 						type="search"

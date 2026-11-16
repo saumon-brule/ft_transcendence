@@ -55,7 +55,7 @@ export class PlaylistsService {
 		};
 	}
 
-	public async searchPlaylists(viewerUUID: string, name: string) {
+	public async searchPlaylists(viewerUUID: string, name?: string) {
 		const playlists = await this.prisma.playlist.findMany({
 			where: {
 				name: { contains: name, mode: "insensitive" },
