@@ -128,9 +128,8 @@ export default function Friends() {
 							<Show when={friend.chat.messages.length === 0}>
 								<div class="chat-message-info"><span>No messages yet</span></div>
 							</Show>
-							<For each={friend.chat.messages}>{(message) => <div class="chat-message" classList={{ "from-me": message.author === "me", "from-friend": message.author === "friend" }}>
-								<span class="message-content">{message.content}</span>
-							</div>}</For>
+							<For each={friend.chat.messages}>{(message) => <div class="chat-message" classList={{ "chat-message-info": message.type === "info", "from-me": message.author === "me" && message.type === "message", "from-friend": message.author === "friend" && message.type === "message" }}><span class="message-content">{message.content}</span></div>}
+							</For>
 						</div>
 					</div>
 					<div class="chat-input">
