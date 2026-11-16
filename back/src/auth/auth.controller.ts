@@ -134,12 +134,13 @@ export class AuthController {
 
 	@TsRestHandler(authContract.changePassword)
 	@UseGuards(JwtAuthGuard)
-	public changePassword(@CurrentUser() user: AuthUser) {
+	public changePassword(@CurrentUser() user: AuthUser, @Req() req: Request) {
 		return tsRestHandler(authContract.changePassword, async ({ body }) => {
 			await this.authService.changePassword(
 				user.uuid,
 				body.oldPassword,
 				body.newPassword,
+				req.cookies?.refresh_token,
 			);
 			return { status: 204, body: null };
 		});
