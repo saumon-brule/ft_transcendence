@@ -20,6 +20,14 @@ import { env } from "../core/env";
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
+	private getRefreshTokenCookie(req: Request): string | undefined {
+		const cookies = req.cookies as Record<string, unknown> | undefined;
+		const token = cookies?.refresh_token;
+		return typeof token === "string"
+			? token
+			: undefined;
+	}
+
 	private setRefreshTokenCookie(res: Response, token: string | null) {
 		const isProd = env.NODE_ENV === "prod";
 
@@ -134,12 +142,13 @@ export class AuthController {
 
 	@TsRestHandler(authContract.changePassword)
 	@UseGuards(JwtAuthGuard)
-	public changePassword(@CurrentUser() user: AuthUser) {
+	public changePassword(@CurrentUser() user: AuthUser, @Req() req: Request) {
 		return tsRestHandler(authContract.changePassword, async ({ body }) => {
 			await this.authService.changePassword(
 				user.uuid,
 				body.oldPassword,
 				body.newPassword,
+				this.getRefreshTokenCookie(req),
 			);
 			return { status: 204, body: null };
 		});

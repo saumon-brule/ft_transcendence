@@ -48,6 +48,17 @@ export class SessionsService {
 		return this.prisma.session.delete({ where: { id: sessionId } });
 	}
 
+	public async removeAllUserSessions(userUUID: string, excludeJti?: string) {
+		return this.prisma.session.deleteMany({
+			where: {
+				userUUID: userUUID,
+				...(excludeJti
+					? { jti: { not: excludeJti } }
+					: {}),
+			},
+		});
+	}
+
 	public async isValidSession(userUUID: string, jti: UUID) {
 		return this.prisma.session.findUnique({ where: { userUUID_jti: { userUUID, jti } } });
 	}

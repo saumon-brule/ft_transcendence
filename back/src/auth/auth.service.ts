@@ -254,13 +254,31 @@ export class AuthService {
 		);
 
 		await this.users.setPassword(payload.userUUID, password);
+		await this.sessions.removeAllUserSessions(payload.userUUID);
 		this.logger.log(LogBuilder.auth.passwordChanged(payload.userUUID));
+	}
+
+	private async extractRefreshJti(refreshToken: string | undefined, userUUID: string) {
+		if (!refreshToken) return undefined;
+
+		try {
+			const payload = await this.jwtService.verifyAsync<{ sub: string; jti: string }>(
+				refreshToken,
+				{ secret: env.JWT_REFRESH_SECRET },
+			);
+			return payload.sub === userUUID
+				? payload.jti
+				: undefined;
+		} catch {
+			return undefined;
+		}
 	}
 
 	public async changePassword(
 		userUUID: string,
 		oldPassword: string,
 		newPassword: string,
+		refreshToken?: string,
 	) {
 		const existing = await this.users.getByUUID(userUUID);
 		if (!existing) {
@@ -283,6 +301,10 @@ export class AuthService {
 		}
 
 		await this.users.setPassword(existing.uuid, newPassword);
+
+		const currentJti = await this.extractRefreshJti(refreshToken, existing.uuid);
+		await this.sessions.removeAllUserSessions(existing.uuid, currentJti);
+
 		this.logger.log(LogBuilder.auth.passwordChanged(existing.uuid));
 	}
 
