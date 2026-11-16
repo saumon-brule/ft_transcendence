@@ -24,6 +24,7 @@
 	--mix-hover: white;
 	--mix-active: black;
 	--mix-disabled: transparent;
+	--logo-main: var(--neutral-0);
 }
 
 @mixin theme-light {
@@ -48,6 +49,7 @@
 	--mix-hover: black;
 	--mix-active: white;
 	--mix-disabled: transparent;
+	--logo-main: var(--neutral-1000);
 }
 
 :root[data-theme="dark"] {
