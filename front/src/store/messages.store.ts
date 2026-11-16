@@ -19,8 +19,7 @@ function ensureChat(userUuid: string) {
 }
 
 function getChat(userUuid: string) {
-	if (!chatStore.chats[userUuid])
-		return undefined;
+	if (!chatStore.chats[userUuid]) return undefined;
 	return chatStore.chats[userUuid];
 }
 
