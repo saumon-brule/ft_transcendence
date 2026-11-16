@@ -6,6 +6,7 @@ import { setupMediaSession, updateMediaMetadata } from "./mediaSession";
 import { summonErrorToast } from "../ui/Toaster";
 import { LocalStorageItem } from "~/utils/storageHelper";
 import { getMediaToken } from "~/api/providerClients";
+import { appearanceStore, systemDark } from "~/store/appearance.store";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
 
@@ -188,7 +189,9 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		if (isPlaying()) {
 			favicon.href = "/images/icons/logo-favicon-pink.svg";
 		} else {
-			favicon.href = "/images/icons/logo-favicon-white.svg";
+			favicon.href = systemDark()
+				? "/images/icons/logo-favicon-white.svg"
+				: "/images/icons/logo-favicon-black.svg";
 		}
 	});
 
