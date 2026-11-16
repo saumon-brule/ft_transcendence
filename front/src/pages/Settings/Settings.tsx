@@ -1,4 +1,3 @@
-import { A } from "@solidjs/router";
 import { Match, Switch } from "solid-js";
 import { useTranslation } from "~/i18n/context";
 import Tabs from "~/components/ui/Tabs/Tabs";
