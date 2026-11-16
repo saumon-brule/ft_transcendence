@@ -1,0 +1,31 @@
+.search-filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 8px 12px;
+	margin-bottom: 16px;
+
+	.filter-field {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		flex: 0 1 150px;
+
+		label {
+			font-size: 0.8rem;
+			font-weight: 600;
+		}
+	}
+
+	.text-input input {
+		padding: 0.4rem 0.7rem;
+		border-radius: 0.5rem;
+		font-size: 0.9rem;
+	}
+
+	@media (max-width: 944px) {
+		.filter-field {
+			flex: 1 1 130px;
+		}
+	}
+}

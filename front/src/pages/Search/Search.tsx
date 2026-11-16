@@ -1,4 +1,4 @@
-import { A, useParams } from "@solidjs/router";
+import { A, useLocation, useParams } from "@solidjs/router";
 import { createMemo, Match, Show, Switch } from "solid-js";
 import { useProvidersSearchQueries } from "~/api/queryHooks/providerInfo";
 import "./Search.scss";
@@ -12,6 +12,8 @@ import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
 import { Provider } from "@flex/shared";
 import { BestResult } from "./BestResult";
+import SearchFilters from "./SearchFilters";
+import { pickFilters, TAB_FILTER_FIELDS, useSearchFilters } from "./searchFilters";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
 import Tabs from "~/components/ui/Tabs/Tabs";
@@ -32,7 +34,18 @@ export default function Search() {
 		return all.filter((provider, i) => all.findIndex((p) => p.uuid === provider.uuid) === i);
 	});
 	const search = () => decodeURIComponent(params.search ?? "");
-	const searches = useProvidersSearchQueries(() => providers(), search);
+
+	const [tab, setTab] = useTabParam(TABS, "All");
+	const location = useLocation();
+	const [filters, setFilters] = useSearchFilters();
+	const appliedFilters = createMemo(() => pickFilters(filters(), TAB_FILTER_FIELDS[tab()]));
+	const searches = useProvidersSearchQueries(() => providers(), search, () => appliedFilters());
+
+	const tabHref = (target: Tab) => {
+		const query = new URLSearchParams(location.search);
+		query.set("tab", target);
+		return `/search/${encodeURIComponent(search())}?${query.toString()}`;
+	};
 
 	const results = createMemo(() => {
 		const data = providers().map((provider, i) => ({
@@ -92,10 +105,9 @@ export default function Search() {
 		return organizedData;
 	});
 
-	const [tab, setTab] = useTabParam(TABS, "All");
-
 	return <div class="page" id="search">
 		<Tabs tabs={TABS} value={tab()} onChange={setTab} />
+		<SearchFilters fields={TAB_FILTER_FIELDS[tab()]} value={filters()} onChange={setFilters} />
 		<Switch>
 			<Match when={tab() === "All"}>
 				<BestResult best={results().best} />
@@ -103,21 +115,21 @@ export default function Search() {
 					<section class="musics">
 						<h2>Musics</h2>
 						<MusicSection musics={results().musics.slice(0, 6)} providers={results().providers}/>
-						<A href={`/search/${encodeURIComponent(search())}?tab=Musics`} class="white-variant see-more">See more</A>
+						<A href={tabHref("Musics")} class="white-variant see-more">See more</A>
 					</section>
 				</Show>
 				<Show when={results().albums.length > 0}>
 					<section class="albums">
 						<h2>Albums</h2>
 						<AlbumSection album={{ albums: results().albums.slice(0, 6), total: results().albums.length }} providers={results().providers}/>
-						<A href={`/search/${encodeURIComponent(search())}?tab=Albums`} class="white-variant see-more">See more</A>
+						<A href={tabHref("Albums")} class="white-variant see-more">See more</A>
 					</section>
 				</Show>
 				<Show when={results().artists.length > 0}>
 					<section class="artists">
 						<h2>Artists</h2>
 						<ArtistSection artist={{ artists: results().artists.slice(0, 6), total: results().artists.length }} providers={results().providers}/>
-						<A href={`/search/${encodeURIComponent(search())}?tab=Artists`} class="white-variant see-more">See more</A>
+						<A href={tabHref("Artists")} class="white-variant see-more">See more</A>
 					</section>
 				</Show>
 				<NoResult show={results().musics.length + results().albums.length + results().artists.length === 0} />

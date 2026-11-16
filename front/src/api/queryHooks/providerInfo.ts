@@ -188,13 +188,29 @@ export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: (
 
 export type ProviderAlbumQueryBody = Exclude<ReturnType<typeof useProviderAlbumQuery>["data"], undefined>["body"];
 
-const providerSearchOptions = (providerInfo: Provider, searchTerm: string) => {
+/** Exact-match filters of the provider `search` route (dates are `YYYY-MM-DD`). */
+export type SearchFilters = {
+	music?: string;
+	artist?: string;
+	album?: string;
+	dateAfter?: string;
+	dateBefore?: string;
+};
+
+const providerSearchOptions = (providerInfo: Provider, searchTerm: string, filters: SearchFilters) => {
 	const providerClient = getProviderClient(providerInfo.address, providerInfo.uuid);
+	const { dateAfter, dateBefore, ...textFilters } = filters;
+	const query = {
+		query: searchTerm,
+		...textFilters,
+		dateAfter: dateAfter ? new Date(dateAfter) : undefined,
+		dateBefore: dateBefore ? new Date(dateBefore) : undefined,
+	};
 	return {
-		queryKey: () => providerClient.keys.search.search([searchTerm]),
+		queryKey: () => providerClient.keys.search.search([searchTerm, JSON.stringify(filters)]),
 		enabled: providerInfo.address !== "" && searchTerm !== "",
 		queryFn: async () => {
-			const res = await providerClient.client.search.search.query({ query: { query: searchTerm } });
+			const res = await providerClient.client.search.search.query({ query });
 			if (res.status !== 200) throw new Error(`Provider search failed with status ${res.status}`);
 			return res;
 		},
@@ -211,10 +227,10 @@ const providerSearchOptions = (providerInfo: Provider, searchTerm: string) => {
 	};
 };
 
-export const useProvidersSearchQueries = (providersInfos: () => Provider[], searchTerm: () => string) => {
+export const useProvidersSearchQueries = (providersInfos: () => Provider[], searchTerm: () => string, filters: () => SearchFilters = () => ({})) => {
 	return createQueries({
 		get queries() {
-			return providersInfos().map((provider) => providerSearchOptions(provider, searchTerm()));
+			return providersInfos().map((provider) => providerSearchOptions(provider, searchTerm(), filters()));
 		},
 	});
 };
