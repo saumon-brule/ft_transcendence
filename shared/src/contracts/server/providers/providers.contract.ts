@@ -73,7 +73,7 @@ export const providersContract = c.router(
 				404: commonError404Schema,
 			},
 		},
-		requestAccess: {
+		initiateAccessRequest: {
 			method: "POST",
 			path: "/:uuid/access-request",
 			pathParams: uuidParamSchema,

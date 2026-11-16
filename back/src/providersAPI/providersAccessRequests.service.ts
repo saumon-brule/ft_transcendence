@@ -7,7 +7,7 @@ type Decision = "APPROVED" | "REJECTED";
 export class ProviderAccessRequestsService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async request(userUUID: string, providerUUID: string) {
+	async initiate(userUUID: string, providerUUID: string) {
 		const provider = await this.prisma.provider.findUnique({ where: { uuid: providerUUID }, select: { uuid: true } });
 		if (!provider) throw new NotFoundException("Provider not found");
 

@@ -18,6 +18,15 @@ export class MemberController {
 		}));
 	}
 
+	@TsRestHandler(providerContract.member.leave)
+	@MemberOnly()
+	leave(@CurrentMember() member: MemberContext) {
+		return tsRestHandler(providerContract.member.leave, async () => {
+			await this.memberService.revoke(member.uuid, member.uuid);
+			return { status: 204, body: null };
+		});
+	}
+
 	@TsRestHandler(providerContract.member.list)
 	@RequirePermission("MANAGE_MEMBERS")
 	list() {

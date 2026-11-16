@@ -32,7 +32,7 @@ export const useJoinProvider = () => {
 
 	return createMutation({
 		mutationFn: async (provider: ProviderRef): Promise<JoinStatus> => {
-			const requested = await client.providers.requestAccess.mutation({ params: { uuid: provider.uuid } });
+			const requested = await client.providers.initiateAccessRequest.mutation({ params: { uuid: provider.uuid } });
 			if (requested.status === 409) throw new Error("The server already considers you a member of this provider");
 			if (requested.status !== 200) throw new Error(`Access request failed with status ${requested.status}`);
 
