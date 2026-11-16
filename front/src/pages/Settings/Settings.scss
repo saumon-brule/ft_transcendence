@@ -1,18 +1,15 @@
+@use "../../styles/breakpoints" as breakpoints;
+
 #settings {
 	width: 100%;
 	max-width: 720px;
 
-	h1 {
-		margin-bottom: 1rem;
+	@include breakpoints.respond-to("mobile") {
+		max-width: 100%;
 	}
 
-	.settings-legal {
-		display: flex;
-		gap: 1.5rem;
-		padding-top: 2rem;
-		margin-top: 1rem;
-		border-top: 1px solid var(--background-overlay);
-		font-size: 0.875rem;
+	h1 {
+		margin-bottom: 1rem;
 	}
 }
 

@@ -5,6 +5,10 @@
 	max-width: 720px;
 	height: 100%;
 
+	@include breakpoints.respond-to("mobile") {
+		max-width: 100%;
+	}
+
 	.profile-settings-content {
 		display: flex;
 		align-items: center;

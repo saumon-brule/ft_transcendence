@@ -31,9 +31,5 @@ export default function Settings() {
 			<Match when={tab() === "profile"}><ProfileSettings /></Match>
 			<Match when={tab() === "appearance"}><AppearanceSettings /></Match>
 		</Switch>
-		<footer class="settings-legal">
-			<A href="/privacy-policy">Privacy Policy</A>
-			<A href="/terms-of-service">Terms of Service</A>
-		</footer>
 	</div>;
 }
