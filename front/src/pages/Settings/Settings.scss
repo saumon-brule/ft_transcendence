@@ -1,50 +1,15 @@
+@use "../../styles/breakpoints" as breakpoints;
+
 #settings {
-	display: flex;
-	justify-content: center;
-	padding: 0;
+	width: 100%;
+	max-width: 720px;
 
-	.settings-layout {
-		width: 100%;
-		max-width: 1536px;
-		min-width: 320px;
-		padding-top: 4rem;
-		padding-inline: 4rem;
-		display: flex;
-		flex-direction: row;
-		gap: 1.5rem;
+	@include breakpoints.respond-to("mobile") {
+		max-width: 100%;
+	}
 
-		.settings-nav {
-			min-width: 280px;
-			height: 100%;
-			li {
-				line-height: 1.5;
-				scroll-snap-align: center;
-
-				a {
-					padding: 0.5rem;
-					display: inline-block;
-					font-weight: 600;
-
-					&:not(.external-link) {
-						color: var(--text-main);
-						transition: color 0.1s linear;
-
-						&:is(.active, :hover) {
-							color: var(--link-hover);
-						}
-					}
-				}
-
-			}
-
-			hr {
-				margin: .5rem;
-				outline: none;
-				border: none;
-				height: 1px;
-				background-color: var(--text-secondary);
-			}
-		}
+	h1 {
+		margin-bottom: 1rem;
 	}
 }
 

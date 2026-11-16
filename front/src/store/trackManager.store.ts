@@ -81,12 +81,15 @@ export function useTrackManager() {
 				prevMusic = null;
 			} else if (manager.loop) {
 				if (!manager.isCurrentTemporary) {
-					manager.position = (manager.position - 1) % (manager.musicGroup.musics.length ?? 0);
+					const musicListLength = manager.musicGroup.musics.length;
+					manager.position = (((manager.position - 1) % musicListLength) + musicListLength) % musicListLength;
 				}
 				prevMusic = manager.musicGroup.musics[manager.position];
 			} else {
-				if (!manager.isCurrentTemporary && manager.position > 0) {
+				if (manager.position > 0 && !manager.isCurrentTemporary) {
 					manager.position -= 1;
+					prevMusic = manager.musicGroup.musics[manager.position];
+				} else if (manager.current === null) {
 					prevMusic = manager.musicGroup.musics[manager.position];
 				} else {
 					prevMusic = null;
@@ -106,12 +109,15 @@ export function useTrackManager() {
 	}
 
 	function setPosition(position: number) {
-		if (!trackManager.musicGroup || trackManager.musicGroup.musics.length === 0) {
-			setTrackManager("position", 0);
-			return;
-		}
-		setTrackManager("position", position);
-		setCurrentMusic(trackManager.musicGroup.musics[position]);
+		setTrackManager(produce((manager) => {
+			if (!manager.musicGroup || manager.musicGroup.musics.length === 0) {
+				manager.position = 0;
+				return;
+			}
+			manager.position = position;
+			manager.current = manager.musicGroup.musics[position];
+			manager.isCurrentTemporary = false;
+		}));
 	}
 
 	function setMusicGroup(musicGroup: MusicGroup): void {
@@ -145,6 +151,32 @@ export function useTrackManager() {
 		setTrackManager("queue", []);
 	}
 
+	function shuffle(): void {
+		setTrackManager(produce((manager) => {
+			if (!manager.musicGroup) return;
+			manager.musicGroup.musics = manager.musicGroup.musics.filter((music) => music !== manager.current);
+
+			for (let i = manager.musicGroup.musics.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[manager.musicGroup.musics[i], manager.musicGroup.musics[j]] = [manager.musicGroup.musics[j], manager.musicGroup.musics[i]];
+			}
+
+			if (manager.current) manager.musicGroup.musics.unshift(manager.current);
+			manager.position = 0;
+		}));
+	}
+
+	function toggleLoop(): void {
+		setTrackManager(produce((manager) => {
+			manager.loop = !manager.loop;
+
+			if (manager.loop && !manager.current) {
+				next();
+			}
+		}));
+	}
+
+
 	return {
 		manager: trackManager,
 		get progression() { return progression(); },
@@ -158,6 +190,8 @@ export function useTrackManager() {
 		pushMusicToQueue,
 		pushMusicToQueueTop,
 		clearQueue,
+		shuffle,
+		toggleLoop,
 	};
 }
 
@@ -167,3 +201,5 @@ export type SetCurrentMusicFn = ReturnType<typeof useTrackManager>["setCurrentMu
 export type PushMusicToQueueFn = ReturnType<typeof useTrackManager>["pushMusicToQueue"];
 export type PushMusicToQueueTopFn = ReturnType<typeof useTrackManager>["pushMusicToQueueTop"];
 export type ClearQueueFn = ReturnType<typeof useTrackManager>["clearQueue"];
+export type ShuffleFn = ReturnType<typeof useTrackManager>["shuffle"];
+export type ToogleLoopFn = ReturnType<typeof useTrackManager>["toggleLoop"];

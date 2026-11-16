@@ -66,7 +66,7 @@ export default function Queue(props: QueueProps) {
 					<Show when={audioManager.musicGroup} keyed>
 						{(musicGroup) => <div class="following-list">
 							<div class="list-title"><h2>{t("pages.queue.following")}<A href={musicGroup.route}>{musicGroup.name}</A></h2></div>
-							<MusicSection musics={musicGroup.musics.slice(audioManager.position + 1)} />
+							<MusicSection musics={musicGroup.musics.slice(audioManager.position + 1).concat(audioManager.loop ? musicGroup.musics.slice(0, audioManager.position) : [])} />
 						</div>}
 					</Show>
 					<Show when={!audioManager.musicGroup && audioManager.queue.length === 0} keyed>

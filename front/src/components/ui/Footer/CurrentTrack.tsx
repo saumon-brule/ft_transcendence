@@ -10,7 +10,12 @@ export default function CurrentTrack() {
 	const audioManager = useAudioManagerContext();
 
 	return <div class="current-track">
-		<Show when={audioManager.currentMusic} keyed>
+		<Show when={audioManager.currentMusic} keyed fallback={
+			<div class="track-display"><img src="/images/default_cover.webp"/><div class="track-details">
+				<div class="track-name">-</div>
+				<div class="track-artists" >-</div>
+			</div></div>
+		}>
 			{(currentMusic) => <div class="track-display">
 				<Show when={currentMusic.hasAlbum() && currentMusic} keyed fallback={<MusicCover music={currentMusic} />}>
 					{(music) => <A class="album-link" href={music.albumRoute()} ><MusicCover music={currentMusic} /></A>}

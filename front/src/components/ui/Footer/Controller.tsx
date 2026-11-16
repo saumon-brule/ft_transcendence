@@ -1,7 +1,7 @@
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import Button from "~/components/inputs/Button";
 import { MusicTimer } from "~/components/common/MusicTimer/MusicTimer";
-import { Pause, Play, SkipBack, SkipForward, Square } from "lucide-solid";
+import { Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, Square } from "lucide-solid";
 import { createSignal, onCleanup } from "solid-js";
 import { REM } from "~/utils/constants";
 
@@ -20,6 +20,7 @@ export default function Controller() {
 	let progressBarRef!: HTMLDivElement;
 	let wasPlaying: boolean = false;
 
+	const hasPreviousMusic = () => ((audioManager.loop && audioManager.musicGroup !== null) || audioManager.isCurrentTemporary ? audioManager.musicGroup !== null : (audioManager.position > 0 || (audioManager.currentMusic === null && audioManager.musicGroup !== null)));
 	const musicSelected = () => (audioManager.currentMusic !== null);
 	const displayedProgression = () => (mouseMoveProgression() ?? (audioManager.progression / audioManager.duration));
 	const displayedProgressionTime = () => {
@@ -63,9 +64,13 @@ export default function Controller() {
 
 	return <div class={"controller"}>
 		<div class="controller-buttons">
-			<Button disabled={audioManager.isCurrentTemporary ? audioManager.musicGroup === null : audioManager.position === 0} class="controller" onClick={audioManager.back} size="sm" ><SkipBack/></Button>
-			<Button disabled={!musicSelected()} class="controller" onClick={audioManager.toggle} size="sm">{musicSelected() ? audioManager.playing ? <Pause/> : <Play/> : <Square/>}</Button>
-			<Button disabled={!musicSelected()} class="controller" onClick={audioManager.forward} size="sm"><SkipForward/></Button>
+			<Button disabled={!musicSelected()} class="controller-btn no-background-button" onClick={audioManager.shuffle} size="sm"><Shuffle/></Button>
+			<div class="music-control">
+				<Button disabled={!hasPreviousMusic()} class="controller-btn" onClick={audioManager.back} size="sm" ><SkipBack/></Button>
+				<Button disabled={!musicSelected()} class="controller-btn" onClick={audioManager.toggle} size="sm">{musicSelected() ? audioManager.playing ? <Pause/> : <Play/> : <Square/>}</Button>
+				<Button disabled={!musicSelected()} class="controller-btn" onClick={audioManager.forward} size="sm"><SkipForward/></Button>
+			</div>
+			<Button disabled={!musicSelected()} class="controller-btn no-background-button" classList={{ enabled: audioManager.loop }} onClick={audioManager.toggleLoop} size="sm"><Repeat/></Button>
 		</div>
 		<div class={`progression${musicSelected() ? "" : " disabled"}`} style={{ "--progression-bar": `${displayedProgression()}` }}>
 			<MusicTimer time={displayedProgressionTime()} />

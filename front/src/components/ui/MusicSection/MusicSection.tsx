@@ -38,7 +38,7 @@ export type GroupMusicSectionProps = {
 export default function MusicSection(props: MusicSectionProps | GroupMusicSectionProps) {
 	const audioManager = useAudioManagerContext();
 	const shown = (column: MusicSectionColumn) => !props.hiddenColumns?.includes(column);
-	const [openMenu, setOpenMenu] = createSignal<Music | null>(null);
+	const [openMenu, setOpenMenu] = createSignal<number | null>(null);
 	const isMenuOpen = createSelector(openMenu);
 
 	function toDate(value: Date | string): Date {
@@ -64,8 +64,8 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 		+ (shown("duration") ? 1 : 0);
 
 
-	function toggleMenu(music: Music) {
-		setOpenMenu((current) => current === music ? null : music);
+	function toggleMenu(index: number) {
+		setOpenMenu((current) => current === index ? null : index);
 	}
 
 	onMount(() => {
@@ -123,9 +123,10 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 								</td>
 								<Show when={shown("actions")}>
 									<td class="col-actions">
-										<Button class="action-button" icon={true} variant="text" onClick={() => toggleMenu(music)}><Ellipsis /></Button>
-										<Show when={isMenuOpen(music)}>
-											<MusicActionMenu music={music} onClose={() => setOpenMenu(null)} />
+										<Button class="action-button" icon={true} variant="text" onClick={() => toggleMenu(i())}><Ellipsis /></Button>
+										<Show when={isMenuOpen(i())}>
+											<MusicActionMenu music={music} onClose={() => setOpenMenu(null)} playlist={props.playlist} />
+
 										</Show>
 									</td>
 								</Show>

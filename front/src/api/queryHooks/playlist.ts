@@ -14,6 +14,7 @@ export const usePlaylistQuery = (uuid: () => string) => client.playlists.getPlay
 );
 
 type ListPlaylistsResponse = ClientInferResponses<typeof serverContract.playlists.listPlaylists, 200>;
+type GetPlaylistResponse = ClientInferResponses<typeof serverContract.playlists.getPlaylist, 200>;
 
 export const useRemoveMusicFromPlaylistMutation = () => {
 	const queryClient = useQueryClient();
@@ -21,8 +22,14 @@ export const useRemoveMusicFromPlaylistMutation = () => {
 	return client.playlists.removeMusicFromPlaylist.createMutation({
 		onSuccess: (_, vars) => {
 			const playlistUuid = vars.params.uuid;
+			const { musicUUID, providerUUID } = vars.body;
 
-			void queryClient.invalidateQueries({ queryKey: queryKeys.playlists.getPlaylist([playlistUuid]) });
+			queryClient.setQueryData<GetPlaylistResponse>(queryKeys.playlists.getPlaylist([playlistUuid]), (old) => {
+				if (!old) return old;
+				return { ...old,
+					body: { ...old.body,
+						musics: old.body.musics.filter((music) => !(music.musicUuid === musicUUID && music.providerUuid === providerUUID)) } };
+			});
 
 			queryClient.setQueryData<ListPlaylistsResponse>(queryKeys.playlists.listPlaylists(), (old) => {
 				if (!old) return old;
