@@ -13,8 +13,10 @@ import { SendHorizontalIcon, ArrowLeft } from "lucide-solid";
 import { PresenceAvatar } from "~/components/ui/PresenceDot/PresenceDot";
 import { endChat, hasUnreadMessages, markAsRead, openChat, sendMessage as sendChatMessage, setDraft } from "~/store/messages.store";
 import { isOnline } from "~/store/presence.store";
+import { useSocketContext } from "~/api/socket.context";
 
 export default function Friends() {
+	const { socket } = useSocketContext();
 	const navigate = useNavigate();
 	const params = useParams<{ uuid?: string }>();
 	const profileQuery = useMeProfileQuery();
@@ -66,7 +68,7 @@ export default function Friends() {
 		const f = friend();
 		if (!f || !isOnline(f.info.uuid, f.info.status) || f.chat.draft.trim() === "") return;
 
-		sendChatMessage(f.info.uuid, f.chat.draft);
+		sendChatMessage(socket, f.info.uuid, f.chat.draft);
 		setDraft(f.info.uuid, "");
 	}
 
@@ -111,7 +113,7 @@ export default function Friends() {
 		</div>
 		<div class="friends-right" classList={{ "no-chat-box": !friend() }}>
 			<div class="back">
-				<A href="/friends" class="white-variant"><ArrowLeft/> Back to friends list</A>
+				<A href="/friends" class="white-variant"><ArrowLeft /> Back to friends list</A>
 			</div>
 			<div class="chat">
 				<Show when={friend()} keyed>{(friend) => <>
@@ -133,8 +135,8 @@ export default function Friends() {
 					</div>
 					<div class="chat-input">
 						<Form onSubmit={(e) => sendMessage(e)}>
-							<TextInput value={friend.chat.draft} onInput={(e) => setDraft(friend.info.uuid, e.currentTarget.value)} type="text" maxlength={CHAT_MAX_MESSAGE_LENGTH} disabled={!isOnline(friend.info.uuid, friend.info.status)} placeholder={isOnline(friend.info.uuid, friend.info.status) ? "Type a message..." : `${friend.info.username} is offline`}/>
-							<Button disabled={friend.chat.draft.trim() === "" || !isOnline(friend.info.uuid, friend.info.status)} type="submit"><SendHorizontalIcon/></Button>
+							<TextInput value={friend.chat.draft} onInput={(e) => setDraft(friend.info.uuid, e.currentTarget.value)} type="text" maxlength={CHAT_MAX_MESSAGE_LENGTH} disabled={!isOnline(friend.info.uuid, friend.info.status)} placeholder={isOnline(friend.info.uuid, friend.info.status) ? "Type a message..." : `${friend.info.username} is offline`} />
+							<Button disabled={friend.chat.draft.trim() === "" || !isOnline(friend.info.uuid, friend.info.status)} type="submit"><SendHorizontalIcon /></Button>
 						</Form>
 					</div>
 				</>}</Show>
