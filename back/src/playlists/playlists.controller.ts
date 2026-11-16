@@ -28,6 +28,7 @@ import type { Express } from "express";
 import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
 import { createReadStream, existsSync } from "node:fs";
+import { unlink } from "node:fs/promises";
 import { ASSET_DIR, COVER_DIR } from "../core/utils/constants";
 
 @Controller()
@@ -57,6 +58,27 @@ export class PlaylistsController {
 				.resize(256, 256, { fit: "cover" })
 				.webp({ quality: 80 })
 				.toFile(filepath);
+
+			return { status: 204, body: null };
+		});
+	}
+
+	@TsRestHandler(playlistsContract.deleteCover)
+	@UseGuards(JwtAuthGuard)
+	public deleteCover(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(playlistsContract.deleteCover, async ({ params }) => {
+			await this.playlistsService.assertPlaylistOwner(params.uuid, authUser.uuid);
+
+			const filename = `${params.uuid}.webp`;
+			const filepath = join(COVER_DIR, filename);
+
+			try {
+				await unlink(filepath);
+			} catch (err) {
+				if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
+					return { status: 500, body: null };
+				}
+			}
 
 			return { status: 204, body: null };
 		});
