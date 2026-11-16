@@ -12,7 +12,7 @@ import Button from "~/components/inputs/Button";
 export default function ProviderArtist() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string; artistUUID: string }>();
-	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { uuid: params.uuid } });
+	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { get uuid() { return params.uuid; } } });
 	const providerUrl = () => providerBack.data?.body.address ?? "";
 	const providerInfo = () => providerBack.data?.body ?? null;
 	const artist = useProviderArtistQuery(providerUrl, () => params.uuid, () => params.artistUUID);
