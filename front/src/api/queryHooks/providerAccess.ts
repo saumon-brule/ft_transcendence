@@ -1,7 +1,7 @@
 import { createMutation, createQuery, useQueryClient } from "@tanstack/solid-query";
 import { client } from "../client";
 import { getProviderClient } from "../providerClients";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 
 interface ProviderRef {
 	uuid: string;
@@ -45,5 +45,17 @@ export const useJoinProvider = () => {
 		},
 		onSuccess: (_status, provider) => queryClient.invalidateQueries({ queryKey: ["provider", provider.uuid] }),
 		onError: (error) => { summonErrorToast((error as Error).message); },
+	});
+};
+
+export const leaveProviderMutation = (provider: ProviderRef) => {
+	const queryClient = useQueryClient();
+
+	return getProviderClient(provider.address, provider.uuid).client.member.leave.createMutation({
+		onSuccess: async () => {
+			summonSuccessToast("Provider leaved");
+			await queryClient.invalidateQueries({ queryKey: ["provider", provider.uuid] });
+		},
+		onError: () => { summonErrorToast("An error occured"); },
 	});
 };
