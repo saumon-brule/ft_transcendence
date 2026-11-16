@@ -6,14 +6,29 @@ import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
 import { DEFAULT_PAGINATION_LIMIT, Provider, type ProviderDataDto } from "@flex/shared";
 
+export class ProviderError extends Error {
+	constructor(public readonly code: "FORBIDDEN" | "OFFLINE", message: string) {
+		super(message);
+		this.name = "ProviderError";
+		Object.setPrototypeOf(this, ProviderError.prototype);
+	}
+}
+
+const providerRetry = (failureCount: number, error: unknown) => {
+	if (error instanceof ProviderError && error.code === "FORBIDDEN") return false;
+	return failureCount < 2;
+};
+
 export const useProviderInfoQuery = (providerUuid: () => string, providerInfo: () => Provider | null) => {
 	const providerClient = createMemo(() => getProviderClient(providerInfo()?.address ?? "", providerUuid()));
 	return createQuery({
 		queryKey: () => providerClient().keys.info.all(),
 		get enabled() { return providerInfo() !== null; },
+		retry: providerRetry,
 		queryFn: async () => {
 			const res = await providerClient().client.info.all.query();
-			if (res.status !== 200) throw new Error(`Provider info failed with status ${res.status}`);
+			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider info failed with status ${res.status} (invalid API key)`);
+			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider info failed with status ${res.status}`);
 			return res;
 		},
 		select: (response) => ({
@@ -53,7 +68,8 @@ export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, provi
 			const res = await providerClient().client.music.list.query({
 				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, ...filter() },
 			});
-			if (res.status !== 200) throw new Error(`Provider musics failed with status ${res.status}`);
+			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider musics failed with status ${res.status}`);
+			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider musics failed with status ${res.status}`);
 			return res.body;
 		},
 		getNextPageParam: (lastPage, pages) => {
@@ -89,7 +105,8 @@ export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, provid
 			const res = await provider().client.album.list.query({
 				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, ...filter() },
 			});
-			if (res.status !== 200) throw new Error(`Provider albums failed with status ${res.status}`);
+			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider albums failed with status ${res.status}`);
+			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider albums failed with status ${res.status}`);
 			return res.body;
 		},
 		getNextPageParam: (lastPage, pages) => {
@@ -125,7 +142,8 @@ export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, provi
 			const res = await provider().client.artist.list.query({
 				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined },
 			});
-			if (res.status !== 200) throw new Error(`Provider artists failed with status ${res.status}`);
+			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider artists failed with status ${res.status}`);
+			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider artists failed with status ${res.status}`);
 			return res.body;
 		},
 		getNextPageParam: (lastPage, pages) => {
@@ -158,7 +176,8 @@ export const useProviderArtistQuery = (providerUrl: () => string, providerUuid: 
 		get enabled() { return providerUrl() !== ""; },
 		queryFn: async () => {
 			const res = await provider().client.artist.get.query({ params: ({ uuid: artistUUID() }) });
-			if (res.status !== 200) throw new Error(`Provider artist failed with status ${res.status}`);
+			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider artist failed with status ${res.status}`);
+			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider artist failed with status ${res.status}`);
 			return res;
 		},
 	});
@@ -173,7 +192,8 @@ export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: (
 		get enabled() { return providerUrl() !== ""; },
 		queryFn: async () => {
 			const res = await provider().client.album.get.query({ params: ({ uuid: albumUUID() }) });
-			if (res.status !== 200) throw new Error(`Provider album failed with status ${res.status}`);
+			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider album failed with status ${res.status}`);
+			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider album failed with status ${res.status}`);
 			return res;
 		},
 		select: (response) => ({
