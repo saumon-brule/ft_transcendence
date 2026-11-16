@@ -64,6 +64,11 @@ export const playlistSummarySchema = z.object({
 });
 export type PlaylistSummaryDto = z.infer<typeof playlistSummarySchema>;
 
+export const searchPlaylistsQuerySchema = z.object({
+	name: z.string().trim().min(1).
+		max(100),
+});
+
 export const playlistListSchema = z.object({
 	owned: z.array(playlistSummarySchema),
 	followed: z.array(playlistSummarySchema),

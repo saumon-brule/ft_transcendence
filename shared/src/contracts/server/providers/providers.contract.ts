@@ -1,5 +1,6 @@
 import { initContract } from "@ts-rest/core";
-import { accessRequestStatusSchema, createdProviderSchema, createProviderSchema, editProviderSchema, providerSchema, providerTokenSchema, regenerateKeyProviderSchema } from "./schemas/provider.schema";
+import { z } from "zod";
+import { accessRequestStatusSchema, createdProviderSchema, createProviderSchema, editProviderSchema, providerSchema, providerTokenSchema, regenerateKeyProviderSchema, searchProvidersQuerySchema } from "./schemas/provider.schema";
 import { commonError404Schema, commonError409Schema } from "../../../errors/error-schemas";
 import { uuidParamSchema } from "../../../schemas/common.schema";
 
@@ -15,6 +16,12 @@ export const providersContract = c.router(
 				201: createdProviderSchema,
 				409: commonError409Schema,
 			},
+		},
+		search: {
+			method: "GET",
+			path: "/search",
+			query: searchProvidersQuerySchema,
+			responses: { 200: z.array(providerSchema) },
 		},
 		get: {
 			method: "GET",

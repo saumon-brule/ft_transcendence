@@ -13,6 +13,8 @@ function normalizeAddress(address: string) {
 	return `${url.origin}${url.pathname.replace(/\/+$/, "")}`;
 }
 
+const SEARCH_LIMIT = 25;
+
 @Injectable()
 export class ProvidersService {
 	constructor(
@@ -50,6 +52,15 @@ export class ProvidersService {
 			}
 			throw error;
 		}
+	}
+
+	async search(name: string) {
+		return this.prisma.provider.findMany({
+			where: { name: { contains: name, mode: "insensitive" } },
+			select: { uuid: true, name: true, address: true },
+			orderBy: [{ name: "asc" }, { id: "asc" }],
+			take: SEARCH_LIMIT,
+		});
 	}
 
 	async get(uuid: string) {

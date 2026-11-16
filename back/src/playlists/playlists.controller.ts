@@ -111,6 +111,15 @@ export class PlaylistsController {
 		}));
 	}
 
+	@TsRestHandler(playlistsContract.searchPlaylists)
+	@UseGuards(JwtAuthGuard)
+	public searchPlaylists(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(playlistsContract.searchPlaylists, async ({ query }) => ({
+			status: 200,
+			body: await this.playlistsService.searchPlaylists(authUser.uuid, query.name),
+		}));
+	}
+
 	@TsRestHandler(playlistsContract.getPlaylist)
 	@UseGuards(JwtAuthGuard)
 	public getPlaylist(@CurrentUser() authUser: AuthUser) {

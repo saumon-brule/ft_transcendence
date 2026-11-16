@@ -25,6 +25,15 @@ export class ProvidersController {
 	}
 
 	@UseGuards(JwtAuthGuard)
+	@TsRestHandler(serverContract.providers.search)
+	public search() {
+		return tsRestHandler(serverContract.providers.search, async ({ query }) => ({
+			status: 200,
+			body: await this.providersService.search(query.name),
+		}));
+	}
+
+	@UseGuards(JwtAuthGuard)
 	@TsRestHandler(serverContract.providers.get)
 	public get() {
 		return tsRestHandler(serverContract.providers.get, async ({ params }) => {
