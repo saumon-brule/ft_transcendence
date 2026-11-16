@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
+import { AccessRequestService } from "../access-request/access-request.service";
 
 const include = { owner: true, defaultRole: true } satisfies Prisma.ProviderInclude;
 type ProviderRow = Prisma.ProviderGetPayload<{ include: typeof include }>;
@@ -18,15 +19,18 @@ interface UpdateSetting {
 
 @Injectable()
 export class SettingService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly accessRequests: AccessRequestService,
+	) {}
 
 	async get() {
 		const provider = await this.prisma.provider.findUniqueOrThrow({ where: { id: 1 }, include });
 		return toSetting(provider);
 	}
 
-	update(dto: UpdateSetting) {
-		return this.prisma.$transaction(async (tx) => {
+	async update(dto: UpdateSetting) {
+		const setting = await this.prisma.$transaction(async (tx) => {
 			const data: Prisma.ProviderUncheckedUpdateInput = {};
 			if (dto.visibility !== undefined) data.visibility = dto.visibility;
 
@@ -46,5 +50,9 @@ export class SettingService {
 			const updated = await tx.provider.update({ where: { id: 1 }, data, include });
 			return toSetting(updated);
 		});
+
+		if (dto.visibility === "PUBLIC") await this.accessRequests.acceptAllPending();
+
+		return setting;
 	}
 }
