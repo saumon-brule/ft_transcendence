@@ -78,16 +78,6 @@ export const playlistsContract = c.router(
 				404: commonError404Schema,
 			},
 		},
-		uploadCover: {
-			method: "PATCH",
-			path: "/:uuid/cover",
-			pathParams: uuidParamSchema,
-			contentType: "multipart/form-data",
-			body: c.type<{ cover: File }>(),
-			responses: {
-				204: null,
-			},
-		},
 		followPlaylist: {
 			method: "POST",
 			path: "/:uuid/follow",
@@ -101,6 +91,24 @@ export const playlistsContract = c.router(
 			pathParams: uuidParamSchema,
 			body: c.noBody(),
 			responses: { 204: null },
+		},
+		uploadCover: {
+			method: "PATCH",
+			path: "/:uuid/cover",
+			pathParams: uuidParamSchema,
+			contentType: "multipart/form-data",
+			body: c.type<{ cover: File }>(),
+			responses: {
+				204: null,
+			},
+		},
+		deleteCover: {
+			method: "DELETE",
+			path: "/:uuid/cover",
+			pathParams: uuidParamSchema,
+			responses: {
+				204: null,
+			},
 		},
 	},
 	{ pathPrefix: "/playlists" },

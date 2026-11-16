@@ -52,6 +52,13 @@ export const usersContract = c.router(
 				413: commonError413Schema,
 			},
 		},
+		deleteAvatar: {
+			method: "DELETE",
+			path: "/me/avatar",
+			responses: {
+				204: null,
+			},
+		},
 	},
 	{ pathPrefix: "/users" },
 );

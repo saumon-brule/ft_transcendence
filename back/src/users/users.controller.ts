@@ -115,4 +115,23 @@ export class UsersController {
 			disposition: "inline",
 		});
 	}
+
+	@TsRestHandler(usersContract.deleteAvatar)
+	@UseGuards(JwtAuthGuard)
+	public deleteAvatar(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(usersContract.deleteAvatar, async () => {
+			const filename = `${authUser.uuid}.webp`;
+			const filepath = join(AVATAR_DIR, filename);
+
+			if (existsSync(filepath)) {
+				await this.usersService.updateAvatarTimestamp(authUser.uuid);
+				await sharp(filepath)
+					.resize(256, 256, { fit: "cover" })
+					.webp({ quality: 80 })
+					.toFile(filepath);
+			}
+
+			return { status: 204, body: null };
+		});
+	}
 }
