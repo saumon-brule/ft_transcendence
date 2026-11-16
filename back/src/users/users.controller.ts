@@ -28,7 +28,8 @@ import { join } from "node:path";
 import type { Express } from "express";
 import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
-import { createReadStream, existsSync, unlink } from "node:fs";
+import { createReadStream, existsSync } from "node:fs";
+import { unlink } from "node:fs/promises";
 import { ASSET_DIR, AVATAR_DIR } from "../core/utils/constants";
 
 @Controller()
@@ -122,13 +123,13 @@ export class UsersController {
 		return tsRestHandler(usersContract.deleteAvatar, async () => {
 			const filename = `${authUser.uuid}.webp`;
 			const filepath = join(AVATAR_DIR, filename);
-
-			if (existsSync(filepath)) {
-				unlink(filepath, (err) => {
-					if (err) {
-						return { status: 500, body: null };
-					}
-				});
+			
+			try {
+				await unlink(filepath);
+			} catch (err) {
+				if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
+					return { status: 500, body: null };	
+				}
 			}
 
 			return { status: 204, body: null };
