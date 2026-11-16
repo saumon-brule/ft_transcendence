@@ -1,8 +1,8 @@
 import type { ProviderDataDto, Provider } from "@flex/shared";
-import { Show } from "solid-js";
+import { createMemo, Show } from "solid-js";
 import { ProviderStatus } from "./Provider";
 import Button from "~/components/inputs/Button/Button";
-import { useAccessRequestQuery, useJoinProvider } from "~/api/queryHooks/providerAccess";
+import { leaveProviderMutation, useAccessRequestQuery, useJoinProvider } from "~/api/queryHooks/providerAccess";
 
 type ProviderHeaderProps = {
 	provider: ProviderDataDto | undefined;
@@ -13,6 +13,7 @@ type ProviderHeaderProps = {
 export default function ProviderHeader(props: ProviderHeaderProps) {
 	const request = useAccessRequestQuery(() => props.providerBack);
 	const join = useJoinProvider();
+	const leave = createMemo(() => leaveProviderMutation(props.providerBack));
 	const pending = () => request.data === "PENDING" || (join.isSuccess && join.data === "PENDING");
 
 	return <header class="provider-header">
@@ -29,8 +30,7 @@ export default function ProviderHeader(props: ProviderHeaderProps) {
 			</>}</Show>
 		</div>
 		<Show when={props.status === "success"}>
-			<Button variant="danger">Leave Provider</Button>
-			{/* Pas encore de leave */}
+			<Button disabled={leave().isPending || request.isLoading} variant="danger" onClick={() => leave().mutate(props.providerBack)}>Leave Provider</Button>
 		</Show>
 		<Show when={props.status === "forbidden"}>
 			<Button disabled={pending() || join.isPending || request.isLoading} onClick={() => join.mutate(props.providerBack)}>{pending() ? "Pending request" : "Request access"}</Button>
