@@ -13,7 +13,8 @@ export type ChatErrorCode = z.infer<typeof chatErrorCodeSchema>;
 
 export const sendChatMessageSchema = z.object({
 	recipientUUID: z.string().uuid(),
-	content: z.string().trim().min(1).max(CHAT_MAX_MESSAGE_LENGTH),
+	content: z.string().trim().min(1).
+		max(CHAT_MAX_MESSAGE_LENGTH),
 });
 export type SendChatMessageDto = z.infer<typeof sendChatMessageSchema>;
 
