@@ -17,6 +17,7 @@ import LoadingSplash from "../Loading/LoadingSplash";
 
 const TABS = ["All", "Musics", "Albums", "Artists"] as const;
 type Tab = typeof TABS[number];
+export type ProviderStatus = "loading" | "success" | "forbidden" | "offline";
 
 export default function Provider() {
 	const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function Provider() {
 	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { get uuid() { return params.uuid; } } });
 	const providerInfo = () => providerBack.data?.body ?? null;
 	const provider = useProviderInfoQuery(() => params.uuid, providerInfo);
-	const providerStatus = createMemo<"loading" | "success" | "forbidden" | "offline">(() => {
+	const providerStatus = createMemo<ProviderStatus>(() => {
 		if (provider.isSuccess) return "success";
 		if (provider.isError) {
 			const err = provider.error;
@@ -47,13 +48,13 @@ export default function Provider() {
 
 	return <div class="page" id="provider">
 		<Show when={providerInfo()} keyed>{(backData) => <>
-			<ProviderHeader provider={provider.data?.body} providerBack={backData} />
+			<ProviderHeader provider={provider.data?.body} providerBack={backData} status={providerStatus()} />
 			<Switch>
 				<Match when={providerStatus() === "loading"}>
 					<LoadingSplash />
 				</Match>
 				<Match when={providerStatus() === "forbidden"}>
-					<div class="error">Provider is forbidden (invalid API key)</div>
+					<div class="error">You don't have access to this provider</div>
 				</Match>
 				<Match when={providerStatus() === "offline"}>
 					<OfflineProvider show={true}/>
