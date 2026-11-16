@@ -266,7 +266,9 @@ export class AuthService {
 				refreshToken,
 				{ secret: env.JWT_REFRESH_SECRET },
 			);
-			return payload.sub === userUUID ? payload.jti : undefined;
+			return payload.sub === userUUID
+				? payload.jti
+				: undefined;
 		} catch {
 			return undefined;
 		}

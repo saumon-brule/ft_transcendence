@@ -52,8 +52,10 @@ export class SessionsService {
 		return this.prisma.session.deleteMany({
 			where: {
 				userUUID: userUUID,
-				...(excludeJti ? { jti: { not: excludeJti } } : {}),
-			 },
+				...(excludeJti
+					? { jti: { not: excludeJti } }
+					: {}),
+			},
 		});
 	}
 
