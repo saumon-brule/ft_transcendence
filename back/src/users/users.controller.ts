@@ -28,7 +28,7 @@ import { join } from "node:path";
 import type { Express } from "express";
 import sharp from "sharp";
 import { isUUID } from "../core/utils/isUuid";
-import { createReadStream, existsSync } from "node:fs";
+import { createReadStream, existsSync, unlink } from "node:fs";
 import { ASSET_DIR, AVATAR_DIR } from "../core/utils/constants";
 
 @Controller()
@@ -124,11 +124,11 @@ export class UsersController {
 			const filepath = join(AVATAR_DIR, filename);
 
 			if (existsSync(filepath)) {
-				await this.usersService.updateAvatarTimestamp(authUser.uuid);
-				await sharp(filepath)
-					.resize(256, 256, { fit: "cover" })
-					.webp({ quality: 80 })
-					.toFile(filepath);
+				unlink(filepath, (err) => {
+					if (err) {
+						return { status: 500, body: null };
+					}
+				});
 			}
 
 			return { status: 204, body: null };

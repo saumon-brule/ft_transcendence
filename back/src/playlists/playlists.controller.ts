@@ -74,7 +74,7 @@ export class PlaylistsController {
 			if (existsSync(filepath)) {
 				unlink(filepath, (err) => {
 					if (err) {
-						throw new BadRequestException("Error deleting cover");
+						return { status: 500, body: null };
 					}
 				});
 			}
