@@ -1,3 +1,5 @@
+@use "../../styles/breakpoints" as breakpoints;
+
 #search {
 	section {
 		margin-top: 20px;
@@ -16,5 +18,26 @@
 		display: flex;
 		flex-direction: column;
 		gap: 12px;
+	}
+
+	.playlists-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+		gap: 16px;
+
+		@include breakpoints.respond-to("mobile") {
+			grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+			gap: 12px;
+		}
+	}
+
+	.users-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		gap: 12px;
+	}
+
+	.search-error {
+		color: var(--text-secondary);
 	}
 }

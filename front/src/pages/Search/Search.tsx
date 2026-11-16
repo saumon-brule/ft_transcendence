@@ -12,6 +12,9 @@ import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
 import { Provider } from "@flex/shared";
 import { BestResult } from "./BestResult";
+import PlaylistCard from "~/components/ui/PlaylistCard/PlaylistCard";
+import UserCard from "~/components/ui/UserCard/UserCard";
+import { useSearchPlaylistsQuery, useSearchProvidersQuery, useSearchUsersQuery } from "~/api/queryHooks/search";
 import SearchFilters from "./SearchFilters";
 import { pickFilters, TAB_FILTER_FIELDS, useSearchFilters } from "./searchFilters";
 import NoResult from "~/components/ui/NoResult/NoResult";
@@ -40,6 +43,10 @@ export default function Search() {
 	const [filters, setFilters] = useSearchFilters();
 	const appliedFilters = createMemo(() => pickFilters(filters(), TAB_FILTER_FIELDS[tab()]));
 	const searches = useProvidersSearchQueries(() => providers(), search, () => appliedFilters());
+
+	const users = useSearchUsersQuery(search, () => tab() === "Users");
+	const playlists = useSearchPlaylistsQuery(search, () => tab() === "Playlists");
+	const providerSearch = useSearchProvidersQuery(search, () => tab() === "Providers");
 
 	const tabHref = (target: Tab) => {
 		const query = new URLSearchParams(location.search);
@@ -162,21 +169,40 @@ export default function Search() {
 				<NoResult show={results().artists.length === 0} />
 			</Match>
 			<Match when={tab() === "Playlists"}>
-				<p>Comming soon</p>
-			</Match>
-			<Match when={tab() === "Users"}>
-				<p>Comming soon</p>
-			</Match>
-			<Match when={tab() === "Providers"}>
-				<Show when={results().providers.length > 0}>
-					<section class="providers">
-						<h2>Providers</h2>
-						<div class="providers-list">
-							<For each={results().providers}>{(provider) => <ProviderCard provider={provider} mine={false}/>}</For>
+				<Show when={(playlists.data?.body.length ?? 0) > 0}>
+					<section class="playlists">
+						<h2>Playlists</h2>
+						<div class="playlists-grid">
+							<For each={playlists.data?.body}>{(playlist) => <PlaylistCard playlist={playlist} showOwner />}</For>
 						</div>
 					</section>
 				</Show>
-				<NoResult show={results().providers.length === 0} />
+				<Show when={playlists.isError}><p class="search-error">Failed to search playlists</p></Show>
+				<NoResult show={playlists.isSuccess && playlists.data.body.length === 0} />
+			</Match>
+			<Match when={tab() === "Users"}>
+				<Show when={(users.data?.body.length ?? 0) > 0}>
+					<section class="users">
+						<h2>Users</h2>
+						<div class="users-list">
+							<For each={users.data?.body}>{(user) => <UserCard user={user} />}</For>
+						</div>
+					</section>
+				</Show>
+				<Show when={users.isError}><p class="search-error">Failed to search users</p></Show>
+				<NoResult show={users.isSuccess && users.data.body.length === 0} />
+			</Match>
+			<Match when={tab() === "Providers"}>
+				<Show when={(providerSearch.data?.body.length ?? 0) > 0}>
+					<section class="providers">
+						<h2>Providers</h2>
+						<div class="providers-list">
+							<For each={providerSearch.data?.body}>{(provider) => <ProviderCard provider={provider} mine={false}/>}</For>
+						</div>
+					</section>
+				</Show>
+				<Show when={providerSearch.isError}><p class="search-error">Failed to search providers</p></Show>
+				<NoResult show={providerSearch.isSuccess && providerSearch.data.body.length === 0} />
 			</Match>
 		</Switch>
 	</div>;
