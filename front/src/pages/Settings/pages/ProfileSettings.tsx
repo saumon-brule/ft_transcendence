@@ -13,6 +13,7 @@ import { OverlayControls } from "~/components/ui/Overlay";
 import { summonUsernameEditPopUp } from "./editionPopUps/usernamePopUp";
 import MusicBars from "~/components/graphics/icons/MusicBars";
 import { MAX_SIZE, serverContract } from "@flex/shared";
+import { X } from "lucide-solid";
 
 type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
 type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;
@@ -24,6 +25,7 @@ function toDate(value: Date | string): Date {
 export default function ProfileSettings() {
 	const profileQuery = useMeProfileQuery();
 	const updatePictureMutation = client.users.uploadAvatar.createMutation();
+	const deletePictureMutation = client.users.deleteAvatar.createMutation();
 	const { t } = useTranslation();
 	// const [listeningPrivate, setListeningPrivate] = createSignal(false);
 	// const [draft, setDraft] = createSignal<ReturnType<typeof serverProfile> | undefined>(undefined);
@@ -38,6 +40,16 @@ export default function ProfileSettings() {
 	// 		setDraft({ ...base, [key]: value });
 	// 	}
 
+	function updatePictureQuery() {
+		queryClient.setQueryData<UserMeResponse>(queryKeys.users.me(), (old) => {
+			if (!old) return old;
+			return {
+				...old,
+				body: { ...old.body, avatarUpdatedAt: new Date() },
+			};
+		});
+	}
+
 	const updatePicture: OnChangeEventHandler = (e) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
@@ -49,13 +61,7 @@ export default function ProfileSettings() {
 			body: { avatar: file },
 		}, {
 			onSuccess: () => {
-				queryClient.setQueryData<UserMeResponse>(queryKeys.users.me(), (old) => {
-					if (!old) return old;
-					return {
-						...old,
-						body: { ...old.body, avatarUpdatedAt: new Date() },
-					};
-				});
+				updatePictureQuery();
 				summonSuccessToast(() => t("pages.settings.profile.profilePictureUpdated"));
 			},
 			onError: (e) => {
@@ -74,16 +80,29 @@ export default function ProfileSettings() {
 		usernameEditPopUpControls?.close();
 	});
 
+	function removePP() {
+		deletePictureMutation.mutate({}, {
+			onSuccess: () => {
+				updatePictureQuery();
+				summonSuccessToast(() => t("pages.settings.profile.profilePictureUpdated"));
+			},
+			onError: () => summonErrorToast(() => t("pages.settings.profile.profilePictureUpdateFail")),
+		});
+	}
+
 
 	return <main class="profile-settings">
 		<Show when={profileQuery.data?.body} keyed>
 			{(user) => <div class="profile-settings-content">
 				{/* <img src={user().avatarUrl} alt="Profile picture" />*/}
-				<div class="profile-picture" style={{ "background-image": `url(${user.avatarUrl}` }}>
-					<label for="avatar-upload">
-						<span>Change</span>
-					</label>
-					<input type="file" id="avatar-upload" accept="image/*" onChange={updatePicture} />
+				<div class="profile-picture-container">
+					<div class="profile-picture" style={{ "background-image": `url(${user.avatarUrl}` }}>
+						<label for="avatar-upload">
+							<span>Change</span>
+						</label>
+						<input type="file" id="avatar-upload" accept="image/*" onChange={updatePicture} />
+					</div>
+					<button type="button" onClick={removePP} class="remove-avatar-button"><X/></button>
 				</div>
 				<div class="header-info">
 					<div class="username">

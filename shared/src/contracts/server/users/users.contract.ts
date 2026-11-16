@@ -55,6 +55,7 @@ export const usersContract = c.router(
 		deleteAvatar: {
 			method: "DELETE",
 			path: "/me/avatar",
+			body: null,
 			responses: {
 				204: null,
 			},
