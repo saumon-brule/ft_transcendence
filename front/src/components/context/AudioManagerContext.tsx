@@ -6,7 +6,7 @@ import { setupMediaSession, updateMediaMetadata } from "./mediaSession";
 import { summonErrorToast } from "../ui/Toaster";
 import { LocalStorageItem } from "~/utils/storageHelper";
 import { getMediaToken } from "~/api/providerClients";
-import { appearanceStore, systemDark } from "~/store/appearance.store";
+import { systemDark } from "~/store/appearance.store";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
 
