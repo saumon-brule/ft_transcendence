@@ -5,7 +5,7 @@ import { FILTER_CONDITIONS, type CatalogFilters } from "../core/catalog/catalog.
 import { albumItemInclude, musicItemInclude, toAlbumItem, toArtistItem, toMusicItem } from "../core/catalog/catalog.mappers";
 
 interface SearchQuery {
-	query: string;
+	query?: string;
 	limit: number;
 	music?: string;
 	artist?: string;

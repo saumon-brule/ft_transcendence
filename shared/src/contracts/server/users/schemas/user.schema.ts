@@ -106,5 +106,6 @@ export const DeleteRoleParamSchema = z.object({
 
 export const searchUsersQuerySchema = z.object({
 	username: z.string().trim().min(1).
-		max(50),
+		max(50).
+		optional(),
 });

@@ -56,7 +56,7 @@ export const AppRouter = () => {
 				<Route path="/" component={AppContainer}>
 					<Route path="/" component={SidebarRoute}>
 						<Route path="/home" component={Home} />
-						<Route path="/search/:search" component={Search} />
+						<Route path="/search/:search?" component={Search} />
 						<Route path="/user/:uuid" component={Profile} />
 						<Route path="/playlists" component={Playlists} />
 						<Route path="/playlist/:uuid" component={Playlist} />
