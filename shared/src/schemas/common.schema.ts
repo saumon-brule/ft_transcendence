@@ -57,8 +57,11 @@ export const artistListQuerySchema = listQuerySchema.extend({
 });
 
 export const searchFiltersSchema = z.object({
+	music: filterTextSchema,
 	artist: filterTextSchema,
 	album: filterTextSchema,
+	artistUuid: filterUuidSchema,
+	albumUuid: filterUuidSchema,
 	dateBefore: filterDateSchema,
 	dateAfter: filterDateSchema,
 });
