@@ -18,6 +18,15 @@ export const providerMemberContract = c.router(
 			path: "/me",
 			responses: { 200: providerMemberProfileSchema },
 		},
+		leave: {
+			method: "DELETE",
+			path: "/me",
+			body: null,
+			responses: {
+				204: null,
+				404: commonError404Schema,
+			},
+		},
 		list: {
 			method: "GET",
 			path: "/",

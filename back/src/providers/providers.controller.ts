@@ -79,10 +79,10 @@ export class ProvidersController {
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@TsRestHandler(serverContract.providers.requestAccess)
-	public requestAccess(@CurrentUser() user: AuthUser) {
-		return tsRestHandler(serverContract.providers.requestAccess, async ({ params }) => {
-			const request = await this.accessRequests.request(user.uuid, params.uuid);
+	@TsRestHandler(serverContract.providers.initiateAccessRequest)
+	public initiateAccessRequest(@CurrentUser() user: AuthUser) {
+		return tsRestHandler(serverContract.providers.initiateAccessRequest, async ({ params }) => {
+			const request = await this.accessRequests.initiate(user.uuid, params.uuid);
 			return { status: 200, body: request };
 		});
 	}
