@@ -3,7 +3,7 @@ import { chatErrorSchema, chatMessageSchema, presenceSchema, type ChatError, typ
 import type { AppSocket } from "~/api/socket";
 import { summonErrorToast, summonInfoToast } from "~/components/ui/Toaster";
 import { auth } from "~/store/auth.store";
-import { clearChats, endChat, receiveMessage } from "~/store/messages.store";
+import { clearChats, endChat, getChat, receiveMessage } from "~/store/messages.store";
 
 const CHAT_ERROR_MESSAGES: Record<ChatErrorCode, string> = {
 	CHAT_INVALID_PAYLOAD: "Invalid message",
@@ -28,6 +28,7 @@ export function useChatEvents(socket: AppSocket) {
 
 		receiveMessage(friendUuid, {
 			id,
+			type: "message",
 			author: fromMe ? "me" : "friend",
 			content,
 			timestamp: createdAt,
@@ -48,7 +49,14 @@ export function useChatEvents(socket: AppSocket) {
 
 	socket.on("presence:changed", (payload) => {
 		const change = presenceSchema.safeParse(payload);
-		if (change.success && !change.data.online) endChat(change.data.uuid);
+		if (change.success && getChat(change.data.uuid)?.messages.length)
+			receiveMessage(change.data.uuid, {
+				id: 0,
+				type: "info",
+				author: "friend",
+				content: change.data.online ? "reconnected" : "disconnected",
+				timestamp: new Date(),
+			});
 	});
 
 	socket.on("disconnect", clearChats);

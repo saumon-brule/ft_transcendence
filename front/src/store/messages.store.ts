@@ -4,6 +4,7 @@ import type { Socket } from "socket.io-client";
 
 export type Message = {
 	id: number;
+	type: "message" | "info";
 	author: "me" | "friend";
 	content: string;
 	timestamp: Date;
@@ -15,6 +16,12 @@ const [chatStore, setChatStore] = createStore<ChatStore>({ chats: {} });
 
 function ensureChat(userUuid: string) {
 	if (!chatStore.chats[userUuid]) setChatStore("chats", userUuid, { draft: "", isRead: true, messages: [] });
+}
+
+function getChat(userUuid: string) {
+	if (!chatStore.chats[userUuid])
+		return undefined;
+	return chatStore.chats[userUuid];
 }
 
 function openChat(userUuid: string) {
@@ -69,4 +76,5 @@ export {
 	markAsRead,
 	hasUnreadMessages,
 	clearChats,
+	getChat,
 };
