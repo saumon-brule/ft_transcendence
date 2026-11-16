@@ -3,9 +3,9 @@ import { Dynamic } from "solid-js/web";
 import { CircleX, CloudOff, LoaderCircle, TriangleAlert } from "lucide-solid";
 import Button from "~/components/inputs/Button";
 import { useAccessRequestQuery, useJoinProvider } from "~/api/queryHooks/providerAccess";
-import { useRemoveMusicFromPlaylist } from "~/api/queryHooks/playlist";
-import type { UnavailableTrack } from "~/utils/playlistTracks";
+import { useRemoveMusicFromPlaylistMutation } from "~/api/queryHooks/playlist";
 import "./UnavailableTrackRow.scss";
+import { Music, UnavailableMusic } from "~/class/Music";
 
 export type PlaylistContext = {
 	uuid: string;
@@ -13,12 +13,12 @@ export type PlaylistContext = {
 };
 
 type UnavailableTrackRowProps = {
-	track: UnavailableTrack;
+	music: UnavailableMusic;
 	columns: number;
 	playlist?: PlaylistContext;
 };
 
-function RestrictedActions(props: { track: UnavailableTrack }) {
+function RestrictedActions(props: { track: Music }) {
 	const request = useAccessRequestQuery(() => props.track.provider);
 	const join = useJoinProvider();
 	const pending = () => request.data === "PENDING" || (join.isSuccess && join.data === "PENDING");
@@ -39,15 +39,18 @@ function RestrictedActions(props: { track: UnavailableTrack }) {
 	</Show>;
 }
 
-function MissingActions(props: { track: UnavailableTrack; playlist?: PlaylistContext }) {
-	const remove = useRemoveMusicFromPlaylist(() => props.playlist?.uuid ?? "");
+function MissingActions(props: { music: Music; playlist?: PlaylistContext }) {
+	const remove = useRemoveMusicFromPlaylistMutation();
 
 	return <Show when={props.playlist?.isOwner}>
 		<Button
 			size="sm"
 			variant="danger"
 			disabled={remove.isPending}
-			onClick={() => remove.mutate({ musicUuid: props.track.musicUuid, providerUuid: props.track.provider.uuid })}
+			onClick={() => remove.mutate({
+				params: { uuid: props.playlist?.uuid ?? "" },
+				body: { musicUUID: props.music.uuid, providerUUID: props.music.provider.uuid },
+			})}
 		>
 			Remove
 		</Button>
@@ -61,22 +64,22 @@ const ICONS = {
 	missing: CircleX,
 } as const;
 
-export default function UnavailableTrackRow(props: UnavailableTrackRowProps) {
-	const Icon = () => ICONS[props.track.state];
+export default function UnavailableMusicRow(props: UnavailableTrackRowProps) {
+	const Icon = () => ICONS[props.music.state];
 	const title = () => ({
 		loading: "Loading…",
 		offline: "Unavailable track",
 		restricted: "Restricted track",
 		missing: "Track no longer exists",
-	})[props.track.state];
+	})[props.music.state];
 	const description = () => ({
-		loading: props.track.provider.name,
-		offline: `${props.track.provider.name} is offline`,
-		restricted: `You are not a member of ${props.track.provider.name}`,
-		missing: `It was removed from ${props.track.provider.name}`,
-	})[props.track.state];
+		loading: props.music.provider.name,
+		offline: `${props.music.provider.name} is offline`,
+		restricted: `You are not a member of ${props.music.provider.name}`,
+		missing: `It was removed from ${props.music.provider.name}`,
+	})[props.music.state];
 
-	return <tr class={`track-state track-state--${props.track.state}`}>
+	return <tr class={`track-state track-state--${props.music.state}`}>
 		<td colSpan={props.columns}>
 			<div class="track-state-content">
 				<div class="music-title">
@@ -87,11 +90,11 @@ export default function UnavailableTrackRow(props: UnavailableTrackRowProps) {
 					</div>
 				</div>
 				<Switch>
-					<Match when={props.track.state === "restricted"}>
-						<RestrictedActions track={props.track} />
+					<Match when={props.music.state === "restricted"}>
+						<RestrictedActions track={props.music} />
 					</Match>
-					<Match when={props.track.state === "missing"}>
-						<MissingActions track={props.track} playlist={props.playlist} />
+					<Match when={props.music.state === "missing"}>
+						<MissingActions music={props.music} playlist={props.playlist} />
 					</Match>
 				</Switch>
 			</div>

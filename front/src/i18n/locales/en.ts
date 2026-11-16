@@ -55,6 +55,7 @@ export default {
 			},
 		},
 		settings: {
+			title: "Settings",
 			profileLink: "Profile",
 			accountLink: "Account",
 			appearanceLink: "Appearance",
@@ -129,6 +130,12 @@ export default {
 					useSystem: "Use browser theme",
 				},
 			},
+		},
+		queue: {
+			title: "You're listening to ...",
+			queue: "Queue",
+			queueClear: "clear",
+			following: "Following in ",
 		},
 	},
 	errors: {

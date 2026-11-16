@@ -57,6 +57,7 @@ export default {
 			},
 		},
 		settings: {
+			title: "Paramètres",
 			profileLink: "Profil",
 			accountLink: "Compte",
 			appearanceLink: "Apparence",
@@ -131,6 +132,12 @@ export default {
 					useSystem: "Suivre le thème de votre navigateur",
 				},
 			},
+		},
+		queue: {
+			title: "Vous écoutez ...",
+			queue: "File d'attente",
+			queueClear: "vider",
+			following: "À suivre dans ",
 		},
 	},
 	errors: {

@@ -28,6 +28,14 @@ export const shortUserSchema = z.object({
 });
 export type ShortUser = z.infer<typeof shortUserSchema>;
 
+export const onlineStatusSchema = z.enum(["online", "offline"]);
+export type OnlineStatus = z.infer<typeof onlineStatusSchema>;
+
+export const friendSchema = shortUserSchema.extend({
+	status: onlineStatusSchema,
+});
+export type Friend = z.infer<typeof friendSchema>;
+
 export const userSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
@@ -37,7 +45,8 @@ export const userSchema = z.object({
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
-	friends: z.array(shortUserSchema),
+	friends: z.array(friendSchema.partial({ status: true })),
+	status: onlineStatusSchema.optional(),
 	_count: z.object({
 		ownedProviders: z.number(),
 		ownedPlaylists: z.number(),
@@ -63,7 +72,7 @@ export const meSchema = z.object({
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
-	friends: z.array(shortUserSchema),
+	friends: z.array(friendSchema),
 	friendRequests: z.array(shortUserSchema),
 	_count: z.object({
 		ownedProviders: z.number(),

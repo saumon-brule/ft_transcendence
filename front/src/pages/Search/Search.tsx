@@ -70,7 +70,7 @@ export default function Search() {
 			if (organizedData.musics[0]) {
 				organizedData.best = {
 					item: organizedData.musics[0],
-					providerName: organizedData.providers.find((p) => p.uuid === organizedData.musics[0].providerUuid)?.name ?? "",
+					providerName: organizedData.providers.find((p) => p.uuid === organizedData.musics[0].provider.uuid)?.name ?? "",
 				};
 			}
 		} else if (bestScores.albums > bestScores.artists) {
@@ -102,7 +102,7 @@ export default function Search() {
 				<Show when={results().musics.length > 0}>
 					<section class="musics">
 						<h2>Musics</h2>
-						<MusicSection music={{ musics: results().musics.slice(0, 6), total: results().musics.length }} providers={results().providers}/>
+						<MusicSection musics={results().musics.slice(0, 6)} providers={results().providers}/>
 						<A href={`/search/${encodeURIComponent(search())}?tab=Musics`} class="white-variant see-more">See more</A>
 					</section>
 				</Show>
@@ -126,7 +126,7 @@ export default function Search() {
 				<Show when={results().musics.length > 0}>
 					<section class="musics">
 						<h2>Musics</h2>
-						<MusicSection music={{ musics: results().musics, total: results().musics.length }} providers={results().providers}/>
+						<MusicSection musics={results().musics} providers={results().providers}/>
 					</section>
 				</Show>
 				<NoResult show={results().musics.length === 0} />
