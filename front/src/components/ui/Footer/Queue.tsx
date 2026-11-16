@@ -34,7 +34,7 @@ export default function Queue(props: QueueProps) {
 			</div>
 			<div class="queue-body">
 				<div class="queue-current-track" classList={{ "empty": audioManager.currentMusic === null }}>
-					<Show when={audioManager.currentMusic} fallback={<img src="/images/default_cover.png" />} keyed>
+					<Show when={audioManager.currentMusic} fallback={<img src="/images/default_cover.webp" />} keyed>
 						{(currentMusic) => <MusicCover music={currentMusic} />}
 					</Show>
 					<h2 class="track-name">
@@ -64,15 +64,18 @@ export default function Queue(props: QueueProps) {
 						</div>
 					</Show>
 					<Show when={audioManager.musicGroup} keyed>
-						{(musicGroup) => <div class="following-list">
+						{(musicGroup) => <Show when={audioManager.currentMusic}><div class="following-list">
 							<div class="list-title"><h2>{t("pages.queue.following")}<A href={musicGroup.route}>{musicGroup.name}</A></h2></div>
 							<MusicSection musics={musicGroup.musics.slice(audioManager.position + 1).concat(audioManager.loop ? musicGroup.musics.slice(0, audioManager.position) : [])} />
-						</div>}
+						</div></Show>}
 					</Show>
-					<Show when={!audioManager.musicGroup && audioManager.queue.length === 0} keyed>
+					<Show when={!audioManager.currentMusic && !audioManager.musicGroup && audioManager.queue.length === 0} keyed>
 						<div>
 							Rien à écouter ? :(
 						</div>
+					</Show>
+					<Show when={audioManager.musicGroup && audioManager.queue.length === 0 && !audioManager.currentMusic} keyed>
+						<div>Vous êtes arrivé à la fin de la liste.</div>
 					</Show>
 				</div>
 			</div>
