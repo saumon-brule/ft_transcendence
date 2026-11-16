@@ -2,7 +2,7 @@
 import "./LoadingSplash.scss";
 
 export default function LoadingSplash() {
-	return <div style={{ color: "red", background: "blue" }} >
-		ATTENDS !!!!!!!!!
+	return <div id="loading-splash">
+		<div class="loader"/>
 	</div>;
 }
