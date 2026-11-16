@@ -203,5 +203,25 @@
 				font-size: 14px;
 			}
 		}
+
+		.header-controls {
+			display: flex;
+			gap: 0.25rem;
+			justify-content: center;
+
+			& > button {
+				&:first-child {
+					border-top-right-radius: 0;
+					border-bottom-right-radius: 0;
+				}
+				&:last-child {
+					border-top-left-radius: 0;
+					border-bottom-left-radius: 0;
+				}
+			}
+
+			@include breakpoints.respond-to("mobile") {
+			}
+		}
 	}
 }
