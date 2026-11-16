@@ -1,9 +1,9 @@
 import { createMemo } from "solid-js";
 import { createQueries } from "@tanstack/solid-query";
 import type { PlaylistDetailDto } from "@flex/shared";
-import { Music } from "~/class/Music";
+import { Music, UnavailableMusic } from "~/class/Music";
 import { getProviderClient } from "../providerClients";
-import { buildTracks, chunkEntries, type Chunk, type ChunkResult, type UnavailableTrack } from "~/utils/playlistTracks";
+import { buildMusics, chunkEntries, type Chunk, type ChunkResult } from "~/utils/playlistTracks";
 
 type RawChunk
 	= | { kind: "ok"; musics: Parameters<typeof Music.fromRawObject>[0][]; missing: string[] }
@@ -18,17 +18,17 @@ async function fetchChunk(provider: { uuid: string; address: string }, uuids: st
 
 const musicsByData = new WeakMap<RawChunk, Music[]>();
 
-function musicsOf(data: Extract<RawChunk, { kind: "ok" }>, provider: { uuid: string; address: string }) {
+function musicsOf(data: Extract<RawChunk, { kind: "ok" }>, provider: { uuid: string; name: string; address: string }) {
 	let musics = musicsByData.get(data);
 	if (!musics) {
-		musics = data.musics.map((music) => Music.fromRawObject(music, provider.address, provider.uuid));
+		musics = data.musics.map((music) => Music.fromRawObject(music, provider));
 		musicsByData.set(data, musics);
 	}
 	return musics;
 }
 
-export const usePlaylistTracks = (playlist: () => PlaylistDetailDto | undefined) => {
-	const unavailableTracks = new Map<string, UnavailableTrack>();
+export const usePlaylistMusics = (playlist: () => PlaylistDetailDto | undefined) => {
+	const unavailableMusics = new Map<string, UnavailableMusic>();
 
 	const jobs = createMemo(() => {
 		const current = playlist();
@@ -53,13 +53,13 @@ export const usePlaylistTracks = (playlist: () => PlaylistDetailDto | undefined)
 		},
 	});
 
-	const tracks = createMemo(() => {
+	const musics = createMemo(() => {
 		const current = playlist();
 		if (!current) return [];
 
-		const chunks = jobs().map((job, index): Chunk<Music> => {
+		const chunks = jobs().map((job, index): Chunk => {
 			const query = results[index] as { data?: RawChunk; isError: boolean } | undefined;
-			let result: ChunkResult<Music> = { status: "pending" };
+			let result: ChunkResult = { status: "pending" };
 			if (query?.isError) {
 				result = { status: "offline" };
 			} else if (query?.data?.kind === "restricted") {
@@ -75,21 +75,21 @@ export const usePlaylistTracks = (playlist: () => PlaylistDetailDto | undefined)
 		});
 
 		const used = new Set<string>();
-		const stable = buildTracks(current.musics, current.providers, chunks).map((track) => {
-			if (track instanceof Music) return track;
+		const stable = buildMusics(current.musics, current.providers, chunks).map((music) => {
+			if (!music.isUnavailable()) return music;
 
-			const key = `${track.state}|${track.provider.uuid}|${track.provider.name}|${track.provider.address}|${track.musicUuid}`;
+			const key = `${music.state}|${music.provider.uuid}|${music.provider.name}|${music.provider.address}|${music.uuid}`;
 			used.add(key);
-			const known = unavailableTracks.get(key);
+			const known = unavailableMusics.get(key);
 			if (known) return known;
 
-			unavailableTracks.set(key, track);
-			return track;
+			unavailableMusics.set(key, music);
+			return music;
 		});
-		for (const key of unavailableTracks.keys()) if (!used.has(key)) unavailableTracks.delete(key);
+		for (const key of unavailableMusics.keys()) if (!used.has(key)) unavailableMusics.delete(key);
 
 		return stable;
 	});
 
-	return { tracks, isLoading: () => tracks().some((track) => !(track instanceof Music) && track.state === "loading") };
+	return { musics, get isLoading() { return musics().some((music) => music.isLoading()); } };
 };

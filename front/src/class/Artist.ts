@@ -15,6 +15,10 @@ export class Artist {
 		return buildMediaUrl(this.providerUrl, "artistAvatar", this.uuid, token);
 	}
 
+	public route() {
+		return `/provider/${this.providerUuid}/artist/${this.uuid}`;
+	}
+
 	public static fromRawObject(this: void, rawArtistObject: ProviderDataArtistDto, providerUrl: string, providerUuid: string): Artist {
 		const artist = { ...rawArtistObject } as Artist;
 		Object.setPrototypeOf(artist, Artist.prototype);

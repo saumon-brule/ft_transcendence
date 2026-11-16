@@ -1,18 +1,39 @@
-import type { AlbumDetailedItemDto, Provider } from "@flex/shared";
+import type { Provider } from "@flex/shared";
 import { Show } from "solid-js";
 import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
 import { A } from "@solidjs/router";
+import Button from "~/components/inputs/Button";
+import { Play, Shuffle } from "lucide-solid";
+import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
+import { ProviderAlbumQueryBody } from "~/api/queryHooks/providerInfo";
+import { MusicGroup } from "~/store/trackManager.store";
+import { Accessor } from "solid-js";
 
-export default function ProviderAlbumHeader(props: { album: AlbumDetailedItemDto; providerBack: Provider; musicTotal?: number }) {
+export type ProviderAlbumHeaderProps = {
+	album: ProviderAlbumQueryBody;
+	providerBack: Provider;
+	musicGroup: Accessor<MusicGroup | null>;
+	musicTotal?: number;
+};
+
+export default function ProviderAlbumHeader(props: ProviderAlbumHeaderProps) {
 	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
+	const audioManager = useAudioManagerContext();
 
-	function getCover(album: AlbumDetailedItemDto) {
+	function playMusicGroup(musicGroup: MusicGroup, shuffle: boolean = false) {
+		audioManager.setMusicGroup(musicGroup);
+		if (shuffle) audioManager.shuffle();
+		audioManager.position = 0;
+		audioManager.play();
+	}
+
+	function getCover(album: ProviderAlbumQueryBody) {
 		const token = mediaToken();
 		if (album.hasCover && token) {
 			return buildMediaUrl(props.providerBack.address, "albumCover", album.uuid, token);
 		}
-		return "/images/default_album.png";
+		return "/images/default_album.webp";
 	}
 
 	return <header class="provider-image-header">
@@ -26,6 +47,14 @@ export default function ProviderAlbumHeader(props: { album: AlbumDetailedItemDto
 			</div>
 			<Show when={props.album.publishedAt} keyed>{(albumDate) => <div class="album-date">Sorti le {new Date(albumDate).toLocaleDateString()}</div>}</Show>
 			<p>From <A href={`/provider/${props.providerBack.uuid}`}>{props.providerBack.name}</A></p>
+		</div>
+		<div class="header-controls">
+			<Show when={props.musicGroup()} fallback={<><Button icon disabled><Play /></Button><Button icon disabled><Shuffle /></Button></>}>
+				{(musicGroup) => <>
+					<Button icon disabled={musicGroup().musics.length === 0} onClick={() => playMusicGroup(musicGroup())}><Play /></Button>
+					<Button icon disabled={musicGroup().musics.length === 0} onClick={() => playMusicGroup(musicGroup(), true)}><Shuffle /></Button>
+				</>}
+			</Show>
 		</div>
 	</header>;
 }

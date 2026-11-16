@@ -1,15 +1,16 @@
-import { JwtService } from "@nestjs/jwt";
+import { Logger } from "@nestjs/common";
 import {
 	OnGatewayConnection,
 	OnGatewayDisconnect,
 	OnGatewayInit,
 	WebSocketGateway,
 } from "@nestjs/websockets";
-import { presenceListSchema, presenceSchema, type JwtPayload } from "@flex/shared";
+import { presenceListSchema, presenceSchema } from "@flex/shared";
 import { env } from "../../core/env";
 import { FriendsService } from "../friends/friends.service";
 import { PresenceService } from "./presence.service";
 import { type DefaultEventsMap, type Server, type Socket } from "socket.io";
+import { SocketAuthService } from "../../auth/auth-socket.service";
 
 type PresenceSocketData = {
 	userUUID?: string;
@@ -40,9 +41,10 @@ export class PresenceGateway implements
     OnGatewayConnection,
     OnGatewayDisconnect {
 	private server!: PresenceServer;
+	private readonly logger = new Logger(PresenceGateway.name);
 
 	constructor(
-		private readonly jwtService: JwtService,
+		private readonly socketAuthService: SocketAuthService,
 		private readonly friendsService: FriendsService,
 		private readonly presenceService: PresenceService,
 	) {}
@@ -51,8 +53,11 @@ export class PresenceGateway implements
 		this.server = server;
 
 		server.use((socket, next) => {
-			void this.authenticate(socket)
-				.then(() => next())
+			void this.socketAuthService.authenticate(socket.handshake.auth?.token)
+				.then((result) => {
+					socket.data.userUUID = result.userUUID;
+					next();
+				})
 				.catch(() => next(new Error("Unauthorized")));
 		});
 	}
@@ -64,25 +69,30 @@ export class PresenceGateway implements
 			return;
 		}
 
-		const friends = await this.friendsService.getFriends(userUUID);
-		if(!client.connected) return;
+		try {
+			const friends = await this.friendsService.getFriends(userUUID);
+			if (!client.connected) return;
 
-		await client.join(this.userRoom(userUUID));
-		if (!client.connected) return;
+			await client.join(this.userRoom(userUUID));
+			if (!client.connected) return;
 
-		const becameOnline = this.presenceService.connect(userUUID, client.id);
+			const becameOnline = this.presenceService.connect(userUUID, client.id);
 
-		const snapshot = presenceListSchema.parse(
-			friends.map((friend) => ({
-				...friend,
-				online: this.presenceService.isOnline(friend.uuid),
-			})),
-		);
+			const snapshot = presenceListSchema.parse(
+				friends.map((friend) => ({
+					...friend,
+					online: this.presenceService.isOnline(friend.uuid),
+				})),
+			);
 
-		client.emit("presence:snapshot", snapshot);
+			client.emit("presence:snapshot", snapshot);
 
-		if (becameOnline) {
-			this.notifyFriends(friends, userUUID, true);
+			if (becameOnline) {
+				this.notifyFriends(friends, userUUID, true);
+			}
+		} catch (error) {
+			this.logger.error(`Presence connection failed for ${userUUID}`, error);
+			client.disconnect(true);
 		}
 	}
 
@@ -97,28 +107,15 @@ export class PresenceGateway implements
 			return;
 		}
 
-		const friends = await this.friendsService.getFriends(userUUID);
-		if (this.presenceService.isOnline(userUUID)) {
-			return;
+		try {
+			const friends = await this.friendsService.getFriends(userUUID);
+			if (this.presenceService.isOnline(userUUID)) {
+				return;
+			}
+			this.notifyFriends(friends, userUUID, false);
+		} catch (error) {
+			this.logger.error(`Presence disconnection failed for ${userUUID}`, error);
 		}
-		this.notifyFriends(friends, userUUID, false);
-	}
-
-	private async authenticate(socket: PresenceSocket): Promise<void> {
-		const token: unknown = socket.handshake.auth?.token;
-		if (typeof token !== "string" || token.length === 0) {
-			throw new Error("Missing token");
-		}
-
-		const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
-			secret: env.JWT_SECRET,
-		});
-
-		if (typeof payload.sub !== "string" || payload.emailVerified !== true) {
-			throw new Error("Invalid token payload");
-		}
-
-		socket.data.userUUID = payload.sub;
 	}
 
 	private notifyFriends(

@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import type { OnlineStatus } from "@flex/shared";
 
 @Injectable()
 export class PresenceService {
@@ -32,5 +33,11 @@ export class PresenceService {
 
 	public isOnline(userUUID: string): boolean {
 		return (this.connections.get(userUUID)?.size ?? 0) > 0;
+	}
+
+	public getStatus(userUUID: string): OnlineStatus {
+		return this.isOnline(userUUID)
+			? "online"
+			: "offline";
 	}
 }

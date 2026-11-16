@@ -1,7 +1,7 @@
 import { createMemo, Match, Switch } from "solid-js";
 import { serverContract, type FriendRelation, type FriendRequestAnswer, type ShortUser } from "@flex/shared";
 import { type ClientInferResponses } from "@ts-rest/core";
-import { queryClient } from "~/App";
+import { queryClient } from "~/api/queryClient";
 import { client, queryKeys } from "~/api/client";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import Button from "~/components/inputs/Button";
@@ -103,7 +103,7 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 					const requester = me.data?.body.friendRequests.find((f) => f.uuid === targetUuid);
 					updateMe((body) => ({
 						friendRequests: body.friendRequests.filter((f) => f.uuid !== targetUuid),
-						friends: requester ? [...body.friends, requester] : body.friends,
+						friends: requester ? [...body.friends, { ...requester, status: "offline" as const }] : body.friends,
 					}));
 					if (me.data) {
 						updateTargetFriends(targetUuid, (friends) => [...friends, { uuid: me.data.body.uuid, username: me.data.body.username }]);

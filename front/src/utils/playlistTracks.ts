@@ -1,34 +1,23 @@
-export const BATCH_SIZE = 100;
+import { Provider } from "@flex/shared";
+import { Music, UnavailableMusicState } from "~/class/Music";
 
-export type UnavailableState = "restricted" | "offline" | "missing" | "loading";
+export const BATCH_SIZE = 100;
 
 export interface PlaylistEntry {
 	musicUuid: string;
 	providerUuid: string;
 }
 
-export interface PlaylistProvider {
-	uuid: string;
-	name: string;
-	address: string;
-}
-
-export interface UnavailableTrack {
-	state: UnavailableState;
-	musicUuid: string;
-	provider: PlaylistProvider;
-}
-
-export type ChunkResult<T>
+export type ChunkResult
 	= | { status: "pending" }
 		| { status: "offline" }
 		| { status: "restricted" }
-		| { status: "ok"; musics: T[]; missing: string[] };
+		| { status: "ok"; musics: Music[]; missing: string[] };
 
-export interface Chunk<T> {
+export interface Chunk {
 	providerUuid: string;
 	uuids: string[];
-	result: ChunkResult<T>;
+	result: ChunkResult;
 }
 
 export function chunkEntries(entries: PlaylistEntry[]) {
@@ -48,12 +37,12 @@ export function chunkEntries(entries: PlaylistEntry[]) {
 	});
 }
 
-export function buildTracks<T extends { uuid: string }>(
+export function buildMusics(
 	entries: PlaylistEntry[],
-	providers: PlaylistProvider[],
-	chunks: Chunk<T>[],
-): (T | UnavailableTrack)[] {
-	const outcomes = new Map<string, T | UnavailableState>();
+	providers: Provider[],
+	chunks: Chunk[],
+): Music[] {
+	const outcomes = new Map<string, Music | UnavailableMusicState>();
 	const key = (providerUuid: string, musicUuid: string) => `${providerUuid}/${musicUuid}`;
 
 	for (const { providerUuid, uuids, result } of chunks) {
@@ -63,7 +52,7 @@ export function buildTracks<T extends { uuid: string }>(
 				if (!outcomes.has(key(providerUuid, uuid))) outcomes.set(key(providerUuid, uuid), "missing");
 			}
 		} else {
-			const state: UnavailableState = result.status === "pending"
+			const state: UnavailableMusicState = result.status === "pending"
 				? "loading"
 				: result.status;
 			for (const uuid of uuids) outcomes.set(key(providerUuid, uuid), state);
@@ -76,6 +65,6 @@ export function buildTracks<T extends { uuid: string }>(
 		if (typeof outcome !== "string") return outcome;
 
 		const provider = providerByUuid.get(entry.providerUuid) ?? { uuid: entry.providerUuid, name: "Unknown provider", address: "" };
-		return { state: outcome, musicUuid: entry.musicUuid, provider };
+		return Music.createUnavailable(entry.musicUuid, provider, outcome);
 	});
 }

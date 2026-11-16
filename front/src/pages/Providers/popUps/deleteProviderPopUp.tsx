@@ -1,6 +1,6 @@
 import { serverContract } from "@flex/shared";
 import { type ClientInferResponses } from "@ts-rest/core";
-import { queryClient } from "~/App";
+import { queryClient } from "~/api/queryClient";
 import { client, queryKeys } from "~/api/client";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";

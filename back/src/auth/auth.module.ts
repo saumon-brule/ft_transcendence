@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { AuthService } from "./auth.service";
+import { SocketAuthService } from "./auth-socket.service";
 import { AuthController } from "./auth.controller";
 import { UsersModule } from "../users/users.module";
 import { SessionsModule } from "../sessions/sessions.module";
@@ -13,8 +14,8 @@ import { LoggingModule } from "../core/logging/logging.module";
 
 @Module({
 	imports: [UsersModule, SessionsModule, JwtModule, MailModule, TokensModule, AppConfigModule, LoggingModule],
-	providers: [AuthService, JwtStrategy, RefreshStrategy],
+	providers: [AuthService, JwtStrategy, RefreshStrategy, SocketAuthService],
 	controllers: [AuthController],
-	exports: [AuthService],
+	exports: [AuthService, SocketAuthService],
 })
 export class AuthModule {}

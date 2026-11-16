@@ -64,35 +64,6 @@ CREATE TABLE "Token" (
 );
 
 -- CreateTable
-CREATE TABLE "Role" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "superRole" BOOLEAN NOT NULL DEFAULT false,
-    "defaultRole" BOOLEAN NOT NULL DEFAULT false,
-    "displayColor" TEXT,
-
-    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "RolePermission" (
-    "id" SERIAL NOT NULL,
-    "roleId" INTEGER NOT NULL,
-    "permission" TEXT NOT NULL,
-
-    CONSTRAINT "RolePermission_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "UserRole" (
-    "id" SERIAL NOT NULL,
-    "userUUID" TEXT NOT NULL,
-    "roleId" INTEGER NOT NULL,
-
-    CONSTRAINT "UserRole_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "AppConfig" (
     "key" TEXT NOT NULL,
     "value" TEXT NOT NULL,
@@ -209,15 +180,6 @@ CREATE UNIQUE INDEX "Session_userUUID_jti_key" ON "Session"("userUUID", "jti");
 CREATE UNIQUE INDEX "Token_token_key" ON "Token"("token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "RolePermission_roleId_permission_key" ON "RolePermission"("roleId", "permission");
-
--- CreateIndex
-CREATE UNIQUE INDEX "UserRole_userUUID_roleId_key" ON "UserRole"("userUUID", "roleId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Provider_uuid_key" ON "Provider"("uuid");
 
 -- CreateIndex
@@ -264,15 +226,6 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_userUUID_fkey" FOREIGN KEY ("userU
 
 -- AddForeignKey
 ALTER TABLE "Token" ADD CONSTRAINT "Token_userUUID_fkey" FOREIGN KEY ("userUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "RolePermission" ADD CONSTRAINT "RolePermission_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_userUUID_fkey" FOREIGN KEY ("userUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Provider" ADD CONSTRAINT "Provider_ownerUUID_fkey" FOREIGN KEY ("ownerUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;

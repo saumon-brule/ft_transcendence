@@ -1,17 +1,62 @@
+@use "../../../styles/breakpoints" as breakpoints;
+
 #app-footer {
 	position: sticky;
 	bottom: 0;
 	z-index: 10;
 	margin-top: auto;
 
-	width: 100%;
-	box-sizing: border-box;
-	height: 100px;
-	background-color: var(--background-surface);
-	padding: 1rem;
-	border-top: solid var(--background-overlay) 1px;
+	@include breakpoints.respond-to("mobile") {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		display: flex;
+		flex-direction: column-reverse;
+		overflow-y: auto;
+		background-color: var(--background-page);
 
-	display: grid;
-	grid-template-columns: minmax(105px, 1fr) minmax(min-content, 42%) minmax(105px, 1fr);
-	align-items: center;
+		&.hide {
+			display: none;
+		}
+	}
+
+	.close-footer {
+		display: none;
+
+		@include breakpoints.respond-to("mobile") {
+			display: flex;
+			position: fixed;
+			top: 0.5rem;
+			right: 0.5rem;
+			z-index: 1;
+			pointer-events: auto;
+		}
+	}
+
+	.footer {
+		width: 100%;
+		box-sizing: border-box;
+		height: 100px;
+		background-color: var(--background-surface);
+		padding: 1rem;
+		border-top: solid var(--background-overlay) 1px;
+
+		display: grid;
+		grid-template-columns: minmax(105px, 1fr) minmax(
+				min-content,
+				42%
+			) minmax(105px, 1fr);
+		align-items: center;
+
+		@include breakpoints.respond-to("mobile") {
+			height: auto;
+			display: flex;
+			flex-direction: column;
+			margin-top: 0;
+			pointer-events: auto; 
+		}
+	}
 }

@@ -8,7 +8,7 @@ import TextInput from "~/components/inputs/TextInput";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { useTranslation } from "~/i18n/context";
 import { validateFromZod } from "~/utils/validateFromZod";
-import { queryClient } from "~/App";
+import { queryClient } from "~/api/queryClient";
 import { ClientInferResponses } from "@ts-rest/core";
 
 type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;

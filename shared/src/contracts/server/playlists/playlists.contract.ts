@@ -1,7 +1,7 @@
 import { initContract } from "@ts-rest/core";
 import { uuidParamSchema } from "../../../schemas/common.schema";
 import { createdPlaylistSchema, createPlaylistBodySchema, MusicBodySchema, playlistDetailSchema, playlistListSchema, updatePlaylistNameSchema, updatePlaylistPrivacySchema } from "./schemas/playlist.schema";
-import { commonError404Schema } from "../../../errors/error-schemas";
+import { commonError404Schema, commonError409Schema } from "../../../errors/error-schemas";
 
 const c = initContract();
 
@@ -66,6 +66,7 @@ export const playlistsContract = c.router(
 			responses: {
 				204: null,
 				404: commonError404Schema,
+				409: commonError409Schema,
 			},
 		},
 		removeMusicFromPlaylist: {

@@ -16,7 +16,7 @@ export function ArtistAvatar(props: { artist: ProviderInfo["artist"]["artists"][
 	const src = () => {
 		const token = mediaToken();
 		if (token && props.artist.hasAvatar) return buildMediaUrl(props.artist.providerUrl, "artistAvatar", props.artist.uuid, token);
-		return "/images/default_artist.png";
+		return "/images/default_artist.webp";
 	};
 
 	return <img src={src()} alt={props.artist.name} class="artist-img"/>;
@@ -27,7 +27,7 @@ export default function ArtistSection(props: ArtistSectionProps) {
 		<For each={props.artist.artists}>{(artist) => <div class="artist">
 			<ArtistAvatar artist={artist}/>
 			<div class="artist-info">
-				<A href={`/provider/${artist.providerUuid}/artist/${artist.uuid}`} class="white-variant artist-name">{artist.name}</A>
+				<A href={artist.route()} class="white-variant artist-name">{artist.name}</A>
 				<Show when={props.providers?.length}><div class="album-provider">From <A href={`/provider/${artist.providerUuid}`}>{props.providers?.find((provider) => provider.uuid === artist.providerUuid)?.name}</A></div></Show>
 			</div>
 		</div>}</For>
