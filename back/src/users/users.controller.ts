@@ -123,12 +123,12 @@ export class UsersController {
 		return tsRestHandler(usersContract.deleteAvatar, async () => {
 			const filename = `${authUser.uuid}.webp`;
 			const filepath = join(AVATAR_DIR, filename);
-			
+
 			try {
 				await unlink(filepath);
 			} catch (err) {
-				if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
-					return { status: 500, body: null };	
+				if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
+					return { status: 500, body: null };
 				}
 			}
 

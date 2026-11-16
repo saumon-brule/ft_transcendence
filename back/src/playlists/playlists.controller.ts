@@ -75,8 +75,8 @@ export class PlaylistsController {
 			try {
 				await unlink(filepath);
 			} catch (err) {
-				if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
-					return { status: 500, body: null };	
+				if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
+					return { status: 500, body: null };
 				}
 			}
 
