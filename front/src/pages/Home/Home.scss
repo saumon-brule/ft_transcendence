@@ -1,0 +1,20 @@
+@use "../../styles/breakpoints" as breakpoints;
+
+#home {
+	h2 {
+		margin-bottom: 20px;
+	}
+
+	.card-list {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+		gap: 16px;
+		margin-bottom: 20px;
+
+		@include breakpoints.respond-to("mobile") {
+			grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+			gap: 12px;
+		}
+	}
+}

@@ -1,36 +1,16 @@
-import { For, Show } from "solid-js";
-import { buildMediaUrl, Provider } from "@flex/shared";
-import { DEFAULT_ARTIST, imgFallback } from "~/utils/imageFallback";
-import { useMediaToken } from "~/api/providerClients";
-import "./ArtistSection.scss";
-import { A } from "@solidjs/router";
+import { For } from "solid-js";
+import { Provider } from "@flex/shared";
 import { ProviderInfo } from "~/api/queryHooks/providerInfo";
+import ArtistCard from "../ArtistCard";
+import "./ArtistSection.scss";
 
 export type ArtistSectionProps = {
 	artist: ProviderInfo["artist"];
 	providers?: Provider[];
 };
 
-export function ArtistAvatar(props: { artist: ProviderInfo["artist"]["artists"][number] }) {
-	const mediaToken = useMediaToken(() => props.artist.providerUrl, () => props.artist.providerUuid);
-
-	const src = () => {
-		const token = mediaToken();
-		if (token && props.artist.hasAvatar) return buildMediaUrl(props.artist.providerUrl, "artistAvatar", props.artist.uuid, token);
-		return DEFAULT_ARTIST;
-	};
-
-	return <img src={src()} alt={props.artist.name} class="artist-img" onError={imgFallback(DEFAULT_ARTIST)} />;
-}
-
 export default function ArtistSection(props: ArtistSectionProps) {
 	return <div class="artist-section">
-		<For each={props.artist.artists}>{(artist) => <div class="artist">
-			<ArtistAvatar artist={artist}/>
-			<div class="artist-info">
-				<A href={artist.route()} class="white-variant artist-name">{artist.name}</A>
-				<Show when={props.providers?.length}><div class="album-provider">From <A href={`/provider/${artist.providerUuid}`}>{props.providers?.find((provider) => provider.uuid === artist.providerUuid)?.name}</A></div></Show>
-			</div>
-		</div>}</For>
+		<For each={props.artist.artists}>{(artist) => <ArtistCard artist={artist} providers={props.providers}/>}</For>
 	</div>;
 }

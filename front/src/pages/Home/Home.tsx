@@ -1,38 +1,41 @@
-import { useNavigate } from "@solidjs/router";
-import { Show } from "solid-js";
-import { client, queryKeys } from "~/api/client";
-import Button from "~/components/inputs/Button";
-import { summonPopUp } from "~/components/ui/Overlay";
-import { authActions } from "~/store/auth.store";
+import { For, Show } from "solid-js";
+import { Album } from "~/class/Album";
+import { Artist } from "~/class/Artist";
+import AlbumCard from "~/components/ui/AlbumCard";
+import ArtistCard from "~/components/ui/ArtistCard";
 import { history } from "~/store/history.store";
-
-function RecursivePopUp(props: { recursionCount?: number }) {
-	return <>Recusrive foutre {props.recursionCount ?? 0}<br/><Button onClick={() => summonPopUp(<RecursivePopUp recursionCount={(props.recursionCount ?? 0) + 1}/>)}>PopUp</Button></>;
-}
+import "./Home.scss";
+import { Music } from "~/class/Music";
+import MusicCard from "~/components/ui/MusicCard";
+import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 
 export default function Home() {
-	const me = client.users.me.createQuery(queryKeys.users.me, () => ({}));
+	const profile = useMeProfileQuery();
+	const providers = () => profile.data?.body ? [...profile.data.body.ownedProviders, ...profile.data.body.connectedProviders] : [];
 
-	const navigate = useNavigate();
-
-	function logout() {
-		authActions.logout();
-	}
-
-	return <div style={{ background: "red" }}>
-		HOME, SWEET HOME ...
-		<code>
-			{JSON.stringify({
-				artist: { top: history.artist.top(), last: history.artist.last() },
-				album: { top: history.album.top(), last: history.album.last() },
-				music: { top: history.music.top(), last: history.music.last() },
-			}, null, 2)}
-		</code>
-		<Show when={me.isFetched}>
-			<pre><code>{JSON.stringify(me.data?.body, null, 2)}</code></pre>
-			<Button onClick={logout}>logout</Button>
-			<Button onClick={() => navigate("/")}>Landing</Button>
-			<Button onClick={() => summonPopUp(<RecursivePopUp/>)}>PopUp</Button>
+	return <div id="home" class="page">
+		<Show when={history.top().length + history.last().length === 0}>
+			<div>Vous n'avez encore rien écouté</div>
+		</Show>
+		<Show when={history.top().length}>
+			<h2>Vous avez le plus écouté</h2>
+			<div class="card-list">
+				<For each={history.top()}>{(e) => {
+					if (e instanceof Artist) return <ArtistCard artist={e} providers={providers()}/>;
+					else if (e instanceof Album) return <AlbumCard album={e} providers={providers()} hiddenProp={["published"]}/>;
+					else if (e instanceof Music) return <MusicCard music={e} providers={providers()}/>;
+				}}</For>
+			</div>
+		</Show>
+		<Show when={history.last().length}>
+			<h2>Vos dernieres écoutes</h2>
+			<div class="card-list">
+				<For each={history.last()}>{(e) => {
+					if (e instanceof Artist) return <ArtistCard artist={e} providers={providers()}/>;
+					else if (e instanceof Album) return <AlbumCard album={e} providers={providers()} hiddenProp={["published"]}/>;
+					else if (e instanceof Music) return <MusicCard music={e} providers={providers()}/>;
+				}}</For>
+			</div>
 		</Show>
 	</div>;
 }
