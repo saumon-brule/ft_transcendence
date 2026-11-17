@@ -14,6 +14,7 @@ export default function Footer() {
 	const [showQueue, setShowQueue] = createSignal(false);
 	const [showFooter, setShowFooter] = createSignal(false);
 	const hasSomethingToPlay = () => !!(audioManager.currentMusic || audioManager.musicGroup || audioManager.queue.length);
+	let footerRef!: HTMLElement;
 
 	createEffect(on(hasSomethingToPlay, (visible) => {
 		if (!visible) {
@@ -22,7 +23,12 @@ export default function Footer() {
 		}
 	}, { defer: true }));
 
-	return <Show when={hasSomethingToPlay()}><footer id="app-footer" classList={{ "hide": !showFooter() }}>
+	function openFooter() {
+		setShowFooter(true);
+		footerRef.scrollTop = -footerRef.scrollHeight;
+	}
+
+	return <Show when={hasSomethingToPlay()}><footer ref={footerRef} id="app-footer" classList={{ "hide": !showFooter() }}>
 		<Button class="close-footer" icon onClick={() => setShowFooter(false)}><ChevronDown/></Button>
 		<Queue show={showQueue} setShow={setShowQueue}/>
 		<div class="footer">
@@ -31,6 +37,6 @@ export default function Footer() {
 			<SecondaryControl setShowQueue={setShowQueue} />
 		</div >
 	</footer>
-	<FloatingFooter hidden={showFooter()} onOpen={() => setShowFooter(true)} />
+	<FloatingFooter hidden={showFooter()} onOpen={openFooter} />
 	</Show>;
 }
