@@ -8,6 +8,8 @@ import { useAudioManagerContext } from "~/components/context/AudioManagerContext
 import Button from "~/components/inputs/Button";
 import { Play, Shuffle } from "lucide-solid";
 import { MusicGroup } from "~/store/trackManager.store";
+import { history } from "~/store/history.store";
+import { Artist } from "~/class/Artist";
 
 export type ProviderArtistHeaderProps = {
 	artist: ProviderArtistQueryBody;
@@ -27,6 +29,7 @@ export default function ProviderArtistHeader(props: ProviderArtistHeaderProps) {
 		if (shuffle) audioManager.shuffle();
 		audioManager.position = 0;
 		audioManager.play();
+		history.artist.listen(Artist.fromRawObject(props.artist, props.providerBack.address, props.providerBack.uuid));
 	}
 
 	function getAvatar(artist: ProviderArtistQueryBody) {

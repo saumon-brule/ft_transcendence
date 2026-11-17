@@ -4,6 +4,7 @@ import { client, queryKeys } from "~/api/client";
 import Button from "~/components/inputs/Button";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { authActions } from "~/store/auth.store";
+import { history } from "~/store/history.store";
 
 function RecursivePopUp(props: { recursionCount?: number }) {
 	return <>Recusrive foutre {props.recursionCount ?? 0}<br/><Button onClick={() => summonPopUp(<RecursivePopUp recursionCount={(props.recursionCount ?? 0) + 1}/>)}>PopUp</Button></>;
@@ -20,6 +21,13 @@ export default function Home() {
 
 	return <div style={{ background: "red" }}>
 		HOME, SWEET HOME ...
+		<code>
+			{JSON.stringify({
+				artist: { top: history.artist.top(), last: history.artist.last() },
+				album: { top: history.album.top(), last: history.album.last() },
+				music: { top: history.music.top(), last: history.music.last() },
+			}, null, 2)}
+		</code>
 		<Show when={me.isFetched}>
 			<pre><code>{JSON.stringify(me.data?.body, null, 2)}</code></pre>
 			<Button onClick={logout}>logout</Button>
