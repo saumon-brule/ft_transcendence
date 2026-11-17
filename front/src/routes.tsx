@@ -32,6 +32,8 @@ import Playlist from "./pages/Playlist";
 import Playlists from "./pages/Playlists";
 import NotFound from "./pages/NotFound/NotFound";
 import ProviderEdit from "./pages/Provider/ProviderEdit";
+import EditPermissionGuard from "./components/guards/EditPermissionGuard";
+import ProviderInfoGuard from "./components/guards/ProviderInfoGuard";
 
 export const AppRouter = () => {
 	return <Router >
@@ -65,10 +67,14 @@ export const AppRouter = () => {
 						<Route path="/friends/:uuid" component={Friends} />
 						<Route path="/settings" component={Settings} />
 						<Route path="/providers" component={Providers} />
-						<Route path="/provider/:uuid" component={Provider} />
-						<Route path="/provider/:uuid/edit" component={ProviderEdit} />
-						<Route path="/provider/:uuid/artist/:artistUUID" component={ProviderArtist} />
-						<Route path="/provider/:uuid/album/:albumUUID" component={ProviderAlbum} />
+						<Route path="/" component={ProviderInfoGuard} >
+							<Route path="/provider/:uuid" component={Provider} />
+							<Route path="/" component={EditPermissionGuard} >
+								<Route path="/provider/:uuid/edit" component={ProviderEdit} />
+							</Route>
+							<Route path="/provider/:uuid/artist/:artistUUID" component={ProviderArtist} />
+							<Route path="/provider/:uuid/album/:albumUUID" component={ProviderAlbum} />
+						</Route>
 						<Route path="*" component={NotFound} />
 					</Route>
 				</Route>
