@@ -48,7 +48,9 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 	return <header class="playlist-header">
 		<img src={`${env.VITE_API_URL}/playlists/${props.playlist.uuid}/cover`} alt="Playlist cover" />
 		<div class="header-info">
-			<Show when={props.playlist.private}><span class="badge">Private</span></Show>
+			<span class="badge">
+				<Show when={props.playlist.private} fallback={<><Globe size={12} /> Public</>}><Lock size={12} /> Private</Show>
+			</span>
 			<h2>{props.playlist.name}</h2>
 			<div class="stats">
 				<span class="stat">{props.playlist.musics.length} musics</span>
@@ -67,7 +69,10 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 			<Show when={props.playlist.isOwner}>
 				<Button variant="text" onClick={() => summonRenamePlaylistPopUp(props.playlist)}><Pencil /> Rename</Button>
 				<Button variant="text" disabled={setPrivacy.isPending} onClick={togglePrivacy}>
-					<Show when={props.playlist.private} fallback={<><Lock /> Make private</>}><Globe /> Make public</Show>
+					<span class="toggle-labels">
+						<span classList={{ inactive: !props.playlist.private }}><Globe /> Make public</span>
+						<span classList={{ inactive: props.playlist.private }}><Lock /> Make private</span>
+					</span>
 				</Button>
 				<Button variant="danger" onClick={() => summonDeletePlaylistPopUp(props.playlist, () => navigate("/playlists"))}><Trash2 /> Delete</Button>
 			</Show>

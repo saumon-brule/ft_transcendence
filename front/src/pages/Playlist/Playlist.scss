@@ -54,7 +54,9 @@
 			}
 
 			.badge {
-				display: inline-block;
+				display: inline-flex;
+				align-items: center;
+				gap: 4px;
 				margin-bottom: 4px;
 				font-size: 12px;
 				text-transform: uppercase;
@@ -140,5 +142,21 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
+	}
+}
+
+#playlist .playlist-header .header-controls .toggle-labels {
+	display: grid;
+
+	> span {
+		grid-area: 1 / 1;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+
+		&.inactive {
+			visibility: hidden;
+		}
 	}
 }
