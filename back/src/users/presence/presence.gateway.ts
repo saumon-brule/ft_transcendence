@@ -10,7 +10,6 @@ import { env } from "../../core/env";
 import { FriendsService } from "../friends/friends.service";
 import { PresenceService } from "./presence.service";
 import { type DefaultEventsMap, type Server, type Socket } from "socket.io";
-import { SocketAuthService } from "../../auth/auth-socket.service";
 
 type PresenceSocketData = {
 	userUUID?: string;
@@ -44,22 +43,12 @@ export class PresenceGateway implements
 	private readonly logger = new Logger(PresenceGateway.name);
 
 	constructor(
-		private readonly socketAuthService: SocketAuthService,
 		private readonly friendsService: FriendsService,
 		private readonly presenceService: PresenceService,
 	) {}
 
 	afterInit(server: PresenceServer): void {
 		this.server = server;
-
-		server.use((socket, next) => {
-			void this.socketAuthService.authenticate(socket.handshake.auth?.token)
-				.then((result) => {
-					socket.data.userUUID = result.userUUID;
-					next();
-				})
-				.catch(() => next(new Error("Unauthorized")));
-		});
 	}
 
 	async handleConnection(client: PresenceSocket): Promise<void> {
@@ -71,9 +60,6 @@ export class PresenceGateway implements
 
 		try {
 			const friends = await this.friendsService.getFriends(userUUID);
-			if (!client.connected) return;
-
-			await client.join(this.userRoom(userUUID));
 			if (!client.connected) return;
 
 			const becameOnline = this.presenceService.connect(userUUID, client.id);

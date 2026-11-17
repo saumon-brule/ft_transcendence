@@ -1,18 +1,14 @@
 import { createMemo, Match, Switch } from "solid-js";
-import { serverContract, type FriendRelation, type FriendRequestAnswer, type ShortUser } from "@flex/shared";
-import { type ClientInferResponses } from "@ts-rest/core";
-import { queryClient } from "~/api/queryClient";
+import { type FriendRequestAnswer } from "@flex/shared";
 import { client, queryKeys } from "~/api/client";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { setRelation, updateMe, updateTargetFriends } from "~/api/queryHooks/friendsCache";
 import Button from "~/components/inputs/Button";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { UserRoundX } from "lucide-solid";
 import "./FriendshipActions.scss";
 
 type FriendshipStatus = "loading" | "friends" | "incoming" | "outgoing" | "none";
-type MeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
-type UserResponse = ClientInferResponses<typeof serverContract.users.getUser, 200>;
-type RelationResponse = ClientInferResponses<typeof serverContract.friends.isFriendWith, 200>;
 
 type FriendshipActionsProps = {
 	meUuid: string;
@@ -41,27 +37,6 @@ export default function FriendshipActions(props: FriendshipActionsProps) {
 	const pending = () => makeRequestMutation.isPending
 		|| removeFriendMutation.isPending
 		|| manageRequestMutation.isPending;
-
-	function setRelation(targetUuid: string, isFriend: FriendRelation) {
-		queryClient.setQueryData<RelationResponse>(
-			queryKeys.friends.isFriendWith([targetUuid]),
-			(old) => old && { ...old, body: { isFriend } },
-		);
-	}
-
-	function updateMe(update: (body: MeResponse["body"]) => Partial<MeResponse["body"]>) {
-		queryClient.setQueryData<MeResponse>(
-			queryKeys.users.me(),
-			(old) => old && { ...old, body: { ...old.body, ...update(old.body) } },
-		);
-	}
-
-	function updateTargetFriends(targetUuid: string, update: (friends: ShortUser[]) => ShortUser[]) {
-		queryClient.setQueryData<UserResponse>(
-			queryKeys.users.getUser([targetUuid]),
-			(old) => old && { ...old, body: { ...old.body, friends: update(old.body.friends) } },
-		);
-	}
 
 	function sendRequest() {
 		const targetUuid = props.targetUuid;

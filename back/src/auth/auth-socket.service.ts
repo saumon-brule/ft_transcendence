@@ -7,12 +7,12 @@ import { env } from "../core/env";
 export class SocketAuthService {
 	constructor(private readonly jwtService: JwtService) {}
 
-	async authenticate(token: unknown): Promise<{ userUUID: string }> {
+	async authenticate(token: unknown): Promise<{ userUUID: string; expiresAt: number | null }> {
 		if (typeof token !== "string" || token.length === 0) {
 			throw new Error("Missing token");
 		}
 
-		const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
+		const payload = await this.jwtService.verifyAsync<JwtPayload & { exp?: number }>(token, {
 			secret: env.JWT_SECRET,
 		});
 
@@ -20,6 +20,11 @@ export class SocketAuthService {
 			throw new Error("Invalid token payload");
 		}
 
-		return { userUUID: payload.sub };
+		return {
+			userUUID: payload.sub,
+			expiresAt: typeof payload.exp === "number"
+				? payload.exp * 1000
+				: null,
+		};
 	}
 }
