@@ -1,5 +1,5 @@
 import type { ProviderDataDto, Provider } from "@flex/shared";
-import { createEffect, Show } from "solid-js";
+import { Show } from "solid-js";
 import { ProviderStatus } from "./Provider";
 import Button from "~/components/inputs/Button/Button";
 import { useLeaveProviderMutation, useAccessRequestQuery, useJoinProvider as useJoinProviderMutation, useProviderInfoInfoQuery } from "~/api/queryHooks/providerAccess";
@@ -29,10 +29,6 @@ export default function ProviderHeader(props: ProviderHeaderProps) {
 	const joinMutation = useJoinProviderMutation();
 	const pending = () => requestQuery.data === "PENDING" || (joinMutation.isSuccess && joinMutation.data === "PENDING");
 	const navigate = useNavigate();
-
-	createEffect(() => {
-		console.log(info.data?.body);
-	});
 
 	return <header class="provider-header">
 		<div class="content">

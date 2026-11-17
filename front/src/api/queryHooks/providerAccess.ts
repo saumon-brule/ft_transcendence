@@ -2,15 +2,11 @@ import { createMutation, createQuery, useQueryClient } from "@tanstack/solid-que
 import { client } from "../client";
 import { getProviderClient } from "../providerClients";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
-
-interface ProviderRef {
-	uuid: string;
-	address: string;
-}
+import { Provider } from "@flex/shared";
 
 export type JoinStatus = "PENDING" | "APPROVED" | "REJECTED";
 
-export const useAccessRequestQuery = (provider: () => ProviderRef) => {
+export const useAccessRequestQuery = (provider: () => Provider) => {
 	const providerClient = () => getProviderClient(provider().address, provider().uuid);
 
 	return createQuery({
@@ -31,7 +27,7 @@ export const useJoinProvider = () => {
 	const queryClient = useQueryClient();
 
 	return createMutation({
-		mutationFn: async (provider: ProviderRef): Promise<JoinStatus> => {
+		mutationFn: async (provider: Provider): Promise<JoinStatus> => {
 			const requested = await client.providers.initiateAccessRequest.mutation({ params: { uuid: provider.uuid } });
 			if (requested.status === 409) throw new Error("The server already considers you a member of this provider");
 			if (requested.status !== 200) throw new Error(`Access request failed with status ${requested.status}`);
@@ -48,7 +44,7 @@ export const useJoinProvider = () => {
 	});
 };
 
-export const useLeaveProviderMutation = (provider: () => ProviderRef) => {
+export const useLeaveProviderMutation = (provider: () => Provider) => {
 	const queryClient = useQueryClient();
 
 	return getProviderClient(provider().address, provider().uuid).client.member.leave.createMutation({
@@ -60,14 +56,11 @@ export const useLeaveProviderMutation = (provider: () => ProviderRef) => {
 	});
 };
 
-export const useProviderInfoInfoQuery = (provider: () => ProviderRef | null) => {
-	if (provider()) {
-		const providerClient = getProviderClient(provider()!.address, provider()!.uuid);
-		return providerClient.client.info.info.createQuery(
-			providerClient.keys.info.info,
-			{},
-			{ onError: () => { summonErrorToast("An error occured"); } },
-		);
-	}
-	return null;
+export const useProviderInfoInfoQuery = (provider: () => Provider) => {
+	const providerClient = getProviderClient(provider().address, provider().uuid);
+	return providerClient.client.info.info.createQuery(
+		providerClient.keys.info.info,
+		{},
+		{ onError: () => { summonErrorToast("An error occured"); } },
+	);
 };
