@@ -18,20 +18,24 @@ export type ProviderStatus = "loading" | "success";
 export default function ProviderEdit() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string }>();
-	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { get uuid() { return params.uuid; } } });
-	const providerInfo = () => providerBack.data?.body ?? null;
-	const provider = useProviderInfoQuery(() => params.uuid, providerInfo);
-	const info = useProviderInfoInfoQuery(providerInfo);
+	const providerQuery = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { get uuid() { return params.uuid; } } });
+	const provider = () => providerQuery.data?.body ?? null;
+	const providerInfoQuery = useProviderInfoQuery(() => params.uuid, provider);
+	const providerInfoInfoQuery = createMemo(() => {
+		const tmp = provider();
+		if (tmp) useProviderInfoInfoQuery(() => tmp);
+		else return null;
+	});
 	const providerStatus = createMemo<ProviderStatus>(() => {
-		if (provider.isSuccess) return "success";
-		if (provider.isError) {
-			navigate(`/provider/${providerInfo()?.uuid}`);
+		if (providerInfoQuery.isSuccess) return "success";
+		if (providerInfoQuery.isError) {
+			navigate(`/provider/${provider()?.uuid}`);
 		}
 		return "loading";
 	});
 
 	createEffect(() => {
-		if (providerBack.isError) {
+		if (providerQuery.isError) {
 			navigate("/home");
 			summonErrorToast("Unknown provider");
 		}
@@ -43,20 +47,17 @@ export default function ProviderEdit() {
 	const setSearch = (value: string) => setSearchParams({ q: encodeURIComponent(value) || undefined }, { replace: true });
 
 	return <div class="page" id="provider">
-		<Show when={providerInfo()} keyed>{(backData) => <>
-			<ProviderHeader provider={provider.data?.body} providerBack={backData} status={providerStatus()} />
+		<Show when={provider()} keyed>{(backData) => <>
+			<ProviderHeader provider={providerInfoQuery.data?.body} providerBack={backData} status={providerStatus()} />
 			<Switch>
 				<Match when={providerStatus() === "loading"}>
 					<LoadingSplash />
 				</Match>
 				<Match when={providerStatus() === "success"}>
-					<Show when={provider.data?.body}>
+					<Show when={providerInfoQuery.data?.body}>
 						<Tabs tabs={TABS} value={tab()} onChange={setTab} />
-						{/* <ProviderSearchBar value={search()} onSearch={setSearch} />
+						<ProviderSearchBar value={search()} onSearch={setSearch} />
 						<Switch>
-							<Match when={tab() === "All"}>
-								<ProviderTabAll providerInfo={backData} search={search()} />
-							</Match>
 							<Match when={tab() === "Musics"}>
 								<ProviderTabMusics providerInfo={backData} search={search()} />
 							</Match>
@@ -66,7 +67,7 @@ export default function ProviderEdit() {
 							<Match when={tab() === "Artists"}>
 								<ProviderTabArtists providerUrl={backData.address} providerUuid={params.uuid} search={search()} />
 							</Match>
-						</Switch> */}
+						</Switch>
 					</Show>
 				</Match>
 			</Switch>
