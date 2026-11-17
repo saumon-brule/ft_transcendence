@@ -11,6 +11,7 @@ import { MusicGroup } from "~/store/trackManager.store";
 import { Accessor } from "solid-js";
 import { Album } from "~/class/Album";
 import { history } from "~/store/history.store";
+import { DEFAULT_ALBUM, imgFallback } from "~/utils/imageFallback";
 
 export type ProviderAlbumHeaderProps = {
 	album: ProviderAlbumQueryBody;
@@ -37,11 +38,11 @@ export default function ProviderAlbumHeader(props: ProviderAlbumHeaderProps) {
 		if (album.hasCover && token) {
 			return buildMediaUrl(props.providerBack.address, "albumCover", album.uuid, token);
 		}
-		return "/images/default_album.webp";
+		return DEFAULT_ALBUM;
 	}
 
 	return <header class="provider-image-header">
-		<img src={getCover(props.album)} alt="Profile picture" />
+		<img src={getCover(props.album)} alt="Album cover" onError={imgFallback(DEFAULT_ALBUM)} />
 		<div class="header-info">
 			<h2>{props.album.name}</h2>
 			<div class="stats">

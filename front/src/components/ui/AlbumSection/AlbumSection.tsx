@@ -5,6 +5,7 @@ import "./AlbumSection.scss";
 import { A } from "@solidjs/router";
 import { ProviderInfo } from "~/api/queryHooks/providerInfo";
 import ArtistsLinks from "../ArtistLinks";
+import { DEFAULT_ALBUM, imgFallback } from "~/utils/imageFallback";
 
 export function AlbumCover(props: { album: ProviderInfo["album"]["albums"][number] }) {
 	const mediaToken = useMediaToken(() => props.album.providerUrl, () => props.album.providerUuid);
@@ -12,10 +13,10 @@ export function AlbumCover(props: { album: ProviderInfo["album"]["albums"][numbe
 	const src = () => {
 		const token = mediaToken();
 		if (token && props.album.hasCover) return buildMediaUrl(props.album.providerUrl, "albumCover", props.album.uuid, token);
-		return "/images/default_album.webp";
+		return DEFAULT_ALBUM;
 	};
 
-	return <img src={src()} alt={props.album.name} />;
+	return <img src={src()} alt={props.album.name} onError={imgFallback(DEFAULT_ALBUM)} />;
 }
 
 export type AlbumSectionData = "artists" | "published";

@@ -2,6 +2,8 @@ import { JSX, splitProps } from "solid-js";
 import { useMediaToken } from "~/api/providerClients";
 import { Music } from "~/class/Music";
 
+import { DEFAULT_COVER, imgFallback } from "~/utils/imageFallback";
+
 import "./MusicCover.scss";
 
 export type MusicCoverProps = JSX.IntrinsicElements["img"] & {
@@ -16,8 +18,8 @@ export default function MusicCover(props: MusicCoverProps) {
 	const src = () => {
 		const token = mediaToken();
 		if (token && local.music.hasCover) return local.music.coverUrl(token);
-		return "/images/default_cover.webp";
+		return DEFAULT_COVER;
 	};
 
-	return <img class={`music-cover ${local.class ?? ""}`} src={src()} alt={local.music.name} {...rest} />;
+	return <img class={`music-cover ${local.class ?? ""}`} src={src()} alt={local.music.name} {...rest} onError={imgFallback(DEFAULT_COVER)} />;
 }
