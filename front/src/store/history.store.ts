@@ -119,6 +119,27 @@ const history = {
 				.map((e) => e.music);
 		},
 	},
+	top: (): (Music | Album | Artist)[] => {
+		return [
+			...Object.values(historyStore.musicPlayCounts)
+				.sort((a, b) => b.amount - a.amount)
+				.slice(0, HISTORY_SIZE * 2),
+			...Object.values(historyStore.albumPlayCounts),
+			...Object.values(historyStore.artistPlayCounts),
+		].sort((a, b) => b.amount - a.amount).slice(0, HISTORY_SIZE * 3)
+			.map((e) => {
+				if ("music" in e) return e.music;
+				else if ("artist" in e) return e.artist;
+				return e.album;
+			});
+	},
+	last: (): (Music | Album | Artist)[] => {
+		return [
+			...historyStore.lastArtists,
+			...historyStore.lastMusics,
+			...historyStore.lastAlbums,
+		];
+	},
 };
 
 export { history };
