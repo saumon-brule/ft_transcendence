@@ -60,11 +60,14 @@ export const useLeaveProviderMutation = (provider: () => ProviderRef) => {
 	});
 };
 
-export const useProviderInfoInfoQuery = (provider: () => ProviderRef) => {
-	const providerClient = getProviderClient(provider().address, provider().uuid);
-	return providerClient.client.info.info.createQuery(
-		providerClient.keys.info.info,
-		{},
-		{ onError: () => { summonErrorToast("An error occured"); } },
-	);
+export const useProviderInfoInfoQuery = (provider: () => ProviderRef | null) => {
+	if (provider()) {
+		const providerClient = getProviderClient(provider()!.address, provider()!.uuid);
+		return providerClient.client.info.info.createQuery(
+			providerClient.keys.info.info,
+			{},
+			{ onError: () => { summonErrorToast("An error occured"); } },
+		);
+	}
+	return null;
 };

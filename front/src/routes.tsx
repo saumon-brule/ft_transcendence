@@ -31,6 +31,7 @@ import Search from "./pages/Search";
 import Playlist from "./pages/Playlist";
 import Playlists from "./pages/Playlists";
 import NotFound from "./pages/NotFound/NotFound";
+import ProviderEdit from "./pages/Provider/ProviderEdit";
 
 export const AppRouter = () => {
 	return <Router >
@@ -65,6 +66,7 @@ export const AppRouter = () => {
 						<Route path="/settings" component={Settings} />
 						<Route path="/providers" component={Providers} />
 						<Route path="/provider/:uuid" component={Provider} />
+						<Route path="/provider/:uuid/edit" component={ProviderEdit} />
 						<Route path="/provider/:uuid/artist/:artistUUID" component={ProviderArtist} />
 						<Route path="/provider/:uuid/album/:albumUUID" component={ProviderAlbum} />
 						<Route path="*" component={NotFound} />
