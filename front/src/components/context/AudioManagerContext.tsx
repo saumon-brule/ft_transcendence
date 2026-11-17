@@ -10,6 +10,7 @@ import { systemDark } from "~/store/appearance.store";
 import { history } from "~/store/history.store";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
+const MAX_CONSECUTIVE_FAILURES = 2;
 
 export type AudioManager = {
 	get playing(): boolean;
@@ -61,6 +62,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	let loadId = 0;
 	let loading = false;
 	let playWhenLoaded = false;
+	let consecutiveFailures = 0;
 
 	function play() {
 		if (loading) {
@@ -81,7 +83,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	}
 
 	function toggle() {
-		if (audio.src === "") return;
+		if (!audio.hasAttribute("src")) return;
 		if (audio.paused) void audio.play().catch(() => {});
 		else audio.pause();
 	}
@@ -101,6 +103,41 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		}
 	}
 
+	function stopPlayback(message: string) {
+		pause();
+		setIsPlaying(false);
+		summonErrorToast(() => message);
+	}
+
+	function skipBrokenTrack(music: Music) {
+		summonErrorToast(() => `${music.name || "This music"} couldn't be played, skipping`);
+		consecutiveFailures++;
+
+		if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+			consecutiveFailures = 0;
+			stopPlayback("Too many tracks failed to load, playback stopped");
+			return;
+		}
+		forward();
+	}
+
+	function handleProviderOffline(music: Music) {
+		const nextMusic = trackManager.peekNextTrack();
+		consecutiveFailures++;
+		if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+			consecutiveFailures = 0;
+			stopPlayback("Too many tracks failed to load, playback stopped");
+			return;
+		}
+		if (nextMusic && nextMusic.provider.uuid !== music.provider.uuid) {
+			summonErrorToast(() => `${music.provider.name} is unreachable, skipping to the next track`);
+			forward();
+			return;
+		}
+		consecutiveFailures = 0;
+		stopPlayback(`${music.provider.name} is unreachable`);
+	}
+
 	const handleKeyDown = (e: KeyboardEvent) => {
 		if ((e.target as HTMLElement).matches("input, textarea, select") || (e.target as HTMLElement).isContentEditable) return;
 		if (e.key === " ") {
@@ -117,6 +154,13 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	};
 	const handleTimeUpdate = () => trackManager.progression = audio.currentTime;
 	const handleLoadedMetadata = () => setDuration(audio.duration);
+	const handlePlaying = () => { consecutiveFailures = 0; };
+	const handleError = () => {
+		const current = trackManager.manager.current;
+		if (!current || !audio.hasAttribute("src")) return;
+		if (audio.error?.code === MediaError.MEDIA_ERR_NETWORK) handleProviderOffline(current);
+		else skipBrokenTrack(current);
+	};
 
 	window.addEventListener("keydown", handleKeyDown);
 	audio.addEventListener("play", handlePlay);
@@ -124,10 +168,12 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	audio.addEventListener("ended", handleEnded);
 	audio.addEventListener("timeupdate", handleTimeUpdate);
 	audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+	audio.addEventListener("playing", handlePlaying);
+	audio.addEventListener("error", handleError);
 
 	onMount(() => {
 		audio.addEventListener("loadedmetadata", (() => audio.currentTime = trackManager.progression), { once: true });
-		audio.src = "";
+		// audio.src = ""; // Si on set "" il choppe la page html / et on a un warning
 		// audio.src = trackManager.manager.current?.music.url().href ?? "";
 	});
 
@@ -156,14 +202,16 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 				.catch(() => {
 					if (id !== loadId) return;
 					loading = false;
-					playWhenLoaded = false;
-					summonErrorToast(() => "This music is not avaible right now :(");
+					audio.removeAttribute("src");
+					audio.load();
+					handleProviderOffline(currentMusic);
 				});
 		} else {
 			loading = false;
 			playWhenLoaded = false;
 			audio.pause();
-			audio.src = "";
+			audio.removeAttribute("src");
+			audio.load();
 			setDuration(0);
 			updateMediaMetadata(null, null);
 		}
@@ -255,9 +303,11 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 			audio.removeEventListener("ended", handleEnded);
 			audio.removeEventListener("timeupdate", handleTimeUpdate);
 			audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+			audio.removeEventListener("playing", handlePlaying);
+			audio.removeEventListener("error", handleError);
 
 			audio.pause();
-			audio.src = "";
+			audio.removeAttribute("src");
 			audio.load();
 		});
 	});

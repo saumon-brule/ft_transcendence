@@ -74,6 +74,14 @@ export function useTrackManager() {
 		return nextMusic;
 	}
 
+	function peekNext(): Music | null {
+		if (trackManager.queue.length > 0) return trackManager.queue[0];
+		const musics = trackManager.musicGroup?.musics;
+		if (!musics || musics.length === 0) return null;
+		if (trackManager.loop) return musics[(trackManager.position + 1) % musics.length];
+		return musics[trackManager.position + 1] ?? null;
+	}
+
 	function prev() {
 		let prevMusic: Music | null = null;
 		setTrackManager(produce((manager) => {
@@ -182,6 +190,7 @@ export function useTrackManager() {
 		get progression() { return progression(); },
 		set progression(progression: number) { setProgression(progression); },
 		nextTrack: next,
+		peekNextTrack: peekNext,
 		prevTrack: prev,
 		setCurrentMusic,
 		setPosition,
