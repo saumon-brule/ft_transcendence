@@ -23,6 +23,7 @@
 			transition: .1s color ease-in-out;
 			padding-left: 0;
 			padding-right: 0;
+			color: var(--text-primary);
 	
 			&:hover {
 				color: var(--text-accent)
