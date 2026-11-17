@@ -3,7 +3,7 @@ import { Accessor, Show } from "solid-js";
 import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
 import { A } from "@solidjs/router";
-import { ProviderArtistQueryBody } from "~/api/queryHooks/providerInfo";
+import { everyMusicQuery, ProviderArtistQueryBody } from "~/api/queryHooks/providerInfo";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import Button from "~/components/inputs/Button";
 import { Play, Shuffle } from "lucide-solid";
@@ -21,7 +21,8 @@ export default function ProviderArtistHeader(props: ProviderArtistHeaderProps) {
 	const mediaToken = useMediaToken(() => props.providerBack.address, () => props.providerBack.uuid);
 	const audioManager = useAudioManagerContext();
 
-	function playMusicGroup(musicGroup: MusicGroup, shuffle: boolean = false) {
+	async function playMusicGroup(musicGroup: MusicGroup, shuffle: boolean = false) {
+		musicGroup.musics = await everyMusicQuery(props.providerBack, props.artist.uuid);
 		audioManager.setMusicGroup(musicGroup);
 		if (shuffle) audioManager.shuffle();
 		audioManager.position = 0;
@@ -53,8 +54,8 @@ export default function ProviderArtistHeader(props: ProviderArtistHeaderProps) {
 		<div class="header-controls">
 			<Show when={props.musicGroup()} fallback={<><Button icon disabled><Play /></Button><Button icon disabled><Shuffle /></Button></>}>
 				{(musicGroup) => <>
-					<Button icon disabled={musicGroup().musics.length === 0} onClick={() => playMusicGroup(musicGroup())}><Play /></Button>
-					<Button icon disabled={musicGroup().musics.length === 0} onClick={() => playMusicGroup(musicGroup(), true)}><Shuffle /></Button>
+					<Button icon disabled={musicGroup().musics.length === 0} onClick={() => void playMusicGroup(musicGroup())}><Play /></Button>
+					<Button icon disabled={musicGroup().musics.length === 0} onClick={() => void playMusicGroup(musicGroup(), true)}><Shuffle /></Button>
 				</>}
 			</Show>
 		</div>
