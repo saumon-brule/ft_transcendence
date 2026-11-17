@@ -22,13 +22,15 @@ export default function Settings() {
 		}
 	};
 
-	return <div class="page" id="settings">
-		<h1>{t("pages.settings.title")}</h1>
-		<Tabs tabs={TABS} value={tab()} onChange={setTab} label={label} />
-		<Switch>
-			<Match when={tab() === "account"}><AccountSettings /></Match>
-			<Match when={tab() === "profile"}><ProfileSettings /></Match>
-			<Match when={tab() === "appearance"}><AppearanceSettings /></Match>
-		</Switch>
+	return <div id="settings">
+		<div class="page settings-content">
+			<h1>{t("pages.settings.title")}</h1>
+			<Tabs tabs={TABS} value={tab()} onChange={setTab} label={label} />
+			<Switch>
+				<Match when={tab() === "account"}><AccountSettings /></Match>
+				<Match when={tab() === "profile"}><ProfileSettings /></Match>
+				<Match when={tab() === "appearance"}><AppearanceSettings /></Match>
+			</Switch>
+		</div>
 	</div>;
 }
