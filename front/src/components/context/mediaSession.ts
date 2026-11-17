@@ -4,12 +4,26 @@ import { Music } from "~/class/Music";
 const DEFAULT_SEEK_OFFSET = 3; // seconds
 const DEFAULT_COVER = "/images/default_cover.webp";
 
+const NOW_PLAYING_KEYS = ["flexTitle", "flexArtists", "flexAlbum", "flexPaused", "flexPosition", "flexDuration"] as const;
+
+function clearNowPlaying() {
+	const { dataset } = document.documentElement;
+	for (const key of NOW_PLAYING_KEYS) delete dataset[key];
+}
+
 export function updateMediaMetadata(music: Music | null, token: string | null) {
-	if (!("mediaSession" in navigator)) return;
 	if (!music) {
-		navigator.mediaSession.metadata = null;
+		clearNowPlaying();
+		if ("mediaSession" in navigator) navigator.mediaSession.metadata = null;
 		return;
 	}
+
+	const { dataset } = document.documentElement;
+	dataset.flexTitle = music.name;
+	dataset.flexArtists = music.artists.map((artist) => artist.name).join(", ");
+	dataset.flexAlbum = music.album?.name ?? "";
+
+	if (!("mediaSession" in navigator)) return;
 
 	const cover = token && music.hasCover ? music.coverUrl(token) : DEFAULT_COVER;
 	navigator.mediaSession.metadata = new MediaMetadata({
@@ -20,8 +34,28 @@ export function updateMediaMetadata(music: Music | null, token: string | null) {
 	});
 }
 
+function exposePlaybackState(audio: HTMLAudioElement) {
+	const { dataset } = document.documentElement;
+	const onPlay = () => { dataset.flexPaused = "false"; };
+	const onPause = () => { dataset.flexPaused = "true"; };
+	const onTime = () => {
+		if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+		dataset.flexPosition = String(Math.floor(audio.currentTime));
+		dataset.flexDuration = String(Math.floor(audio.duration));
+	};
+	const events = [["play", onPlay], ["pause", onPause], ["timeupdate", onTime], ["seeked", onTime], ["loadedmetadata", onTime]] as const;
+
+	dataset.flexPaused = String(audio.paused);
+	for (const [event, handler] of events) audio.addEventListener(event, handler);
+	return () => {
+		for (const [event, handler] of events) audio.removeEventListener(event, handler);
+		clearNowPlaying();
+	};
+}
+
 export function setupMediaSession(audioManager: AudioManager, audio: HTMLAudioElement) {
-	if (!("mediaSession" in navigator)) return;
+	const cleanupPlaybackState = exposePlaybackState(audio);
+	if (!("mediaSession" in navigator)) return cleanupPlaybackState;
 	navigator.mediaSession.setActionHandler("play", () => {
 		if (audio.paused) { audio.play().catch(() => {}); }
 	});
@@ -67,6 +101,7 @@ export function setupMediaSession(audioManager: AudioManager, audio: HTMLAudioEl
 	});
 
 	return () => {
+		cleanupPlaybackState();
 		navigator.mediaSession.setActionHandler("pause", null);
 		navigator.mediaSession.setActionHandler("play", null);
 		navigator.mediaSession.setActionHandler("stop", null);

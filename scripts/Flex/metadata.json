@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schemas.premid.app/metadata/1.17",
+  "apiVersion": 1,
+  "author": {
+    "id": "516993045724528663",
+    "name": "supermoi74"
+  },
+  "service": "Flex",
+  "description": {
+    "en": "Flex is a self-hosted music streaming app.",
+    "fr": "Flex est une application de streaming musical auto-hébergée."
+  },
+  "url": "localhost",
+  "regExp": "^https?[:][/][/](localhost|127[.]0[.]0[.]1)([:][0-9]+)?[/]",
+  "version": "1.0.0",
+  "logo": "https://imgur.com/oOXk8p6.png",
+  "thumbnail": "https://imgur.com/oOXk8p6.png",
+  "color": "#AB075E",
+  "category": "music",
+  "tags": [
+    "music",
+    "streaming",
+    "self-hosted"
+  ],
+  "settings": [
+    {
+      "id": "privacy",
+      "title": "Privacy Mode",
+      "icon": "fad fa-user-secret",
+      "value": false
+    },
+    {
+      "id": "timestamps",
+      "title": "Show timestamps",
+      "icon": "fad fa-stopwatch",
+      "value": true
+    },
+    {
+      "id": "album",
+      "title": "Show album",
+      "icon": "fad fa-compact-disc",
+      "value": true
+    },
+    {
+      "id": "showPaused",
+      "title": "Show when paused",
+      "icon": "fad fa-pause",
+      "value": true
+    }
+  ]
+}
