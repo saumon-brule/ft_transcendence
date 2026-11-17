@@ -70,7 +70,7 @@ export class SearchService {
 		const [rows, [{ total }]] = await this.prisma.$transaction([
 			this.prisma.$queryRaw<{ id: number }[]>(Prisma.sql`
 				SELECT "id" FROM ${from} ${where}
-				ORDER BY "name" ASC, "id" ASC
+				/* ORDER BY "name" ASC, "id" ASC */
 				LIMIT ${limit}::int OFFSET ${offset}::int
 			`),
 			this.prisma.$queryRaw<{ total: number }[]>(Prisma.sql`
