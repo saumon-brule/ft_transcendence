@@ -100,6 +100,10 @@ ul {
 
 	@include breakpoints.respond-to("mobile") {
 		padding: 10px 16px;
+
+		body:has(.floating-footer:not(.hide)) & {
+			padding-bottom: 90px;
+		}
 	}
 }
 

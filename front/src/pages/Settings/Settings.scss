@@ -1,11 +1,16 @@
 @use "../../styles/breakpoints" as breakpoints;
 
+// #settings is the scroll container (full width, so the scrollbar sits on the right edge);
+// the inner .settings-content carries the max-width.
 #settings {
 	width: 100%;
-	max-width: 720px;
 
-	@include breakpoints.respond-to("mobile") {
-		max-width: 100%;
+	.settings-content {
+		max-width: 720px;
+
+		@include breakpoints.respond-to("mobile") {
+			max-width: 100%;
+		}
 	}
 
 	h1 {
