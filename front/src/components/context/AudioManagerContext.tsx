@@ -7,6 +7,7 @@ import { summonErrorToast } from "../ui/Toaster";
 import { LocalStorageItem } from "~/utils/storageHelper";
 import { getMediaToken } from "~/api/providerClients";
 import { systemDark } from "~/store/appearance.store";
+import { history } from "~/store/history.store";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
 
@@ -138,6 +139,7 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 			currentMusic.audioUrl()
 				.then((url) => {
 					if (id !== loadId) return;
+					history.music.listen(currentMusic);
 					loading = false;
 					audio.src = url;
 					audio.currentTime = 0;

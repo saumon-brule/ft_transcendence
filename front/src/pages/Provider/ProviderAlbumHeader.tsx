@@ -9,6 +9,8 @@ import { useAudioManagerContext } from "~/components/context/AudioManagerContext
 import { everyMusicQuery, ProviderAlbumQueryBody } from "~/api/queryHooks/providerInfo";
 import { MusicGroup } from "~/store/trackManager.store";
 import { Accessor } from "solid-js";
+import { Album } from "~/class/Album";
+import { history } from "~/store/history.store";
 
 export type ProviderAlbumHeaderProps = {
 	album: ProviderAlbumQueryBody;
@@ -27,6 +29,7 @@ export default function ProviderAlbumHeader(props: ProviderAlbumHeaderProps) {
 		if (shuffle) audioManager.shuffle();
 		audioManager.position = 0;
 		audioManager.play();
+		history.album.listen(Album.fromRawObject(props.album, props.providerBack.address, props.providerBack.uuid));
 	}
 
 	function getCover(album: ProviderAlbumQueryBody) {

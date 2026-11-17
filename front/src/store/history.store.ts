@@ -27,6 +27,20 @@ const historyItem = new LocalStorageItem<HistoryStore>(
 
 const [historyStore, setHistoryStore] = createStore<HistoryStore>(historyItem.get());
 
+function bumpArtist(s: HistoryStore, artist: Artist, weight: number, direct: boolean) {
+	if (direct) {
+		s.lastArtists = [artist, ...s.lastArtists.filter((a) => a.uuid !== artist.uuid)].slice(0, HISTORY_SIZE);
+	}
+
+	const entry = s.artistPlayCounts[artist.uuid];
+	if (entry) {
+		entry.amount += weight;
+		entry.artist = artist;
+	} else {
+		s.artistPlayCounts[artist.uuid] = { amount: weight, artist };
+	}
+}
+
 const history = {
 	album: {
 		listen: (album: Album) => {
@@ -40,6 +54,10 @@ const history = {
 						entry.album = album;
 					} else {
 						s.albumPlayCounts[album.uuid] = { amount: 1, album };
+					}
+
+					for (const raw of album.artists) {
+						bumpArtist(s, Artist.fromRawObject(raw, album.providerUrl, album.providerUuid), 0.7, false);
 					}
 				}),
 			);
@@ -57,19 +75,7 @@ const history = {
 	},
 	artist: {
 		listen: (artist: Artist) => {
-			setHistoryStore(
-				produce((s) => {
-					s.lastArtists = [artist, ...s.lastArtists.filter((a) => a.uuid !== artist.uuid)].slice(0, HISTORY_SIZE);
-
-					const entry = s.artistPlayCounts[artist.uuid];
-					if (entry) {
-						entry.amount++;
-						entry.artist = artist;
-					} else {
-						s.artistPlayCounts[artist.uuid] = { amount: 1, artist };
-					}
-				}),
-			);
+			setHistoryStore(produce((s) => bumpArtist(s, artist, 1, true)));
 			historyItem.set(unwrap(historyStore));
 		},
 		last: (): Artist[] => {
@@ -94,6 +100,10 @@ const history = {
 						entry.music = music;
 					} else {
 						s.musicPlayCounts[music.uuid] = { amount: 1, music };
+					}
+
+					for (const raw of music.artists) {
+						bumpArtist(s, Artist.fromRawObject(raw, music.provider.address, music.provider.uuid), 0.1, false);
 					}
 				}),
 			);
