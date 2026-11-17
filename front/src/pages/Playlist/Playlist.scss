@@ -122,3 +122,23 @@
 		}
 	}
 }
+
+#playlist .playlist-header .header-controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-left: auto;
+
+	@include breakpoints.respond-to("mobile") {
+		justify-content: center;
+		margin-left: 0;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+	}
+}

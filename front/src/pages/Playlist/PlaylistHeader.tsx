@@ -1,12 +1,15 @@
 import { Show } from "solid-js";
-import { A } from "@solidjs/router";
+import { A, useNavigate } from "@solidjs/router";
 import type { PlaylistDetailDto } from "@flex/shared";
 import { env } from "~/env";
 import { Music } from "~/class/Music";
 import { MusicGroup } from "~/store/trackManager.store";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import Button from "~/components/inputs/Button";
-import { Play, Shuffle } from "lucide-solid";
+import { Globe, Lock, Pencil, Play, Shuffle, Trash2 } from "lucide-solid";
+import { useSetPlaylistPrivacyMutation } from "~/api/queryHooks/playlist";
+import { summonRenamePlaylistPopUp } from "./popUps/renamePlaylistPopUp";
+import { summonDeletePlaylistPopUp } from "./popUps/deletePlaylistPopUp";
 
 type PlaylistHeaderProps = {
 	playlist: PlaylistDetailDto;
@@ -23,6 +26,8 @@ function formatTotalDuration(seconds: number): string {
 
 export default function PlaylistHeader(props: PlaylistHeaderProps) {
 	const audioManager = useAudioManagerContext();
+	const navigate = useNavigate();
+	const setPrivacy = useSetPlaylistPrivacyMutation();
 
 	const musics = () => props.musicGroup.musics.filter((music): music is Music => music instanceof Music);
 	const loading = () => props.musicGroup.musics.some((music) => music.isLoading());
@@ -34,6 +39,10 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 		if (shuffle) audioManager.shuffle();
 		audioManager.position = 0;
 		audioManager.play();
+	}
+
+	function togglePrivacy() {
+		setPrivacy.mutate({ params: { uuid: props.playlist.uuid }, body: { private: !props.playlist.private } });
 	}
 
 	return <header class="playlist-header">
@@ -55,6 +64,13 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 			<p>By <A href={`/user/${props.playlist.owner.uuid}`}>{props.playlist.owner.username}</A></p>
 		</div>
 		<div class="header-controls">
+			<Show when={props.playlist.isOwner}>
+				<Button variant="text" onClick={() => summonRenamePlaylistPopUp(props.playlist)}><Pencil /> Rename</Button>
+				<Button variant="text" disabled={setPrivacy.isPending} onClick={togglePrivacy}>
+					<Show when={props.playlist.private} fallback={<><Lock /> Make private</>}><Globe /> Make public</Show>
+				</Button>
+				<Button variant="danger" onClick={() => summonDeletePlaylistPopUp(props.playlist, () => navigate("/playlists"))}><Trash2 /> Delete</Button>
+			</Show>
 			<Show when={props.musicGroup} fallback={<><Button icon disabled><Play /></Button><Button icon disabled><Shuffle /></Button></>}>
 				{(musicGroup) => <>
 					<Button icon disabled={musicGroup().musics.length === 0} onClick={() => playMusicGroup(musicGroup())}><Play /></Button>
