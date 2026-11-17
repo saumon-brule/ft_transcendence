@@ -48,14 +48,23 @@ export const useJoinProvider = () => {
 	});
 };
 
-export const leaveProviderMutation = (provider: ProviderRef) => {
+export const useLeaveProviderMutation = (provider: () => ProviderRef) => {
 	const queryClient = useQueryClient();
 
-	return getProviderClient(provider.address, provider.uuid).client.member.leave.createMutation({
+	return getProviderClient(provider().address, provider().uuid).client.member.leave.createMutation({
 		onSuccess: async () => {
 			summonSuccessToast("Provider leaved");
-			await queryClient.invalidateQueries({ queryKey: ["provider", provider.uuid] });
+			await queryClient.invalidateQueries({ queryKey: ["provider", provider().uuid] });
 		},
 		onError: () => { summonErrorToast("An error occured"); },
 	});
+};
+
+export const useProviderInfoInfoQuery = (provider: () => ProviderRef) => {
+	const providerClient = getProviderClient(provider().address, provider().uuid);
+	return providerClient.client.info.info.createQuery(
+		providerClient.keys.info.info,
+		{},
+		{ onError: () => { summonErrorToast("An error occured"); } },
+	);
 };

@@ -6,16 +6,28 @@
 		margin-bottom: 20px;
 		flex-direction: row;
 		justify-content: space-between;
+		align-items: center;
 
 		.content {
 			display: flex;
 			flex-direction: column;
 
-			h2 {
-				font-size: 28px;
-				margin: 0;
+			.provider-header-title {
+				display: flex;
+				gap: 0.5rem;
+				align-items: baseline;
+
+				h2 {
+					font-size: 28px;
+					margin: 0;
+				}
+
+				& > button {
+					color: var(--text-secondary);
+				}
+
 			}
-	
+
 			.header-info-items {
 				display: flex;
 				flex-direction: row;
@@ -23,14 +35,14 @@
 				margin-top: 6px;
 				align-items: center;
 				color: var(--text-secondary);
-	
+
 				.stat {
 					display: flex;
 					align-items: center;
 					gap: 10px;
 					font-size: 14px;
 				}
-	
+
 				.separator {
 					width: 3px;
 					height: 3px;
@@ -40,6 +52,11 @@
 			}
 		}
 
+		& > button {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
 	}
 
 	.provider-search {
@@ -231,4 +248,8 @@
 			}
 		}
 	}
+}
+
+.leave-probider-confirm-pop-up {
+	width: fit-content;
 }
