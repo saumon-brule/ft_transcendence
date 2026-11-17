@@ -8,15 +8,16 @@ import ProviderArtistHeader from "./ProviderArtistHeader";
 import MusicSection from "../../components/ui/MusicSection/MusicSection";
 import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 import Button from "~/components/inputs/Button";
+import { useProviderInfo } from "~/components/guards/ProviderInfoGuard";
 
 export default function ProviderArtist() {
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string; artistUUID: string }>();
 	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { get uuid() { return params.uuid; } } });
 	const providerUrl = () => providerBack.data?.body.address ?? "";
-	const providerInfo = () => providerBack.data?.body ?? null;
+	const providerInfo = useProviderInfo();
 	const artist = useProviderArtistQuery(providerUrl, () => params.uuid, () => params.artistUUID);
-	const musicsQuery = useProviderMusicsInfiniteQuery(() => params.uuid, providerInfo, () => "", () => ({ artistUuid: params.artistUUID }));
+	const musicsQuery = useProviderMusicsInfiniteQuery(() => params.uuid, () => providerInfo, () => "", () => ({ artistUuid: params.artistUUID }));
 	const albumsQuery = useProviderAlbumsInfiniteQuery(providerUrl, () => params.uuid, () => "", () => ({ artistUuid: params.artistUUID }));
 	const musics = createMemo(() => musicsQuery.data && {
 		musics: musicsQuery.data.pages.flatMap((page) => page.musics),
