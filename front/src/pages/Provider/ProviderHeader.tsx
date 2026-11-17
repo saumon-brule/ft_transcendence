@@ -1,8 +1,11 @@
 import type { ProviderDataDto, Provider } from "@flex/shared";
-import { createMemo, Show } from "solid-js";
+import { Show } from "solid-js";
 import { ProviderStatus } from "./Provider";
 import Button from "~/components/inputs/Button/Button";
-import { leaveProviderMutation, useAccessRequestQuery, useJoinProvider } from "~/api/queryHooks/providerAccess";
+import { useLeaveProviderMutation, useAccessRequestQuery, useJoinProvider as useJoinProviderMutation } from "~/api/queryHooks/providerAccess";
+import { DoorOpen } from "lucide-solid";
+import { summonPopUp } from "~/components/ui/Overlay";
+import { summonEditProviderPopUp } from "../Providers/popUps/editProviderPopUp";
 
 type ProviderHeaderProps = {
 	provider: ProviderDataDto | undefined;
@@ -10,15 +13,26 @@ type ProviderHeaderProps = {
 	status: ProviderStatus;
 };
 
+function summonLeaveProviderPopUpConfirmation(leaveMutation: ReturnType<typeof useLeaveProviderMutation>, provider: Provider) {
+	return summonPopUp((controls) => <div>
+		<h3>Do you really want to leave <b>{provider.name}</b></h3>
+		<Button variant="ghost" onClick={controls.close}>cancel</Button>
+		<Button variant="danger" onClick={() => leaveMutation.mutate({})}>leave</Button>
+	</div>, { customClass: "leave-probider-confirm-pop-up" });
+}
+
 export default function ProviderHeader(props: ProviderHeaderProps) {
-	const request = useAccessRequestQuery(() => props.providerBack);
-	const join = useJoinProvider();
-	const leave = createMemo(() => leaveProviderMutation(props.providerBack));
-	const pending = () => request.data === "PENDING" || (join.isSuccess && join.data === "PENDING");
+	const requestQuery = useAccessRequestQuery(() => props.providerBack);
+	const leaveMutation = useLeaveProviderMutation(() => props.providerBack);
+	const joinMutation = useJoinProviderMutation();
+	const pending = () => requestQuery.data === "PENDING" || (joinMutation.isSuccess && joinMutation.data === "PENDING");
 
 	return <header class="provider-header">
 		<div class="content">
-			<h2>{props.providerBack.name}</h2>
+			<div class="provider-header-title">
+				<h2>{props.providerBack.name}</h2>
+				<Button size="sm" variant="text" onClick={() => summonEditProviderPopUp(props.providerBack)}>edit</Button>
+			</div>
 			<Show when={props.provider}>{(provider) => <>
 				<div class="header-info-items">
 					<span class="stat">{provider().music.total} musics</span>
@@ -30,10 +44,10 @@ export default function ProviderHeader(props: ProviderHeaderProps) {
 			</>}</Show>
 		</div>
 		<Show when={props.status === "success"}>
-			<Button disabled={leave().isPending || request.isLoading} variant="danger" onClick={() => leave().mutate(props.providerBack)}>Leave Provider</Button>
+			<Button disabled={leaveMutation.isPending || requestQuery.isLoading} variant="danger" onClick={() => summonLeaveProviderPopUpConfirmation(leaveMutation, props.providerBack)} ><DoorOpen/>Leave Provider</Button>
 		</Show>
 		<Show when={props.status === "forbidden"}>
-			<Button disabled={pending() || join.isPending || request.isLoading} onClick={() => join.mutate(props.providerBack)}>{pending() ? "Pending request" : "Request access"}</Button>
+			<Button disabled={pending() || joinMutation.isPending || requestQuery.isLoading} onClick={() => joinMutation.mutate(props.providerBack)}>{pending() ? "Pending request" : "Request access"}</Button>
 		</Show>
 	</header>;
 }
