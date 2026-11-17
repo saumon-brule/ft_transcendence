@@ -144,6 +144,8 @@ export default {
 		rateLimit: "Euh... Bro tu vas trop vite là !",
 		unavailableFtApi: "We are not currently able to reach 42's API",
 		unknownFallback: "Une erreur s'est produite, réessayez plus tard",
+		profileUnavailable: "Impossible de charger ton profil",
+		retry: "Réessayer",
 		input: {
 			select: {
 				valueMissing: "Veuillez sélectionner une option",

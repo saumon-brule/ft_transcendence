@@ -23,7 +23,12 @@ const fetchWithRefresh: ApiFetcher = async (args) => {
 			&& (response.body as z.infer<typeof serverBaseError401Schema>).code !== "INVALID_TOKEN")
 	) return response;
 
-	const accessToken = await doRefresh();
+	let accessToken: string | null;
+	try {
+		accessToken = await doRefresh();
+	} catch {
+		return response;
+	}
 
 	if (accessToken === null) {
 		authActions.logout();

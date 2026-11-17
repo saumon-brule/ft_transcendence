@@ -64,12 +64,18 @@ export const authActions = {
 	setProviderToken,
 	login: (accessToken: string) => setAccessToken(accessToken),
 	logout: () => {
-		void client.auth.logout.mutation().then(() => {
-			setAccessToken(null);
-			window.location.replace("/login");
-		});
+		void client.auth.logout.mutation()
+			.catch(() => undefined)
+			.then(() => {
+				setAccessToken(null);
+				window.location.replace("/login");
+			});
 	},
-	refreshToken: async () => setAccessToken(await doRefresh()),
+	refreshToken: async () => {
+		try {
+			setAccessToken(await doRefresh());
+		} catch {}
+	},
 } as const;
 
 
