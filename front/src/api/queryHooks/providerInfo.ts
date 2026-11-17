@@ -254,3 +254,16 @@ export const useProvidersSearchQueries = (providersInfos: () => Provider[], sear
 		},
 	});
 };
+
+export const everyMusicQuery = async (providerInfo: Provider, artistUuid?: string, albumUuid?: string) => {
+	const providerClient = getProviderClient(providerInfo.address, providerInfo.uuid);
+
+	const res = await providerClient.client.music.list.query(
+		{ query: { artistUuid, albumUuid, offset: 0, limit: 10000 } },
+	);
+
+	if (res.status === 200) {
+		return res.body.musics.map((music) => Music.fromRawObject(music, providerInfo));
+	}
+	return [];
+};
