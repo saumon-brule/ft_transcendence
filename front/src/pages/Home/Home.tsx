@@ -8,6 +8,8 @@ import "./Home.scss";
 import { Music } from "~/class/Music";
 import MusicCard from "~/components/ui/MusicCard";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { Playlist } from "~/class/Playlist";
+import PlaylistCard from "~/components/ui/PlaylistCard/PlaylistCard";
 
 export default function Home() {
 	const profile = useMeProfileQuery();
@@ -24,6 +26,7 @@ export default function Home() {
 					if (e instanceof Artist) return <ArtistCard artist={e} providers={providers()}/>;
 					else if (e instanceof Album) return <AlbumCard album={e} providers={providers()} hiddenProp={["published"]}/>;
 					else if (e instanceof Music) return <MusicCard music={e} providers={providers()}/>;
+					else if (e instanceof Playlist) return <PlaylistCard playlist={e} showOwner/>;
 				}}</For>
 			</div>
 		</Show>
@@ -34,6 +37,7 @@ export default function Home() {
 					if (e instanceof Artist) return <ArtistCard artist={e} providers={providers()}/>;
 					else if (e instanceof Album) return <AlbumCard album={e} providers={providers()} hiddenProp={["published"]}/>;
 					else if (e instanceof Music) return <MusicCard music={e} providers={providers()}/>;
+					else if (e instanceof Playlist) return <PlaylistCard playlist={e} showOwner/>;
 				}}</For>
 			</div>
 		</Show>
