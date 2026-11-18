@@ -19,8 +19,6 @@ const toMember = (member: MemberRow, ownerUuid: string) => ({
 });
 
 interface ListQuery {
-	limit: number;
-	offset: number;
 	revoked?: boolean;
 }
 
@@ -40,26 +38,23 @@ export class MemberService {
 		};
 	}
 
-	async list({ limit, offset, revoked }: ListQuery) {
+	async list({ revoked }: ListQuery) {
 		const where: Prisma.MemberWhereInput = revoked === undefined
 			? {}
 			: { revokedAt: revoked
 				? { not: null }
 				: null };
 
-		const [{ ownerUuid }, rows, total] = await Promise.all([
+		const [{ ownerUuid }, rows] = await Promise.all([
 			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } }),
 			this.prisma.member.findMany({
 				where,
 				include,
 				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-				take: limit,
-				skip: offset,
 			}),
-			this.prisma.member.count({ where }),
 		]);
 
-		return { members: rows.map((row) => toMember(row, ownerUuid)), total };
+		return { members: rows.map((row) => toMember(row, ownerUuid)) };
 	}
 
 	async revoke(uuid: string, actorUuid: string) {

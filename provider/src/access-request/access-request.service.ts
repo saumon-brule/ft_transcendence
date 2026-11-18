@@ -20,8 +20,6 @@ const toAccessRequest = (request: AccessRequestRow) => ({
 });
 
 interface ListQuery {
-	limit: number;
-	offset: number;
 	status?: "PENDING" | "APPROVED" | "REJECTED";
 }
 
@@ -106,23 +104,18 @@ export class AccessRequestService {
 		return toAccessRequest(request);
 	}
 
-	async list({ limit, offset, status }: ListQuery) {
+	async list({ status }: ListQuery) {
 		const where: Prisma.AccessRequestWhereInput = status
 			? { status }
 			: {};
 
-		const [rows, total] = await this.prisma.$transaction([
-			this.prisma.accessRequest.findMany({
-				where,
-				include,
-				orderBy: { createdAt: "desc" },
-				take: limit,
-				skip: offset,
-			}),
-			this.prisma.accessRequest.count({ where }),
-		]);
+		const rows = await this.prisma.accessRequest.findMany({
+			where,
+			include,
+			orderBy: { createdAt: "desc" },
+		});
 
-		return { accessRequests: rows.map(toAccessRequest), total };
+		return { accessRequests: rows.map(toAccessRequest) };
 	}
 
 	async acceptAllPending() {

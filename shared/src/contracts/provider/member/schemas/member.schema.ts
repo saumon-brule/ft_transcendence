@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { paginationQuerySchema } from "../../../../schemas/common.schema";
 import { providerPermissionSchema, providerRoleSummarySchema } from "../../role/schemas/role.schema";
 
 export const providerMemberSchema = z.object({
@@ -17,13 +16,12 @@ export const providerMemberProfileSchema = z.object({
 	permissions: z.array(providerPermissionSchema),
 });
 
-export const providerMemberListQuerySchema = paginationQuerySchema.extend({
+export const providerMemberListQuerySchema = z.object({
 	revoked: z.enum(["true", "false"]).transform((value) => value === "true").optional(),
 });
 
 export const providerMemberListResponseSchema = z.object({
 	members: z.array(providerMemberSchema),
-	total: z.number(),
 });
 
 export const setMemberRolesSchema = z.object({

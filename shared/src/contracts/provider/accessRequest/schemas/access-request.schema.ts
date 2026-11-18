@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { paginationQuerySchema } from "../../../../schemas/common.schema";
 
 export const requestStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
 
@@ -12,13 +11,12 @@ export const accessRequestStatusSchema = z.object({
 	createdAt: z.coerce.date(),
 });
 
-export const accessRequestListQuerySchema = paginationQuerySchema.extend({
+export const accessRequestListQuerySchema = z.object({
 	status: requestStatusSchema.optional(),
 });
 
 export const accessRequestListResponseSchema = z.object({
 	accessRequests: z.array(accessRequestStatusSchema),
-	total: z.number(),
 });
 
 export const decideAccessRequestSchema = z.object({
