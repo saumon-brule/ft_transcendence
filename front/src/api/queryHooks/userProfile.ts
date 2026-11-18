@@ -14,3 +14,15 @@ export const useUserProfileQuery = (uuid: () => string) => client.users.getUser.
 		}),
 	},
 );
+
+export const getUsersBatch = async (uuids: string[]) => {
+	const res = await client.users.getUsers.mutation({ body: { uuids } });
+	if (res.status !== 200) throw Error("Cannot get users");
+	return {
+		...res.body,
+		users: res.body.users.map((u) => ({
+			...u,
+			avatarUrl: `${env.VITE_API_URL}/users/${u.uuid}/avatar`,
+		})),
+	};
+};

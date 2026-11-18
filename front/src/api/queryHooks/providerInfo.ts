@@ -267,30 +267,3 @@ export const everyMusicQuery = async (providerInfo: Provider, artistUuid?: strin
 	}
 	return [];
 };
-
-export type MemberListFilter = { revoked?: boolean };
-
-export const useProviderMembersQuery = (providerData: Provider, filter: () => MemberListFilter = () => ({})) => {
-	const provider = getProviderClient(providerData.address, providerData.uuid);
-
-	return provider.client.member.list.createQuery(
-		() => provider.keys.member.list([JSON.stringify(filter())]),
-		{
-			query: {
-				get revoked() {
-					const { revoked } = filter();
-					return revoked === undefined ? undefined : revoked ? "true" as const : "false" as const;
-				},
-			},
-		},
-		{ staleTime: 30_000 },
-	);
-};
-
-export const useProviderPendingMembersQuery = (providerData: Provider) => {
-	const provider = getProviderClient(providerData.address, providerData.uuid);
-
-	return provider.client.accessRequest.list.createQuery(
-		() => provider.keys.accessRequest.list(), {}, { staleTime: 30_000 },
-	);
-};
