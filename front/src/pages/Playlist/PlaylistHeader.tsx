@@ -7,6 +7,8 @@ import { MusicGroup } from "~/store/trackManager.store";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import Button from "~/components/inputs/Button";
 import { Play, Shuffle } from "lucide-solid";
+import { Playlist } from "~/class/Playlist";
+import { history } from "~/store/history.store";
 
 type PlaylistHeaderProps = {
 	playlist: PlaylistDetailDto;
@@ -34,6 +36,7 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 		if (shuffle) audioManager.shuffle();
 		audioManager.position = 0;
 		audioManager.play();
+		history.playlist.listen(Playlist.fromDetail(props.playlist));
 	}
 
 	return <header class="playlist-header">
