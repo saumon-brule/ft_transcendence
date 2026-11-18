@@ -5,6 +5,8 @@ import {
 	shortUserSchema,
 	updateMeSchema,
 	userSchema,
+	usersBatchResponseSchema,
+	usersBatchSchema,
 } from "./schemas/user.schema";
 import z from "zod";
 import { uuidParamSchema } from "../../../schemas/common.schema";
@@ -30,6 +32,12 @@ export const usersContract = c.router(
 			path: "/search",
 			query: searchUsersQuerySchema,
 			responses: { 200: z.array(shortUserSchema) },
+		},
+		getUsers: {
+			method: "POST",
+			path: "/batch",
+			body: usersBatchSchema,
+			responses: { 200: usersBatchResponseSchema },
 		},
 		getUser: {
 			method: "GET",

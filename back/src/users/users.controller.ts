@@ -63,6 +63,15 @@ export class UsersController {
 		});
 	}
 
+	@TsRestHandler(usersContract.getUsers)
+	@UseGuards(JwtAuthGuard)
+	public getUsers() {
+		return tsRestHandler(usersContract.getUsers, async ({ body }) => ({
+			status: 200,
+			body: await this.usersService.getShortUsers(body.uuids),
+		}));
+	}
+
 	@TsRestHandler(usersContract.getUser)
 	@UseGuards(JwtAuthGuard)
 	public getUser(@CurrentUser() authUser: AuthUser) {
