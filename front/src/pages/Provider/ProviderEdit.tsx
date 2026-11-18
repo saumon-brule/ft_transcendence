@@ -9,6 +9,7 @@ import ProviderSearchBar from "./ProviderSearchBar";
 import LoadingSplash from "../Loading/LoadingSplash";
 import "./Provider.scss";
 import { useProviderInfoInfo } from "~/components/guards/EditPermissionGuard";
+import { ManageMembers } from "./ProviderEditTabs/ManageMembers";
 
 const TABS = ["Musics", "Albums", "Artists", "Members", "Roles"] as const;
 type Tab = typeof TABS[number];
@@ -61,7 +62,7 @@ export default function ProviderEdit() {
 							</Show>
 							<Show when={permissions().includes("MANAGE_MEMBERS")}>
 								<Match when={tab() === "Members"}>
-									<div>members</div>
+									<ManageMembers search={search()}/>
 								</Match>
 							</Show>
 							<Show when={permissions().includes("ADMIN")}>
