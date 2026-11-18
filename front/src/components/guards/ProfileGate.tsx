@@ -8,6 +8,9 @@ import { createSocket } from "~/api/socket";
 import { SocketContext } from "~/api/socket.context";
 import { useChatEvents } from "~/api/socketHooks/useChatEvents";
 import { usePresenceEvents } from "~/api/socketHooks/usePresenceEvents";
+import { useFriendEvents } from "~/api/socketHooks/useFriendEvents";
+import { useTokenRefresh } from "~/api/socketHooks/useTokenRefresh";
+import { useReconnectSync } from "~/api/socketHooks/useReconnectSync";
 
 export default function ProfileGate(props: { children: JSXElement }) {
 	const profile = useMeProfileQuery();
@@ -24,6 +27,9 @@ export default function ProfileGate(props: { children: JSXElement }) {
 
 	useChatEvents(socket);
 	usePresenceEvents(socket);
+	useFriendEvents(socket);
+	useReconnectSync(socket);
+	useTokenRefresh(socket);
 
 	return <Switch fallback={<LoadingSplash />}>
 		<Match when={profile.data}>

@@ -1,7 +1,6 @@
 import {
 	ConnectedSocket,
 	MessageBody,
-	OnGatewayConnection,
 	OnGatewayInit,
 	SubscribeMessage,
 	WebSocketGateway,
@@ -9,7 +8,6 @@ import {
 } from "@nestjs/websockets";
 import { type DefaultEventsMap, type Server, type Socket } from "socket.io";
 import { sendChatMessageSchema, type ChatError } from "@flex/shared";
-import { SocketAuthService } from "../../auth/auth-socket.service";
 import { env } from "../../core/env";
 import { ChatService } from "./chat.service";
 
@@ -37,34 +35,15 @@ type ChatServer = Server<
 		credentials: true,
 	},
 })
-export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
+export class ChatGateway implements OnGatewayInit {
 	private server!: ChatServer;
 
 	constructor(
-		private readonly socketAuthService: SocketAuthService,
 		private readonly chatService: ChatService,
 	) {}
 
 	afterInit(server: ChatServer): void {
 		this.server = server;
-		server.use((socket, next) => {
-			void this.socketAuthService.authenticate(socket.handshake.auth?.token)
-				.then(({ userUUID }) => {
-					socket.data.userUUID = userUUID;
-					next();
-				})
-				.catch(() => next(new Error("Unauthorized")));
-		});
-	}
-
-	async handleConnection(client: ChatSocket): Promise<void> {
-		const userUUID = client.data.userUUID;
-		if (typeof userUUID !== "string") {
-			client.disconnect(true);
-			return;
-		}
-
-		await client.join(this.userRoom(userUUID));
 	}
 
 	@SubscribeMessage("chat:send")

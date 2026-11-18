@@ -496,7 +496,11 @@ export class AuthService {
 				}),
 			});
 
-			const tokenData = TokenResponseSchema.parse(await tokenResponse.json());
+			const tokenJson: unknown = await tokenResponse.json();
+			if (!tokenResponse.ok) {
+				this.logger.error(`42 token exchange failed (HTTP ${tokenResponse.status}, redirect_uri=${redirectUri}): ${JSON.stringify(tokenJson)}`);
+			}
+			const tokenData = TokenResponseSchema.parse(tokenJson);
 
 			if (!tokenData.access_token) {
 				throw new AppUnauthorizedException("UNAUTHORIZED", "Failed to authenticate with 42");
@@ -512,7 +516,10 @@ export class AuthService {
 			}
 			return userData;
 
-		} catch (_e) {
+		} catch (e) {
+			this.logger.error(`42 api request failed: ${e instanceof Error
+				? e.message
+				: String(e)}`);
 			throw new InternalServerErrorException("An error occured while fetching data from 42's api");
 		}
 	}

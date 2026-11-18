@@ -18,6 +18,7 @@ import { FriendsModule } from "./users/friends/friends.module";
 import { HealthModule } from "./health/health.module";
 import { PresenceModule } from "./users/presence/presence.module";
 import { ChatModule } from "./users/chat/chat.module";
+import { RealtimeModule } from "./realtime/realtime.module";
 
 @Module({
 	providers: [
@@ -42,6 +43,7 @@ import { ChatModule } from "./users/chat/chat.module";
 		AppConfigModule,
 		PlaylistsModule,
 		ProvidersModule,
+		RealtimeModule,
 		PresenceModule,
 		ChatModule,
 		ThrottlerModule.forRoot({
