@@ -197,6 +197,20 @@ export class UsersService {
 		return email.trim().toLowerCase();
 	}
 
+	public async getShortUsers(uuids: string[]) {
+		const requested = [...new Set(uuids)];
+		const found = await this.prisma.user.findMany({
+			where: { uuid: { in: requested } },
+			select: { uuid: true, username: true },
+		});
+
+		const byUuid = new Map(found.map((user) => [user.uuid, user]));
+		return {
+			users: requested.flatMap((uuid) => byUuid.get(uuid) ?? []),
+			missing: requested.filter((uuid) => !byUuid.has(uuid)),
+		};
+	}
+
 	public async searchUsers(userUUID: string, username?: string) {
 		return this.prisma.user.findMany({
 			where: {

@@ -28,6 +28,20 @@ export const shortUserSchema = z.object({
 });
 export type ShortUser = z.infer<typeof shortUserSchema>;
 
+export const USERS_BATCH_MAX = 100;
+
+export const usersBatchSchema = z.object({
+	uuids: z.array(z.string().uuid()).min(1).
+		max(USERS_BATCH_MAX),
+});
+export type UsersBatchDto = z.infer<typeof usersBatchSchema>;
+
+export const usersBatchResponseSchema = z.object({
+	users: z.array(shortUserSchema),
+	missing: z.array(z.string().uuid()),
+});
+export type UsersBatchResponse = z.infer<typeof usersBatchResponseSchema>;
+
 export const onlineStatusSchema = z.enum(["online", "offline"]);
 export type OnlineStatus = z.infer<typeof onlineStatusSchema>;
 
