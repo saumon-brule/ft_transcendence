@@ -2,6 +2,7 @@ import type { Provider } from "@flex/shared";
 import { Accessor, Show } from "solid-js";
 import { useMediaToken } from "~/api/providerClients";
 import { buildMediaUrl } from "@flex/shared";
+import { DEFAULT_ARTIST, imgFallback } from "~/utils/imageFallback";
 import { A } from "@solidjs/router";
 import { everyMusicQuery, ProviderArtistQueryBody } from "~/api/queryHooks/providerInfo";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
@@ -37,11 +38,11 @@ export default function ProviderArtistHeader(props: ProviderArtistHeaderProps) {
 		if (artist.hasAvatar && token) {
 			return buildMediaUrl(props.providerBack.address, "artistAvatar", artist.uuid, token);
 		}
-		return "/images/default_artist.webp";
+		return DEFAULT_ARTIST;
 	}
 
 	return <header class="provider-image-header">
-		<img src={getAvatar(props.artist)} alt="Profile picture" />
+		<img src={getAvatar(props.artist)} alt="Artist picture" onError={imgFallback(DEFAULT_ARTIST)} />
 		<div class="header-info">
 			<h2>{props.artist.name}</h2>
 			<div class="stats">

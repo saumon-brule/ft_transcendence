@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, createRoot, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { LocalStorageItem } from "~/utils/storageHelper";
 
@@ -27,12 +27,14 @@ const media = window.matchMedia("(prefers-color-scheme: dark)");
 export const [systemDark, setSystemDark] = createSignal(media.matches);
 media.addEventListener("change", (e) => setSystemDark(e.matches));
 
-createEffect(() => {
-	if (appearanceStore.useDevice) {
-		document.documentElement.dataset.theme = "auto";
-	} else {
-		document.documentElement.dataset.theme = appearanceStore.theme;
-	}
+createRoot(() => {
+	createEffect(() => {
+		if (appearanceStore.useDevice) {
+			document.documentElement.dataset.theme = "auto";
+		} else {
+			document.documentElement.dataset.theme = appearanceStore.theme;
+		}
+	});
 });
 
 export { appearanceStore, changeTheme, changeUseDevice };

@@ -25,6 +25,7 @@
 	--mix-active: black;
 	--mix-disabled: transparent;
 	--logo-main: var(--neutral-0);
+	--login-intra-hover: #1A1A1A;
 }
 
 @mixin theme-light {
@@ -50,6 +51,7 @@
 	--mix-active: white;
 	--mix-disabled: transparent;
 	--logo-main: var(--neutral-1000);
+	--login-intra-hover: #1D1D1D;
 }
 
 :root[data-theme="dark"] {

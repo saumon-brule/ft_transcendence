@@ -109,10 +109,10 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 						<Match when={!music.isUnavailable() && music}>
 							<tr>
 								<td class="col-title">
-									<div class="music-title">
+									<div class="music-title" onClick={() => handleMusicClick(i())}>
 										<MusicCover music={music} />
 										<div class="music-title-text">
-											<Button variant="text" onClick={() => handleMusicClick(i())}>{music.name}</Button>
+											<Button variant="text">{music.name}</Button>
 											<Show when={shown("artists")}>
 												<span class="music-title-artists">
 													<ArtistsLinks artists={music.artists} providerUUID={music.provider.uuid} />

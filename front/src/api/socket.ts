@@ -53,6 +53,8 @@ export function createSocket() {
 			}
 			authActions.login(accessToken);
 			socket.connect();
+		} catch {
+			scheduleReconnect();
 		} finally {
 			refreshingToken = false;
 		}

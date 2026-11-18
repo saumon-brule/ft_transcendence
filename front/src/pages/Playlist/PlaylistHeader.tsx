@@ -10,6 +10,8 @@ import { Globe, Lock, Pencil, Play, Shuffle, Trash2 } from "lucide-solid";
 import { useSetPlaylistPrivacyMutation } from "~/api/queryHooks/playlist";
 import { summonRenamePlaylistPopUp } from "./popUps/renamePlaylistPopUp";
 import { summonDeletePlaylistPopUp } from "./popUps/deletePlaylistPopUp";
+import { Playlist } from "~/class/Playlist";
+import { history } from "~/store/history.store";
 
 type PlaylistHeaderProps = {
 	playlist: PlaylistDetailDto;
@@ -39,6 +41,7 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 		if (shuffle) audioManager.shuffle();
 		audioManager.position = 0;
 		audioManager.play();
+		history.playlist.listen(Playlist.fromDetail(props.playlist));
 	}
 
 	function togglePrivacy() {

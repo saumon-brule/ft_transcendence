@@ -3,6 +3,7 @@ import z from "zod";
 import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
 import { Music } from "~/class/Music";
+import { Playlist } from "~/class/Playlist";
 import { LocalStorageItem } from "~/utils/storageHelper";
 
 const HISTORY_SIZE = 3;
@@ -14,13 +15,15 @@ const historySchema = z.object({
 	artistPlayCounts: z.record(z.string(), z.object({ amount: z.number(), artist: Artist.zodSchema })),
 	lastMusics: z.array(Music.zodSchema),
 	musicPlayCounts: z.record(z.string(), z.object({ amount: z.number(), music: Music.zodSchema })),
+	lastPlaylists: z.array(Playlist.zodSchema).default([]),
+	playlistPlayCounts: z.record(z.string(), z.object({ amount: z.number(), playlist: Playlist.zodSchema })).default({}),
 });
 
 type HistoryStore = z.output<typeof historySchema>;
 
 const historyItem = new LocalStorageItem<HistoryStore>(
 	"history",
-	() => ({ lastAlbums: [], albumPlayCounts: {}, lastArtists: [], artistPlayCounts: {}, lastMusics: [], musicPlayCounts: {} }),
+	() => ({ lastAlbums: [], albumPlayCounts: {}, lastArtists: [], artistPlayCounts: {}, lastMusics: [], musicPlayCounts: {}, lastPlaylists: [], playlistPlayCounts: {} }),
 	JSON.stringify,
 	(stored) => historySchema.parse(JSON.parse(stored)),
 );
@@ -118,6 +121,57 @@ const history = {
 				.slice(0, HISTORY_SIZE)
 				.map((e) => e.music);
 		},
+	},
+	playlist: {
+		listen: (playlist: Playlist) => {
+			setHistoryStore(
+				produce((s) => {
+					s.lastPlaylists = [playlist, ...s.lastPlaylists.filter((p) => p.uuid !== playlist.uuid)].slice(0, HISTORY_SIZE);
+
+					const entry = s.playlistPlayCounts[playlist.uuid];
+					if (entry) {
+						entry.amount++;
+						entry.playlist = playlist;
+					} else {
+						s.playlistPlayCounts[playlist.uuid] = { amount: 1, playlist };
+					}
+				}),
+			);
+			historyItem.set(unwrap(historyStore));
+		},
+		last: (): Playlist[] => {
+			return historyStore.lastPlaylists;
+		},
+		top: (): Playlist[] => {
+			return Object.values(historyStore.playlistPlayCounts)
+				.sort((a, b) => b.amount - a.amount)
+				.slice(0, HISTORY_SIZE)
+				.map((e) => e.playlist);
+		},
+	},
+	top: (): (Music | Album | Artist | Playlist)[] => {
+		return [
+			...Object.values(historyStore.musicPlayCounts)
+				.sort((a, b) => b.amount - a.amount)
+				.slice(0, HISTORY_SIZE * 2),
+			...Object.values(historyStore.albumPlayCounts),
+			...Object.values(historyStore.artistPlayCounts),
+			...Object.values(historyStore.playlistPlayCounts),
+		].sort((a, b) => b.amount - a.amount).slice(0, HISTORY_SIZE * 4)
+			.map((e) => {
+				if ("music" in e) return e.music;
+				else if ("artist" in e) return e.artist;
+				else if ("playlist" in e) return e.playlist;
+				return e.album;
+			});
+	},
+	last: (): (Music | Album | Artist | Playlist)[] => {
+		return [
+			...historyStore.lastArtists,
+			...historyStore.lastMusics,
+			...historyStore.lastAlbums,
+			...historyStore.lastPlaylists,
+		];
 	},
 };
 
