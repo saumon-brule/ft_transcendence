@@ -3,6 +3,7 @@ import type { ClientInferResponses } from "@ts-rest/core";
 import { serverContract } from "@flex/shared";
 import { client, queryKeys } from "../client";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { bumpPlaylistCover } from "~/utils/playlistCover";
 
 export const usePlaylistQuery = (uuid: () => string) => client.playlists.getPlaylist.createQuery(
 	() => queryKeys.playlists.getPlaylist([uuid()]),
@@ -124,3 +125,95 @@ export const useCreatePlaylistMutation = () => {
 		onError: () => { summonErrorToast("Failed to create the playlist"); },
 	});
 };
+
+type PlaylistPatch = Partial<{ name: string; private: boolean }>;
+
+function patchPlaylistCaches(queryClient: ReturnType<typeof useQueryClient>, playlistUuid: string, patch: PlaylistPatch) {
+	const patchSummary = <T extends { uuid: string }>(playlist: T): T => playlist.uuid === playlistUuid
+		? { ...playlist, ...patch }
+		: playlist;
+
+	queryClient.setQueryData<GetPlaylistResponse>(queryKeys.playlists.getPlaylist([playlistUuid]), (old) => old && { ...old, body: { ...old.body, ...patch } });
+	queryClient.setQueryData<ListPlaylistsResponse>(queryKeys.playlists.listPlaylists(), (old) => old && {
+		...old,
+		body: { owned: old.body.owned.map(patchSummary), followed: old.body.followed.map(patchSummary) },
+	});
+	queryClient.setQueryData<MeResponse>(queryKeys.users.me(), (old) => old && {
+		...old,
+		body: { ...old.body, ownedPlaylists: old.body.ownedPlaylists.map(patchSummary) },
+	});
+}
+
+export const useRenamePlaylistMutation = () => {
+	const queryClient = useQueryClient();
+
+	return client.playlists.updatePlaylistName.createMutation({
+		onSuccess: (_, vars) => {
+			patchPlaylistCaches(queryClient, vars.params.uuid, { name: vars.body.name });
+			summonSuccessToast("Playlist renamed");
+		},
+		onError: () => { summonErrorToast("Failed to rename the playlist"); },
+	});
+};
+
+export const useSetPlaylistPrivacyMutation = () => {
+	const queryClient = useQueryClient();
+
+	return client.playlists.setPlaylistPrivacy.createMutation({
+		onSuccess: (_, vars) => {
+			patchPlaylistCaches(queryClient, vars.params.uuid, { private: vars.body.private });
+			summonSuccessToast(vars.body.private
+				? "Playlist is now private"
+				: "Playlist is now public");
+		},
+		onError: () => { summonErrorToast("Failed to change the playlist visibility"); },
+	});
+};
+
+export const useDeletePlaylistMutation = () => {
+	const queryClient = useQueryClient();
+
+	return client.playlists.deletePlaylist.createMutation({
+		onSuccess: (_, vars) => {
+			const playlistUuid = vars.params.uuid;
+
+			queryClient.removeQueries({ queryKey: queryKeys.playlists.getPlaylist([playlistUuid]) });
+			queryClient.setQueryData<ListPlaylistsResponse>(queryKeys.playlists.listPlaylists(), (old) => old && {
+				...old,
+				body: {
+					owned: old.body.owned.filter((playlist) => playlist.uuid !== playlistUuid),
+					followed: old.body.followed.filter((playlist) => playlist.uuid !== playlistUuid),
+				},
+			});
+			queryClient.setQueryData<MeResponse>(queryKeys.users.me(), (old) => old && {
+				...old,
+				body: {
+					...old.body,
+					ownedPlaylists: old.body.ownedPlaylists.filter((playlist) => playlist.uuid !== playlistUuid),
+					_count: { ...old.body._count, ownedPlaylists: old.body._count.ownedPlaylists - 1 },
+				},
+			});
+			summonSuccessToast("Playlist deleted");
+		},
+		onError: () => { summonErrorToast("Failed to delete the playlist"); },
+	});
+};
+
+export const useUploadPlaylistCoverMutation = () => client.playlists.uploadCover.createMutation({
+	onSuccess: (_, vars) => {
+		bumpPlaylistCover(vars.params.uuid);
+		summonSuccessToast("Playlist cover updated");
+	},
+	onError: (e) => {
+		if (e.status === 413) summonErrorToast("This image is too large");
+		else summonErrorToast("Failed to update the playlist cover");
+	},
+});
+
+export const useDeletePlaylistCoverMutation = () => client.playlists.deleteCover.createMutation({
+	onSuccess: (_, vars) => {
+		bumpPlaylistCover(vars.params.uuid);
+		summonSuccessToast("Playlist cover removed");
+	},
+	onError: () => { summonErrorToast("Failed to remove the playlist cover"); },
+});

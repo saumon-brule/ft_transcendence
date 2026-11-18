@@ -58,3 +58,17 @@
 		}
 	}
 }
+
+.cover-pop-up-inputs {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+
+	.cover-preview {
+		width: 160px;
+		height: 160px;
+		border-radius: 8px;
+		object-fit: cover;
+	}
+}

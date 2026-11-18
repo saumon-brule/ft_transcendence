@@ -32,84 +32,170 @@
 			}
 		}
 
-		.header-info {
-			min-width: 0;
+		.cover-button {
+			position: relative;
+			flex-shrink: 0;
+			margin-right: 20px;
+			padding: 0;
+			border: 0;
+			border-radius: 8px;
+			background: none;
+			cursor: pointer;
+			line-height: 0;
+			overflow: hidden;
 
 			@include breakpoints.respond-to("mobile") {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				width: 100%;
+				margin-right: 0;
 			}
 
-			h2 {
-				font-size: 28px;
-				margin: 0;
-
-				@include breakpoints.respond-to("mobile") {
-					font-size: 24px;
-					max-width: 100%;
-					overflow-wrap: anywhere;
-				}
+			img {
+				margin-right: 0;
 			}
 
-			.badge {
-				display: inline-block;
-				margin-bottom: 4px;
-				font-size: 12px;
-				text-transform: uppercase;
-				color: var(--text-secondary);
+			.cover-overlay {
+				position: absolute;
+				inset: 0;
+				display: grid;
+				place-items: center;
+				background: rgb(0 0 0 / 0.55);
+				color: #fff;
+				opacity: 0;
+				transition: opacity 0.2s;
 			}
 
-			.stats {
-				display: flex;
-				flex-direction: row;
-				gap: 8px;
-				margin-top: 6px;
-				align-items: center;
-				color: var(--text-secondary);
-
-				@include breakpoints.respond-to("mobile") {
-					flex-wrap: wrap;
-					justify-content: center;
-					row-gap: 4px;
-				}
-
-				.stat {
-					font-size: 14px;
-				}
-
-				.separator {
-					width: 3px;
-					height: 3px;
-					background-color: var(--text-secondary);
-					border-radius: 50%;
-				}
-			}
-
-			p {
-				margin-top: 10px;
-				font-size: 14px;
+			&:is(:hover, :focus-visible) .cover-overlay {
+				opacity: 1;
 			}
 		}
 
-		.header-controls {
+		.header-container {
 			display: flex;
-			gap: 0.25rem;
-			justify-content: center;
+			align-items: center;
+			gap: 1.5rem;
+			min-width: 0;
 
-			& > button {
-				&:first-child {
-					border-top-right-radius: 0;
-					border-bottom-right-radius: 0;
+			@include breakpoints.respond-to("mobile") {
+				flex-direction: column;
+				gap: 12px;
+			}
+
+			.header-info {
+				min-width: 0;
+
+				@include breakpoints.respond-to("mobile") {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					width: 100%;
 				}
-				&:last-child {
-					border-top-left-radius: 0;
-					border-bottom-left-radius: 0;
+
+				h2 {
+					font-size: 28px;
+					margin: 0;
+
+					@include breakpoints.respond-to("mobile") {
+						font-size: 24px;
+						max-width: 100%;
+						overflow-wrap: anywhere;
+					}
+				}
+
+				.badge {
+					display: inline-flex;
+					align-items: center;
+					gap: 4px;
+					margin-bottom: 4px;
+					font-size: 12px;
+					text-transform: uppercase;
+					color: var(--text-secondary);
+				}
+
+				.stats {
+					display: flex;
+					flex-direction: row;
+					gap: 8px;
+					margin-top: 6px;
+					align-items: center;
+					color: var(--text-secondary);
+
+					@include breakpoints.respond-to("mobile") {
+						flex-wrap: wrap;
+						justify-content: center;
+						row-gap: 4px;
+					}
+
+					.stat {
+						font-size: 14px;
+					}
+
+					.separator {
+						width: 3px;
+						height: 3px;
+						background-color: var(--text-secondary);
+						border-radius: 50%;
+					}
+				}
+
+				p {
+					margin-top: 10px;
+					font-size: 14px;
 				}
 			}
 
+			.header-controls {
+				display: flex;
+				gap: 0.25rem;
+				justify-content: center;
+
+				& > button {
+					&:first-child {
+						border-top-right-radius: 0;
+						border-bottom-right-radius: 0;
+					}
+					&:last-child {
+						border-top-left-radius: 0;
+						border-bottom-left-radius: 0;
+					}
+				}
+
+				@include breakpoints.respond-to("mobile") {
+				}
+			}
+		}
+
+		.header-actions {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: flex-end;
+			gap: 8px;
+			margin-left: auto;
+
 			@include breakpoints.respond-to("mobile") {
+				justify-content: center;
+				margin-left: 0;
+			}
+
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+			}
+
+			.toggle-labels {
+				display: grid;
+
+				> span {
+					grid-area: 1 / 1;
+					display: inline-flex;
+					align-items: center;
+					justify-content: center;
+					gap: 6px;
+
+					&.inactive {
+						visibility: hidden;
+					}
+				}
 			}
 		}
 	}

@@ -1,10 +1,10 @@
+import { playlistCoverUrl } from "~/utils/playlistCover";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import { ChevronLeft, ChevronRight, EighthNote, ListEnd, ListStart, Search, Trash } from "lucide-solid";
 import TextInput from "~/components/inputs/TextInput";
 import Form from "~/components/inputs/Form/Form";
 import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import { useAddMusicToPlaylistMutation, useRemoveMusicFromPlaylistMutation } from "~/api/queryHooks/playlist";
-import { env } from "~/env";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { Music } from "~/class/Music";
 import { PlaylistContext } from "./UnavailableTrackRow";
@@ -86,7 +86,7 @@ export function MusicActionMenu(props: { music: Music; playlist?: PlaylistContex
 						<TextInput value={searchQuery()} placeholder="Search playlist" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 					</Form>
 					<Show when={meProfileQuery.data?.body} keyed>{(meProfile) => <For each={meProfile.ownedPlaylists.filter((p) => p.name.toLowerCase().includes(searchQuery().toLowerCase())).slice(0, 5)}>{(playlist) => <button type="button" role="menuitem" onClick={() => addToPlaylist(playlist.uuid)}>
-						<img src={`${env.VITE_API_URL}/playlists/${playlist.uuid}/cover`} alt="Playlist cover" />
+						<img src={playlistCoverUrl(playlist.uuid)} alt="Playlist cover" />
 						<span>{playlist.name}</span>
 					</button>
 					}</For>

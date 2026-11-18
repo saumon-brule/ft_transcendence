@@ -60,6 +60,7 @@ export const playlistsContract = c.router(
 			method: "DELETE",
 			path: "/:uuid",
 			pathParams: uuidParamSchema,
+			body: null,
 			responses: {
 				204: null,
 				404: commonError404Schema,
@@ -114,6 +115,7 @@ export const playlistsContract = c.router(
 			method: "DELETE",
 			path: "/:uuid/cover",
 			pathParams: uuidParamSchema,
+			body: null,
 			responses: {
 				204: null,
 			},
