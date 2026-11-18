@@ -40,12 +40,12 @@ export class PlaylistsService {
 			this.prisma.playlist.findMany({
 				where: { ownerUUID: viewerUUID },
 				select,
-				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 			}),
 			this.prisma.userPlaylist.findMany({
 				where: { userUUID: viewerUUID, playlist: { ownerUUID: { not: viewerUUID }, private: false } },
 				select: { playlist: { select } },
-				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 			}),
 		]);
 

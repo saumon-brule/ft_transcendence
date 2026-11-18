@@ -47,7 +47,7 @@ import { RealtimeModule } from "./realtime/realtime.module";
 		PresenceModule,
 		ChatModule,
 		ThrottlerModule.forRoot({
-			throttlers: [{ ttl: 60000, limit: 100 }],
+			throttlers: [{ ttl: 60000, limit: 1000 }],
 		}),
 	],
 })

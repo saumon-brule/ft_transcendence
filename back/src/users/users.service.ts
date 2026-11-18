@@ -52,16 +52,18 @@ export class UsersService {
 			where: { uuid: uuid },
 			include: {
 				_count: { select: { ownedProviders: true, ownedPlaylists: true } },
-				ownedProviders: true,
+				ownedProviders: { orderBy: [{ createdAt: "asc" }, { id: "asc" }] },
 				providers: {
 					where: { provider: { is: { ownerUUID: { not: uuid } } } },
 					include: { provider: true },
+					orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 				},
 				currentlyListening: true,
 				ownedPlaylists: {
 					where: isSelf
 						? {}
 						: { private: false },
+					orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 					include: {
 						_count: {
 							select: { musics: true },
@@ -70,13 +72,17 @@ export class UsersService {
 				},
 				friendsRequests: {
 					where: { status: "ACCEPTED" },
+					orderBy: { id: "asc" },
 					select: {
+						id: true,
 						friend: { select: { uuid: true, username: true } },
 					},
 				},
 				friendsReceive: {
 					where: { status: { in: ["ACCEPTED", "PENDING"] } },
+					orderBy: { id: "asc" },
 					select: {
+						id: true,
 						status: true,
 						user: { select: { uuid: true, username: true } },
 					},
@@ -91,11 +97,13 @@ export class UsersService {
 			user.listeningUntil = null;
 		}
 		const friends = [
-			...user.friendsRequests.map((request) => request.friend),
+			...user.friendsRequests.map((request) => ({ id: request.id, friend: request.friend })),
 			...user.friendsReceive
 				.filter((request) => request.status === "ACCEPTED")
-				.map((request) => request.user),
-		];
+				.map((request) => ({ id: request.id, friend: request.user })),
+		]
+			.sort((a, b) => a.id - b.id)
+			.map((request) => request.friend);
 		const isFriend = friends.some((friend) => friend.uuid === viewerUUID);
 		const status = isFriend
 			? this.presence.getStatus(uuid)

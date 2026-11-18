@@ -54,7 +54,7 @@ export class PlaylistsController {
 			const filename = `${params.uuid}.webp`;
 			const filepath = join(COVER_DIR, filename);
 
-			await sharp(file.buffer)
+			await sharp(file.buffer, { animated: true })
 				.resize(256, 256, { fit: "cover" })
 				.webp({ quality: 80 })
 				.toFile(filepath);
