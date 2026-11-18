@@ -1,8 +1,8 @@
+import { playlistCoverUrl } from "~/utils/playlistCover";
 import { Show } from "solid-js";
 import { A } from "@solidjs/router";
 import { Lock, Plus } from "lucide-solid";
 import type { PlaylistSummaryDto } from "@flex/shared";
-import { env } from "~/env";
 import "./PlaylistCard.scss";
 
 type PlaylistCardProps = {
@@ -13,7 +13,7 @@ type PlaylistCardProps = {
 
 export default function PlaylistCard(props: PlaylistCardProps) {
 	return <A class={`playlist-card ${props.variant === "row" ? "playlist-card--row" : ""}`} href={`/playlist/${props.playlist.uuid}`}>
-		<img src={`${env.VITE_API_URL}/playlists/${props.playlist.uuid}/cover`} alt="" />
+		<img src={playlistCoverUrl(props.playlist.uuid)} alt="" />
 		<div class="playlist-card-info">
 			<h4>
 				{props.playlist.name}

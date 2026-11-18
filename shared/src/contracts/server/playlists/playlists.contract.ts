@@ -115,6 +115,7 @@ export const playlistsContract = c.router(
 			method: "DELETE",
 			path: "/:uuid/cover",
 			pathParams: uuidParamSchema,
+			body: null,
 			responses: {
 				204: null,
 			},

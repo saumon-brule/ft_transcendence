@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 import { A, useNavigate } from "@solidjs/router";
 import type { PlaylistDetailDto } from "@flex/shared";
-import { env } from "~/env";
+import { playlistCoverUrl } from "~/utils/playlistCover";
 import { Music } from "~/class/Music";
 import { MusicGroup } from "~/store/trackManager.store";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
@@ -10,6 +10,7 @@ import { Globe, Lock, Pencil, Play, Shuffle, Trash2 } from "lucide-solid";
 import { useSetPlaylistPrivacyMutation } from "~/api/queryHooks/playlist";
 import { summonRenamePlaylistPopUp } from "./popUps/renamePlaylistPopUp";
 import { summonDeletePlaylistPopUp } from "./popUps/deletePlaylistPopUp";
+import { summonChangeCoverPopUp } from "./popUps/changeCoverPopUp";
 import { Playlist } from "~/class/Playlist";
 import { history } from "~/store/history.store";
 
@@ -49,7 +50,12 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 	}
 
 	return <header class="playlist-header">
-		<img src={`${env.VITE_API_URL}/playlists/${props.playlist.uuid}/cover`} alt="Playlist cover" />
+		<Show when={props.playlist.isOwner} fallback={<img src={playlistCoverUrl(props.playlist.uuid)} alt="Playlist cover" />}>
+			<button type="button" class="cover-button" aria-label="Change cover" onClick={() => summonChangeCoverPopUp(props.playlist)}>
+				<img src={playlistCoverUrl(props.playlist.uuid)} alt="Playlist cover" />
+				<span class="cover-overlay"><Pencil /></span>
+			</button>
+		</Show>
 		<div class="header-container">
 			<div class="header-info">
 				<span class="badge">

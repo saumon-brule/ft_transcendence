@@ -3,6 +3,7 @@ import type { ClientInferResponses } from "@ts-rest/core";
 import { serverContract } from "@flex/shared";
 import { client, queryKeys } from "../client";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { bumpPlaylistCover } from "~/utils/playlistCover";
 
 export const usePlaylistQuery = (uuid: () => string) => client.playlists.getPlaylist.createQuery(
 	() => queryKeys.playlists.getPlaylist([uuid()]),
@@ -197,3 +198,22 @@ export const useDeletePlaylistMutation = () => {
 		onError: () => { summonErrorToast("Failed to delete the playlist"); },
 	});
 };
+
+export const useUploadPlaylistCoverMutation = () => client.playlists.uploadCover.createMutation({
+	onSuccess: (_, vars) => {
+		bumpPlaylistCover(vars.params.uuid);
+		summonSuccessToast("Playlist cover updated");
+	},
+	onError: (e) => {
+		if (e.status === 413) summonErrorToast("This image is too large");
+		else summonErrorToast("Failed to update the playlist cover");
+	},
+});
+
+export const useDeletePlaylistCoverMutation = () => client.playlists.deleteCover.createMutation({
+	onSuccess: (_, vars) => {
+		bumpPlaylistCover(vars.params.uuid);
+		summonSuccessToast("Playlist cover removed");
+	},
+	onError: () => { summonErrorToast("Failed to remove the playlist cover"); },
+});
