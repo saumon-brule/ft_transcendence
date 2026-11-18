@@ -48,6 +48,41 @@
 				margin-top: 0.5rem;
 				margin-bottom: 0rem;
 			}
+
+			.provider-key-copy {
+				position: relative;
+				display: block;
+				width: 100%;
+				margin-top: 0.5rem;
+				cursor: copy;
+				border-radius: 0.5rem;
+				outline: none;
+
+				code {
+					margin: 0;
+					user-select: text;
+					padding-right: 3rem;
+					transition: border-color 0.2s;
+				}
+
+				&:is(:hover, :focus-visible) code {
+					border-color: var(--text-secondary);
+				}
+
+				.provider-key-copy-icon {
+					position: absolute;
+					top: 50%;
+					right: 1rem;
+					transform: translateY(-50%);
+					display: flex;
+					color: var(--text-secondary);
+				}
+			}
+
+			.provider-key-copy-status {
+				font-size: 0.85rem;
+				color: var(--text-secondary);
+			}
 		}
 
 		.pop-up-buttons {
