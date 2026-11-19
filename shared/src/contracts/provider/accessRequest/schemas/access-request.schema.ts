@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { providerMemberSchema } from "../../member/schemas/member.schema";
 
 export const requestStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
 
@@ -21,4 +22,8 @@ export const accessRequestListResponseSchema = z.object({
 
 export const decideAccessRequestSchema = z.object({
 	decision: z.enum(["APPROVED", "REJECTED"]),
+});
+
+export const accessRequestDecideResponseSchema = accessRequestStatusSchema.extend({
+	member: providerMemberSchema.nullable(),
 });

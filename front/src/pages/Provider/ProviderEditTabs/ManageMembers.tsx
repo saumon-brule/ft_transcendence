@@ -4,10 +4,11 @@ import { useProviderInfo } from "~/components/guards/ProviderInfoGuard";
 import Button from "~/components/inputs/Button";
 import "./ManageMembers.scss";
 import { A } from "@solidjs/router";
-import { Plus, RefreshCcw, X } from "lucide-solid";
+import { RefreshCcw, X } from "lucide-solid";
 import { textToCSS } from "~/utils/tex2col";
 import { Provider } from "@flex/shared";
 import { providerRemoveMember, providerUserAccessDecide, useProviderMembersQuery, useProviderPendingMembersQuery } from "~/api/queryHooks/providerManageMembers";
+import { AddRoleMenu } from "./AddRoleMenu";
 
 type PendingUser = {
 	status: "PENDING" | "APPROVED" | "REJECTED";
@@ -20,7 +21,7 @@ type PendingUser = {
 	username: string;
 };
 
-type ProviderUser = {
+export type ProviderUser = {
 	uuid: string;
 	createdAt: Date;
 	isOwner: boolean;
@@ -136,9 +137,7 @@ function ProviderMemberCard(props: { member: ProviderUser; provider: Provider })
 					<span>{role.name}</span>
 					<Button variant="text" icon onClick={() => {}}><X size={14}/></Button>
 				</div>}</For>
-				<div class="role" onClick={() => {}}>
-					<Button variant="text" icon><Plus size={14}/></Button>
-				</div>
+				<AddRoleMenu provider={props.provider} user={props.member}/>
 			</div>
 		</div>
 		<div class="actions">
