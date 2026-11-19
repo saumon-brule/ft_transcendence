@@ -1,5 +1,6 @@
 import { initContract } from "@ts-rest/core";
 import {
+	accessRequestDecideResponseSchema,
 	accessRequestListQuerySchema,
 	accessRequestListResponseSchema,
 	accessRequestStatusSchema,
@@ -42,7 +43,7 @@ export const accessRequestContract = c.router(
 			pathParams: uuidParamSchema,
 			body: decideAccessRequestSchema,
 			responses: {
-				200: accessRequestStatusSchema,
+				200: accessRequestDecideResponseSchema,
 				404: commonError404Schema,
 				409: providerError409Schema,
 			},
