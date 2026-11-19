@@ -1,7 +1,7 @@
 import { useNavigate, RouteSectionProps } from "@solidjs/router";
 import { createContext, createEffect, Show, useContext } from "solid-js";
 import { useProviderInfoInfoQuery } from "~/api/queryHooks/providerAccess";
-import { useProviderInfo } from "./ProviderInfoGuard";
+import { useProvider } from "./ProviderInfoGuard";
 
 const AllowedContext = createContext<Exclude<ReturnType<typeof useProviderInfoInfoQuery>["data"], undefined>["body"]>();
 
@@ -13,7 +13,7 @@ export function useProviderInfoInfo() {
 
 export default function EditPermissionGuard(props: RouteSectionProps) {
 	const navigate = useNavigate();
-	const provider = useProviderInfo();
+	const provider = useProvider();
 	const providerInfoInfoQuery = useProviderInfoInfoQuery(() => provider);
 
 	createEffect(() => {

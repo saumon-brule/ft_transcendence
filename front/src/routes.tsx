@@ -34,48 +34,51 @@ import NotFound from "./pages/NotFound/NotFound";
 import ProviderEdit from "./pages/Provider/ProviderEdit";
 import EditPermissionGuard from "./components/guards/EditPermissionGuard";
 import ProviderInfoGuard from "./components/guards/ProviderInfoGuard";
+import GlobalContextsGate from "./components/guards/GlobalContextsGate";
 
 export const AppRouter = () => {
 	return <Router >
-		<Route path="/" component={Landing} />
-		<Route path="/privacy-policy" component={PrivacyPolicy} />
-		<Route path="/terms-of-service" component={TermsOfService} />
-		<Route path="/" component={GuestGuard}>
-			<Route path="/" component={AuthLayout}>
-				<Route path="/login" component={LoginForm}/>
-				<Route path="/register" component={RegisterForm} />
-				<Route path="/auth/request-password-reset" component={RequestPasswordReset} />
+		<Route path="/" component={GlobalContextsGate}>
+			<Route path="/" component={Landing} />
+			<Route path="/privacy-policy" component={PrivacyPolicy} />
+			<Route path="/terms-of-service" component={TermsOfService} />
+			<Route path="/" component={GuestGuard}>
+				<Route path="/" component={AuthLayout}>
+					<Route path="/login" component={LoginForm}/>
+					<Route path="/register" component={RegisterForm} />
+					<Route path="/auth/request-password-reset" component={RequestPasswordReset} />
+				</Route>
 			</Route>
-		</Route>
-		<Route path={emailConfirmationPath} component={VerifyEmail} />
-		<Route path={changeEmailConfirmationPath} component={ChangeEmailValidation} />
-		<Route path={ftIntraCallbackPath} component={FtAuthCallback} />
-		<Route path={passwordResetConfirmationPath} component={ResetPassword} />
-		<Route path="/" component={AuthGuard}>
-			<Route path="/" component={UnverifiedEmailGuard}>
-				<Route path="/verify-email" component={PromptVerifyEmail}/>
-			</Route>
-			<Route path="/" component={VerifiedEmailGuard}>
-				<Route path="/" component={AppContainer}>
-					<Route path="/" component={SidebarRoute}>
-						<Route path="/home" component={Home} />
-						<Route path="/search/:search?" component={Search} />
-						<Route path="/user/:uuid" component={Profile} />
-						<Route path="/playlists" component={Playlists} />
-						<Route path="/playlist/:uuid" component={Playlist} />
-						<Route path="/friends" component={Friends} />
-						<Route path="/friends/:uuid" component={Friends} />
-						<Route path="/settings" component={Settings} />
-						<Route path="/providers" component={Providers} />
-						<Route path="/" component={ProviderInfoGuard} >
-							<Route path="/provider/:uuid" component={Provider} />
-							<Route path="/" component={EditPermissionGuard} >
-								<Route path="/provider/:uuid/edit" component={ProviderEdit} />
+			<Route path={emailConfirmationPath} component={VerifyEmail} />
+			<Route path={changeEmailConfirmationPath} component={ChangeEmailValidation} />
+			<Route path={ftIntraCallbackPath} component={FtAuthCallback} />
+			<Route path={passwordResetConfirmationPath} component={ResetPassword} />
+			<Route path="/" component={AuthGuard}>
+				<Route path="/" component={UnverifiedEmailGuard}>
+					<Route path="/verify-email" component={PromptVerifyEmail}/>
+				</Route>
+				<Route path="/" component={VerifiedEmailGuard}>
+					<Route path="/" component={AppContainer}>
+						<Route path="/" component={SidebarRoute}>
+							<Route path="/home" component={Home} />
+							<Route path="/search/:search?" component={Search} />
+							<Route path="/user/:uuid" component={Profile} />
+							<Route path="/playlists" component={Playlists} />
+							<Route path="/playlist/:uuid" component={Playlist} />
+							<Route path="/friends" component={Friends} />
+							<Route path="/friends/:uuid" component={Friends} />
+							<Route path="/settings" component={Settings} />
+							<Route path="/providers" component={Providers} />
+							<Route path="/" component={ProviderInfoGuard} >
+								<Route path="/provider/:uuid" component={Provider} />
+								<Route path="/" component={EditPermissionGuard} >
+									<Route path="/provider/:uuid/edit" component={ProviderEdit} />
+								</Route>
+								<Route path="/provider/:uuid/artist/:artistUUID" component={ProviderArtist} />
+								<Route path="/provider/:uuid/album/:albumUUID" component={ProviderAlbum} />
 							</Route>
-							<Route path="/provider/:uuid/artist/:artistUUID" component={ProviderArtist} />
-							<Route path="/provider/:uuid/album/:albumUUID" component={ProviderAlbum} />
+							<Route path="*" component={NotFound} />
 						</Route>
-						<Route path="*" component={NotFound} />
 					</Route>
 				</Route>
 			</Route>

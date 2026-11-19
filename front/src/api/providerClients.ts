@@ -58,7 +58,7 @@ const createProviderClient = (providerUrl: string, providerUuid: string) => ({
 	mediaToken: { token: "", expiresAt: new Date(0) },
 });
 
-type ProviderClient = ReturnType<typeof createProviderClient>;
+export type ProviderClient = ReturnType<typeof createProviderClient>;
 
 const providerClientsMap = new Map<string, ProviderClient>();
 
