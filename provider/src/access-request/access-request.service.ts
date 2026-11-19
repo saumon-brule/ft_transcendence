@@ -4,6 +4,7 @@ import { PrismaService } from "../core/prisma/prisma.service";
 import { retryOnWriteConflict } from "../core/prisma/write-conflict";
 import { AppConflictException } from "../core/error/conflict";
 import { ServerClientService } from "../core/server/server-client.service";
+import { memberInclude, toMember } from "../member/member.service";
 
 const TRANSACTION = { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: 15_000, maxWait: 5_000 };
 
@@ -151,9 +152,12 @@ export class AccessRequestService {
 
 			await this.server.decideAccessRequest(request.userUuid, decision);
 
+			let member: ReturnType<typeof toMember> | null = null;
 			if (decision === "APPROVED") {
 				const provider = await tx.provider.findUniqueOrThrow({ where: { id: 1 } });
 				await this.grantMembership(tx, request.userUuid, provider.defaultRoleUuid);
+				const row = await tx.member.findUniqueOrThrow({ where: { uuid: request.userUuid }, include: memberInclude });
+				member = toMember(row, provider.ownerUuid);
 			}
 
 			const updated = await tx.accessRequest.update({
@@ -161,7 +165,7 @@ export class AccessRequestService {
 				data: { status: decision, decidedByUuid: actorUuid, decidedAt: new Date() },
 				include,
 			});
-			return toAccessRequest(updated);
+			return { ...toAccessRequest(updated), member };
 		}, TRANSACTION));
 	}
 }

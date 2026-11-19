@@ -5,12 +5,12 @@ import { ServerClientService } from "../core/server/server-client.service";
 import type { MemberContext } from "../core/auth/auth.types";
 import { AppForbiddenException } from "../core/error/forbidden";
 
-const include = {
+export const memberInclude = {
 	roles: { include: { role: true }, orderBy: { role: { name: "asc" } } },
 } satisfies Prisma.MemberInclude;
-type MemberRow = Prisma.MemberGetPayload<{ include: typeof include }>;
+type MemberRow = Prisma.MemberGetPayload<{ include: typeof memberInclude }>;
 
-const toMember = (member: MemberRow, ownerUuid: string) => ({
+export const toMember = (member: MemberRow, ownerUuid: string) => ({
 	uuid: member.uuid,
 	isOwner: member.uuid === ownerUuid,
 	revokedAt: member.revokedAt,
@@ -49,7 +49,7 @@ export class MemberService {
 			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } }),
 			this.prisma.member.findMany({
 				where,
-				include,
+				include: memberInclude,
 				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 			}),
 		]);
@@ -95,7 +95,7 @@ export class MemberService {
 
 			const [{ ownerUuid }, updated] = await Promise.all([
 				tx.provider.findUniqueOrThrow({ where: { id: 1 } }),
-				tx.member.findUniqueOrThrow({ where: { uuid }, include }),
+				tx.member.findUniqueOrThrow({ where: { uuid }, include: memberInclude }),
 			]);
 			return toMember(updated, ownerUuid);
 		});
