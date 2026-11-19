@@ -1,6 +1,6 @@
 import { createMemo, createResource, For, Show } from "solid-js";
 import { getUsersBatch } from "~/api/queryHooks/userProfile";
-import { useProviderInfo } from "~/components/guards/ProviderInfoGuard";
+import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import Button from "~/components/inputs/Button";
 import "./ManageMembers.scss";
 import { A } from "@solidjs/router";
@@ -41,9 +41,9 @@ function displayDate(date: Date | string) {
 }
 
 export function ManageMembers(props: { search: string }) {
-	const providerInfo = useProviderInfo();
-	const providerPendingMembersQuery = useProviderPendingMembersQuery(providerInfo);
-	const providerMembersQuery = useProviderMembersQuery(providerInfo);
+	const provider = useProvider();
+	const providerPendingMembersQuery = useProviderPendingMembersQuery(provider);
+	const providerMembersQuery = useProviderMembersQuery(provider);
 
 	const [pendingUsers] = createResource(
 		() => providerPendingMembersQuery.data?.body.accessRequests,
@@ -83,7 +83,7 @@ export function ManageMembers(props: { search: string }) {
 				<Button size="sm" icon onClick={() => void providerPendingMembersQuery.refetch()}><RefreshCcw classList={{ spinning: providerPendingMembersQuery.isFetching }}/></Button>
 			</div>
 			<Show when={pendingMembers()} keyed fallback={<p class="empty-message">No pending requests at the moment.</p>}>{(members) => <div class="members-list">
-				<For each={members}>{(member) => <PendingMemberCard member={member} provider={providerInfo}/>}</For>
+				<For each={members}>{(member) => <PendingMemberCard member={member} provider={provider}/>}</For>
 			</div>}</Show>
 		</section>
 		<Show when={currentMembers()} keyed>{(members) => <section>
@@ -92,7 +92,7 @@ export function ManageMembers(props: { search: string }) {
 				<Button size="sm" icon onClick={() => void providerMembersQuery.refetch()}><RefreshCcw classList={{ spinning: providerMembersQuery.isFetching }}/></Button>
 			</div>
 			<div class="members-list">
-				<For each={members}>{(member) => <ProviderMemberCard member={member} provider={providerInfo}/>}</For>
+				<For each={members}>{(member) => <ProviderMemberCard member={member} provider={provider}/>}</For>
 			</div>
 		</section>}</Show>
 	</div>;

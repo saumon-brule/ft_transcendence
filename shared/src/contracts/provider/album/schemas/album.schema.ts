@@ -16,6 +16,7 @@ export const albumListResponseSchema = z.object({
 	albums: z.array(albumItemSchema),
 	total: z.number(),
 });
+export type AlbumListResponseDto = z.infer<typeof albumListResponseSchema>;
 
 export const createAlbumSchema = z.object({
 	name: z.string().trim().min(1).

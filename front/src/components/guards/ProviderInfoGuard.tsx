@@ -7,7 +7,7 @@ import LoadingSplash from "~/pages/Loading/LoadingSplash";
 
 const ProviderInfoContext = createContext<Provider>();
 
-export function useProviderInfo() {
+export function useProvider() {
 	const ctx = useContext(ProviderInfoContext);
 	if (!ctx) throw new Error("useProviderInfo should only be used with ProviderInfoGuard parent.");
 	return ctx;
