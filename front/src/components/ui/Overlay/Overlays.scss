@@ -45,12 +45,11 @@
 			background-color: var(--background-card);
 			padding: 1.5rem 2rem;
 			border-radius: 1rem;
-
-			max-width: 400px;
-			width: 40%;
+			width: 800px;
+			max-width: 80%;
 
 			@include breakpoints.respond-to("mobile") {
-				max-width: 90%;
+				max-width: calc(100dvw - 100px);
 				width: 100%;
 				min-width: 40%;
 				padding: 1rem 1.5rem;

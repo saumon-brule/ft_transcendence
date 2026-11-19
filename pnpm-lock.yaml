@@ -233,6 +233,9 @@ catalogs:
     globals:
       specifier: ^17.4.0
       version: 17.14.0
+    music-metadata:
+      specifier: ^12.5.0
+      version: 12.5.0
     nodemon:
       specifier: ^3.1.14
       version: 3.1.14
@@ -473,6 +476,9 @@ importers:
       lucide-solid:
         specifier: ^1.47.0
         version: 1.66.0(solid-js@1.9.18)
+      music-metadata:
+        specifier: 'catalog:'
+        version: 12.5.0(supports-color@8.1.1)
       socket.io-client:
         specifier: 'catalog:'
         version: 4.8.4(supports-color@8.1.1)
@@ -4141,6 +4147,10 @@ packages:
 
   music-metadata@12.3.4:
     resolution: {integrity: sha512-M0t4TlnpaNMd1XBb1rW3BmSIosxTXmXtdOVYsx1wb56l1Jbij08JV9bKEAIn68f19+xO7s7sm/7IzdnfR8BJwQ==}
+    engines: {node: '>=22'}
+
+  music-metadata@12.5.0:
+    resolution: {integrity: sha512-+o2irTJVlskl1JuNp8/3MxtZ4DUstfkvOo5eYBYKzcm7L8IK9oTTO/GTpJxqky7IEJctN1/CjzGGPDYXC3Kewg==}
     engines: {node: '>=22'}
 
   mute-stream@2.0.0:
@@ -9863,6 +9873,21 @@ snapshots:
       type-is: 1.6.18
 
   music-metadata@12.3.4(supports-color@8.1.1):
+    dependencies:
+      '@borewit/text-codec': 0.2.3
+      '@tokenizer/token': 0.3.0
+      content-type: 3.1.1
+      debug: 4.4.3(supports-color@8.1.1)
+      file-type: 22.3.0(supports-color@8.1.1)
+      media-typer: 2.0.0
+      strtok3: 10.7.0
+      token-types: 6.2.0
+      uint8array-extras: 1.6.0
+      win-guid: 0.2.1
+    transitivePeerDependencies:
+      - supports-color
+
+  music-metadata@12.5.0(supports-color@8.1.1):
     dependencies:
       '@borewit/text-codec': 0.2.3
       '@tokenizer/token': 0.3.0
