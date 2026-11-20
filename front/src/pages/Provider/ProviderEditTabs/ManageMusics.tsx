@@ -2,7 +2,6 @@ import { createMemo, For, Show } from "solid-js";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import Button from "~/components/inputs/Button";
 import "./ManageMusics.scss";
-import { Provider } from "@flex/shared";
 import { useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Music } from "~/class/Music";
 import MusicCover from "~/components/ui/MusicCover";
@@ -19,7 +18,7 @@ export function ManageMusics(props: { search: string }) {
 	return <div id="manage-musics-tab" class="tab-container">
 		<Show when={musics().length} keyed fallback={<div>No musics</div>}><section>
 			<div class="musics-list">
-				<For each={musics()}>{(music) => <ProviderAristCard music={music} provider={provider}/>}</For>
+				<For each={musics()}>{(music) => <ProviderAristCard music={music}/>}</For>
 			</div>
 		</section></Show>
 		<Show when={musicsQuery.hasNextPage}>
@@ -28,7 +27,7 @@ export function ManageMusics(props: { search: string }) {
 	</div>;
 }
 
-function ProviderAristCard(props: { music: Music; provider: Provider }) {
+function ProviderAristCard(props: { music: Music }) {
 
 	return <div class="provider-edit-music-card">
 		<div class="infos">

@@ -12,6 +12,10 @@ export const accessRequestStatusSchema = z.object({
 	createdAt: z.coerce.date(),
 });
 
+export const myAccessRequestResponseSchema = z.object({
+	accessRequest: accessRequestStatusSchema.nullable(),
+});
+
 export const accessRequestListQuerySchema = z.object({
 	status: requestStatusSchema.optional(),
 });

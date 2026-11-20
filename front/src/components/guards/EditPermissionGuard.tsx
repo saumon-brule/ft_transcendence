@@ -24,6 +24,7 @@ export default function EditPermissionGuard(props: RouteSectionProps) {
 
 	return <Show
 		when={(providerInfoInfoQuery?.data?.body.member.permissions.length ?? 0) > 0 && providerInfoInfoQuery?.data?.body}
+		keyed
 		fallback={<Show when={providerInfoInfoQuery.isError} fallback={<LoadingSplash/>}>
 			<div class="page">
 				<p>Could not reach this provider.</p>
@@ -31,7 +32,7 @@ export default function EditPermissionGuard(props: RouteSectionProps) {
 			</div>
 		</Show>}
 	>
-		{(providerInfoInfoData) => <AllowedContext.Provider value={providerInfoInfoData()}>
+		{(providerInfoInfoData) => <AllowedContext.Provider value={providerInfoInfoData}>
 			{props.children}
 		</AllowedContext.Provider>}
 	</Show>;

@@ -13,8 +13,7 @@ export const useAccessRequestQuery = (provider: () => Provider) => {
 		queryKey: () => providerClient().keys.accessRequest.me(),
 		queryFn: async (): Promise<JoinStatus | null> => {
 			const res = await providerClient().client.accessRequest.me.query();
-			if (res.status === 200) return res.body.status;
-			if (res.status === 404) return null;
+			if (res.status === 200) return res.body.accessRequest?.status ?? null;
 			throw new Error(`Access request lookup failed with status ${res.status}`);
 		},
 		staleTime: 30_000,

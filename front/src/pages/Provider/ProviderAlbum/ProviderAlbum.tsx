@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "@solidjs/router";
 import { createEffect, createMemo, Show } from "solid-js";
 import { summonErrorToast } from "~/components/ui/Toaster";
-import { client, queryKeys } from "~/api/client";
 import "../Provider.scss";
+import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import { useProviderAlbumQuery, useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import ProviderAlbumHeader from "./ProviderAlbumHeader";
 import MusicSection from "~/components/ui/MusicSection/MusicSection";
@@ -11,40 +11,28 @@ import Button from "~/components/inputs/Button";
 
 export default function ProviderAlbum() {
 	const navigate = useNavigate();
+	const provider = useProvider();
 	const params = useParams<{ uuid: string; albumUUID: string }>();
-	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { get uuid() { return params.uuid; } } });
-	const providerUrl = () => providerBack.data?.body.address ?? "";
-	const providerInfo = () => providerBack.data?.body ?? null;
-	const album = useProviderAlbumQuery(providerUrl, () => params.uuid, () => params.albumUUID);
-	const musicsQuery = useProviderMusicsInfiniteQuery(providerInfo, () => "", () => ({ albumUuid: params.albumUUID }));
-	const musics = createMemo(() => musicsQuery.data && {
-		musics: musicsQuery.data.pages.flatMap((page) => page.musics),
-		total: musicsQuery.data.pages[0]?.total ?? 0,
-	});
-	const data = createMemo(() => album.data && providerBack.data
-		? { info: album.data.body, back: providerBack.data.body }
-		: undefined);
+	const album = useProviderAlbumQuery(() => provider, () => params.albumUUID);
+	const musicsQuery = useProviderMusicsInfiniteQuery(() => provider, () => "", () => ({ albumUuid: params.albumUUID }));
+	const musics = createMemo(() => musicsQuery.data?.pages.flatMap((page) => page.musics));
 
 	createEffect(() => {
-		if (providerBack.isError) {
-			navigate("/home");
-			summonErrorToast("Unknown provider");
-		}
 		if (album.isError) {
-			navigate(`/provider/${params.uuid}`);
+			navigate(`/provider/${provider.uuid}`);
 			summonErrorToast("Unknown album");
 		}
 	});
 
 	return <div class="page" id="provider">
-		<Show when={data()} keyed>{(data) => {
+		<Show when={album.data?.body} keyed>{(info) => {
 			const musicGroup = () => {
 				const music = musics();
-				return music ? { name: data.info.name, musics: music.musics, route: `/provider/${data.back.uuid}/album/${data.info.uuid}` } : null;
+				return music ? { name: info.name, musics: music, route: `/provider/${provider.uuid}/album/${info.uuid}` } : null;
 			};
 
 			return <>
-				<ProviderAlbumHeader musicGroup={musicGroup} album={data.info} providerBack={data.back} musicTotal={musics()?.total} />
+				<ProviderAlbumHeader album={info} />
 				<section>
 					<h2>Musiques</h2>
 					<Show when={musicGroup()} keyed>
@@ -56,7 +44,7 @@ export default function ProviderAlbum() {
 				</section>
 				<section>
 					<h2>Artists</h2>
-					<ArtistSection artist={{ total: data.info.artists.length, artists: data.info.artists }} />
+					<ArtistSection artist={{ total: info.artists.length, artists: info.artists }} />
 				</section>
 			</>;
 		}}</Show>

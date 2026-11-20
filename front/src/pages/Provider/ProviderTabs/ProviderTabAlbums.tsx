@@ -1,11 +1,13 @@
 import { createMemo, Show } from "solid-js";
 import { useProviderAlbumsInfiniteQuery } from "~/api/queryHooks/providerInfo";
+import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import Button from "~/components/inputs/Button";
 import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 
-export default function ProviderTabAlbums(props: { providerUrl: string; providerUuid: string; search: string }) {
-	const albumsQuery = useProviderAlbumsInfiniteQuery(() => props.providerUrl, () => props.providerUuid, () => props.search);
+export default function ProviderTabAlbums(props: { search: string }) {
+	const provider = useProvider();
+	const albumsQuery = useProviderAlbumsInfiniteQuery(() => provider, () => props.search);
 	const albums = createMemo(() => albumsQuery.data && {
 		albums: albumsQuery.data.pages.flatMap((page) => page.albums),
 		total: albumsQuery.data.pages[0]?.total ?? 0,

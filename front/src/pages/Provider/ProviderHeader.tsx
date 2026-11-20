@@ -7,10 +7,10 @@ import { DoorOpen, Pencil } from "lucide-solid";
 import { summonPopUp } from "~/components/ui/Overlay";
 // import { summonEditProviderPopUp } from "../Providers/popUps/editProviderPopUp";
 import { useNavigate } from "@solidjs/router";
+import { useProvider } from "~/components/guards/ProviderInfoGuard";
 
 type ProviderHeaderProps = {
 	provider: ProviderDataDto | undefined;
-	providerBack: Provider;
 	status: ProviderStatus;
 };
 
@@ -23,9 +23,10 @@ function summonLeaveProviderPopUpConfirmation(leaveMutation: ReturnType<typeof u
 }
 
 export default function ProviderHeader(props: ProviderHeaderProps) {
-	const info = useProviderInfoInfoQuery(() => props.providerBack);
-	const requestQuery = useAccessRequestQuery(() => props.providerBack);
-	const leaveMutation = useLeaveProviderMutation(() => props.providerBack);
+	const providerBack = useProvider();
+	const info = useProviderInfoInfoQuery(() => providerBack);
+	const requestQuery = useAccessRequestQuery(() => providerBack);
+	const leaveMutation = useLeaveProviderMutation(() => providerBack);
 	const joinMutation = useJoinProviderMutation();
 	const pending = () => requestQuery.data === "PENDING" || (joinMutation.isSuccess && joinMutation.data === "PENDING");
 	const navigate = useNavigate();
@@ -33,8 +34,8 @@ export default function ProviderHeader(props: ProviderHeaderProps) {
 	return <header class="provider-header">
 		<div class="content">
 			<div class="provider-header-title">
-				<h2>{props.providerBack.name}</h2>
-				{/* <Button size="sm" variant="text" onClick={() => summonEditProviderPopUp(props.providerBack)}>edit</Button> */}
+				<h2>{providerBack.name}</h2>
+				{/* <Button size="sm" variant="text" onClick={() => summonEditProviderPopUp(providerBack)}>edit</Button> */}
 			</div>
 			<Show when={props.provider}>{(provider) => <>
 				<div class="header-info-items">
@@ -47,13 +48,13 @@ export default function ProviderHeader(props: ProviderHeaderProps) {
 			</>}</Show>
 		</div>
 		<Show when={props.status === "success" && (info.data?.body.member.isOwner === true || info.data?.body.member.permissions.length)}>
-			<Button onClick={() => navigate(`/provider/${props.providerBack.uuid}/edit`)}><Pencil/>Edit</Button>
+			<Button onClick={() => navigate(`/provider/${providerBack.uuid}/edit`)}><Pencil/>Edit</Button>
 		</Show>
 		<Show when={props.status === "success" && info.data?.body.member.isOwner === false}>
-			<Button disabled={leaveMutation.isPending || requestQuery.isLoading} variant="danger" onClick={() => summonLeaveProviderPopUpConfirmation(leaveMutation, props.providerBack)} ><DoorOpen/>Leave Provider</Button>
+			<Button disabled={leaveMutation.isPending || requestQuery.isLoading} variant="danger" onClick={() => summonLeaveProviderPopUpConfirmation(leaveMutation, providerBack)} ><DoorOpen/>Leave Provider</Button>
 		</Show>
 		<Show when={props.status === "forbidden" && info.data?.body}>
-			<Button disabled={pending() || joinMutation.isPending || requestQuery.isLoading} onClick={() => joinMutation.mutate(props.providerBack)}>
+			<Button disabled={pending() || joinMutation.isPending || requestQuery.isLoading} onClick={() => joinMutation.mutate(providerBack)}>
 				{pending() ? "Pending request" : info.data?.body.visibility === "PUBLIC" ? "Join provider" : "Request access"}
 			</Button>
 		</Show>

@@ -2,7 +2,6 @@ import { createMemo, For, Show } from "solid-js";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import Button from "~/components/inputs/Button";
 import "./ManageArtists.scss";
-import { Provider } from "@flex/shared";
 import { useProviderArtistsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Artist } from "~/class/Artist";
 import { ArtistAvatar } from "~/components/ui/ArtistCard";
@@ -10,7 +9,7 @@ import { Pencil, Trash } from "lucide-solid";
 
 export function ManageArtists(props: { search: string }) {
 	const provider = useProvider();
-	const artistsQuery = useProviderArtistsInfiniteQuery(() => provider.address, () => provider.uuid, () => props.search);
+	const artistsQuery = useProviderArtistsInfiniteQuery(() => provider, () => props.search);
 	const artists = createMemo(() => {
 		if (artistsQuery.data) return artistsQuery.data.pages.flatMap((page) => page.artists);
 		return [];
@@ -19,7 +18,7 @@ export function ManageArtists(props: { search: string }) {
 	return <div id="manage-artists-tab" class="tab-container">
 		<Show when={artists().length} keyed fallback={<div>No artists</div>}><section>
 			<div class="artists-list">
-				<For each={artists()}>{(artist) => <ProviderAristCard artist={artist} provider={provider}/>}</For>
+				<For each={artists()}>{(artist) => <ProviderAristCard artist={artist}/>}</For>
 			</div>
 		</section></Show>
 		<Show when={artistsQuery.hasNextPage}>
@@ -28,7 +27,7 @@ export function ManageArtists(props: { search: string }) {
 	</div>;
 }
 
-function ProviderAristCard(props: { artist: Artist; provider: Provider }) {
+function ProviderAristCard(props: { artist: Artist }) {
 
 	return <div class="provider-edit-artist-card">
 		<div class="infos">

@@ -3,15 +3,15 @@ import { useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import MusicSection from "~/components/ui/MusicSection/MusicSection";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import Button from "~/components/inputs/Button";
-import { Provider } from "@flex/shared";
+import { useProvider } from "~/components/guards/ProviderInfoGuard";
 
 export type ProviderTabMusicProps = {
-	providerInfo: Provider;
 	search: string;
 };
 
 export default function ProviderTabMusics(props: ProviderTabMusicProps) {
-	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerInfo, () => props.search);
+	const provider = useProvider();
+	const musicsQuery = useProviderMusicsInfiniteQuery(() => provider, () => props.search);
 	const musics = createMemo(() => musicsQuery.data && {
 		musics: musicsQuery.data.pages.flatMap((page) => page.musics),
 		total: musicsQuery.data.pages[0]?.total ?? 0,

@@ -20,16 +20,14 @@ export default function ProviderInfoGuard(props: RouteSectionProps) {
 	const provider = () => providerQuery.data?.body ?? null;
 
 	createEffect(() => {
-		if (providerQuery.isError) {
-			if (providerQuery.error.status === 404) {
-				summonErrorToast("Unknown provider");
-				navigate("/home");
-			}
-		}
+		if (!providerQuery.isError) return;
+		const status = (providerQuery.error as { status?: number } | null)?.status;
+		summonErrorToast(status === 404 || status === 400 ? "Unknown provider" : "Failed to load provider");
+		navigate("/home", { replace: true });
 	});
 
-	return <Show when={provider()} fallback={<LoadingSplash/>}>
-		{(providerInfo) => <ProviderInfoContext.Provider value={providerInfo()}>
+	return <Show when={provider()} keyed fallback={<LoadingSplash/>}>
+		{(providerInfo) => <ProviderInfoContext.Provider value={providerInfo}>
 			{props.children}
 		</ProviderInfoContext.Provider>}
 	</Show>;
