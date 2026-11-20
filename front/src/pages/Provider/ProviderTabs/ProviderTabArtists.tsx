@@ -1,11 +1,13 @@
 import { createMemo, Show } from "solid-js";
 import { useProviderArtistsInfiniteQuery } from "~/api/queryHooks/providerInfo";
+import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import Button from "~/components/inputs/Button";
 import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
 
-export default function ProviderTabArtists(props: { providerUrl: string; providerUuid: string; search: string }) {
-	const artistsQuery = useProviderArtistsInfiniteQuery(() => props.providerUrl, () => props.providerUuid, () => props.search);
+export default function ProviderTabArtists(props: { search: string }) {
+	const provider = useProvider();
+	const artistsQuery = useProviderArtistsInfiniteQuery(() => provider, () => props.search);
 	const artists = createMemo(() => artistsQuery.data && {
 		artists: artistsQuery.data.pages.flatMap((page) => page.artists),
 		total: artistsQuery.data.pages[0]?.total ?? 0,

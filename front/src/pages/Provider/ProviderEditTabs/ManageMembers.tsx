@@ -6,7 +6,6 @@ import "./ManageMembers.scss";
 import { A } from "@solidjs/router";
 import { RefreshCcw, X } from "lucide-solid";
 import { textToCSS } from "~/utils/tex2col";
-import { Provider } from "@flex/shared";
 import { providerMemberRemoveRole, providerRemoveMember, providerUserAccessDecide, useProviderMembersQuery, useProviderPendingMembersQuery } from "~/api/queryHooks/providerManageMembers";
 import { AddRoleMenu } from "./AddRoleMenu";
 
@@ -83,7 +82,7 @@ export function ManageMembers(props: { search: string }) {
 				<Button size="sm" icon onClick={() => void providerPendingMembersQuery.refetch()}><RefreshCcw classList={{ spinning: providerPendingMembersQuery.isFetching }}/></Button>
 			</div>
 			<Show when={pendingMembers()} keyed fallback={<p class="empty-message">No pending requests at the moment.</p>}>{(members) => <div class="members-list">
-				<For each={members}>{(member) => <PendingMemberCard member={member} provider={provider}/>}</For>
+				<For each={members}>{(member) => <PendingMemberCard member={member}/>}</For>
 			</div>}</Show>
 		</section>
 		<Show when={currentMembers()} keyed>{(members) => <section>
@@ -92,20 +91,21 @@ export function ManageMembers(props: { search: string }) {
 				<Button size="sm" icon onClick={() => void providerMembersQuery.refetch()}><RefreshCcw classList={{ spinning: providerMembersQuery.isFetching }}/></Button>
 			</div>
 			<div class="members-list">
-				<For each={members}>{(member) => <ProviderMemberCard member={member} provider={provider}/>}</For>
+				<For each={members}>{(member) => <ProviderMemberCard member={member}/>}</For>
 			</div>
 		</section>}</Show>
 	</div>;
 }
 
-function PendingMemberCard(props: { member: PendingUser; provider: Provider }) {
+function PendingMemberCard(props: { member: PendingUser }) {
+	const provider = useProvider();
 
 	async function acceptMember() {
-		await providerUserAccessDecide(props.provider, props.member.uuid, true);
+		await providerUserAccessDecide(provider, props.member.uuid, true);
 	}
 
 	async function rejectMember() {
-		await providerUserAccessDecide(props.provider, props.member.uuid, false);
+		await providerUserAccessDecide(provider, props.member.uuid, false);
 	}
 
 	return <div class="pending-member-card member-card">
@@ -120,14 +120,15 @@ function PendingMemberCard(props: { member: PendingUser; provider: Provider }) {
 	</div>;
 }
 
-function ProviderMemberCard(props: { member: ProviderUser; provider: Provider }) {
+function ProviderMemberCard(props: { member: ProviderUser }) {
+	const provider = useProvider();
 
 	async function removeMember() {
-		await providerRemoveMember(props.provider, props.member.uuid);
+		await providerRemoveMember(provider, props.member.uuid);
 	}
 
 	async function removeRole(roleUuid: string) {
-		await providerMemberRemoveRole(props.provider, props.member.uuid, roleUuid);
+		await providerMemberRemoveRole(provider, props.member.uuid, roleUuid);
 	}
 
 	return <div class="provider-member-card member-card">
@@ -141,7 +142,7 @@ function ProviderMemberCard(props: { member: ProviderUser; provider: Provider })
 					<span>{role.name}</span>
 					<Button variant="text" icon onClick={() => void removeRole(role.uuid)}><X size={14}/></Button>
 				</div>}</For>
-				<AddRoleMenu provider={props.provider} user={props.member}/>
+				<AddRoleMenu user={props.member}/>
 			</div>
 		</div>
 		<div class="actions">

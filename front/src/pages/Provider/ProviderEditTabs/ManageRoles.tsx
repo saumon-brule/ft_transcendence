@@ -2,7 +2,7 @@ import { createMemo, createSignal, For, Show } from "solid-js";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import Button from "~/components/inputs/Button";
 import "./ManageRoles.scss";
-import { Provider, providerPermissions, ProviderRole } from "@flex/shared";
+import { providerPermissions, ProviderRole } from "@flex/shared";
 import { deleteRole, useProviderRolesQuery } from "~/api/queryHooks/providerManageRoles";
 import Checkbox from "~/components/inputs/Checkbox/Checkbox";
 import { summonEditRolePopUp } from "../popUps/summonEditRolePopUp";
@@ -20,31 +20,32 @@ export function ManageRoles(props: { search: string }) {
 	return <div id="manage-role-tab" class="tab-container">
 		<Show when={roles().length} keyed fallback={<div>No role</div>}><section>
 			<div class="roles-list">
-				<For each={roles()}>{(role) => <ProviderRoleCard role={role} provider={provider}/>}</For>
+				<For each={roles()}>{(role) => <ProviderRoleCard role={role}/>}</For>
 			</div>
 		</section></Show>
 
 	</div>;
 }
 
-function ProviderRoleCard(props: { role: ProviderRole; provider: Provider }) {
+function ProviderRoleCard(props: { role: ProviderRole }) {
+	const provider = useProvider();
 	const [deleteRoleDisabled, setDeleteRoleDisabled] = createSignal<boolean>(false);
 	const [defaultDisabled, setDefaultDisabled] = createSignal<boolean>(false);
 
 	async function setDefault() {
 		setDefaultDisabled(true);
-		await providerUpdateSettings(props.provider, undefined, props.role.uuid);
+		await providerUpdateSettings(provider, undefined, props.role.uuid);
 		setDefaultDisabled(false);
 	}
 
 	async function remove() {
 		setDeleteRoleDisabled(true);
-		await deleteRole(props.provider, props.role.uuid);
+		await deleteRole(provider, props.role.uuid);
 		setDeleteRoleDisabled(false);
 	}
 
 	function edit() {
-		summonEditRolePopUp(props.provider, props.role);
+		summonEditRolePopUp(provider, props.role);
 	}
 
 	return <div class="role-card">

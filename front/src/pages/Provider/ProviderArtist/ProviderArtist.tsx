@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "@solidjs/router";
 import { createEffect, createMemo, Show } from "solid-js";
 import { summonErrorToast } from "~/components/ui/Toaster";
-import { client, queryKeys } from "~/api/client";
 import "../Provider.scss";
 import { useProviderAlbumsInfiniteQuery, useProviderArtistQuery, useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import ProviderArtistHeader from "./ProviderArtistHeader";
@@ -12,46 +11,34 @@ import { useProvider } from "~/components/guards/ProviderInfoGuard";
 
 export default function ProviderArtist() {
 	const navigate = useNavigate();
-	const params = useParams<{ uuid: string; artistUUID: string }>();
-	const providerBack = client.providers.get.createQuery(() => queryKeys.providers.get([params.uuid]), { params: { get uuid() { return params.uuid; } } });
-	const providerUrl = () => providerBack.data?.body.address ?? "";
 	const provider = useProvider();
-	const artist = useProviderArtistQuery(providerUrl, () => params.uuid, () => params.artistUUID);
+	const params = useParams<{ uuid: string; artistUUID: string }>();
+	const artist = useProviderArtistQuery(() => provider, () => params.artistUUID);
 	const musicsQuery = useProviderMusicsInfiniteQuery(() => provider, () => "", () => ({ artistUuid: params.artistUUID }));
-	const albumsQuery = useProviderAlbumsInfiniteQuery(providerUrl, () => params.uuid, () => "", () => ({ artistUuid: params.artistUUID }));
-	const musics = createMemo(() => musicsQuery.data && {
-		musics: musicsQuery.data.pages.flatMap((page) => page.musics),
-		total: musicsQuery.data.pages[0]?.total ?? 0,
-	});
+	const albumsQuery = useProviderAlbumsInfiniteQuery(() => provider, () => "", () => ({ artistUuid: params.artistUUID }));
+	const musics = createMemo(() => musicsQuery.data?.pages.flatMap((page) => page.musics));
 	const albums = createMemo(() => albumsQuery.data && {
 		albums: albumsQuery.data.pages.flatMap((page) => page.albums),
 		total: albumsQuery.data.pages[0]?.total ?? 0,
 	});
-	const data = createMemo(() => artist.data && providerBack.data
-		? { info: artist.data.body, back: providerBack.data.body }
-		: undefined);
 
 	createEffect(() => {
-		if (providerBack.isError) {
-			navigate("/home");
-			summonErrorToast("Unknown provider");
-		}
 		if (artist.isError) {
-			navigate(`/provider/${params.uuid}`);
+			navigate(`/provider/${provider.uuid}`);
 			summonErrorToast("Unknown artist");
 		}
 	});
 
 
 	return <div class="page" id="provider">
-		<Show when={data()} keyed>{(data) => {
+		<Show when={artist.data?.body} keyed>{(info) => {
 			const musicGroup = () => {
 				const music = musics();
-				return music ? { name: data.info.name, musics: music.musics, route: `/provider/${data.back.uuid}/artist/${data.info.uuid}` } : null;
+				return music ? { name: info.name, musics: music, route: `/provider/${provider.uuid}/artist/${info.uuid}` } : null;
 			};
 
 			return <>
-				<ProviderArtistHeader musicGroup={musicGroup} artist={data.info} providerBack={data.back} musicTotal={musics()?.total} albumTotal={albums()?.total} />
+				<ProviderArtistHeader artist={info} />
 				<section>
 					<h2>Musiques</h2>
 					<Show when={musicGroup()} keyed>

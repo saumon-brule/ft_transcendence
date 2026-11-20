@@ -5,6 +5,7 @@ import {
 	accessRequestListResponseSchema,
 	accessRequestStatusSchema,
 	decideAccessRequestSchema,
+	myAccessRequestResponseSchema,
 } from "./schemas/access-request.schema";
 import { uuidParamSchema } from "../../../schemas/common.schema";
 import { commonError404Schema, providerError409Schema } from "../../../errors/error-schemas";
@@ -27,8 +28,7 @@ export const accessRequestContract = c.router(
 			method: "GET",
 			path: "/me",
 			responses: {
-				200: accessRequestStatusSchema,
-				404: commonError404Schema,
+				200: myAccessRequestResponseSchema,
 			},
 		},
 		list: {

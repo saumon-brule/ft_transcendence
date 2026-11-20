@@ -9,6 +9,7 @@ export const albumDetailedItemSchema = z.object({
 	publishedAt: z.coerce.date().nullable(),
 	hasCover: z.boolean(),
 	artists: z.array(artistItemSchema),
+	musicCount: z.number().int(),
 });
 export type AlbumDetailedItemDto = z.infer<typeof albumDetailedItemSchema>;
 
