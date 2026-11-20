@@ -89,9 +89,11 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	}
 
 	function forward() {
-		trackManager.nextTrack();
+		const previous = trackManager.manager.current;
+		const next = trackManager.nextTrack();
 		setIsPlaying(true);
 		audio.currentTime = 0;
+		if (next !== null && next === previous) play();
 	}
 
 	function back() {
