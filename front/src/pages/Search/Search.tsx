@@ -16,7 +16,7 @@ import PlaylistCard from "~/components/ui/PlaylistCard/PlaylistCard";
 import UserCard from "~/components/ui/UserCard/UserCard";
 import { useSearchPlaylistsQuery, useSearchProvidersQuery, useSearchUsersQuery } from "~/api/queryHooks/search";
 import SearchFilters from "./SearchFilters";
-import { pickFilters, TAB_FILTER_FIELDS, useSearchFilters } from "./searchFilters";
+import { pickFilters, TAB_FILTER_FIELDS, useSearchFilters } from "./useSearchFilters";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
 import Tabs from "~/components/ui/Tabs/Tabs";
