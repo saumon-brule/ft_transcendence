@@ -6,6 +6,7 @@ import { Provider } from "@flex/shared";
 import { useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Music } from "~/class/Music";
 import MusicCover from "~/components/ui/MusicCover";
+import { Pencil, Trash } from "lucide-solid";
 
 export function ManageMusics(props: { search: string }) {
 	const provider = useProvider();
@@ -32,11 +33,14 @@ function ProviderAristCard(props: { music: Music; provider: Provider }) {
 	return <div class="provider-edit-music-card">
 		<div class="infos">
 			<MusicCover music={props.music}/>
-			<div class="name">{props.music.name}</div>
+			<div class="subinfo">
+				<div class="name">{props.music.name}</div>
+				<div class="artists">{props.music.artists.map((a) => a.name).join(", ")}</div>
+			</div>
 		</div>
 		<div class="actions">
-			<Button onClick={() => {}}>Edit</Button>
-			<Button variant="danger" onClick={() => {}}>Delete</Button>
+			<Button icon variant="ghost" onClick={() => {}}><Pencil size={18}/></Button>
+			<Button icon variant="danger" onClick={() => {}}><Trash size={18}/></Button>
 		</div>
 	</div>;
 }

@@ -6,6 +6,7 @@ import { Provider } from "@flex/shared";
 import { useProviderAlbumsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Album } from "~/class/Album";
 import { AlbumCover } from "~/components/ui/AlbumCard";
+import { Pencil, Trash } from "lucide-solid";
 
 export function ManageAlbums(props: { search: string }) {
 	const provider = useProvider();
@@ -35,8 +36,8 @@ function ProviderAristCard(props: { album: Album; provider: Provider }) {
 			<div class="name">{props.album.name}</div>
 		</div>
 		<div class="actions">
-			<Button onClick={() => {}}>Edit</Button>
-			<Button variant="danger" onClick={() => {}}>Delete</Button>
+			<Button icon variant="ghost" onClick={() => {}}><Pencil size={18}/></Button>
+			<Button icon variant="danger" onClick={() => {}}><Trash size={18}/></Button>
 		</div>
 	</div>;
 }

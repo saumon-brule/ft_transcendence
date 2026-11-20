@@ -3,7 +3,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
-		margin-top: 10px;
 
 		.provider-edit-music-card {
 			display: flex;
@@ -27,12 +26,22 @@
 					margin-left: 4px;
 					border-radius: 4px;
 				}
+
+				.subinfo {
+					display: flex;
+					flex-direction: column;
+					gap: 4px;
+
+					.artists {
+						color: var(--text-secondary);
+					}
+				}
 			}
 
 			.actions {
 				display: flex;
 				flex-direction: row;
-				gap: 16px;
+				gap: 8px;
 				padding: 10px;
 
 				button {

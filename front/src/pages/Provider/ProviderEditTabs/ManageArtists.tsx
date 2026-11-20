@@ -6,6 +6,7 @@ import { Provider } from "@flex/shared";
 import { useProviderArtistsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Artist } from "~/class/Artist";
 import { ArtistAvatar } from "~/components/ui/ArtistCard";
+import { Pencil, Trash } from "lucide-solid";
 
 export function ManageArtists(props: { search: string }) {
 	const provider = useProvider();
@@ -35,8 +36,8 @@ function ProviderAristCard(props: { artist: Artist; provider: Provider }) {
 			<div class="name">{props.artist.name}</div>
 		</div>
 		<div class="actions">
-			<Button onClick={() => {}}>Edit</Button>
-			<Button variant="danger" onClick={() => {}}>Delete</Button>
+			<Button icon variant="ghost" onClick={() => {}}><Pencil size={18}/></Button>
+			<Button icon variant="danger" onClick={() => {}}><Trash size={18}/></Button>
 		</div>
 	</div>;
 }
