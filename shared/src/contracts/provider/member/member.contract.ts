@@ -1,5 +1,6 @@
 import { initContract } from "@ts-rest/core";
 import {
+	memberRoleParamSchema,
 	providerMemberListQuerySchema,
 	providerMemberListResponseSchema,
 	providerMemberProfileSchema,
@@ -50,6 +51,26 @@ export const providerMemberContract = c.router(
 			body: setMemberRolesSchema,
 			responses: {
 				200: providerMemberSchema,
+				404: commonError404Schema,
+			},
+		},
+		addRole: {
+			method: "POST",
+			path: "/:uuid/roles/:roleUuid",
+			pathParams: memberRoleParamSchema,
+			body: null,
+			responses: {
+				204: null,
+				404: commonError404Schema,
+			},
+		},
+		removeRole: {
+			method: "DELETE",
+			path: "/:uuid/roles/:roleUuid",
+			pathParams: memberRoleParamSchema,
+			body: null,
+			responses: {
+				204: null,
 				404: commonError404Schema,
 			},
 		},

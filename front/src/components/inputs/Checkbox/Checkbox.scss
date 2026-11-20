@@ -1,0 +1,74 @@
+$box-size: 1.25rem;
+$check-size: 0.875rem;
+$transition: 120ms ease;
+
+.checkbox {
+	$root: &;
+
+	display: inline-flex;
+	align-items: center;
+	gap: 0.625rem;
+	cursor: pointer;
+	color: var(--text-primary);
+	font-weight: 700;
+
+	input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+
+		&:checked + #{$root}-box {
+			border-color: var(--background-accent);
+			background: var(--background-accent);
+
+			#{$root}-check {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+
+		&:focus-visible + #{$root}-box {
+			outline: 2px solid var(--input-outline-active);
+			outline-offset: 3px;
+		}
+	}
+
+	&-box {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: $box-size;
+		height: $box-size;
+		border-radius: 0.375rem;
+		border: 1px solid var(--input-outline-main);
+		background: var(--background-overlay);
+		transition:
+			background-color $transition,
+			border-color $transition;
+	}
+
+	&-check {
+		width: $check-size;
+		height: $check-size;
+		fill: none;
+		stroke: var(--neutral-0);
+		stroke-width: 2.25;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		opacity: 0;
+		transform: scale(0.6);
+		transition:
+			opacity $transition,
+			transform $transition;
+	}
+
+	&:hover &-box {
+		border-color: var(--input-outline-hover);
+	}
+
+	&:has(input:disabled) {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+}

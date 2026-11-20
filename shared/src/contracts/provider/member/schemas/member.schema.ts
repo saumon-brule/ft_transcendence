@@ -27,3 +27,8 @@ export const providerMemberListResponseSchema = z.object({
 export const setMemberRolesSchema = z.object({
 	roleUuids: z.array(z.string().uuid()),
 });
+
+export const memberRoleParamSchema = z.object({
+	uuid: z.string().uuid(),
+	roleUuid: z.string().uuid(),
+});

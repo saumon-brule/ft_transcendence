@@ -8,6 +8,7 @@ import { Menu } from "~/components/ui/Menu/Menu";
 import { Plus, Search } from "lucide-solid";
 import { ProviderUser } from "./ManageMembers";
 import { A } from "@solidjs/router";
+import { providerMemberAddRole } from "~/api/queryHooks/providerManageMembers";
 
 export function AddRoleMenu(props: { provider: Provider; user: ProviderUser }) {
 	return <Menu
@@ -23,6 +24,14 @@ function AddRoleContent(props: { provider: Provider; user: ProviderUser; onClose
 	const [searchQuery, setSearchQuery] = createSignal("");
 	// eslint-disable-next-line solid/reactivity -- y'a pas d'update du provider de toute façon
 	const rolesQuery = useProviderRolesQuery(props.provider);
+	const [disableAddRole, setDisableAddRole] = createSignal(false);
+
+	async function addRole(role: ProviderUser["roles"][number]) {
+		setDisableAddRole(true);
+		await providerMemberAddRole(props.provider, props.user.uuid, role);
+		setDisableAddRole(false);
+		props.onClose();
+	}
 
 	return <>
 		<Form class="playlist-form search-form" onSubmit={(e) => {
@@ -33,8 +42,8 @@ function AddRoleContent(props: { provider: Provider; user: ProviderUser; onClose
 		</Form>
 		<A href={`/provider/${props.provider.uuid}/edit?tab=Roles`} class="subtext white-variant">Manage roles</A>
 		<Show when={rolesQuery.data?.body.roles} keyed>
-			{(roles) => <For each={roles.filter((r) => r.name.toLowerCase().includes(searchQuery().toLowerCase()))}>
-				{(role) => <button type="button" role="menuitem" onClick={() => {}}>
+			{(roles) => <For each={roles.filter((r) => !props.user.roles.map((rl) => rl.uuid).includes(r.uuid)).filter((r) => r.name.toLowerCase().includes(searchQuery().toLowerCase()))}>
+				{(role) => <button disabled={disableAddRole()} type="button" role="menuitem" onClick={() => void addRole(role)}>
 					<span>{role.name}</span>
 				</button>}
 			</For>}
