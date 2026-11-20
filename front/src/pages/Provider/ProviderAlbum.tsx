@@ -16,7 +16,7 @@ export default function ProviderAlbum() {
 	const providerUrl = () => providerBack.data?.body.address ?? "";
 	const providerInfo = () => providerBack.data?.body ?? null;
 	const album = useProviderAlbumQuery(providerUrl, () => params.uuid, () => params.albumUUID);
-	const musicsQuery = useProviderMusicsInfiniteQuery(() => params.uuid, providerInfo, () => "", () => ({ albumUuid: params.albumUUID }));
+	const musicsQuery = useProviderMusicsInfiniteQuery(providerInfo, () => "", () => ({ albumUuid: params.albumUUID }));
 	const musics = createMemo(() => musicsQuery.data && {
 		musics: musicsQuery.data.pages.flatMap((page) => page.musics),
 		total: musicsQuery.data.pages[0]?.total ?? 0,

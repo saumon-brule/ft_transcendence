@@ -9,7 +9,6 @@ import { useProviderInfoInfo } from "~/components/guards/EditPermissionGuard";
 import { ManageMembers } from "./ProviderEditTabs/ManageMembers";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import ProviderEditHeader from "./ProviderEditHeader";
-
 import { summonUploadMusicPopUp } from "./popUps/summonAddMusicPopUp";
 import Button from "~/components/inputs/Button";
 import { Plus } from "lucide-solid";
@@ -19,6 +18,9 @@ import { ProviderPermission } from "@flex/shared";
 import { summonAddRolePopUp } from "./popUps/summonAddRolePopUp";
 import { summonAddArtistPopUp } from "./popUps/summonAddArtistPopUp";
 import { summonAddAlbumPopUp } from "./popUps/summonAddAlbumPopUp";
+import { ManageArtists } from "./ProviderEditTabs/ManageArtists";
+import { ManageAlbums } from "./ProviderEditTabs/ManageAlbums";
+import { ManageMusics } from "./ProviderEditTabs/ManageMusics";
 
 const TABS = ["Musics", "Albums", "Artists", "Members", "Roles"] as const;
 type Tab = typeof TABS[number];
@@ -76,13 +78,13 @@ export default function ProviderEdit() {
 			</div>
 			<Switch>
 				<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Musics"}>
-					<div>musics</div>
+					<ManageMusics search={search()}/>
 				</Match>
 				<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Albums"}>
-					<div>albuims</div>
+					<ManageAlbums search={search()}/>
 				</Match>
 				<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Artists"}>
-					<div>artits</div>
+					<ManageArtists search={search()}/>
 				</Match>
 				<Match when={hasPerm("MANAGE_MEMBERS") && tab() === "Members"}>
 					<ManageMembers search={search()}/>
