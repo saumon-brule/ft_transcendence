@@ -5,7 +5,7 @@ import { client, queryKeys } from "~/api/client";
 import "./Provider.scss";
 import { useProviderAlbumQuery, useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import ProviderAlbumHeader from "./ProviderAlbumHeader";
-import MusicSection from "../../components/ui/MusicSection/MusicSection";
+import MusicSection from "~/components/ui/MusicSection/MusicSection";
 import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
 import Button from "~/components/inputs/Button";
 
