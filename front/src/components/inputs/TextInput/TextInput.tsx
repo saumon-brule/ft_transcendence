@@ -5,7 +5,7 @@ import { Translator, useTranslation } from "~/i18n/context";
 import { FormEmbeddedComponentRef } from "~/types/ComponentRef";
 import { useFormContext } from "../Form/Form";
 
-type TextInputTypes = "text" | "email" | "password" | "tel" | "url" | "search";
+type TextInputTypes = "text" | "email" | "password" | "tel" | "url" | "search" | "date";
 
 type InvalidHandler = JSX.EventHandlerUnion<
 	HTMLInputElement,
@@ -21,6 +21,7 @@ interface TextInputComponentProps {
 	 * @see {@link TextInputComponentProps.validator} To provide validation checks that will be run
 	 * by `ref.checkValidity` */
 	type?: TextInputTypes;
+	size?: "sm" | "md";
 	ref?: FormEmbeddedComponentRef<HTMLInputElement> | ((ref: FormEmbeddedComponentRef<HTMLInputElement>) => void);
 	/** `validate` is the callback used by {@link InputComponentRefProperty.checkValidity} to validate input value.
 	 * The JSXElement returned by the callback will be displayed if truish
@@ -68,7 +69,9 @@ export default function TextInput(props: TextInputProps) {
 		"validator",
 		"onInvalid",
 		"onInput",
+		"size",
 		"ref",
+		"id",
 	]);
 
 	let componentRef!: FormEmbeddedComponentRef<HTMLInputElement>;
@@ -106,7 +109,7 @@ export default function TextInput(props: TextInputProps) {
 	const isInvalid = () => !!invalidMessage();
 	const ariaMessageId = createUniqueId();
 
-	return <div class={`text-input ${local.class ?? ""}`}>
+	return <div class={`text-input text-input--${local.size ?? "md"} ${local.class ?? ""}`}>
 		<input
 			onInvalid={handleInvalid}
 			onInput={handleInput}
@@ -114,8 +117,8 @@ export default function TextInput(props: TextInputProps) {
 			aria-describedby={isInvalid()
 				? ariaMessageId
 				: undefined}
-			id={props.placeholder?.replace(/\s+/g, "-").toLowerCase() ?? createUniqueId()}
-			name={props.placeholder?.replace(/\s+/g, "-").toLowerCase() ?? createUniqueId()}
+			id={local.id ?? rest.placeholder?.replace(/\s+/g, "-").toLowerCase() ?? createUniqueId()}
+			name={local.id ?? rest.placeholder?.replace(/\s+/g, "-").toLowerCase() ?? createUniqueId()}
 			autocomplete="on"
 			ref={(el) => {
 				componentRef = { htmlElement: el, checkErrors };

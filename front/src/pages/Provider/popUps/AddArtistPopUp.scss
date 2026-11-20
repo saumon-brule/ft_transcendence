@@ -1,0 +1,22 @@
+.create-artist-pop-up {
+	.create-artist-info {
+		width: 100%;
+		display: flex;
+		gap: 1rem;
+
+		.create-artist-avatar-box {
+			width: 25%;
+
+			& > img {
+				border-radius: 999999px;
+				aspect-ratio: 1/1;
+				object-fit: contain;
+				background-color: black;
+			}
+		}
+
+		.create-artist-details {
+			flex: 1;
+		}
+	}
+}
