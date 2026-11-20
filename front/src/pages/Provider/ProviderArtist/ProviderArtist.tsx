@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "@solidjs/router";
 import { createEffect, createMemo, Show } from "solid-js";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { client, queryKeys } from "~/api/client";
-import "./Provider.scss";
+import "../Provider.scss";
 import { useProviderAlbumsInfiniteQuery, useProviderArtistQuery, useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import ProviderArtistHeader from "./ProviderArtistHeader";
 import MusicSection from "../../../components/ui/MusicSection/MusicSection";
