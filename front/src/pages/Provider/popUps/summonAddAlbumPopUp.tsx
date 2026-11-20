@@ -66,7 +66,7 @@ export function summonAddAlbumPopUp(provider: Provider) {
 		const isPending = () => albumCreateMutation.isPending || albumUploadCoverMutation.isPending || albumRemoveMutation.isPending;
 
 		return <Form class="create-album-pop-up" onSubmit={() => { void handleSubmit(); }}>
-			<h2 >Create new artist</h2>
+			<h2 >Create new album</h2>
 			<div class="create-album-info">
 				<div class="create-album-cover-box">
 					<input
