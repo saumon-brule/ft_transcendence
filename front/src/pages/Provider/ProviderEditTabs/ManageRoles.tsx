@@ -7,6 +7,7 @@ import { deleteRole, useProviderRolesQuery } from "~/api/queryHooks/providerMana
 import Checkbox from "~/components/inputs/Checkbox/Checkbox";
 import { summonEditRolePopUp } from "../popUps/summonEditRolePopUp";
 import { providerUpdateSettings } from "~/api/queryHooks/providerSettings";
+import { Pencil, Trash } from "lucide-solid";
 
 export function ManageRoles(props: { search: string }) {
 	const provider = useProvider();
@@ -57,8 +58,8 @@ function ProviderRoleCard(props: { role: ProviderRole; provider: Provider }) {
 		</div>
 		<div class="actions">
 			<Button variant="ghost" disabled={props.role.isDefault || defaultDisabled()} onClick={() => void setDefault()}>{props.role.isDefault ? "Default role" : "Set default"}</Button>
-			<Button onClick={edit}>Edit</Button>
-			<Button variant="danger" disabled={deleteRoleDisabled()} onClick={() => void remove()}>Delete</Button>
+			<Button icon variant="ghost" onClick={edit}><Pencil size={18}/></Button>
+			<Button icon variant="danger" disabled={deleteRoleDisabled()} onClick={() => void remove()}><Trash size={18}/></Button>
 		</div>
 	</div>;
 }
