@@ -3,19 +3,18 @@ import { IPicture, parseBlob, selectCover } from "music-metadata";
 import { DEFAULT_COVER } from "~/utils/imageFallback";
 import TextInput from "~/components/inputs/TextInput";
 import Button from "~/components/inputs/Button";
-import { createMemo, createSignal, For, JSX, onCleanup, onMount } from "solid-js";
+import { createMemo, createSignal, For, onCleanup, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
-import { getProviderClient, ProviderClient } from "~/api/providerClients";
-import { AlbumDetailedItemDto, Provider } from "@flex/shared";
-import "./AddMusicPopUp.scss";
+import { getProviderClient } from "~/api/providerClients";
+import { Provider } from "@flex/shared";
 import { Plus } from "lucide-solid";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { Artist } from "~/class/Artist";
 import { ArtistItemDto } from "node_modules/@flex/shared/dist/contracts/provider/schemas/items.schema";
 import ArtistCard from "~/components/ui/ArtistCard";
 import { Album } from "~/class/Album";
-
-type FileChangeEventHandler = JSX.EventHandler<HTMLInputElement, Event>;
+import AlbumCard from "~/components/ui/AlbumCard";
+import "./AddMusicPopUp.scss";
 
 function pictureToFile(pic: IPicture, baseName = "cover"): File {
 	const ext = pic.format.split("/")[1]?.replace("jpeg", "jpg") ?? "bin";
@@ -72,7 +71,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		}),
 		searchRelatedAlbum(album, provider).catch((e) => {
 			console.error(e);
-			return { found: [], rest: artistList };
+			return null;
 		}),
 	]);
 	const releaseYear = metadata.common.originalyear ?? metadata.common.year;
@@ -92,6 +91,11 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		const [artists, setArtists] = createSignal([...foundArtists.found]);
 		const [album, setAlbum] = createSignal(foundAlbum);
 
+		const musicCreateMutation = providerClient.client.music.create.createMutation();
+		const musicUploadAudioMutation = providerClient.client.music.uploadAudio.createMutation();
+		const musicUploadCoverMutation = providerClient.client.music.uploadCover.createMutation();
+		const musicRemoveMutation = providerClient.client.music.remove.createMutation();
+
 		const coverPpreviewUrl = createMemo(() => {
 			const f = cover();
 			if (!f) return null;
@@ -104,44 +108,47 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 
 		const handleSubmit = async () => {
 			try {
-				const createRes = await providerClient.client.music.create.mutation({
-					body: {
-						name: title(),
-						artistUuids: artists().map((artist) => artist.uuid),
-						duration: Math.floor(duration),
-						publishedAt: publishedDate(),
-					},
-				});
+				const createRes = await musicCreateMutation.mutateAsync({ body: {
+					name: title(),
+					artistUuids: artists().map((artist) => artist.uuid),
+					duration: Math.floor(duration),
+					publishedAt: publishedDate(),
+				} });
 				if (createRes.status !== 201) {
 					// if (createRes.status === 404) summonErrorToast(() => "Something not found");
 					summonErrorToast(() => "An error occured during creation of the music");
 					return;
 				}
+
 				const uuid = createRes.body.uuid;
-				const uploadAudioRes = await providerClient.client.music.uploadAudio.mutation({ params: { uuid }, body: { file: musicFile } });
+				const uploadAudioRes = await musicUploadAudioMutation.mutateAsync({ params: { uuid }, body: { file: musicFile } });
 				if (uploadAudioRes.status !== 204) {
 					if (uploadAudioRes.status === 413) summonErrorToast(() => "File to large");
 					else if (uploadAudioRes.status === 415) summonErrorToast(() => "File not supported");
 					else summonErrorToast(() => "An error occured during creation of the music");
-					void providerClient.client.music.remove.mutation({ params: { uuid } });
+					void musicRemoveMutation.mutate({ params: { uuid } });
 					return;
 				}
+
 				const curCover = cover();
+
 				if (!curCover) return;
-				const uploadCoverRes = await providerClient.client.music.uploadCover.mutation({ params: { uuid }, body: { file: curCover } });
+				const uploadCoverRes = await musicUploadCoverMutation.mutateAsync({ params: { uuid }, body: { file: curCover } });
 				if (uploadCoverRes.status !== 204) {
 					if (uploadCoverRes.status === 413) summonErrorToast(() => "File to large");
 					else if (uploadCoverRes.status === 415) summonErrorToast(() => "File not supported");
 					else summonErrorToast(() => "An error occured during creation of the music");
-					void providerClient.client.music.remove.mutation({ params: { uuid } });
+					void musicRemoveMutation.mutate({ params: { uuid } });
 					return;
 				}
+				props.close();
 			} catch (e) {
 				console.error(e);
 				summonErrorToast(() => "An error occured during creation of the music");
-				close();
 			}
 		};
+
+		const isPending = () => musicCreateMutation.isPending || musicUploadAudioMutation.isPending || musicUploadCoverMutation.isPending || musicRemoveMutation.isPending;
 
 		return <Form class="upload-music-pop-up" onSubmit={() => { void handleSubmit(); }}>
 			<h2 >Upload new music</h2>
@@ -158,10 +165,12 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 				</div>
 				<div class="upload-music-details">
 					<TextInput placeholder="Name" class="upload-music-music-title" onChange={(a) => setTitle(a.currentTarget.value)} value={title()} />
-					<input type="date" onInput={(e) => setPublishedDate(e.currentTarget.value ? new Date(e.currentTarget.value) : null)}/>
+					<TextInput type="date" size="sm" onInput={(e) => setPublishedDate(e.currentTarget.value ? new Date(e.currentTarget.value) : null)}/>
 					<div class="upload-music-album">
 						<h3>album</h3>
-						<div>{album ?? ""}</div>
+						<Show when={album()} fallback={<button type="button">select album</button>}>
+							{(album) => <AlbumCard album={album()}/>}
+						</Show>
 					</div>
 				</div>
 			</div>
@@ -180,8 +189,8 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 				</div>
 			</div>
 			<div class="upload-music-pop-up-controls">
-				<Button type="button" variant="ghost" onClick={props.close}>Cancel</Button>
-				<Button type="submit">Upload</Button>
+				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
+				<Button disabled={isPending()} type="submit">Upload</Button>
 			</div>
 		</Form>;
 	});
