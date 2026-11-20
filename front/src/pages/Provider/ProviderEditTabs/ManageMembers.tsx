@@ -7,7 +7,7 @@ import { A } from "@solidjs/router";
 import { RefreshCcw, X } from "lucide-solid";
 import { textToCSS } from "~/utils/tex2col";
 import { Provider } from "@flex/shared";
-import { providerRemoveMember, providerUserAccessDecide, useProviderMembersQuery, useProviderPendingMembersQuery } from "~/api/queryHooks/providerManageMembers";
+import { providerMemberRemoveRole, providerRemoveMember, providerUserAccessDecide, useProviderMembersQuery, useProviderPendingMembersQuery } from "~/api/queryHooks/providerManageMembers";
 import { AddRoleMenu } from "./AddRoleMenu";
 
 type PendingUser = {
@@ -68,7 +68,7 @@ export function ManageMembers(props: { search: string }) {
 	const members = createMemo(() => {
 		const search = props.search.trim().toLowerCase();
 		const list = (users() ?? []).filter((u) => u.username.toLowerCase().includes(search));
-		return list.length ? list.map((u) => { return { ...u, roles: [{ name: "admin", uuid: "0" }, { name: "manager", uuid: "0" }, { name: "truc", uuid: "0" }, { name: "musiqueur", uuid: "0" }, { name: "superpersonne", uuid: "0" }] }; }) : undefined;
+		return list.length ? list : undefined;
 	});
 
 	const currentMembers = createMemo(() => {
@@ -126,6 +126,10 @@ function ProviderMemberCard(props: { member: ProviderUser; provider: Provider })
 		await providerRemoveMember(props.provider, props.member.uuid);
 	}
 
+	async function removeRole(roleUuid: string) {
+		await providerMemberRemoveRole(props.provider, props.member.uuid, roleUuid);
+	}
+
 	return <div class="provider-member-card member-card">
 		<div class="infos">
 			<A class="username white-variant" href={`/user/${props.member.uuid}`}>{props.member.username}</A>
@@ -135,7 +139,7 @@ function ProviderMemberCard(props: { member: ProviderUser; provider: Provider })
 				</Show>
 				<For each={props.member.roles}>{(role) => <div class="role" style={{ "--role-color": textToCSS(role.name) }}>
 					<span>{role.name}</span>
-					<Button variant="text" icon onClick={() => {}}><X size={14}/></Button>
+					<Button variant="text" icon onClick={() => void removeRole(role.uuid)}><X size={14}/></Button>
 				</div>}</For>
 				<AddRoleMenu provider={props.provider} user={props.member}/>
 			</div>

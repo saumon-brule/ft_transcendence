@@ -25,7 +25,7 @@ export { getAppVariables } from "./contracts/server/appConfig/schemas/app-config
 export * from "./core/constants";
 export { createJwtPayload, type JwtPayload } from "./core/jwt.payload";
 
-export { providerPermissions, providerPermissionSchema, type ProviderPermission } from "./contracts/provider/role/schemas/role.schema";
+export { providerPermissions, providerPermissionSchema, createProviderRoleSchema, type ProviderPermission, type ProviderRole } from "./contracts/provider/role/schemas/role.schema";
 
 export { MEDIA_ROUTES, buildMediaUrl, type MediaType } from "./contracts/provider/media/media-routes";
 export * from "./errors/error-codes";

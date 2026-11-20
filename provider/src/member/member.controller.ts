@@ -53,4 +53,22 @@ export class MemberController {
 			body: await this.memberService.setRoles(params.uuid, body.roleUuids),
 		}));
 	}
+
+	@TsRestHandler(providerContract.member.addRole)
+	@RequirePermission("ADMIN")
+	addRole() {
+		return tsRestHandler(providerContract.member.addRole, async ({ params }) => {
+			await this.memberService.addRole(params.uuid, params.roleUuid);
+			return { status: 204, body: null };
+		});
+	}
+
+	@TsRestHandler(providerContract.member.removeRole)
+	@RequirePermission("ADMIN")
+	removeRole() {
+		return tsRestHandler(providerContract.member.removeRole, async ({ params }) => {
+			await this.memberService.removeRole(params.uuid, params.roleUuid);
+			return { status: 204, body: null };
+		});
+	}
 }

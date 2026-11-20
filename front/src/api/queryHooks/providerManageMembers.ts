@@ -3,6 +3,7 @@ import { type ClientInferResponses } from "@ts-rest/core";
 import { getProviderClient } from "../providerClients";
 import { queryClient } from "../queryClient";
 import { summonErrorToast } from "~/components/ui/Toaster";
+import { ProviderUser } from "~/pages/Provider/ProviderEditTabs/ManageMembers";
 
 type MembersResponse = ClientInferResponses<typeof providerContract.member.list, 200>;
 type AccessRequestsResponse = ClientInferResponses<typeof providerContract.accessRequest.list, 200>;
@@ -117,5 +118,55 @@ export const providerRemoveMember = async (providerData: Provider, uuid: string)
 				};
 			});
 		}
+	}
+};
+
+export const providerMemberAddRole = async (providerData: Provider, userUuid: string, role: ProviderUser["roles"][number]) => {
+	const provider = getProviderClient(providerData.address, providerData.uuid);
+
+	const res = await provider.client.member.addRole.mutation({
+		params: { uuid: userUuid, roleUuid: role.uuid },
+	});
+	if (res.status === 403) {
+		summonErrorToast("You dont have the permission to do that");
+	} else if (res.status === 404) {
+		summonErrorToast("This member or role does not exist");
+	} else if (res.status !== 204) {
+		summonErrorToast("An error occured");
+	} else {
+		queryClient.setQueriesData<MembersResponse>(
+			{ queryKey: provider.keys.member.list() },
+			(old) => old && {
+				...old,
+				body: {
+					members: old.body.members.map((m) => m.uuid !== userUuid ? m : { ...m, roles: [...m.roles, role] }),
+				},
+			},
+		);
+	}
+};
+
+export const providerMemberRemoveRole = async (providerData: Provider, userUuid: string, roleUuid: string) => {
+	const provider = getProviderClient(providerData.address, providerData.uuid);
+
+	const res = await provider.client.member.removeRole.mutation({
+		params: { uuid: userUuid, roleUuid },
+	});
+	if (res.status === 403) {
+		summonErrorToast("You dont have the permission to do that");
+	} else if (res.status === 404) {
+		summonErrorToast("This member or role does not exist");
+	} else if (res.status !== 204) {
+		summonErrorToast("An error occured");
+	} else {
+		queryClient.setQueriesData<MembersResponse>(
+			{ queryKey: provider.keys.member.list() },
+			(old) => old && {
+				...old,
+				body: {
+					members: old.body.members.map((m) => m.uuid !== userUuid ? m : { ...m, roles: m.roles.filter((r) => r.uuid != roleUuid) }),
+				},
+			},
+		);
 	}
 };

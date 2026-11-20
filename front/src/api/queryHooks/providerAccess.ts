@@ -61,6 +61,9 @@ export const useProviderInfoInfoQuery = (provider: () => Provider) => {
 	return providerClient.client.info.info.createQuery(
 		providerClient.keys.info.info,
 		{},
-		{ onError: () => { summonErrorToast("An error occured"); } },
+		{
+			retry: (failureCount, error) => error instanceof TypeError && failureCount < 3,
+			onError: () => { summonErrorToast("An error occured"); },
+		},
 	);
 };

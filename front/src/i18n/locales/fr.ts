@@ -142,6 +142,7 @@ export default {
 	},
 	errors: {
 		rateLimit: "Euh... Bro tu vas trop vite là !",
+		noPermission: "T'as pas la permission de faire ça",
 		unavailableFtApi: "We are not currently able to reach 42's API",
 		unknownFallback: "Une erreur s'est produite, réessayez plus tard",
 		profileUnavailable: "Impossible de charger ton profil",

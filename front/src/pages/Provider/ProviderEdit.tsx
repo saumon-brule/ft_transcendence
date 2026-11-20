@@ -14,6 +14,9 @@ import { summonUploadMusicPopUp } from "./popUps/summonAddMusicPopUp";
 import Button from "~/components/inputs/Button";
 import { Plus } from "lucide-solid";
 import "./ProviderEdit.scss";
+import { ManageRoles } from "./ProviderEditTabs/ManageRoles";
+import { ProviderPermission } from "@flex/shared";
+import { summonAddRolePopUp } from "./popUps/summonAddRolePopUp";
 
 const TABS = ["Musics", "Albums", "Artists", "Members", "Roles"] as const;
 type Tab = typeof TABS[number];
@@ -33,13 +36,17 @@ export default function ProviderEdit() {
 
 	let fileInputRef!: HTMLInputElement;
 
+	function hasPerm(perm: ProviderPermission) {
+		return providerInfoInfo.member.isOwner || providerInfoInfo.member.permissions.includes(perm);
+	}
+
 	return <div class="page" id="provider-edit">
 		<ProviderEditHeader providerInfo={providerInfoQuery.data?.body} provider={provider} />
 		<Show when={providerInfoQuery.data?.body} fallback={<LoadingSplash/>}>
 			<Tabs tabs={TABS} value={tab()} onChange={setTab} />
 			<div class="provider-controls">
 				<ProviderSearchBar value={search()} onSearch={setSearch} />
-				<Show when={providerInfoInfo.member.isOwner || providerInfoInfo.member.permissions.includes("MANAGE_CATALOG")}>
+				<Show when={hasPerm("MANAGE_CATALOG") && tab() == "Musics"}>
 					<input
 						ref={fileInputRef}
 						type="file"
@@ -53,29 +60,26 @@ export default function ProviderEdit() {
 					/>
 					<Button onClick={() => fileInputRef.click()}><Plus/>Add Music</Button>
 				</Show>
+				<Show when={hasPerm("ADMIN") && tab() == "Roles"}>
+					<Button onClick={() => summonAddRolePopUp(provider)}><Plus/>Add role</Button>
+				</Show>
 			</div>
 			<Switch>
-				<Show when={permissions().includes("MANAGE_CATALOG")}>
-					<Match when={tab() === "Musics"}>
-						<div>musics</div>
-					</Match>
-					<Match when={tab() === "Albums"}>
-						<div>albuims</div>
-					</Match>
-					<Match when={tab() === "Artists"}>
-						<div>artits</div>
-					</Match>
-				</Show>
-				<Show when={permissions().includes("MANAGE_MEMBERS")}>
-					<Match when={tab() === "Members"}>
-						<ManageMembers search={search()}/>
-					</Match>
-				</Show>
-				<Show when={permissions().includes("ADMIN")}>
-					<Match when={tab() === "Roles"}>
-						<div>roles</div>
-					</Match>
-				</Show>
+				<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Musics"}>
+					<div>musics</div>
+				</Match>
+				<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Albums"}>
+					<div>albuims</div>
+				</Match>
+				<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Artists"}>
+					<div>artits</div>
+				</Match>
+				<Match when={hasPerm("MANAGE_MEMBERS") && tab() === "Members"}>
+					<ManageMembers search={search()}/>
+				</Match>
+				<Match when={hasPerm("ADMIN") && tab() === "Roles"}>
+					<ManageRoles search={search()}/>
+				</Match>
 			</Switch>
 		</Show>
 	</div>;
