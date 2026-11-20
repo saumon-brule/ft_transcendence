@@ -4,7 +4,7 @@ import { summonErrorToast } from "~/components/ui/Toaster";
 import { client, queryKeys } from "~/api/client";
 import "./Provider.scss";
 import { useProviderAlbumsInfiniteQuery, useProviderArtistQuery, useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
-import ProviderArtistHeader from "../ProviderArtist/ProviderArtistHeader";
+import ProviderArtistHeader from "./ProviderArtistHeader";
 import MusicSection from "../../../components/ui/MusicSection/MusicSection";
 import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 import Button from "~/components/inputs/Button";

@@ -180,6 +180,10 @@ export default {
 					valueMissing: "FR: Please enter a research",
 					typeMismatch: "FR: Please enter a valid research",
 				},
+				date: {
+					valueMissing: "Veuillez entrer une date",
+					typeMismatch: "Veuillez entrer une date valide",
+				},
 			},
 		},
 		auth: {
