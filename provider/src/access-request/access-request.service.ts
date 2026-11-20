@@ -100,9 +100,11 @@ export class AccessRequestService {
 			orderBy: { createdAt: "desc" },
 			include,
 		});
-		if (!request) throw new NotFoundException("No access request found");
-
-		return toAccessRequest(request);
+		return {
+			accessRequest: request
+				? toAccessRequest(request)
+				: null,
+		};
 	}
 
 	async list({ status }: ListQuery) {

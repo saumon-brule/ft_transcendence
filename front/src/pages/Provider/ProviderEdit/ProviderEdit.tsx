@@ -30,7 +30,7 @@ export type ProviderStatus = "loading" | "success";
 export default function ProviderEdit() {
 	const provider = useProvider();
 	const providerInfoInfo = useProviderInfoInfo();
-	const providerInfoQuery = useProviderInfoQuery(() => provider.uuid, () => provider);
+	const providerInfoQuery = useProviderInfoQuery(() => provider);
 	const permissions = () => providerInfoInfo.member.permissions;
 
 	const [tab, setTab] = useTabParam<Tab>(TABS, permissions().includes("MANAGE_CATALOG") ? "Musics" : permissions().includes("MANAGE_MEMBERS") ? "Members" : "Roles");
@@ -45,7 +45,7 @@ export default function ProviderEdit() {
 	}
 
 	return <div class="page" id="provider-edit">
-		<ProviderEditHeader providerInfo={providerInfoQuery.data?.body} provider={provider} />
+		<ProviderEditHeader providerInfo={providerInfoQuery.data?.body} />
 		<Show when={providerInfoQuery.data?.body} fallback={<LoadingSplash/>}>
 			<Tabs tabs={TABS} value={tab()} onChange={setTab} />
 			<div class="provider-controls">
