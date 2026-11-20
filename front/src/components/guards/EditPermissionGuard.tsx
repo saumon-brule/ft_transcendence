@@ -2,6 +2,8 @@ import { useNavigate, RouteSectionProps } from "@solidjs/router";
 import { createContext, createEffect, Show, useContext } from "solid-js";
 import { useProviderInfoInfoQuery } from "~/api/queryHooks/providerAccess";
 import { useProvider } from "./ProviderInfoGuard";
+import LoadingSplash from "~/pages/Loading/LoadingSplash";
+import Button from "~/components/inputs/Button";
 
 const AllowedContext = createContext<Exclude<ReturnType<typeof useProviderInfoInfoQuery>["data"], undefined>["body"]>();
 
@@ -20,7 +22,15 @@ export default function EditPermissionGuard(props: RouteSectionProps) {
 		if (providerInfoInfoQuery?.data?.body.member.permissions.length === 0) navigate("/home", { replace: true });
 	});
 
-	return <Show when={(providerInfoInfoQuery?.data?.body.member.permissions.length ?? 0) > 0 && providerInfoInfoQuery?.data?.body}>
+	return <Show
+		when={(providerInfoInfoQuery?.data?.body.member.permissions.length ?? 0) > 0 && providerInfoInfoQuery?.data?.body}
+		fallback={<Show when={providerInfoInfoQuery.isError} fallback={<LoadingSplash/>}>
+			<div class="page">
+				<p>Could not reach this provider.</p>
+				<Button onClick={() => void providerInfoInfoQuery.refetch()}>Retry</Button>
+			</div>
+		</Show>}
+	>
 		{(providerInfoInfoData) => <AllowedContext.Provider value={providerInfoInfoData()}>
 			{props.children}
 		</AllowedContext.Provider>}

@@ -93,11 +93,42 @@ export class MemberService {
 				data: unique.map((roleUuid) => ({ memberUuid: uuid, roleUuid })),
 			});
 
-			const [{ ownerUuid }, updated] = await Promise.all([
-				tx.provider.findUniqueOrThrow({ where: { id: 1 } }),
-				tx.member.findUniqueOrThrow({ where: { uuid }, include: memberInclude }),
-			]);
-			return toMember(updated, ownerUuid);
+			return this.fetchMember(tx, uuid);
 		});
+	}
+
+	async addRole(uuid: string, roleUuid: string) {
+		await this.prisma.$transaction(async (tx) => {
+			const member = await tx.member.findUnique({ where: { uuid } });
+			if (!member || member.revokedAt) throw new NotFoundException("Member not found");
+
+			const role = await tx.role.findUnique({ where: { uuid: roleUuid } });
+			if (!role) throw new NotFoundException("Role not found");
+
+			await tx.memberRole.createMany({
+				data: [{ memberUuid: uuid, roleUuid }],
+				skipDuplicates: true,
+			});
+		});
+	}
+
+	async removeRole(uuid: string, roleUuid: string) {
+		await this.prisma.$transaction(async (tx) => {
+			const member = await tx.member.findUnique({ where: { uuid } });
+			if (!member || member.revokedAt) throw new NotFoundException("Member not found");
+
+			const role = await tx.role.findUnique({ where: { uuid: roleUuid } });
+			if (!role) throw new NotFoundException("Role not found");
+
+			await tx.memberRole.deleteMany({ where: { memberUuid: uuid, roleUuid } });
+		});
+	}
+
+	private async fetchMember(tx: Prisma.TransactionClient, uuid: string) {
+		const [{ ownerUuid }, updated] = await Promise.all([
+			tx.provider.findUniqueOrThrow({ where: { id: 1 } }),
+			tx.member.findUniqueOrThrow({ where: { uuid }, include: memberInclude }),
+		]);
+		return toMember(updated, ownerUuid);
 	}
 }

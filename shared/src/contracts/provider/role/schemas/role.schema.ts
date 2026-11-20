@@ -20,6 +20,8 @@ export const providerRoleSchema = providerRoleSummarySchema.extend({
 	permissions: z.array(providerPermissionSchema),
 });
 
+export type ProviderRole = z.infer<typeof providerRoleSchema>;
+
 export const providerRoleListResponseSchema = z.object({
 	roles: z.array(providerRoleSchema),
 });
