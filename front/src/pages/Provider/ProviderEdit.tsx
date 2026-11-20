@@ -17,6 +17,8 @@ import "./ProviderEdit.scss";
 import { ManageRoles } from "./ProviderEditTabs/ManageRoles";
 import { ProviderPermission } from "@flex/shared";
 import { summonAddRolePopUp } from "./popUps/summonAddRolePopUp";
+import { summonAddArtistPopUp } from "./popUps/summonAddArtistPopUp";
+import { summonAddAlbumPopUp } from "./popUps/summonAddAlbumPopUp";
 
 const TABS = ["Musics", "Albums", "Artists", "Members", "Roles"] as const;
 type Tab = typeof TABS[number];
@@ -46,23 +48,31 @@ export default function ProviderEdit() {
 			<Tabs tabs={TABS} value={tab()} onChange={setTab} />
 			<div class="provider-controls">
 				<ProviderSearchBar value={search()} onSearch={setSearch} />
-				<Show when={hasPerm("MANAGE_CATALOG") && tab() == "Musics"}>
-					<input
-						ref={fileInputRef}
-						type="file"
-						accept="audio/*"
-						style={{ display: "none" }}
-						onChange={(e) => {
-							const file = e.currentTarget.files?.[0];
-							if (!file) return;
-							void summonUploadMusicPopUp(file, provider);
-						}}
-					/>
-					<Button onClick={() => fileInputRef.click()}><Plus/>Add Music</Button>
-				</Show>
-				<Show when={hasPerm("ADMIN") && tab() == "Roles"}>
-					<Button onClick={() => summonAddRolePopUp(provider)}><Plus/>Add role</Button>
-				</Show>
+				<Switch>
+					<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Musics"}>
+						<input
+							ref={fileInputRef}
+							type="file"
+							accept="audio/*"
+							style={{ display: "none" }}
+							onChange={(e) => {
+								const file = e.currentTarget.files?.[0];
+								if (!file) return;
+								void summonUploadMusicPopUp(file, provider);
+							}}
+						/>
+						<Button onClick={() => fileInputRef.click()}><Plus/>Add Music</Button>
+					</Match>
+					<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Albums"}>
+						<Button onClick={() => summonAddAlbumPopUp(provider)}><Plus/>Add Album</Button>
+					</Match>
+					<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Artists"}>
+						<Button onClick={() => summonAddArtistPopUp(provider)}><Plus/>Add Artist</Button>
+					</Match>
+					<Match when={hasPerm("ADMIN") && tab() == "Roles"}>
+						<Button onClick={() => summonAddRolePopUp(provider)}><Plus/>Add role</Button>
+					</Match>
+				</Switch>
 			</div>
 			<Switch>
 				<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Musics"}>
