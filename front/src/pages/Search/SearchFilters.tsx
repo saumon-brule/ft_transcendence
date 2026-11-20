@@ -2,7 +2,7 @@ import { Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import type { SearchFilters as Filters } from "~/api/queryHooks/providerInfo";
-import { type SearchFilterField } from "./searchFilters";
+import { type SearchFilterField } from "./useSearchFilters";
 import "./SearchFilters.scss";
 
 type SearchFiltersProps = {
