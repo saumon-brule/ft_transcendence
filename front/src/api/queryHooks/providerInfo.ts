@@ -57,8 +57,8 @@ export type ProviderInfo = Exclude<ReturnType<typeof useProviderInfoQuery>["data
 export type MusicRelationFilter = { artistUuid?: string; albumUuid?: string };
 export type AlbumRelationFilter = { artistUuid?: string };
 
-export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, providerInfo: () => Provider | null, search: () => string = () => "", filter: () => MusicRelationFilter = () => ({})) => {
-	const providerClient = createMemo(() => getProviderClient(providerInfo()?.address ?? "", providerUuid()));
+export const useProviderMusicsInfiniteQuery = (providerInfo: () => Provider | null, search: () => string = () => "", filter: () => MusicRelationFilter = () => ({})) => {
+	const providerClient = createMemo(() => getProviderClient(providerInfo()?.address ?? "", providerInfo()?.uuid ?? ""));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
@@ -88,7 +88,7 @@ export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, provi
 			...data,
 			pages: data.pages.map((page) => ({
 				...page,
-				musics: page.musics.map((music) => Music.fromRawObject(music, providerInfo() ?? { uuid: providerUuid(), address: "", name: "" })),
+				musics: page.musics.map((music) => Music.fromRawObject(music, providerInfo() ?? { uuid: providerInfo()?.uuid ?? "", address: "", name: "" })),
 			})),
 		}),
 	});

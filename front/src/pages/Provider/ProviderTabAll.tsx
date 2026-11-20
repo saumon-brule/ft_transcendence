@@ -10,7 +10,7 @@ import { Provider } from "@flex/shared";
 const PREVIEW_SIZE = 6;
 
 export default function ProviderTabAll(props: { providerInfo: Provider; search: string }) {
-	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerInfo.uuid, () => props.providerInfo, () => props.search);
+	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerInfo, () => props.search);
 	const albumsQuery = useProviderAlbumsInfiniteQuery(() => props.providerInfo.address, () => props.providerInfo.uuid, () => props.search);
 	const artistsQuery = useProviderArtistsInfiniteQuery(() => props.providerInfo.address, () => props.providerInfo.uuid, () => props.search);
 

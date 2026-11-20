@@ -1,0 +1,44 @@
+#manage-albums-tab {
+	.albums-list {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		margin-top: 10px;
+
+		.provider-edit-album-card {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			padding: 5px;
+			background-color: var(--background-card);
+			border: 1px solid var(--background-overlay);
+			border-radius: 9px;
+
+			.infos {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 16px;
+
+				img {
+					height: 60px;
+					width: 60px;
+					margin-left: 4px;
+					border-radius: 4px;
+				}
+			}
+
+			.actions {
+				display: flex;
+				flex-direction: row;
+				gap: 16px;
+				padding: 10px;
+
+				button {
+					height: fit-content;
+				}
+			}
+		}
+	}
+}

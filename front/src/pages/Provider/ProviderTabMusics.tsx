@@ -11,7 +11,7 @@ export type ProviderTabMusicProps = {
 };
 
 export default function ProviderTabMusics(props: ProviderTabMusicProps) {
-	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerInfo.uuid, () => props.providerInfo, () => props.search);
+	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerInfo, () => props.search);
 	const musics = createMemo(() => musicsQuery.data && {
 		musics: musicsQuery.data.pages.flatMap((page) => page.musics),
 		total: musicsQuery.data.pages[0]?.total ?? 0,
