@@ -1,9 +1,11 @@
 import { initContract } from "@ts-rest/core";
 import {
+	accessRequestDecideResponseSchema,
 	accessRequestListQuerySchema,
 	accessRequestListResponseSchema,
 	accessRequestStatusSchema,
 	decideAccessRequestSchema,
+	myAccessRequestResponseSchema,
 } from "./schemas/access-request.schema";
 import { uuidParamSchema } from "../../../schemas/common.schema";
 import { commonError404Schema, providerError409Schema } from "../../../errors/error-schemas";
@@ -26,8 +28,7 @@ export const accessRequestContract = c.router(
 			method: "GET",
 			path: "/me",
 			responses: {
-				200: accessRequestStatusSchema,
-				404: commonError404Schema,
+				200: myAccessRequestResponseSchema,
 			},
 		},
 		list: {
@@ -42,7 +43,7 @@ export const accessRequestContract = c.router(
 			pathParams: uuidParamSchema,
 			body: decideAccessRequestSchema,
 			responses: {
-				200: accessRequestStatusSchema,
+				200: accessRequestDecideResponseSchema,
 				404: commonError404Schema,
 				409: providerError409Schema,
 			},

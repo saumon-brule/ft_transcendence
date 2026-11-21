@@ -1,6 +1,7 @@
 import { createMemo } from "solid-js";
 import { createInfiniteQuery, createQueries, createQuery, useQueryClient } from "@tanstack/solid-query";
 import { getProviderClient } from "../providerClients";
+import { summonErrorToast } from "~/components/ui/Toaster";
 import { Music } from "~/class/Music";
 import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
@@ -19,11 +20,10 @@ const providerRetry = (failureCount: number, error: unknown) => {
 	return failureCount < 2;
 };
 
-export const useProviderInfoQuery = (providerUuid: () => string, providerInfo: () => Provider | null) => {
-	const providerClient = createMemo(() => getProviderClient(providerInfo()?.address ?? "", providerUuid()));
+export const useProviderInfoQuery = (provider: () => Provider) => {
+	const providerClient = createMemo(() => getProviderClient(provider().address, provider().uuid));
 	return createQuery({
 		queryKey: () => providerClient().keys.info.all(),
-		get enabled() { return providerInfo() !== null; },
 		retry: providerRetry,
 		queryFn: async () => {
 			const res = await providerClient().client.info.all.query();
@@ -37,15 +37,15 @@ export const useProviderInfoQuery = (providerUuid: () => string, providerInfo: (
 				...response.body,
 				music: {
 					...response.body.music,
-					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, providerInfo() ?? { uuid: providerUuid(), address: "", name: "" })),
+					musics: response.body.music.musics.map((music) => Music.fromRawObject(music, provider())),
 				},
 				artist: {
 					...response.body.artist,
-					artists: response.body.artist.artists.map((artist) => Artist.fromRawObject(artist, providerInfo()?.address ?? "", providerUuid())),
+					artists: response.body.artist.artists.map((artist) => Artist.fromRawObject(artist, provider().address, provider().uuid)),
 				},
 				album: {
 					...response.body.album,
-					albums: response.body.album.albums.map((album) => Album.fromRawObject(album, providerInfo()?.address ?? "", providerUuid())),
+					albums: response.body.album.albums.map((album) => Album.fromRawObject(album, provider().address, provider().uuid)),
 				},
 			},
 		}),
@@ -57,13 +57,12 @@ export type ProviderInfo = Exclude<ReturnType<typeof useProviderInfoQuery>["data
 export type MusicRelationFilter = { artistUuid?: string; albumUuid?: string };
 export type AlbumRelationFilter = { artistUuid?: string };
 
-export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, providerInfo: () => Provider | null, search: () => string = () => "", filter: () => MusicRelationFilter = () => ({})) => {
-	const providerClient = createMemo(() => getProviderClient(providerInfo()?.address ?? "", providerUuid()));
+export const useProviderMusicsInfiniteQuery = (provider: () => Provider, search: () => string = () => "", filter: () => MusicRelationFilter = () => ({})) => {
+	const providerClient = createMemo(() => getProviderClient(provider().address, provider().uuid));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
 		queryKey: () => providerClient().keys.music.list([search(), JSON.stringify(filter())]),
-		get enabled() { return providerInfo() !== null; },
 		queryFn: async ({ pageParam }) => {
 			const res = await providerClient().client.music.list.query({
 				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, ...filter() },
@@ -88,21 +87,20 @@ export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, provi
 			...data,
 			pages: data.pages.map((page) => ({
 				...page,
-				musics: page.musics.map((music) => Music.fromRawObject(music, providerInfo() ?? { uuid: providerUuid(), address: "", name: "" })),
+				musics: page.musics.map((music) => Music.fromRawObject(music, provider())),
 			})),
 		}),
 	});
 };
 
-export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "", filter: () => AlbumRelationFilter = () => ({})) => {
-	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
+export const useProviderAlbumsInfiniteQuery = (provider: () => Provider, search: () => string = () => "", filter: () => AlbumRelationFilter = () => ({})) => {
+	const providerClient = createMemo(() => getProviderClient(provider().address, provider().uuid));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
-		queryKey: () => provider().keys.album.list([search(), JSON.stringify(filter())]),
-		get enabled() { return providerUrl() !== ""; },
+		queryKey: () => providerClient().keys.album.list([search(), JSON.stringify(filter())]),
 		queryFn: async ({ pageParam }) => {
-			const res = await provider().client.album.list.query({
+			const res = await providerClient().client.album.list.query({
 				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, ...filter() },
 			});
 			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider albums failed with status ${res.status}`);
@@ -115,31 +113,30 @@ export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, provid
 		},
 		initialData: () => {
 			if (search() || Object.keys(filter()).length > 0) return undefined;
-			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(provider().keys.info.all());
+			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(providerClient().keys.info.all());
 			return all ? { pages: [all.body.album], pageParams: [0] } : undefined;
 		},
-		initialDataUpdatedAt: () => queryClient.getQueryState(provider().keys.info.all())?.dataUpdatedAt,
+		initialDataUpdatedAt: () => queryClient.getQueryState(providerClient().keys.info.all())?.dataUpdatedAt,
 		staleTime: 30_000,
 		keepPreviousData: true,
 		select: (data) => ({
 			...data,
 			pages: data.pages.map((page) => ({
 				...page,
-				albums: page.albums.map((album) => Album.fromRawObject(album, providerUrl(), providerUuid())),
+				albums: page.albums.map((album) => Album.fromRawObject(album, provider().address, provider().uuid)),
 			})),
 		}),
 	});
 };
 
-export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "") => {
-	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
+export const useProviderArtistsInfiniteQuery = (provider: () => Provider, search: () => string = () => "") => {
+	const providerClient = createMemo(() => getProviderClient(provider().address, provider().uuid));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
-		queryKey: () => provider().keys.artist.list([search()]),
-		get enabled() { return providerUrl() !== ""; },
+		queryKey: () => providerClient().keys.artist.list([search()]),
 		queryFn: async ({ pageParam }) => {
-			const res = await provider().client.artist.list.query({
+			const res = await providerClient().client.artist.list.query({
 				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined },
 			});
 			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider artists failed with status ${res.status}`);
@@ -152,30 +149,29 @@ export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, provi
 		},
 		initialData: () => {
 			if (search()) return undefined;
-			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(provider().keys.info.all());
+			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(providerClient().keys.info.all());
 			return all ? { pages: [all.body.artist], pageParams: [0] } : undefined;
 		},
-		initialDataUpdatedAt: () => queryClient.getQueryState(provider().keys.info.all())?.dataUpdatedAt,
+		initialDataUpdatedAt: () => queryClient.getQueryState(providerClient().keys.info.all())?.dataUpdatedAt,
 		staleTime: 30_000,
 		keepPreviousData: true,
 		select: (data) => ({
 			...data,
 			pages: data.pages.map((page) => ({
 				...page,
-				artists: page.artists.map((artist) => Artist.fromRawObject(artist, providerUrl(), providerUuid())),
+				artists: page.artists.map((artist) => Artist.fromRawObject(artist, provider().address, provider().uuid)),
 			})),
 		}),
 	});
 };
 
 
-export const useProviderArtistQuery = (providerUrl: () => string, providerUuid: () => string, artistUUID: () => string) => {
-	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
+export const useProviderArtistQuery = (provider: () => Provider, artistUUID: () => string) => {
+	const providerClient = createMemo(() => getProviderClient(provider().address, provider().uuid));
 	return createQuery({
-		queryKey: () => provider().keys.artist.get([artistUUID()]),
-		get enabled() { return providerUrl() !== ""; },
+		queryKey: () => providerClient().keys.artist.get([artistUUID()]),
 		queryFn: async () => {
-			const res = await provider().client.artist.get.query({ params: ({ uuid: artistUUID() }) });
+			const res = await providerClient().client.artist.get.query({ params: ({ uuid: artistUUID() }) });
 			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider artist failed with status ${res.status}`);
 			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider artist failed with status ${res.status}`);
 			return res;
@@ -185,13 +181,12 @@ export const useProviderArtistQuery = (providerUrl: () => string, providerUuid: 
 
 export type ProviderArtistQueryBody = Exclude<ReturnType<typeof useProviderArtistQuery>["data"], undefined>["body"];
 
-export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: () => string, albumUUID: () => string) => {
-	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
+export const useProviderAlbumQuery = (provider: () => Provider, albumUUID: () => string) => {
+	const providerClient = createMemo(() => getProviderClient(provider().address, provider().uuid));
 	return createQuery({
-		queryKey: () => provider().keys.album.get([albumUUID()]),
-		get enabled() { return providerUrl() !== ""; },
+		queryKey: () => providerClient().keys.album.get([albumUUID()]),
 		queryFn: async () => {
-			const res = await provider().client.album.get.query({ params: ({ uuid: albumUUID() }) });
+			const res = await providerClient().client.album.get.query({ params: ({ uuid: albumUUID() }) });
 			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider album failed with status ${res.status}`);
 			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider album failed with status ${res.status}`);
 			return res;
@@ -200,7 +195,7 @@ export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: (
 			...response,
 			body: {
 				...response.body,
-				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, providerUrl(), providerUuid())),
+				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, provider().address, provider().uuid)),
 			},
 		}),
 	});
@@ -255,15 +250,19 @@ export const useProvidersSearchQueries = (providersInfos: () => Provider[], sear
 	});
 };
 
-export const everyMusicQuery = async (providerInfo: Provider, artistUuid?: string, albumUuid?: string) => {
+export const everyMusicQuery = async (providerInfo: Provider, artistUuid?: string, albumUuid?: string): Promise<Music[] | null> => {
 	const providerClient = getProviderClient(providerInfo.address, providerInfo.uuid);
 
-	const res = await providerClient.client.music.list.query(
-		{ query: { artistUuid, albumUuid, offset: 0, limit: 10000 } },
-	);
-
-	if (res.status === 200) {
-		return res.body.musics.map((music) => Music.fromRawObject(music, providerInfo));
+	try {
+		const res = await providerClient.client.music.list.query(
+			{ query: { artistUuid, albumUuid, offset: 0, limit: 10000 } },
+		);
+		if (res.status === 200) {
+			return res.body.musics.map((music) => Music.fromRawObject(music, providerInfo));
+		}
+		summonErrorToast(`Failed to load musics from ${providerInfo.name}`);
+	} catch {
+		summonErrorToast(`${providerInfo.name} is unreachable`);
 	}
-	return [];
+	return null;
 };

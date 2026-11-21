@@ -140,6 +140,7 @@ export default {
 	},
 	errors: {
 		rateLimit: "You are being rate limited",
+		noPermission: "You don't have the permission to do that",
 		unavailableFtApi: "We are not currently able to reach 42's API",
 		unknownFallback: "An error occurred, please try again later",
 		profileUnavailable: "We couldn't load your profile",
@@ -176,6 +177,10 @@ export default {
 				search: {
 					valueMissing: "Please enter a research",
 					typeMismatch: "Please enter a valid research",
+				},
+				date: {
+					valueMissing: "Please enter a date",
+					typeMismatch: "Please enter a valid date",
 				},
 			},
 		},

@@ -1,4 +1,4 @@
-import { createSelector, createSignal, For, Match, onCleanup, onMount, Show, Switch } from "solid-js";
+import { For, Match, Show, Switch } from "solid-js";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import { Music } from "~/class/Music";
 import "./MusicSection.scss";
@@ -11,7 +11,6 @@ import { Provider } from "@flex/shared";
 import { MusicGroup } from "~/store/trackManager.store";
 import UnavailableMusicRow, { type PlaylistContext } from "./UnavailableTrackRow";
 import { MusicActionMenu } from "./MusicActionMenu";
-import { Ellipsis } from "lucide-solid";
 
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
@@ -38,8 +37,6 @@ export type GroupMusicSectionProps = {
 export default function MusicSection(props: MusicSectionProps | GroupMusicSectionProps) {
 	const audioManager = useAudioManagerContext();
 	const shown = (column: MusicSectionColumn) => !props.hiddenColumns?.includes(column);
-	const [openMenu, setOpenMenu] = createSignal<number | null>(null);
-	const isMenuOpen = createSelector(openMenu);
 
 	function toDate(value: Date | string): Date {
 		return value instanceof Date ? value : new Date(value);
@@ -63,27 +60,6 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 		+ (shown("published") ? 1 : 0)
 		+ (shown("duration") ? 1 : 0);
 
-
-	function toggleMenu(index: number) {
-		setOpenMenu((current) => current === index ? null : index);
-	}
-
-	onMount(() => {
-		const onPointerDown = (e: PointerEvent) => {
-			if (!(e.target as Element | null)?.closest(".col-actions")) {
-				setOpenMenu(null);
-			}
-		};
-		const onKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "Escape") setOpenMenu(null);
-		};
-		document.addEventListener("pointerdown", onPointerDown);
-		document.addEventListener("keydown", onKeyDown);
-		onCleanup(() => {
-			document.removeEventListener("pointerdown", onPointerDown);
-			document.removeEventListener("keydown", onKeyDown);
-		});
-	});
 
 	const musicList = () => isGroupMusicSection(props) ? props.musicGroup.musics : props.musics;
 
@@ -123,11 +99,7 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 								</td>
 								<Show when={shown("actions")}>
 									<td class="col-actions">
-										<Button class="action-button" icon={true} variant="text" onClick={() => toggleMenu(i())}><Ellipsis /></Button>
-										<Show when={isMenuOpen(i())}>
-											<MusicActionMenu music={music} onClose={() => setOpenMenu(null)} playlist={props.playlist} />
-
-										</Show>
+										<MusicActionMenu music={music} playlist={props.playlist} />
 									</td>
 								</Show>
 								<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks artists={music.artists} providerUUID={music.provider.uuid} /></td></Show>

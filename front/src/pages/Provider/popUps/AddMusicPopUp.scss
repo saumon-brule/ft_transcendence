@@ -1,0 +1,106 @@
+.upload-music-pop-up {
+	h2 {
+		margin-bottom: 16px;
+	}
+
+	.upload-music-info {
+		width: 100%;
+		display: flex;
+		gap: 1rem;
+
+		.upload-music-cover-box {
+			width: 35%;
+
+			& > img {
+				width: 100%;
+				aspect-ratio: 1/1;
+				object-fit: cover;
+				background-color: black;
+				border-radius: 5px;
+			}
+		}
+
+		.upload-music-details {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+
+			.upload-music-album.has-album {
+				height: 80px;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				padding: 5px;
+				background-color: var(--background-card);
+				border: 1px solid var(--background-overlay);
+				border-radius: 9px;
+
+				.infos {
+					height: 100%;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					gap: 8px;
+
+					img {
+						height: 100%;
+						aspect-ratio: 1/1;
+						border-radius: 4px;
+					}
+
+					.title {
+						font-weight: 700;
+					}
+				}
+
+				.actions {
+					padding-right: 16px;
+				}
+			}
+		}
+	}
+
+	.upload-music-music-artists {
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
+		padding: 16px 0;
+
+		.music-artists-scrollable {
+			overflow-x: scroll;
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+		}
+
+		.artist {
+			width: 120px;
+			min-width: 120px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+			justify-content: center;
+			padding: 5px;
+			background-color: var(--background-card);
+			border: 1px solid var(--background-overlay);
+			border-radius: 9px;
+			gap: 8px;
+	
+			> img {
+				width: 100%;
+				border-radius: 1000px;
+			}
+
+			> span {
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				width: 100%;
+				text-align: center;
+			}
+		}
+	}
+}

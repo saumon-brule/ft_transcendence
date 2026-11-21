@@ -50,6 +50,7 @@ export const albumContract = c.router(
 			method: "DELETE",
 			path: "/:uuid",
 			pathParams: uuidParamSchema,
+			body: null,
 			responses: {
 				204: null,
 				404: commonError404Schema,

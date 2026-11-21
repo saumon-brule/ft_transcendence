@@ -1,0 +1,42 @@
+#manage-role-tab {
+
+	.roles-list {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		
+		.role-card {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			padding: 15px;
+			background-color: var(--background-card);
+			border: 1px solid var(--background-overlay);
+			border-radius: 9px;
+	
+			.infos {
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+	
+				.permissions {
+					margin-top: 5px;
+					display: flex;
+					flex-direction: column;
+					gap: 4px;
+				}
+			}
+	
+			.actions {
+				display: flex;
+				flex-direction: row;
+				gap: 8px;
+	
+				button {
+					height: fit-content;
+				}
+			}
+		}
+	}
+}

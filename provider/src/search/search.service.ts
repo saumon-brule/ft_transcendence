@@ -44,7 +44,6 @@ const TABLES: Record<SearchTable, { from: Prisma.Sql; fields: SearchField[] }> =
 const FUZZY_DISTANCES = [
 	{ minLength: 3, distance: 1 },
 	{ minLength: 6, distance: 2 },
-	{ minLength: 8, distance: 3 },
 ];
 const MIN_RELATIVE_SCORE = 0.2;
 
@@ -70,7 +69,7 @@ export class SearchService {
 		const [rows, [{ total }]] = await this.prisma.$transaction([
 			this.prisma.$queryRaw<{ id: number }[]>(Prisma.sql`
 				SELECT "id" FROM ${from} ${where}
-				/* ORDER BY "name" ASC, "id" ASC */
+				ORDER BY "id" ASC
 				LIMIT ${limit}::int OFFSET ${offset}::int
 			`),
 			this.prisma.$queryRaw<{ total: number }[]>(Prisma.sql`

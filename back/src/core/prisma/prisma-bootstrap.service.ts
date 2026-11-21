@@ -108,33 +108,33 @@ export class DatabaseBootstrapService implements OnModuleInit {
 
 		console.log("Friends : chantal↔liam (accepted), machin→liam (pending)");
 
-		const privateProvider = await this.prisma.provider.upsert({
-			where: { name: "Liam's Private Provider" },
-			update: {
-				ownerUUID: liamUser.uuid,
-				address: "https://liam-private-provider",
-			},
-			create: {
-				name: "Liam's Private Provider",
-				address: "https://liam-private-provider",
-				ownerUUID: liamUser.uuid,
-				...providerCredentials(),
-			},
-		});
+		// const privateProvider = await this.prisma.provider.upsert({
+		// 	where: { name: "Liam's Private Provider" },
+		// 	update: {
+		// 		ownerUUID: liamUser.uuid,
+		// 		address: "https://liam-private-provider",
+		// 	},
+		// 	create: {
+		// 		name: "Liam's Private Provider",
+		// 		address: "https://liam-private-provider",
+		// 		ownerUUID: liamUser.uuid,
+		// 		...providerCredentials(),
+		// 	},
+		// });
 
-		const publicProvider = await this.prisma.provider.upsert({
-			where: { name: "Liam's Public Provider" },
-			update: {
-				ownerUUID: liamUser.uuid,
-				address: "https://liam-public-providerr",
-			},
-			create: {
-				name: "Liam's Public Provider",
-				address: "https://liam-public-providerr",
-				ownerUUID: liamUser.uuid,
-				...providerCredentials(),
-			},
-		});
+		// const publicProvider = await this.prisma.provider.upsert({
+		// 	where: { name: "Liam's Public Provider" },
+		// 	update: {
+		// 		ownerUUID: liamUser.uuid,
+		// 		address: "https://liam-public-providerr",
+		// 	},
+		// 	create: {
+		// 		name: "Liam's Public Provider",
+		// 		address: "https://liam-public-providerr",
+		// 		ownerUUID: liamUser.uuid,
+		// 		...providerCredentials(),
+		// 	},
+		// });
 
 		const additionalProviders: { name: string; address: string }[] = [
 			// { name: "Liam's Provider 3", address: "https://liam-provider-3" },
@@ -153,33 +153,33 @@ export class DatabaseBootstrapService implements OnModuleInit {
 			});
 		}
 
-		await this.prisma.providerUser.upsert({
-			where: {
-				providerUUID_userUUID: {
-					providerUUID: privateProvider.uuid,
-					userUUID: liamUser.uuid,
-				},
-			},
-			update: { },
-			create: {
-				providerUUID: privateProvider.uuid,
-				userUUID: liamUser.uuid,
-			},
-		});
+		// await this.prisma.providerUser.upsert({
+		// 	where: {
+		// 		providerUUID_userUUID: {
+		// 			providerUUID: privateProvider.uuid,
+		// 			userUUID: liamUser.uuid,
+		// 		},
+		// 	},
+		// 	update: { },
+		// 	create: {
+		// 		providerUUID: privateProvider.uuid,
+		// 		userUUID: liamUser.uuid,
+		// 	},
+		// });
 
-		await this.prisma.providerUser.upsert({
-			where: {
-				providerUUID_userUUID: {
-					providerUUID: publicProvider.uuid,
-					userUUID: liamUser.uuid,
-				},
-			},
-			update: { },
-			create: {
-				providerUUID: publicProvider.uuid,
-				userUUID: liamUser.uuid,
-			},
-		});
+		// await this.prisma.providerUser.upsert({
+		// 	where: {
+		// 		providerUUID_userUUID: {
+		// 			providerUUID: publicProvider.uuid,
+		// 			userUUID: liamUser.uuid,
+		// 		},
+		// 	},
+		// 	update: { },
+		// 	create: {
+		// 		providerUUID: publicProvider.uuid,
+		// 		userUUID: liamUser.uuid,
+		// 	},
+		// });
 
 		const musicData = [
 			{ title: "the newer sweet groove", artist: "Chris Gouge", duration: 214 },
