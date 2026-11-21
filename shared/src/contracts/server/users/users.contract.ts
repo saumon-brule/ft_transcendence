@@ -41,7 +41,7 @@ export const usersContract = c.router(
 		},
 		regenerateApiKey: {
 			method: "POST",
-			path: "/regenerateApiKey",
+			path: "/regenerate-api-key",
 			body: null,
 			responses: { 200: z.object({ apiKey: z.string() }) },
 		},

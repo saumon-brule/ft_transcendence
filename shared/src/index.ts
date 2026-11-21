@@ -1,6 +1,7 @@
 export { serverContract } from "./contracts/server/server.contract";
 export { authContract } from "./contracts/server/auth/auth.contract";
 export { usersContract } from "./contracts/server/users/users.contract";
+export { apiContract } from "./contracts/server/api/api.contract";
 export { appConfigContract } from "./contracts/server/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/server/playlists/playlists.contract";
 export { createPlaylistBodySchema, playlistSummarySchema, type PlaylistDetailDto, type PlaylistListDto, type PlaylistSummaryDto } from "./contracts/server/playlists/schemas/playlist.schema";
