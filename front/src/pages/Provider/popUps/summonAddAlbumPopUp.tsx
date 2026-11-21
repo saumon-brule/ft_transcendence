@@ -9,8 +9,9 @@ import { Provider } from "@flex/shared";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import "./AddAlbumPopUp.scss";
 import { Artist } from "~/class/Artist";
-import ArtistCard from "~/components/ui/ArtistCard";
-import { Plus } from "lucide-solid";
+import { ArtistAvatar } from "~/components/ui/ArtistCard";
+import { X } from "lucide-solid";
+import { SelectArtistMenu } from "./SelectArtistMenu";
 
 export function summonAddAlbumPopUp(provider: Provider) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
@@ -18,6 +19,13 @@ export function summonAddAlbumPopUp(provider: Provider) {
 		const [name, setName] = createSignal("");
 		const [cover, setCover] = createSignal<File | null>(null);
 		const [artists, setArtists] = createSignal<Array<Artist>>([]);
+
+		function addArtist(artist: Artist) {
+			setArtists([...artists(), artist]);
+		}
+		function removeArtist(artist: Artist) {
+			setArtists([...artists().filter((a) => a.uuid !== artist.uuid)]);
+		}
 
 		const albumCreateMutation = providerClient.client.album.create.createMutation();
 		const albumUploadCoverMutation = providerClient.client.album.uploadCover.createMutation();
@@ -82,15 +90,18 @@ export function summonAddAlbumPopUp(provider: Provider) {
 					<TextInput placeholder="Name" class="create-album-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
 				</div>
 			</div>
-			<h3>Artists</h3>
-			<div class="upload-music-music-artists" >
-				<For each={artists()} >
-					{(artist) => <div>
-						<ArtistCard artist={artist}/>
-					</div>}
-				</For>
-				<div>
-					<button type="button"><Plus/>add artist</button>
+			<div class="create-album-artists" >
+				<div class="artist">
+					<SelectArtistMenu provider={provider} addArtist={addArtist}/>
+				</div>
+				<div class="album-artists-scrollable">
+					<For each={artists()} >
+						{(artist) => <div class="artist">
+							<ArtistAvatar artist={artist}/>
+							<span>{artist.name}</span>
+							<Button type="button" icon variant="danger" onClick={() => removeArtist(artist)}><X size={18}/></Button>
+						</div>}
+					</For>
 				</div>
 			</div>
 			<div class="create-album-pop-up-controls">
