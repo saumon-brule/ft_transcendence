@@ -5,7 +5,7 @@ import { resolvePermissions } from "../core/auth/permissions";
 import { albumItemInclude, musicItemInclude, toAlbumItem, toArtistItem, toMusicItem } from "../core/catalog/catalog.mappers";
 
 const DB_TIMEOUT_MS = 3000;
-const byName = [{ name: "asc" as const }, { id: "asc" as const }];
+const byId = { id: "asc" as const };
 const firstPage = { take: DEFAULT_PAGINATION_LIMIT, skip: 0 };
 
 @Injectable()
@@ -69,11 +69,11 @@ export class InfoService {
 		const [info, [musics, musicTotal, albums, albumTotal, artists, artistTotal]] = await Promise.all([
 			this.get(),
 			this.prisma.$transaction([
-				this.prisma.music.findMany({ include: musicItemInclude, orderBy: byName, ...firstPage }),
+				this.prisma.music.findMany({ include: musicItemInclude, orderBy: byId, ...firstPage }),
 				this.prisma.music.count(),
-				this.prisma.album.findMany({ include: albumItemInclude, orderBy: byName, ...firstPage }),
+				this.prisma.album.findMany({ include: albumItemInclude, orderBy: byId, ...firstPage }),
 				this.prisma.album.count(),
-				this.prisma.artist.findMany({ orderBy: byName, ...firstPage }),
+				this.prisma.artist.findMany({ orderBy: byId, ...firstPage }),
 				this.prisma.artist.count(),
 			]),
 		]);
