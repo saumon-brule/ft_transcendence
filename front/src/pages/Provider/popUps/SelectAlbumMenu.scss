@@ -1,0 +1,32 @@
+
+.set-album-menu {
+	.menu-content {
+		max-height: 400px;
+		overflow-y: scroll;
+
+		.subtext {
+			min-height: 30px;
+			padding-left: 4px!important;
+			border-radius: 5px;
+		}
+
+		.album-menu-card {
+			height: 30px;
+		
+			img {
+				height: 22px;
+				aspect-ratio: 1/1;
+				padding: -4px;
+				margin: -4px;
+				border-radius: 2px;
+			}
+		
+			span {
+				padding-left: 4px;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+		}
+	}
+}
