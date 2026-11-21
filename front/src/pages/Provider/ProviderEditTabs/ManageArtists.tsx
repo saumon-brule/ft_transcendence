@@ -1,4 +1,4 @@
-import { createMemo, For, Show } from "solid-js";
+import { createMemo, createSignal, For, Show } from "solid-js";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import Button from "~/components/inputs/Button";
 import "./ManageArtists.scss";
@@ -6,6 +6,7 @@ import { useProviderArtistsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Artist } from "~/class/Artist";
 import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Pencil, Trash } from "lucide-solid";
+import { providerRemoveArtist } from "~/api/queryHooks/providerManageCatalog";
 
 export function ManageArtists(props: { search: string }) {
 	const provider = useProvider();
@@ -28,6 +29,14 @@ export function ManageArtists(props: { search: string }) {
 }
 
 function ProviderAristCard(props: { artist: Artist }) {
+	const provider = useProvider();
+	const [deleting, setDeleting] = createSignal(false);
+
+	async function remove() {
+		setDeleting(true);
+		await providerRemoveArtist(provider, props.artist.uuid);
+		setDeleting(false);
+	}
 
 	return <div class="provider-edit-artist-card">
 		<div class="infos">
@@ -36,7 +45,7 @@ function ProviderAristCard(props: { artist: Artist }) {
 		</div>
 		<div class="actions">
 			<Button icon variant="ghost" onClick={() => {}}><Pencil size={18}/></Button>
-			<Button icon variant="danger" onClick={() => {}}><Trash size={18}/></Button>
+			<Button icon variant="danger" disabled={deleting()} onClick={() => void remove()}><Trash size={18}/></Button>
 		</div>
 	</div>;
 }
