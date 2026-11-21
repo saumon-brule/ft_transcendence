@@ -92,7 +92,7 @@ export function summonAddAlbumPopUp(provider: Provider) {
 			</div>
 			<div class="create-album-artists" >
 				<div class="artist">
-					<SelectArtistMenu provider={provider} addArtist={addArtist}/>
+					<SelectArtistMenu exclude={artists()} provider={provider} addArtist={addArtist}/>
 				</div>
 				<div class="album-artists-scrollable">
 					<For each={artists()} >

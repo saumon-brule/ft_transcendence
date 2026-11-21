@@ -190,7 +190,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 			</div>
 			<div class="upload-music-music-artists" >
 				<div class="artist">
-					<SelectArtistMenu provider={provider} addArtist={addArtist}/>
+					<SelectArtistMenu exclude={artists()} provider={provider} addArtist={addArtist}/>
 				</div>
 				<div class="music-artists-scrollable">
 					<For each={artists()} >

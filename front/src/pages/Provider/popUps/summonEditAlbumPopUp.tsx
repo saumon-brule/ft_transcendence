@@ -108,7 +108,7 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum: (newAlbum: Album
 			</div>
 			<div class="edit-album-artists" >
 				<div class="artist">
-					<SelectArtistMenu provider={album.provider} addArtist={addArtist}/>
+					<SelectArtistMenu exclude={artists()} provider={album.provider} addArtist={addArtist}/>
 				</div>
 				<div class="album-artists-scrollable">
 					<For each={artists()} >

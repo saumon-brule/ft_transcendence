@@ -131,7 +131,7 @@ export function summonEditMusicPopUp(music: Music, setNewMusic: (newMusic: Music
 			</div>
 			<div class="edit-music-music-artists" >
 				<div class="artist">
-					<SelectArtistMenu provider={music.provider} addArtist={addArtist}/>
+					<SelectArtistMenu exclude={artists()} provider={music.provider} addArtist={addArtist}/>
 				</div>
 				<div class="music-artists-scrollable">
 					<For each={artists()} >
