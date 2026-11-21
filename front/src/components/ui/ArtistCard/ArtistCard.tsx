@@ -1,4 +1,4 @@
-import { Show } from "solid-js";
+import { JSX, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import { buildMediaUrl, Provider } from "@flex/shared";
 import { DEFAULT_ARTIST, imgFallback } from "~/utils/imageFallback";
@@ -6,7 +6,9 @@ import { useMediaToken } from "~/api/providerClients";
 import "./ArtistCard.scss";
 import { Artist } from "~/class/Artist";
 
-export function ArtistAvatar(props: { artist: Artist }) {
+export type ArtistAvatarProps = JSX.IntrinsicElements["img"] & { artist: Artist };
+
+export function ArtistAvatar(props: ArtistAvatarProps) {
 	const mediaToken = useMediaToken(() => props.artist.provider.address, () => props.artist.provider.uuid);
 
 	const src = () => {
@@ -15,7 +17,7 @@ export function ArtistAvatar(props: { artist: Artist }) {
 		return DEFAULT_ARTIST;
 	};
 
-	return <img src={src()} alt={props.artist.name} class="artist-img" onError={imgFallback(DEFAULT_ARTIST)} />;
+	return <img src={src()} alt={props.artist.name} class="artist-img" onError={imgFallback(DEFAULT_ARTIST)} {...props} />;
 }
 
 export type ArtistCardProps = {

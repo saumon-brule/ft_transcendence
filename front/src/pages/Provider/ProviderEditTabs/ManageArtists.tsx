@@ -7,6 +7,7 @@ import { Artist } from "~/class/Artist";
 import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Pencil, Trash } from "lucide-solid";
 import { providerRemoveArtist } from "~/api/queryHooks/providerManageCatalog";
+import { summonEditArtistPopUp } from "../popUps/summonEditArtistPopUp";
 
 export function ManageArtists(props: { search: string }) {
 	const provider = useProvider();
@@ -44,7 +45,7 @@ function ProviderAristCard(props: { artist: Artist }) {
 			<div class="name">{props.artist.name}</div>
 		</div>
 		<div class="actions">
-			<Button icon variant="ghost" onClick={() => {}}><Pencil size={18}/></Button>
+			<Button icon variant="ghost" onClick={() => summonEditArtistPopUp(props.artist)}><Pencil size={18}/></Button>
 			<Button icon variant="danger" disabled={deleting()} onClick={() => void remove()}><Trash size={18}/></Button>
 		</div>
 	</div>;

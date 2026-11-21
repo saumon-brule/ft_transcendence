@@ -1,4 +1,4 @@
-import { Show } from "solid-js";
+import { JSX, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import { buildMediaUrl, Provider } from "@flex/shared";
 import { useMediaToken } from "~/api/providerClients";
@@ -7,7 +7,10 @@ import ArtistsLinks from "../ArtistLinks";
 import "./AlbumCard.scss";
 import { Album } from "~/class/Album";
 
-export function AlbumCover(props: { album: Album }) {
+export type AlbumCoverProps = JSX.IntrinsicElements["img"] & { album: Album }
+
+
+export function AlbumCover(props: AlbumCoverProps) {
 	const mediaToken = useMediaToken(() => props.album.provider.address, () => props.album.provider.uuid);
 
 	const src = () => {
@@ -16,7 +19,7 @@ export function AlbumCover(props: { album: Album }) {
 		return DEFAULT_ALBUM;
 	};
 
-	return <img src={src()} alt={props.album.name} onError={imgFallback(DEFAULT_ALBUM)} />;
+	return <img src={src()} alt={props.album.name} onError={imgFallback(DEFAULT_ALBUM)} {...props} />;
 }
 
 export type AlbumCardData = "artists" | "published";
