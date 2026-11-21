@@ -2,11 +2,11 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { User } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import * as bcrypt from "bcrypt";
-import { randomBytes } from "node:crypto";
 import { Cron } from "@nestjs/schedule";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 import { LogBuilder } from "../core/logging/log-builder";
 import { PresenceService } from "./presence/presence.service";
+import { generateUserApiKey } from "../publicAPI/user-api-key";
 
 @Injectable()
 export class UsersService {
@@ -181,12 +181,12 @@ export class UsersService {
 	}
 
 	public async regenerateApiKey(uuid: string): Promise<string> {
-		const { apiKey } = await this.prisma.user.update({
+		const { key, keyHash } = generateUserApiKey();
+		await this.prisma.user.update({
 			where: { uuid },
-			data: { apiKey: randomBytes(24).toString("base64url") },
-			select: { apiKey: true },
+			data: { apiKeyHash: keyHash },
 		});
-		return apiKey;
+		return key;
 	}
 
 	public async linkIntraAccount(uuid: string, intraId: number) {
