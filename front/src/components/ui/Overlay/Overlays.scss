@@ -10,7 +10,7 @@
 
 	&.visible {
 		pointer-events: all;
-		background-color: #0000007f;
+		background-color: #000000Bf;
 	}
 
 	& > .overlay {
@@ -19,6 +19,7 @@
 		left: 50%;
 		scale: 100%;
 		translate: -50% -50%;
+		box-shadow: 0 0 10px black;
 
 		&.overlay-wrapper-enter {
 			opacity: 0;

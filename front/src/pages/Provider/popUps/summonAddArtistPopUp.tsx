@@ -8,11 +8,12 @@ import { getProviderClient } from "~/api/providerClients";
 import { Provider } from "@flex/shared";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import "./AddArtistPopUp.scss";
+import { Artist } from "~/class/Artist";
 
-export function summonAddArtistPopUp(provider: Provider) {
+export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", onNewArtist?: (newArtist: Artist) => void) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
 	return summonPopUp((props) => {
-		const [name, setName] = createSignal("");
+		const [name, setName] = createSignal(nameHint);
 		const [avatar, setAvatar] = createSignal<File | null>(null);
 
 		const artistCreateMutation = providerClient.client.artist.create.createMutation();
@@ -37,18 +38,21 @@ export function summonAddArtistPopUp(provider: Provider) {
 					return;
 				}
 
-				const uuid = createRes.body.uuid;
+				const newArtist = createRes.body;
+				const uuid = newArtist.uuid;
 				const curAvatar = avatar();
-				if (!curAvatar) return;
-
-				const uploadAvatarRes = await artistUploadAvatarMutation.mutateAsync({ params: { uuid }, body: { file: curAvatar } });
-				if (uploadAvatarRes.status !== 204) {
-					if (uploadAvatarRes.status === 413) summonErrorToast(() => "File to large");
-					else if (uploadAvatarRes.status === 415) summonErrorToast(() => "File not supported");
-					else summonErrorToast(() => "An error occured during creation of the artist");
-					void artistRemoveMutation.mutate({ params: { uuid } });
-					return;
+				if (curAvatar) {
+					const uploadAvatarRes = await artistUploadAvatarMutation.mutateAsync({ params: { uuid }, body: { file: curAvatar } });
+					if (uploadAvatarRes.status !== 204) {
+						if (uploadAvatarRes.status === 413) summonErrorToast(() => "File to large");
+						else if (uploadAvatarRes.status === 415) summonErrorToast(() => "File not supported");
+						else summonErrorToast(() => "An error occured during creation of the artist");
+						void artistRemoveMutation.mutate({ params: { uuid } });
+						return;
+					}
+					newArtist.hasAvatar = true;
 				}
+				onNewArtist?.(Artist.fromRawObject(newArtist, provider));
 				props.close();
 			} catch (e) {
 				console.error(e);

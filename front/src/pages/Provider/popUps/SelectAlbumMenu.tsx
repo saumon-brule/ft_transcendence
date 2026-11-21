@@ -9,6 +9,7 @@ import { Album } from "~/class/Album";
 import { AlbumCover } from "~/components/ui/AlbumCard";
 import { Provider } from "@flex/shared";
 import "./SelectAlbumMenu.scss";
+import { summonAddAlbumPopUp } from "./summonAddAlbumPopUp";
 
 export function SelectAlbumMenu(props: { provider: Provider; setAlbum: (album: Album) => void }) {
 	return <Menu
@@ -35,7 +36,7 @@ function SelectAlbumContent(props: { provider: Provider; setAlbum: (album: Album
 			<Search class="search-icon" size={15}/>
 			<TextInput value={searchQuery()} placeholder="Search album" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 		</Form>
-		<Button size="sm" variant="text" class="subtext white-variant">New album</Button>
+		<Button type="button" size="sm" variant="text" class="subtext white-variant" onClick={() => summonAddAlbumPopUp(props.provider, undefined, props.setAlbum)}>New album</Button>
 		<Show when={albums()?.albums} keyed>
 			{(albums) => <For each={albums}>
 				{(album) => <button class="album-menu-card" type="button" role="menuitem" onClick={() => props.setAlbum(album)}>

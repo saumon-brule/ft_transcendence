@@ -17,7 +17,7 @@ import { Album } from "~/class/Album";
 import "./EditMusicPopUp.scss";
 import { DEFAULT_COVER } from "~/utils/imageFallback";
 
-export function summonEditMusicPopUp(music: Music, setNewMusic: (newMusic: Music) => void = () => {}) {
+export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Music) => void) {
 	const providerClient = getProviderClient(music.provider.address, music.provider.uuid);
 	return summonPopUp((props) => {
 		const [title, setTitle] = createSignal(music.name);
@@ -63,11 +63,10 @@ export function summonEditMusicPopUp(music: Music, setNewMusic: (newMusic: Music
 				if (updateRes.status !== 200) {
 					// if (createRes.status === 404) summonErrorToast(() => "Something not found");
 					summonErrorToast(() => "An error occured during creation of the music");
-					console.log("foutre3");
 					return;
 				}
 
-				setNewMusic(Music.fromRawObject(updateRes.body, music.provider));
+				setNewMusic?.(Music.fromRawObject(updateRes.body, music.provider));
 
 				const curCover = cover();
 				if (curCover === null) {

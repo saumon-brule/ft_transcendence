@@ -11,7 +11,7 @@ import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Undo2, X } from "lucide-solid";
 import "./EditArtistPopUp.scss";
 
-export function summonEditArtistPopUp(artist: Artist, setNewArtist: (newArtist: Artist) => void = () => {}) {
+export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist: Artist) => void) {
 	const providerClient = getProviderClient(artist.provider.address, artist.provider.uuid);
 	return summonPopUp((props) => {
 		const [name, setName] = createSignal(artist.name);
@@ -39,7 +39,7 @@ export function summonEditArtistPopUp(artist: Artist, setNewArtist: (newArtist: 
 					return;
 				}
 
-				setNewArtist(Artist.fromRawObject(createRes.body, artist.provider));
+				setNewArtist?.(Artist.fromRawObject(createRes.body, artist.provider));
 
 				const curCover = cover();
 				if (curCover === null) {
