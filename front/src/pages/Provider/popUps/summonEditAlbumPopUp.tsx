@@ -14,7 +14,7 @@ import { Album } from "~/class/Album";
 import { AlbumCover } from "~/components/ui/AlbumCard";
 import "./EditAlbumPopUp.scss";
 
-export function summonEditAlbumPopUp(album: Album, setNewAlbum: (newAlbum: Album) => void = () => {}) {
+export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Album) => void) {
 	const providerClient = getProviderClient(album.provider.address, album.provider.uuid);
 	return summonPopUp((props) => {
 		const [name, setName] = createSignal(album.name);
@@ -54,7 +54,7 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum: (newAlbum: Album
 					return;
 				}
 
-				setNewAlbum(Album.fromRawObject(createRes.body, album.provider));
+				setNewAlbum?.(Album.fromRawObject(createRes.body, album.provider));
 
 				const curCover = cover();
 				if (curCover === null) {

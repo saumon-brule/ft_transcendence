@@ -12,11 +12,12 @@ import { Artist } from "~/class/Artist";
 import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { X } from "lucide-solid";
 import { SelectArtistMenu } from "./SelectArtistMenu";
+import { Album } from "~/class/Album";
 
-export function summonAddAlbumPopUp(provider: Provider) {
+export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", onNewAlbum?: (newAlbum: Album) => void) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
 	return summonPopUp((props) => {
-		const [name, setName] = createSignal("");
+		const [name, setName] = createSignal(nameHint);
 		const [cover, setCover] = createSignal<File | null>(null);
 		const [artists, setArtists] = createSignal<Array<Artist>>([]);
 
@@ -52,18 +53,22 @@ export function summonAddAlbumPopUp(provider: Provider) {
 					return;
 				}
 
-				const uuid = createRes.body.uuid;
+				const newAlbum = createRes.body;
+				const uuid = newAlbum.uuid;
 				const curCover = cover();
-				if (!curCover) return;
 
-				const uploadCoverRes = await albumUploadCoverMutation.mutateAsync({ params: { uuid }, body: { file: curCover } });
-				if (uploadCoverRes.status !== 204) {
-					if (uploadCoverRes.status === 413) summonErrorToast(() => "File to large");
-					else if (uploadCoverRes.status === 415) summonErrorToast(() => "File not supported");
-					else summonErrorToast(() => "An error occured during creation of the artist");
-					void albumRemoveMutation.mutate({ params: { uuid } });
-					return;
+				if (curCover) {
+					const uploadCoverRes = await albumUploadCoverMutation.mutateAsync({ params: { uuid }, body: { file: curCover } });
+					if (uploadCoverRes.status !== 204) {
+						if (uploadCoverRes.status === 413) summonErrorToast(() => "File to large");
+						else if (uploadCoverRes.status === 415) summonErrorToast(() => "File not supported");
+						else summonErrorToast(() => "An error occured during creation of the artist");
+						void albumRemoveMutation.mutate({ params: { uuid } });
+						return;
+					}
+					newAlbum.hasCover = true;
 				}
+				onNewAlbum?.(Album.fromRawObject(newAlbum, provider));
 				props.close();
 			} catch (e) {
 				console.error(e);

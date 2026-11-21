@@ -17,6 +17,8 @@ import "./AddMusicPopUp.scss";
 import { SelectAlbumMenu } from "./SelectAlbumMenu";
 import { SelectArtistMenu } from "./SelectArtistMenu";
 import { AlbumCover } from "~/components/ui/AlbumCard";
+import { Music } from "~/class/Music";
+import { summonAddArtistPopUp } from "./summonAddArtistPopUp";
 
 function pictureToFile(pic: IPicture, baseName = "cover"): File {
 	const ext = pic.format.split("/")[1]?.replace("jpeg", "jpg") ?? "bin";
@@ -53,7 +55,7 @@ async function searchRelatedAlbum(album: string | undefined, provider: Provider)
 	else return null;
 }
 
-export async function summonUploadMusicPopUp(musicFile: File, provider: Provider) {
+export async function summonUploadMusicPopUp(musicFile: File, provider: Provider, onNewMusic?: (newMusic: Music) => void) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
 	const metadata = await parseBlob(musicFile, { duration: true });
 
@@ -91,6 +93,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		const [publishedDate, setPublishedDate] = createSignal<Date | null>(releaseDate);
 		const [cover, setCover] = createSignal(fileCover);
 		const [artists, setArtists] = createSignal([...foundArtists.found]);
+		const [notFoundArtists, setNotFoundArtists] = createSignal([...foundArtists.rest]);
 		const [album, setAlbum] = createSignal(foundAlbum);
 
 		const musicCreateMutation = providerClient.client.music.create.createMutation();
@@ -98,9 +101,15 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		const musicUploadCoverMutation = providerClient.client.music.uploadCover.createMutation();
 		const musicRemoveMutation = providerClient.client.music.remove.createMutation();
 
+		function addArtistFromRest(artist: Artist, restIndex: number) {
+			setArtists([...artists(), artist]);
+			setNotFoundArtists((prev) => prev.filter((_, i) => i !== restIndex));
+		}
+
 		function addArtist(artist: Artist) {
 			setArtists([...artists(), artist]);
 		}
+
 		function removeArtist(artist: Artist) {
 			setArtists([...artists().filter((a) => a.uuid !== artist.uuid)]);
 		}
@@ -129,7 +138,8 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 					return;
 				}
 
-				const uuid = createRes.body.uuid;
+				const newMusic = createRes.body;
+				const uuid = newMusic.uuid;
 				const uploadAudioRes = await musicUploadAudioMutation.mutateAsync({ params: { uuid }, body: { file: musicFile } });
 				if (uploadAudioRes.status !== 204) {
 					if (uploadAudioRes.status === 413) summonErrorToast(() => "File to large");
@@ -141,15 +151,18 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 
 				const curCover = cover();
 
-				if (!curCover) return;
-				const uploadCoverRes = await musicUploadCoverMutation.mutateAsync({ params: { uuid }, body: { file: curCover } });
-				if (uploadCoverRes.status !== 204) {
-					if (uploadCoverRes.status === 413) summonErrorToast(() => "File to large");
-					else if (uploadCoverRes.status === 415) summonErrorToast(() => "File not supported");
-					else summonErrorToast(() => "An error occured during creation of the music");
-					void musicRemoveMutation.mutate({ params: { uuid } });
-					return;
+				if (curCover) {
+					const uploadCoverRes = await musicUploadCoverMutation.mutateAsync({ params: { uuid }, body: { file: curCover } });
+					if (uploadCoverRes.status !== 204) {
+						if (uploadCoverRes.status === 413) summonErrorToast(() => "File to large");
+						else if (uploadCoverRes.status === 415) summonErrorToast(() => "File not supported");
+						else summonErrorToast(() => "An error occured during creation of the music");
+						void musicRemoveMutation.mutate({ params: { uuid } });
+						return;
+					}
+					newMusic.hasCover = true;
 				}
+				onNewMusic?.(Music.fromRawObject(newMusic, provider));
 				props.close();
 			} catch (e) {
 				console.error(e);
@@ -200,11 +213,11 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 							<Button icon variant="danger" onClick={() => removeArtist(artist)}><X size={18}/></Button>
 						</div>}
 					</For>
-					<For each={foundArtists.rest} >
-						{(artistName) => <div class="artist">
+					<For each={notFoundArtists()} >
+						{(artistName, i) => <div class="artist">
 							<img src={DEFAULT_ARTIST} alt="artist avatar"/>
 							<span>{artistName}</span>
-							<Button icon onClick={() => {}}><Plus size={18}/></Button>
+							<Button type="button" icon onClick={() => summonAddArtistPopUp(provider, artistName, (artist) => addArtistFromRest(artist, i()))}><Plus size={18}/></Button>
 						</div>}
 					</For>
 				</div>

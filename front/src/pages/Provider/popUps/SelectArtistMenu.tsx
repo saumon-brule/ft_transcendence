@@ -8,6 +8,7 @@ import { useProviderArtistsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Artist } from "~/class/Artist";
 import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Provider } from "@flex/shared";
+import { summonAddArtistPopUp } from "./summonAddArtistPopUp";
 import "./SelectArtistMenu.scss";
 
 export function SelectArtistMenu(props: { provider: Provider; exclude?: Artist[]; addArtist: (artist: Artist) => void }) {
@@ -35,7 +36,7 @@ function SelectArtistContent(props: { provider: Provider; addArtist: (artist: Ar
 			<Search class="search-icon" size={15}/>
 			<TextInput value={searchQuery()} placeholder="Search artist" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 		</Form>
-		<Button type="button" size="sm" variant="text" class="subtext white-variant">New artist</Button>
+		<Button type="button" size="sm" variant="text" class="subtext white-variant" onClick={() => summonAddArtistPopUp(props.provider, "", props.addArtist)}>New artist</Button>
 		<Show when={artists()?.artists} keyed>
 			{(artists) => <For each={artists}>
 				{(artist) => <button class="artist-menu-card" type="button" role="menuitem" onClick={() => props.addArtist(artist)}>
