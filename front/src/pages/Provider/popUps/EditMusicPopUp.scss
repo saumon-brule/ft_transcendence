@@ -10,6 +10,9 @@
 
 		.edit-music-cover-box {
 			width: 35%;
+			position: relative;
+			height: fit-content;
+			line-height: 0;
 
 			& > img {
 				width: 100%;
@@ -17,6 +20,14 @@
 				object-fit: cover;
 				background-color: black;
 				border-radius: 5px;
+			}
+
+			> button {
+				position:absolute;
+				top: 100%;
+				left: 100%;
+				border-radius: 1000px;
+				transform: translate(-50%, -50%);
 			}
 		}
 

@@ -107,10 +107,10 @@ export function summonEditMusicPopUp(music: Music, setNewMusic: (newMusic: Music
 						<img src={coverPreviewUrl() ?? DEFAULT_COVER} onClick={() => fileInputRef.click()} />
 					</Show>
 					<Show when={(() => { const curCover = cover(); return curCover ?? (curCover === undefined && music.hasCover); })()} >
-						<button type="button" onClick={() => setCover(null)} class="remove-cover-button"><X/></button>
+						<Button icon size="sm" variant="ghost" type="button" onClick={() => setCover(null)} class="remove-cover-button"><X/></Button>
 					</Show>
 					<Show when={cover() !== undefined} >
-						<button onClick={() => setCover(undefined)} ><Undo2/></button>
+						<Button icon size="sm" variant="ghost" onClick={() => setCover(undefined)} ><Undo2/></Button>
 					</Show>
 				</div>
 				<div class="edit-music-details">

@@ -96,10 +96,10 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum: (newAlbum: Album
 						<img src={coverPreviewUrl() ?? DEFAULT_ALBUM} onClick={() => fileInputRef.click()}/>
 					</Show>
 					<Show when={cover() === undefined && album.hasCover} >
-						<button type="button" onClick={() => setCover(null)} class="remove-cover-button"><X/></button>
+						<Button icon size="sm" variant="ghost" type="button" onClick={() => setCover(null)} class="remove-cover-button"><X size={20}/></Button>
 					</Show>
 					<Show when={cover() !== undefined} >
-						<button onClick={() => setCover(undefined)} ><Undo2/></button>
+						<Button icon size="sm" variant="ghost" onClick={() => setCover(undefined)} ><Undo2 size={20}/></Button>
 					</Show>
 				</div>
 				<div class="edit-album-details">
