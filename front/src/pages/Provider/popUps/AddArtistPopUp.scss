@@ -3,15 +3,19 @@
 		width: 100%;
 		display: flex;
 		gap: 1rem;
+		flex-direction: column;
+		align-items: center;
 
 		.create-artist-avatar-box {
-			width: 25%;
+			width: 30%;
 
 			& > img {
 				border-radius: 999999px;
 				aspect-ratio: 1/1;
-				object-fit: contain;
+				object-fit: cover;
 				background-color: black;
+				width: 100%;
+				cursor: pointer;
 			}
 		}
 
