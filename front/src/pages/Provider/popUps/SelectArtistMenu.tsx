@@ -10,21 +10,21 @@ import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Provider } from "@flex/shared";
 import "./SelectArtistMenu.scss";
 
-export function SelectArtistMenu(props: { provider: Provider; addArtist: (artist: Artist) => void }) {
+export function SelectArtistMenu(props: { provider: Provider; exclude?: Artist[]; addArtist: (artist: Artist) => void }) {
 	return <Menu
 		align="left"
 		class="set-artist-menu"
 		trigger={<Button class="add-artist" type="button" variant="text" icon><Plus size={40}/></Button>}
 	>
-		{(close) => <SelectArtistContent provider={props.provider} addArtist={props.addArtist} onClose={close} />}
+		{(close) => <SelectArtistContent provider={props.provider} exclude={props.exclude} addArtist={props.addArtist} onClose={close} />}
 	</Menu>;
 }
 
-function SelectArtistContent(props: { provider: Provider; addArtist: (artist: Artist) => void; onClose: () => void }) {
+function SelectArtistContent(props: { provider: Provider; addArtist: (artist: Artist) => void; exclude?: Artist[]; onClose: () => void }) {
 	const [searchQuery, setSearchQuery] = createSignal("");
 	const artistsQuery = useProviderArtistsInfiniteQuery(() => props.provider, searchQuery);
 	const artists = createMemo(() => artistsQuery.data && {
-		artists: artistsQuery.data.pages.flatMap((page) => page.artists),
+		artists: artistsQuery.data.pages.flatMap((page) => page.artists).filter((a) => !props.exclude?.map((am) => am.uuid).includes(a.uuid)),
 		total: artistsQuery.data.pages[0]?.total ?? 0,
 	});
 
