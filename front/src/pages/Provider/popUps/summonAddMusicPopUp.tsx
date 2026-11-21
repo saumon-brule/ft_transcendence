@@ -7,16 +7,16 @@ import { createMemo, createSignal, For, onCleanup, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import { getProviderClient } from "~/api/providerClients";
 import { Provider } from "@flex/shared";
-import { Plus, Trash, X } from "lucide-solid";
+import { Plus, X } from "lucide-solid";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { Artist } from "~/class/Artist";
 import { ArtistItemDto } from "node_modules/@flex/shared/dist/contracts/provider/schemas/items.schema";
-import ArtistCard, { ArtistAvatar } from "~/components/ui/ArtistCard";
+import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Album } from "~/class/Album";
-import AlbumCard, { AlbumCover } from "~/components/ui/AlbumCard";
 import "./AddMusicPopUp.scss";
 import { SelectAlbumMenu } from "./SelectAlbumMenu";
 import { SelectArtistMenu } from "./SelectArtistMenu";
+import { AlbumCover } from "~/components/ui/AlbumCard";
 
 function pictureToFile(pic: IPicture, baseName = "cover"): File {
 	const ext = pic.format.split("/")[1]?.replace("jpeg", "jpg") ?? "bin";
@@ -33,7 +33,7 @@ async function searchRelatedArtists(artists: Array<string>, provider: Provider):
 	responses.forEach((response, i) => {
 		const rawArtist: ArtistItemDto | null = (response.status === 200 && response.body.artists[0]) || null;
 		if (rawArtist) {
-			result.found.push(Artist.fromRawObject(rawArtist, provider.address, provider.uuid));
+			result.found.push(Artist.fromRawObject(rawArtist, provider));
 		} else {
 			result.rest.push(artists[i]);
 		}
@@ -49,7 +49,7 @@ async function searchRelatedAlbum(album: string | undefined, provider: Provider)
 	});
 
 	const rawAlbum = (response.status === 200 && response.body.albums[0]) || null;
-	if (rawAlbum) return Album.fromRawObject(rawAlbum, provider.address, provider.uuid);
+	if (rawAlbum) return Album.fromRawObject(rawAlbum, provider);
 	else return null;
 }
 

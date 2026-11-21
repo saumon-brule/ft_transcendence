@@ -96,14 +96,14 @@ export default function Search() {
 			if (organizedData.albums[0]) {
 				organizedData.best = {
 					item: organizedData.albums[0],
-					providerName: organizedData.providers.find((p) => p.uuid === organizedData.albums[0].providerUuid)?.name ?? "",
+					providerName: organizedData.providers.find((p) => p.uuid === organizedData.albums[0].provider.uuid)?.name ?? "",
 				};
 			}
 		} else if (bestScores.artists > 0) {
 			if (organizedData.artists[0]) {
 				organizedData.best = {
 					item: organizedData.artists[0],
-					providerName: organizedData.providers.find((p) => p.uuid === organizedData.artists[0].providerUuid)?.name ?? "",
+					providerName: organizedData.providers.find((p) => p.uuid === organizedData.artists[0].provider.uuid)?.name ?? "",
 				};
 			}
 		}

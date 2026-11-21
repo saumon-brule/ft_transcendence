@@ -36,7 +36,7 @@ export default function ProviderArtistHeader(props: ProviderArtistHeaderProps) {
 		if (shuffle) audioManager.shuffle();
 		audioManager.position = 0;
 		audioManager.play();
-		history.artist.listen(Artist.fromRawObject(props.artist, provider.address, provider.uuid));
+		history.artist.listen(Artist.fromRawObject(props.artist, provider));
 	}
 
 	function getAvatar(artist: ProviderArtistQueryBody) {

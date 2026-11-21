@@ -41,11 +41,11 @@ export const useProviderInfoQuery = (provider: () => Provider) => {
 				},
 				artist: {
 					...response.body.artist,
-					artists: response.body.artist.artists.map((artist) => Artist.fromRawObject(artist, provider().address, provider().uuid)),
+					artists: response.body.artist.artists.map((artist) => Artist.fromRawObject(artist, provider())),
 				},
 				album: {
 					...response.body.album,
-					albums: response.body.album.albums.map((album) => Album.fromRawObject(album, provider().address, provider().uuid)),
+					albums: response.body.album.albums.map((album) => Album.fromRawObject(album, provider())),
 				},
 			},
 		}),
@@ -123,7 +123,7 @@ export const useProviderAlbumsInfiniteQuery = (provider: () => Provider, search:
 			...data,
 			pages: data.pages.map((page) => ({
 				...page,
-				albums: page.albums.map((album) => Album.fromRawObject(album, provider().address, provider().uuid)),
+				albums: page.albums.map((album) => Album.fromRawObject(album, provider())),
 			})),
 		}),
 	});
@@ -159,7 +159,7 @@ export const useProviderArtistsInfiniteQuery = (provider: () => Provider, search
 			...data,
 			pages: data.pages.map((page) => ({
 				...page,
-				artists: page.artists.map((artist) => Artist.fromRawObject(artist, provider().address, provider().uuid)),
+				artists: page.artists.map((artist) => Artist.fromRawObject(artist, provider())),
 			})),
 		}),
 	});
@@ -195,7 +195,7 @@ export const useProviderAlbumQuery = (provider: () => Provider, albumUUID: () =>
 			...response,
 			body: {
 				...response.body,
-				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, provider().address, provider().uuid)),
+				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, provider())),
 			},
 		}),
 	});
@@ -212,8 +212,8 @@ export type SearchFilters = {
 	dateBefore?: string;
 };
 
-const providerSearchOptions = (providerInfo: Provider, searchTerm: string, filters: SearchFilters) => {
-	const providerClient = getProviderClient(providerInfo.address, providerInfo.uuid);
+const providerSearchOptions = (provider: Provider, searchTerm: string, filters: SearchFilters) => {
+	const providerClient = getProviderClient(provider.address, provider.uuid);
 	const { dateAfter, dateBefore, ...textFilters } = filters;
 	const query = {
 		query: searchTerm || undefined,
@@ -223,7 +223,7 @@ const providerSearchOptions = (providerInfo: Provider, searchTerm: string, filte
 	};
 	return {
 		queryKey: () => providerClient.keys.search.search([searchTerm, JSON.stringify(filters)]),
-		enabled: providerInfo.address !== "",
+		enabled: provider.address !== "",
 		queryFn: async () => {
 			const res = await providerClient.client.search.search.query({ query });
 			if (res.status !== 200) throw new Error(`Provider search failed with status ${res.status}`);
@@ -234,9 +234,9 @@ const providerSearchOptions = (providerInfo: Provider, searchTerm: string, filte
 			...response,
 			body: {
 				...response.body,
-				musics: response.body.musics.map((music) => Music.fromRawObject(music, providerInfo)),
-				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, providerInfo.address, providerInfo.uuid)),
-				albums: response.body.albums.map((album) => Album.fromRawObject(album, providerInfo.address, providerInfo.uuid)),
+				musics: response.body.musics.map((music) => Music.fromRawObject(music, provider)),
+				artists: response.body.artists.map((artist) => Artist.fromRawObject(artist, provider)),
+				albums: response.body.albums.map((album) => Album.fromRawObject(album, provider)),
 			},
 		}),
 	};

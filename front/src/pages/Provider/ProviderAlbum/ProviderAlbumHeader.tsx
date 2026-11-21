@@ -36,7 +36,7 @@ export default function ProviderAlbumHeader(props: ProviderAlbumHeaderProps) {
 		if (shuffle) audioManager.shuffle();
 		audioManager.position = 0;
 		audioManager.play();
-		history.album.listen(Album.fromRawObject(props.album, provider.address, provider.uuid));
+		history.album.listen(Album.fromRawObject(props.album, provider));
 	}
 
 	function getCover(album: ProviderAlbumQueryBody) {
