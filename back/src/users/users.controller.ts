@@ -72,6 +72,15 @@ export class UsersController {
 		}));
 	}
 
+	@TsRestHandler(usersContract.regenerateApiKey)
+	@UseGuards(JwtAuthGuard)
+	public regenerateApiKey(@CurrentUser() authUser: AuthUser) {
+		return tsRestHandler(usersContract.regenerateApiKey, async () => ({
+			status: 200,
+			body: { apiKey: await this.usersService.regenerateApiKey(authUser.uuid) },
+		}));
+	}
+
 	@TsRestHandler(usersContract.getUser)
 	@UseGuards(JwtAuthGuard)
 	public getUser(@CurrentUser() authUser: AuthUser) {
