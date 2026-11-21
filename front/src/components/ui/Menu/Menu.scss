@@ -25,6 +25,11 @@
 		left: 0;
 	}
 
+	&.up {
+		top: auto;
+		bottom: calc(100% + 4px);
+	}
+
 	.menu-content {
 		display: flex;
 		flex-direction: column;

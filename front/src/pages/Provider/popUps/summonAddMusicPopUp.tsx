@@ -1,20 +1,22 @@
 import { summonPopUp } from "~/components/ui/Overlay";
 import { IPicture, parseBlob, selectCover } from "music-metadata";
-import { DEFAULT_COVER } from "~/utils/imageFallback";
+import { DEFAULT_ARTIST, DEFAULT_COVER } from "~/utils/imageFallback";
 import TextInput from "~/components/inputs/TextInput";
 import Button from "~/components/inputs/Button";
 import { createMemo, createSignal, For, onCleanup, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import { getProviderClient } from "~/api/providerClients";
 import { Provider } from "@flex/shared";
-import { Plus } from "lucide-solid";
+import { Plus, Trash, X } from "lucide-solid";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { Artist } from "~/class/Artist";
 import { ArtistItemDto } from "node_modules/@flex/shared/dist/contracts/provider/schemas/items.schema";
-import ArtistCard from "~/components/ui/ArtistCard";
+import ArtistCard, { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Album } from "~/class/Album";
-import AlbumCard from "~/components/ui/AlbumCard";
+import AlbumCard, { AlbumCover } from "~/components/ui/AlbumCard";
 import "./AddMusicPopUp.scss";
+import { SelectAlbumMenu } from "./SelectAlbumMenu";
+import { SelectArtistMenu } from "./SelectArtistMenu";
 
 function pictureToFile(pic: IPicture, baseName = "cover"): File {
 	const ext = pic.format.split("/")[1]?.replace("jpeg", "jpg") ?? "bin";
@@ -96,6 +98,13 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		const musicUploadCoverMutation = providerClient.client.music.uploadCover.createMutation();
 		const musicRemoveMutation = providerClient.client.music.remove.createMutation();
 
+		function addArtist(artist: Artist) {
+			setArtists([...artists(), artist]);
+		}
+		function removeArtist(artist: Artist) {
+			setArtists([...artists().filter((a) => a.uuid !== artist.uuid)]);
+		}
+
 		const coverPpreviewUrl = createMemo(() => {
 			const f = cover();
 			if (!f) return null;
@@ -166,26 +175,38 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 				<div class="upload-music-details">
 					<TextInput placeholder="Name" class="upload-music-music-title" onChange={(a) => setTitle(a.currentTarget.value)} value={title()} />
 					<TextInput type="date" size="sm" onInput={(e) => setPublishedDate(e.currentTarget.value ? new Date(e.currentTarget.value) : null)}/>
-					<div class="upload-music-album">
-						<h3>album</h3>
-						<Show when={album()} fallback={<button type="button">select album</button>}>
-							{(album) => <AlbumCard album={album()}/>}
-						</Show>
-					</div>
+					<Show when={album()} keyed fallback={<div class="upload-music-album no-album"><SelectAlbumMenu provider={provider} setAlbum={setAlbum}/></div>}>
+						{(album) => <div class="upload-music-album has-album">
+							<div class="infos">
+								<AlbumCover album={album}/>
+								<div class="title">{album.name}</div>
+							</div>
+							<div class="actions">
+								<Button icon variant="danger" onClick={() => setAlbum(null)}><X size={18}/></Button>
+							</div>
+						</div>}
+					</Show>
 				</div>
 			</div>
-			<h3>Artists</h3>
 			<div class="upload-music-music-artists" >
-				<For each={artists()} >
-					{(artist) => <div>
-						<ArtistCard artist={artist}/>
-					</div>}
-				</For>
-				<For each={foundArtists.rest} >
-					{(artistName) => <div>{artistName}</div>}
-				</For>
-				<div>
-					<button type="button"><Plus/>add artist</button>
+				<div class="artist">
+					<SelectArtistMenu provider={provider} addArtist={addArtist}/>
+				</div>
+				<div class="music-artists-scrollable">
+					<For each={artists()} >
+						{(artist) => <div class="artist">
+							<ArtistAvatar artist={artist}/>
+							<span>{artist.name}</span>
+							<Button icon variant="danger" onClick={() => removeArtist(artist)}><X size={18}/></Button>
+						</div>}
+					</For>
+					<For each={foundArtists.rest} >
+						{(artistName) => <div class="artist">
+							<img src={DEFAULT_ARTIST} alt="artist avatar"/>
+							<span>{artistName}</span>
+							<Button icon onClick={() => {}}><Plus size={18}/></Button>
+						</div>}
+					</For>
 				</div>
 			</div>
 			<div class="upload-music-pop-up-controls">
