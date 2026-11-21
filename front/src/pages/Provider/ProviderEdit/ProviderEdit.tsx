@@ -1,5 +1,5 @@
 import { useSearchParams } from "@solidjs/router";
-import { Match, Show, Switch } from "solid-js";
+import { createMemo, Match, Show, Switch } from "solid-js";
 import { useProviderInfoQuery } from "~/api/queryHooks/providerInfo";
 import { useTabParam } from "~/components/ui/Tabs/useTabParam";
 import Tabs from "~/components/ui/Tabs/Tabs";
@@ -44,10 +44,18 @@ export default function ProviderEdit() {
 		return providerInfoInfo.member.isOwner || providerInfoInfo.member.permissions.includes(perm);
 	}
 
+	const tabExclude = createMemo(() => {
+		let include: Tab[] = [];
+		if (hasPerm("MANAGE_CATALOG")) include = [...include, "Albums", "Artists", "Musics"];
+		if (hasPerm("MANAGE_MEMBERS")) include = [...include, "Members"];
+		if (hasPerm("ADMIN")) include = [...include, "Roles"];
+		return TABS.filter((t) => !include.includes(t));
+	});
+
 	return <div class="page" id="provider-edit">
 		<ProviderEditHeader providerInfo={providerInfoQuery.data?.body} />
 		<Show when={providerInfoQuery.data?.body} fallback={<LoadingSplash/>}>
-			<Tabs tabs={TABS} value={tab()} onChange={setTab} />
+			<Tabs tabs={TABS} value={tab()} exclude={tabExclude()} onChange={setTab} />
 			<div class="provider-controls">
 				<ProviderSearchBar value={search()} onSearch={setSearch} />
 				<Switch>

@@ -1,6 +1,7 @@
 import { createMemo, createResource, For, Show } from "solid-js";
 import { getUsersBatch } from "~/api/queryHooks/userProfile";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
+import { useProfile } from "~/components/guards/ProfileGate";
 import Button from "~/components/inputs/Button";
 import "./ManageMembers.scss";
 import { A } from "@solidjs/router";
@@ -8,6 +9,7 @@ import { RefreshCcw, X } from "lucide-solid";
 import { textToCSS } from "~/utils/tex2col";
 import { providerMemberRemoveRole, providerRemoveMember, providerUserAccessDecide, useProviderMembersQuery, useProviderPendingMembersQuery } from "~/api/queryHooks/providerManageMembers";
 import { AddRoleMenu } from "./AddRoleMenu";
+import { useProviderInfoInfo } from "~/components/guards/EditPermissionGuard";
 
 type PendingUser = {
 	status: "PENDING" | "APPROVED" | "REJECTED";
@@ -122,6 +124,8 @@ function PendingMemberCard(props: { member: PendingUser }) {
 
 function ProviderMemberCard(props: { member: ProviderUser }) {
 	const provider = useProvider();
+	const providerInfo = useProviderInfoInfo();
+	const me = useProfile();
 
 	async function removeMember() {
 		await providerRemoveMember(provider, props.member.uuid);
@@ -140,14 +144,20 @@ function ProviderMemberCard(props: { member: ProviderUser }) {
 				</Show>
 				<For each={props.member.roles}>{(role) => <div class="role" style={{ "--role-color": textToCSS(role.name) }}>
 					<span>{role.name}</span>
-					<Button variant="text" icon onClick={() => void removeRole(role.uuid)}><X size={14}/></Button>
+					<Show when={providerInfo.member.isOwner || providerInfo.member.permissions.includes("ADMIN")}>
+						<Button variant="text" icon onClick={() => void removeRole(role.uuid)}><X size={14}/></Button>
+					</Show>
 				</div>}</For>
-				<AddRoleMenu user={props.member}/>
+				<Show when={providerInfo.member.isOwner || providerInfo.member.permissions.includes("ADMIN")}>
+					<AddRoleMenu user={props.member}/>
+				</Show>
 			</div>
 		</div>
 		<div class="actions">
 			<Show when={!props.member.isOwner} fallback={<div class="owner">Owner</div>}>
-				<Button variant="danger" onClick={() => void removeMember()}>Remove</Button>
+				<Show when={props.member.uuid !== me().uuid} fallback={<div class="owner">Myself</div>}>
+					<Button variant="danger" onClick={() => void removeMember()}>Remove</Button>
+				</Show>
 			</Show>
 		</div>
 	</div>;

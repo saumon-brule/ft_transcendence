@@ -5,7 +5,7 @@ import TextInput from "~/components/inputs/TextInput";
 import { authActions } from "~/store/auth.store";
 import type { FormEmbeddedComponentRef } from "~/types/ComponentRef";
 import { useMatch, useNavigate, useSearchParams } from "@solidjs/router";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 
 import "./Header.scss";
 import { hasUnreadMessages } from "~/store/messages.store";
@@ -13,7 +13,7 @@ import { Tab } from "~/pages/Search/Search";
 import { isSidebarOpen, sidebarActions } from "~/store/sidebar.store";
 
 export default function Header() {
-	const meProfileQuery = useMeProfileQuery();
+	const me = useProfile();
 	const navigate = useNavigate();
 
 	const [isMenuOpen, setIsMenuOpen] = createSignal(false);
@@ -25,7 +25,7 @@ export default function Header() {
 	let searchInput!: FormEmbeddedComponentRef<HTMLInputElement>;
 	let profileMenu!: HTMLDivElement;
 
-	const hasFriendNotification = createMemo(() => (meProfileQuery.data?.body.friendRequests.length ?? 0) > 0 || hasUnreadMessages());
+	const hasFriendNotification = createMemo(() => me().friendRequests.length > 0 || hasUnreadMessages());
 
 	function handleDocumentClick(event: MouseEvent) {
 		if (profileMenu && !profileMenu.contains(event.target as Node)) {
@@ -116,23 +116,17 @@ export default function Header() {
 					aria-haspopup="menu"
 					onClick={() => setIsMenuOpen((open) => !open)}
 				>
-					<Show when={meProfileQuery.data ? meProfileQuery.data.body : undefined}>
-						{(user) => <>
-							<img class="profile-avatar" src={user().avatarUrl}/>
-							<span class="profile-username">{user().username}</span>
-						</>}
-					</Show>
+					<img class="profile-avatar" src={me().avatarUrl}/>
+					<span class="profile-username">{me().username}</span>
 					<ChevronDown class="profile-chevron" size={16} aria-hidden="true" />
 				</button>
 
 				<Show when={isMenuOpen()}>
 					<div class="profile-dropdown" role="menu">
-						<Show when={meProfileQuery.data ? meProfileQuery.data.body : undefined}>
-							{(user) => <button type="button" role="menuitem" onClick={() => { navigate(`/user/${user().uuid}`); setIsMenuOpen(false); }}>
-								<User size={17} aria-hidden="true" />
-								<span>Profile</span>
-							</button>}
-						</Show>
+						<button type="button" role="menuitem" onClick={() => { navigate(`/user/${me().uuid}`); setIsMenuOpen(false); }}>
+							<User size={17} aria-hidden="true" />
+							<span>Profile</span>
+						</button>
 						<button type="button" role="menuitem" onClick={() => { navigate("/friends"); setIsMenuOpen(false); }}>
 							<span class="icon-badge" classList={{ notification: hasFriendNotification() }}>
 								<Users size={17} aria-hidden="true" />

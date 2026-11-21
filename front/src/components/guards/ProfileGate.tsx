@@ -1,7 +1,7 @@
-import { createEffect, JSXElement, Match, Switch } from "solid-js";
+import { Accessor, createContext, createEffect, JSXElement, Match, Switch, useContext } from "solid-js";
 import Button from "~/components/inputs/Button";
 import DialogPage from "~/components/ui/DialogPage";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { MeProfile, useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import { useTranslation } from "~/i18n/context";
 import LoadingSplash from "~/pages/Loading/LoadingSplash";
 import { createSocket } from "~/api/socket";
@@ -11,6 +11,14 @@ import { usePresenceEvents } from "~/api/socketHooks/usePresenceEvents";
 import { useFriendEvents } from "~/api/socketHooks/useFriendEvents";
 import { useTokenRefresh } from "~/api/socketHooks/useTokenRefresh";
 import { useReconnectSync } from "~/api/socketHooks/useReconnectSync";
+
+const ProfileContext = createContext<Accessor<MeProfile>>();
+
+export function useProfile() {
+	const ctx = useContext(ProfileContext);
+	if (!ctx) throw new Error("useProfile should only be used with ProfileGate parent.");
+	return ctx;
+}
 
 export default function ProfileGate(props: { children: JSXElement }) {
 	const profile = useMeProfileQuery();
@@ -32,10 +40,13 @@ export default function ProfileGate(props: { children: JSXElement }) {
 	useTokenRefresh(socket);
 
 	return <Switch fallback={<LoadingSplash />}>
-		<Match when={profile.data}>
-			<SocketContext.Provider value={{ socket, socketConnected }}>
-				{props.children}
-			</SocketContext.Provider>
+		<Match when={profile.data}>{(data) => (
+			<ProfileContext.Provider value={() => data().body}>
+				<SocketContext.Provider value={{ socket, socketConnected }}>
+					{props.children}
+				</SocketContext.Provider>
+			</ProfileContext.Provider>
+		)}
 		</Match>
 		<Match when={profile.isError}>
 			<DialogPage>

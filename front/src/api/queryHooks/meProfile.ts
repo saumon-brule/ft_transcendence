@@ -1,6 +1,8 @@
 import { env } from "~/env";
 import { client, queryKeys } from "../client";
 
+export type MeProfile = NonNullable<ReturnType<typeof useMeProfileQuery>["data"]>["body"];
+
 export const useMeProfileQuery = () => client.users.me.createQuery(queryKeys.users.me, {}, {
 	staleTime: 30_000,
 

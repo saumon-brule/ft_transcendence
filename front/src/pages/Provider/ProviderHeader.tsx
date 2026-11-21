@@ -47,16 +47,18 @@ export default function ProviderHeader(props: ProviderHeaderProps) {
 				</div>
 			</>}</Show>
 		</div>
-		<Show when={props.status === "success" && (info.data?.body.member.isOwner === true || info.data?.body.member.permissions.length)}>
-			<Button onClick={() => navigate(`/provider/${providerBack.uuid}/edit`)}><Pencil/>Edit</Button>
-		</Show>
-		<Show when={props.status === "success" && info.data?.body.member.isOwner === false}>
-			<Button disabled={leaveMutation.isPending || requestQuery.isLoading} variant="danger" onClick={() => summonLeaveProviderPopUpConfirmation(leaveMutation, providerBack)} ><DoorOpen/>Leave Provider</Button>
-		</Show>
-		<Show when={props.status === "forbidden" && info.data?.body}>
-			<Button disabled={pending() || joinMutation.isPending || requestQuery.isLoading} onClick={() => joinMutation.mutate(providerBack)}>
-				{pending() ? "Pending request" : info.data?.body.visibility === "PUBLIC" ? "Join provider" : "Request access"}
-			</Button>
-		</Show>
+		<div class="action-buttons">
+			<Show when={props.status === "success" && (info.data?.body.member.isOwner === true || info.data?.body.member.permissions.length)}>
+				<Button onClick={() => navigate(`/provider/${providerBack.uuid}/edit`)}><Pencil/>Edit</Button>
+			</Show>
+			<Show when={props.status === "success" && info.data?.body.member.isOwner === false}>
+				<Button disabled={leaveMutation.isPending || requestQuery.isLoading} variant="danger" onClick={() => summonLeaveProviderPopUpConfirmation(leaveMutation, providerBack)} ><DoorOpen/>Leave Provider</Button>
+			</Show>
+			<Show when={props.status === "forbidden" && info.data?.body}>
+				<Button disabled={pending() || joinMutation.isPending || requestQuery.isLoading} onClick={() => joinMutation.mutate(providerBack)}>
+					{pending() ? "Pending request" : info.data?.body.visibility === "PUBLIC" ? "Join provider" : "Request access"}
+				</Button>
+			</Show>
+		</div>
 	</header>;
 }
