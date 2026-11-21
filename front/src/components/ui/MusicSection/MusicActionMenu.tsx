@@ -3,7 +3,7 @@ import { useAudioManagerContext } from "~/components/context/AudioManagerContext
 import { ChevronLeft, ChevronRight, Ellipsis, EighthNote, ListEnd, ListStart, Search, Trash } from "lucide-solid";
 import TextInput from "~/components/inputs/TextInput";
 import Form from "~/components/inputs/Form/Form";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 import { useAddMusicToPlaylistMutation, useRemoveMusicFromPlaylistMutation } from "~/api/queryHooks/playlist";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { Music } from "~/class/Music";
@@ -24,7 +24,7 @@ function MusicActionMenuContent(props: { music: Music; playlist?: PlaylistContex
 	type MusicActionMenus = "main" | "playlist";
 	const audioManager = useAudioManagerContext();
 	const [currentMenu, setCurrentMenu] = createSignal<MusicActionMenus>("main");
-	const meProfileQuery = useMeProfileQuery();
+	const me = useProfile();
 	const [searchQuery, setSearchQuery] = createSignal("");
 	const addMusicToPlaylistMutation = useAddMusicToPlaylistMutation();
 	const removeMusicFromPlaylistMutation = useRemoveMusicFromPlaylistMutation();
@@ -95,12 +95,11 @@ function MusicActionMenuContent(props: { music: Music; playlist?: PlaylistContex
 					<Search class="search-icon" size={15}/>
 					<TextInput value={searchQuery()} placeholder="Search playlist" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 				</Form>
-				<Show when={meProfileQuery.data?.body} keyed>{(meProfile) => <For each={meProfile.ownedPlaylists.filter((p) => p.name.toLowerCase().includes(searchQuery().toLowerCase())).slice(0, 5)}>{(playlist) => <button type="button" role="menuitem" onClick={() => addToPlaylist(playlist.uuid)}>
+				<For each={me().ownedPlaylists.filter((p) => p.name.toLowerCase().includes(searchQuery().toLowerCase())).slice(0, 5)}>{(playlist) => <button type="button" role="menuitem" onClick={() => addToPlaylist(playlist.uuid)}>
 					<img src={playlistCoverUrl(playlist.uuid)} alt="Playlist cover" />
 					<span>{playlist.name}</span>
 				</button>
 				}</For>
-				}</Show>
 			</>
 		</Match>
 	</Switch>;

@@ -2,7 +2,7 @@ import { A, useLocation, useParams } from "@solidjs/router";
 import { createMemo, Match, Show, Switch } from "solid-js";
 import { useProvidersSearchQueries } from "~/api/queryHooks/providerInfo";
 import "./Search.scss";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 import { For } from "solid-js";
 import MusicSection from "~/components/ui/MusicSection/MusicSection";
 import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
@@ -28,11 +28,10 @@ export type Tab = typeof TABS[number];
 
 export default function Search() {
 	const params = useParams<{ search: string }>();
-	const profileQuery = useMeProfileQuery();
+	const me = useProfile();
 
 	const providers = createMemo(() => {
-		const body = profileQuery.data?.body;
-		if (!body) return [];
+		const body = me();
 		const all = [...body.ownedProviders, ...body.connectedProviders];
 		return all.filter((provider, i) => all.findIndex((p) => p.uuid === provider.uuid) === i);
 	});

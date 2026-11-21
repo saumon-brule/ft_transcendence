@@ -2,7 +2,7 @@ import { useParams, useNavigate, A } from "@solidjs/router";
 import { createEffect, For, Show, createMemo } from "solid-js";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import "./Friends.scss";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 import FriendshipActions from "~/components/ui/FriendshipAction/FriendshipActions";
 import { env } from "~/env";
 import { CHAT_MAX_MESSAGE_LENGTH } from "@flex/shared";
@@ -19,10 +19,10 @@ export default function Friends() {
 	const { socket } = useSocketContext();
 	const navigate = useNavigate();
 	const params = useParams<{ uuid?: string }>();
-	const profileQuery = useMeProfileQuery();
+	const me = useProfile();
 	const friend = createMemo(() => {
 		if (params.uuid) {
-			const info = profileQuery.data?.body.friends.find((friend) => friend.uuid === params.uuid) ?? null;
+			const info = me().friends.find((friend) => friend.uuid === params.uuid) ?? null;
 			if (!info) {
 				return null;
 			}
@@ -36,7 +36,7 @@ export default function Friends() {
 
 	let openedFriendUuid: string | undefined;
 	createEffect(() => {
-		if (!profileQuery.data || !params.uuid) {
+		if (!params.uuid) {
 			openedFriendUuid = undefined;
 			return;
 		}
@@ -74,42 +74,40 @@ export default function Friends() {
 
 	return <div class="page" id="friends">
 		<div class="friends-left" classList={{ "no-friend-list": !!friend() }}>
-			<Show when={profileQuery.data} keyed>{(data) => <>
-				<Show when={data.body.friendRequests.length > 0}>
-					<section>
-						<h2>Pending</h2>
-						<div class="friend-list">
-							<For each={data.body.friendRequests}>{(friend) => <div class="friend-card">
-								<div class="friend-info">
-									<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
-									<A href={`/user/${friend.uuid}`} class="white-variant">{friend.username}</A>
-								</div>
-								<div class="friend-actions">
-									<FriendshipActions meUuid={data.body.uuid} targetUuid={friend.uuid} />
-								</div>
-							</div>}</For>
-						</div>
-					</section>
-				</Show>
+			<Show when={me().friendRequests.length > 0}>
 				<section>
-					<h2>Friends</h2>
+					<h2>Pending</h2>
 					<div class="friend-list">
-						<For each={data.body.friends}>{(friend) => <div class="friend-card chat-link" classList={{ active: params.uuid === friend.uuid }}>
-							<A class="friend-card-link" href={`/friends/${friend.uuid}`} aria-label={`Chat with ${friend.username}`} />
+						<For each={me().friendRequests}>{(friend) => <div class="friend-card">
 							<div class="friend-info">
-								<PresenceAvatar uuid={friend.uuid} status={friend.status}>
-									<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
-								</PresenceAvatar>
-								<span class="friend-name">{friend.username}</span>
-								<Show when={hasUnreadMessages(friend.uuid)}><span class="unread-dot" role="img" aria-label="Unread messages" /></Show>
+								<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
+								<A href={`/user/${friend.uuid}`} class="white-variant">{friend.username}</A>
 							</div>
 							<div class="friend-actions">
-								<FriendshipActions meUuid={data.body.uuid} targetUuid={friend.uuid} />
+								<FriendshipActions meUuid={me().uuid} targetUuid={friend.uuid} />
 							</div>
 						</div>}</For>
 					</div>
 				</section>
-			</>}</Show>
+			</Show>
+			<section>
+				<h2>Friends</h2>
+				<div class="friend-list">
+					<For each={me().friends}>{(friend) => <div class="friend-card chat-link" classList={{ active: params.uuid === friend.uuid }}>
+						<A class="friend-card-link" href={`/friends/${friend.uuid}`} aria-label={`Chat with ${friend.username}`} />
+						<div class="friend-info">
+							<PresenceAvatar uuid={friend.uuid} status={friend.status}>
+								<img class="friend-avatar" src={`${env.VITE_API_URL}/users/${friend.uuid}/avatar`} alt={`${friend.username}'s avatar`} />
+							</PresenceAvatar>
+							<span class="friend-name">{friend.username}</span>
+							<Show when={hasUnreadMessages(friend.uuid)}><span class="unread-dot" role="img" aria-label="Unread messages" /></Show>
+						</div>
+						<div class="friend-actions">
+							<FriendshipActions meUuid={me().uuid} targetUuid={friend.uuid} />
+						</div>
+					</div>}</For>
+				</div>
+			</section>
 		</div>
 		<div class="friends-right" classList={{ "no-chat-box": !friend() }}>
 			<div class="back">

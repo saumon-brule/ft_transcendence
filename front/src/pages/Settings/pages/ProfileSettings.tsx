@@ -3,7 +3,7 @@ import { /* createSignal,*/ JSX, onCleanup, Show } from "solid-js";
 import { client, queryKeys } from "~/api/client";
 import { queryClient } from "~/api/queryClient";
 import { ClientInferResponses } from "@ts-rest/core";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 import Button from "~/components/inputs/Button";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { useTranslation } from "~/i18n/context";
@@ -23,7 +23,7 @@ function toDate(value: Date | string): Date {
 }
 
 export default function ProfileSettings() {
-	const profileQuery = useMeProfileQuery();
+	const user = useProfile();
 	const updatePictureMutation = client.users.uploadAvatar.createMutation();
 	const deletePictureMutation = client.users.deleteAvatar.createMutation();
 	const { t } = useTranslation();
@@ -92,42 +92,40 @@ export default function ProfileSettings() {
 
 
 	return <main class="profile-settings">
-		<Show when={profileQuery.data?.body} keyed>
-			{(user) => <div class="profile-settings-content">
-				{/* <img src={user().avatarUrl} alt="Profile picture" />*/}
-				<div class="profile-picture-container">
-					<div class="profile-picture" style={{ "background-image": `url(${user.avatarUrl}` }}>
-						<label for="avatar-upload">
-							<span>Change</span>
-						</label>
-						<input type="file" id="avatar-upload" accept="image/*" onChange={updatePicture} />
-					</div>
-					<button type="button" onClick={removePP} class="remove-avatar-button"><X/></button>
+		<div class="profile-settings-content">
+			{/* <img src={user().avatarUrl} alt="Profile picture" />*/}
+			<div class="profile-picture-container">
+				<div class="profile-picture" style={{ "background-image": `url(${user().avatarUrl}` }}>
+					<label for="avatar-upload">
+						<span>Change</span>
+					</label>
+					<input type="file" id="avatar-upload" accept="image/*" onChange={updatePicture} />
 				</div>
-				<div class="header-info">
-					<div class="username">
-						<h2>
-							{user.username}
-						</h2>
-						<Button size="sm" onClick={(e) => {
-							e.preventDefault();
-							usernameEditPopUpControls = summonUsernameEditPopUp(() => usernameEditPopUpControls = null);
-						}} >
-							{t("pages.settings.edit")}
-						</Button>
-					</div>
-					<div class="user-stats">
-						<div class="stat">Member since {user.createdAt.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</div>
-						<div class="separator" />
-						<div class="stat">{user._count.ownedProviders} owned providers</div>
-						<div class="separator" />
-						<div class="stat">{user._count.ownedPlaylists} playlists</div>
-					</div>
-					<Show when={user.currentlyListening && user.listeningUntil && toDate(user.listeningUntil) > new Date()}>
-						<div class="listening"><MusicBars />Listening to « {user.currentlyListening!.title} » - {user.currentlyListening!.artist}</div>
-					</Show>
+				<button type="button" onClick={removePP} class="remove-avatar-button"><X/></button>
+			</div>
+			<div class="header-info">
+				<div class="username">
+					<h2>
+						{user().username}
+					</h2>
+					<Button size="sm" onClick={(e) => {
+						e.preventDefault();
+						usernameEditPopUpControls = summonUsernameEditPopUp(() => usernameEditPopUpControls = null);
+					}} >
+						{t("pages.settings.edit")}
+					</Button>
 				</div>
-			</div>}
-		</Show>
+				<div class="user-stats">
+					<div class="stat">Member since {user().createdAt.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</div>
+					<div class="separator" />
+					<div class="stat">{user()._count.ownedProviders} owned providers</div>
+					<div class="separator" />
+					<div class="stat">{user()._count.ownedPlaylists} playlists</div>
+				</div>
+				<Show when={user().currentlyListening && user().listeningUntil && toDate(user().listeningUntil!) > new Date()}>
+					<div class="listening"><MusicBars />Listening to « {user().currentlyListening!.title} » - {user().currentlyListening!.artist}</div>
+				</Show>
+			</div>
+		</div>
 	</main>;
 }
