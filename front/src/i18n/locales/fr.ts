@@ -61,6 +61,7 @@ export default {
 			profileLink: "Profil",
 			accountLink: "Compte",
 			appearanceLink: "Apparence",
+			apiLink: "Api",
 			edit: "modifier",
 			set: "définir",
 			confirm: "confirmer",

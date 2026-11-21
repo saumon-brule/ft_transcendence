@@ -4,6 +4,9 @@ import { commonError429Schema, serverBaseError401Schema } from "../../../errors/
 
 const c = initContract();
 
+export const API_MAX_USAGE_PER_HOUR = 1200;
+export const API_MAX_USAGE_PER_SECOND = 2;
+
 export const apiContract = c.router(
 	{
 		me: {

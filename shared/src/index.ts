@@ -42,3 +42,4 @@ export * from "./contracts/server/providers/schemas/provider.schema";
 export { type ArtistDetailedItemDto } from "./contracts/provider/artist/schemas/artist.schema";
 export { type AlbumDetailedItemDto } from "./contracts/provider/album/schemas/album.schema";
 export { SEARCH_MAX_LIMIT } from "./contracts/provider/search/schemas/search.schema";
+export { API_MAX_USAGE_PER_HOUR, API_MAX_USAGE_PER_SECOND } from "./contracts/server/api/api.contract";

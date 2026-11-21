@@ -27,6 +27,10 @@ async function bootstrap() {
 			title: "Flex public API",
 			version: "1.0.0",
 		},
+		servers: [
+			{ url: "/api", description: "From front (proxy)" },
+			{ url: "/", description: "From back" },
+		],
 		components: {
 			securitySchemes: {
 				apiKey: {

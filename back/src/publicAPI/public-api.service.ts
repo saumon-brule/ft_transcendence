@@ -4,9 +4,7 @@ import { PrismaService } from "../core/prisma/prisma.service";
 import { TooManyRequestsException } from "../core/error/to-many-request";
 import { AppUnauthorizedException } from "../core/error/unauthorized";
 import { hashUserApiKey } from "./user-api-key";
-
-const MAX_USAGE_PER_HOUR = 1200;
-const MAX_USAGE_PER_SECOND = 2;
+import { API_MAX_USAGE_PER_HOUR, API_MAX_USAGE_PER_SECOND } from "@flex/shared";
 
 @Injectable()
 export class PublicApiKeysService {
@@ -22,11 +20,11 @@ export class PublicApiKeysService {
 
 		if (!user) throw new AppUnauthorizedException("INVALID_TOKEN", "Invalid api key");
 
-		if (user.apiOneHourUsage >= MAX_USAGE_PER_HOUR) throw new TooManyRequestsException("RATE_LIMITED", "Hourly api limit reached");
+		if (user.apiOneHourUsage >= API_MAX_USAGE_PER_HOUR) throw new TooManyRequestsException("RATE_LIMITED", "Hourly api limit reached");
 
 		const now = Date.now();
 		const timestamps = (this.recentRequests.get(user.uuid) ?? []).filter((t) => now - t < 1000);
-		if (timestamps.length >= MAX_USAGE_PER_SECOND) {
+		if (timestamps.length >= API_MAX_USAGE_PER_SECOND) {
 			this.recentRequests.set(user.uuid, timestamps);
 			throw new TooManyRequestsException("RATE_LIMITED", "Too many requests per second");
 		}

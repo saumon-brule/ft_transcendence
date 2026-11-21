@@ -6,8 +6,9 @@ import AccountSettings from "./pages/AccountSettings";
 import ProfileSettings from "./pages/ProfileSettings";
 import AppearanceSettings from "./pages/AppearanceSettings";
 import "./Settings.scss";
+import ApiSettings from "./pages/ApiSettings";
 
-const TABS = ["account", "profile", "appearance"] as const;
+const TABS = ["account", "profile", "appearance", "api"] as const;
 type Tab = typeof TABS[number];
 
 export default function Settings() {
@@ -19,6 +20,7 @@ export default function Settings() {
 			case "account": return t("pages.settings.accountLink");
 			case "profile": return t("pages.settings.profileLink");
 			case "appearance": return t("pages.settings.appearanceLink");
+			case "api": return t("pages.settings.apiLink");
 		}
 	};
 
@@ -30,6 +32,7 @@ export default function Settings() {
 				<Match when={tab() === "account"}><AccountSettings /></Match>
 				<Match when={tab() === "profile"}><ProfileSettings /></Match>
 				<Match when={tab() === "appearance"}><AppearanceSettings /></Match>
+				<Match when={tab() === "api"}><ApiSettings /></Match>
 			</Switch>
 		</div>
 	</div>;
