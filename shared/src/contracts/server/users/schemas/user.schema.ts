@@ -88,6 +88,8 @@ export const meSchema = z.object({
 	ownedPlaylists: z.array(playlistSchema),
 	friends: z.array(friendSchema),
 	friendRequests: z.array(shortUserSchema),
+	apiUsage: z.number(),
+	apiOneHourUsage: z.number(),
 	_count: z.object({
 		ownedProviders: z.number(),
 		ownedPlaylists: z.number(),

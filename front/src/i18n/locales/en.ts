@@ -59,6 +59,7 @@ export default {
 			profileLink: "Profile",
 			accountLink: "Account",
 			appearanceLink: "Appearance",
+			apiLink: "Api",
 			edit: "edit",
 			set: "set",
 			confirm: "confirm",
