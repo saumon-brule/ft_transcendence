@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { User } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import * as bcrypt from "bcrypt";
+import { randomBytes } from "node:crypto";
 import { Cron } from "@nestjs/schedule";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 import { LogBuilder } from "../core/logging/log-builder";
@@ -177,6 +178,15 @@ export class UsersService {
 			where: { uuid },
 			data: { avatarUpdatedAt: new Date() },
 		});
+	}
+
+	public async regenerateApiKey(uuid: string): Promise<string> {
+		const { apiKey } = await this.prisma.user.update({
+			where: { uuid },
+			data: { apiKey: randomBytes(24).toString("base64url") },
+			select: { apiKey: true },
+		});
+		return apiKey;
 	}
 
 	public async linkIntraAccount(uuid: string, intraId: number) {
