@@ -11,10 +11,20 @@ import { Provider } from "@flex/shared";
 import { MusicGroup } from "~/store/trackManager.store";
 import UnavailableMusicRow, { type PlaylistContext } from "./UnavailableTrackRow";
 import { MusicActionMenu } from "./MusicActionMenu";
-import { Ellipsis } from "lucide-solid";
+import { ArrowDown, ArrowUp, Ellipsis } from "lucide-solid";
+import type { SearchSort } from "~/api/queryHooks/providerInfo";
+import { nextSort } from "~/components/ui/SortBar/useSortParam";
 
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
+
+export type MusicSortField = "name" | "artist" | "album" | "provider" | "published" | "duration";
+
+/** When given, the headers of the sortable columns become buttons that cycle through ascending, descending and the default order. */
+export type MusicSectionSort = {
+	value: SearchSort<MusicSortField> | undefined;
+	onChange: (sort: SearchSort<MusicSortField> | undefined) => void;
+};
 
 function isGroupMusicSection(props: MusicSectionProps | GroupMusicSectionProps): props is GroupMusicSectionProps {
 	return "musicGroup" in props;
@@ -24,6 +34,7 @@ export type MusicSectionProps = {
 	hiddenColumns?: MusicSectionColumn[];
 	providers?: Provider[];
 	playlist?: PlaylistContext;
+	sort?: MusicSectionSort;
 	musics: Array<Music>;
 };
 
@@ -32,6 +43,7 @@ export type GroupMusicSectionProps = {
 	providers?: Provider[];
 	showCurrent?: boolean;
 	playlist?: PlaylistContext;
+	sort?: MusicSectionSort;
 	musicGroup: MusicGroup;
 };
 
@@ -85,19 +97,38 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 		});
 	});
 
+	const ariaSort = (field: MusicSortField) => props.sort?.value?.field === field
+		? props.sort.value.order === "asc"
+			? "ascending"
+			: "descending"
+		: undefined;
+
+	function SortHeader(headerProps: { field: MusicSortField; children: string }) {
+		return <Show when={props.sort} fallback={headerProps.children}>
+			{(sort) => <Button type="button" variant="text" class="sort-header" classList={{ active: sort().value?.field === headerProps.field }} onClick={() => sort().onChange(nextSort(sort().value, headerProps.field))}>
+				{headerProps.children}
+				<span class="sort-arrow" aria-hidden="true">
+					<Show when={sort().value?.field === headerProps.field}>
+						{sort().value?.order === "asc" ? <ArrowUp size={14} /> : <ArrowDown size={14} />}
+					</Show>
+				</span>
+			</Button>}
+		</Show>;
+	}
+
 	const musicList = () => isGroupMusicSection(props) ? props.musicGroup.musics : props.musics;
 
 	return <div class="music-section">
 		<table class="data">
 			<thead>
 				<tr>
-					<th class="col-title" scope="col">Title</th>
+					<th class="col-title" scope="col" aria-sort={ariaSort("name")}><SortHeader field="name">Title</SortHeader></th>
 					<Show when={shown("actions")}><th class="col-actions" scope="col" /></Show>
-					<Show when={shown("artists")}><th class="col-artists" scope="col">Artists</th></Show>
-					<Show when={shown("album")}><th class="col-album" scope="col">Album</th></Show>
-					<Show when={props.providers?.length}><th class="col-provider" scope="col">Provider</th></Show>
-					<Show when={shown("published")}><th class="col-published" scope="col">Published</th></Show>
-					<Show when={shown("duration")}><th class="col-duration" scope="col">Duration</th></Show>
+					<Show when={shown("artists")}><th class="col-artists" scope="col" aria-sort={ariaSort("artist")}><SortHeader field="artist">Artists</SortHeader></th></Show>
+					<Show when={shown("album")}><th class="col-album" scope="col" aria-sort={ariaSort("album")}><SortHeader field="album">Album</SortHeader></th></Show>
+					<Show when={props.providers?.length}><th class="col-provider" scope="col" aria-sort={ariaSort("provider")}><SortHeader field="provider">Provider</SortHeader></th></Show>
+					<Show when={shown("published")}><th class="col-published" scope="col" aria-sort={ariaSort("published")}><SortHeader field="published">Published</SortHeader></th></Show>
+					<Show when={shown("duration")}><th class="col-duration" scope="col" aria-sort={ariaSort("duration")}><SortHeader field="duration">Duration</SortHeader></th></Show>
 				</tr>
 			</thead>
 			<tbody>

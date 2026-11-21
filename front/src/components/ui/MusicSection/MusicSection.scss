@@ -18,6 +18,25 @@ $compact-below: 520px;
 			overflow: hidden;
 		}
 
+		.sort-header {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			padding: 0;
+			font: inherit;
+			color: inherit;
+
+			&.active {
+				font-weight: 700;
+			}
+
+			.sort-arrow {
+				display: inline-flex;
+				width: 14px;
+				height: 14px;
+			}
+		}
+
 		.col-title { width: auto; }
 		.col-actions { width: 48px; }
 		.col-artists { width: 20%; }

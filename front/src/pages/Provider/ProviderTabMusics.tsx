@@ -1,9 +1,11 @@
 import { createMemo, Show } from "solid-js";
 import { useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
-import MusicSection from "~/components/ui/MusicSection/MusicSection";
+import MusicSection, { type MusicSortField } from "~/components/ui/MusicSection/MusicSection";
 import NoResult from "~/components/ui/NoResult/NoResult";
-import Button from "~/components/inputs/Button";
-import { Provider } from "@flex/shared";
+import InfiniteScroll from "~/components/ui/InfiniteScroll";
+import { useSortParam } from "~/components/ui/SortBar/useSortParam";
+import { MUSIC_SORT_FIELDS, Provider } from "@flex/shared";
+import type { SearchSort } from "~/api/queryHooks/providerInfo";
 
 export type ProviderTabMusicProps = {
 	providerInfo: Provider;
@@ -11,7 +13,12 @@ export type ProviderTabMusicProps = {
 };
 
 export default function ProviderTabMusics(props: ProviderTabMusicProps) {
-	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerInfo.uuid, () => props.providerInfo, () => props.search);
+	const [sort, setSort] = useSortParam(() => MUSIC_SORT_FIELDS);
+	// A provider has no column to sort by its own name
+	const changeSort = (next: SearchSort<MusicSortField> | undefined) => setSort(next && next.field !== "provider"
+		? { field: next.field, order: next.order }
+		: undefined);
+	const musicsQuery = useProviderMusicsInfiniteQuery(() => props.providerInfo.uuid, () => props.providerInfo, () => props.search, () => ({}), sort);
 	const musics = createMemo(() => musicsQuery.data && {
 		musics: musicsQuery.data.pages.flatMap((page) => page.musics),
 		total: musicsQuery.data.pages[0]?.total ?? 0,
@@ -21,12 +28,10 @@ export default function ProviderTabMusics(props: ProviderTabMusicProps) {
 		<Show when={m.total > 0}>
 			<section class="musics">
 				{/* <h2>Musics</h2> */}
-				<MusicSection musics={m.musics}/>
+				<MusicSection musics={m.musics} sort={{ value: sort(), onChange: changeSort }}/>
 			</section>
 		</Show>
-		<Show when={musicsQuery.hasNextPage}>
-			<Button onClick={() => void musicsQuery.fetchNextPage()} disabled={musicsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
-		</Show>
+		<InfiniteScroll enabled={musicsQuery.hasNextPage === true && !musicsQuery.isFetching} onLoadMore={() => void musicsQuery.fetchNextPage()} />
 		<NoResult show={m.total === 0} />
 	</>}</Show>;
 }

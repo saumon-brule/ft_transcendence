@@ -42,9 +42,13 @@ export default function Provider() {
 	});
 
 	const [tab, setTab] = useTabParam<Tab>(TABS, "All");
-	const [searchParams, setSearchParams] = useSearchParams<{ q?: string }>();
+	const [searchParams, setSearchParams] = useSearchParams<{ q?: string; sort?: string; order?: string }>();
 	const search = () => decodeURIComponent(searchParams.q ?? "");
 	const setSearch = (value: string) => setSearchParams({ q: encodeURIComponent(value) || undefined }, { replace: true });
+	const changeTab = (value: Tab) => {
+		setTab(value);
+		setSearchParams({ sort: undefined, order: undefined }, { replace: true });
+	};
 
 	return <div class="page" id="provider">
 		<Show when={providerInfo()} keyed>{(backData) => <>
@@ -61,7 +65,7 @@ export default function Provider() {
 				</Match>
 				<Match when={providerStatus() === "success"}>
 					<Show when={provider.data?.body}>
-						<Tabs tabs={TABS} value={tab()} onChange={setTab} />
+						<Tabs tabs={TABS} value={tab()} onChange={changeTab} />
 						<ProviderSearchBar value={search()} onSearch={setSearch} />
 						<Switch>
 							<Match when={tab() === "All"}>
@@ -71,10 +75,10 @@ export default function Provider() {
 								<ProviderTabMusics providerInfo={backData} search={search()} />
 							</Match>
 							<Match when={tab() === "Albums"}>
-								<ProviderTabAlbums providerUrl={backData.address} providerUuid={params.uuid} search={search()} />
+								<ProviderTabAlbums providerInfo={backData} search={search()} />
 							</Match>
 							<Match when={tab() === "Artists"}>
-								<ProviderTabArtists providerUrl={backData.address} providerUuid={params.uuid} search={search()} />
+								<ProviderTabArtists providerInfo={backData} search={search()} />
 							</Match>
 						</Switch>
 					</Show>

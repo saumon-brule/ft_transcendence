@@ -4,7 +4,7 @@ import { getProviderClient } from "../providerClients";
 import { Music } from "~/class/Music";
 import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
-import { DEFAULT_PAGINATION_LIMIT, Provider, type ProviderDataDto } from "@flex/shared";
+import { type ALBUM_SORT_FIELDS, type ARTIST_SORT_FIELDS, DEFAULT_PAGINATION_LIMIT, type MUSIC_SORT_FIELDS, Provider, type ProviderDataDto, type SearchSortField, type SortOrder } from "@flex/shared";
 
 export class ProviderError extends Error {
 	constructor(public readonly code: "FORBIDDEN" | "OFFLINE", message: string) {
@@ -54,19 +54,25 @@ export const useProviderInfoQuery = (providerUuid: () => string, providerInfo: (
 
 export type ProviderInfo = Exclude<ReturnType<typeof useProviderInfoQuery>["data"], undefined>["body"];
 
+export type SearchSort<F extends string = SearchSortField> = { field: F; order: SortOrder };
+
+type MusicSort = SearchSort<(typeof MUSIC_SORT_FIELDS)[number]>;
+type AlbumSort = SearchSort<(typeof ALBUM_SORT_FIELDS)[number]>;
+type ArtistSort = SearchSort<(typeof ARTIST_SORT_FIELDS)[number]>;
+
 export type MusicRelationFilter = { artistUuid?: string; albumUuid?: string };
 export type AlbumRelationFilter = { artistUuid?: string };
 
-export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, providerInfo: () => Provider | null, search: () => string = () => "", filter: () => MusicRelationFilter = () => ({})) => {
+export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, providerInfo: () => Provider | null, search: () => string = () => "", filter: () => MusicRelationFilter = () => ({}), sort: () => MusicSort | undefined = () => undefined) => {
 	const providerClient = createMemo(() => getProviderClient(providerInfo()?.address ?? "", providerUuid()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
-		queryKey: () => providerClient().keys.music.list([search(), JSON.stringify(filter())]),
+		queryKey: () => providerClient().keys.music.list([search(), JSON.stringify(filter()), JSON.stringify(sort() ?? null)]),
 		get enabled() { return providerInfo() !== null; },
 		queryFn: async ({ pageParam }) => {
 			const res = await providerClient().client.music.list.query({
-				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, ...filter() },
+				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, ...filter(), sort: sort()?.field, order: sort()?.order },
 			});
 			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider musics failed with status ${res.status}`);
 			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider musics failed with status ${res.status}`);
@@ -77,7 +83,7 @@ export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, provi
 			return loaded < lastPage.total ? loaded : undefined;
 		},
 		initialData: () => {
-			if (search() || Object.keys(filter()).length > 0) return undefined;
+			if (search() || Object.keys(filter()).length > 0 || sort()) return undefined;
 			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(providerClient().keys.info.all());
 			return all ? { pages: [all.body.music], pageParams: [0] } : undefined;
 		},
@@ -94,16 +100,16 @@ export const useProviderMusicsInfiniteQuery = (providerUuid: () => string, provi
 	});
 };
 
-export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "", filter: () => AlbumRelationFilter = () => ({})) => {
+export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "", filter: () => AlbumRelationFilter = () => ({}), sort: () => AlbumSort | undefined = () => undefined) => {
 	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
-		queryKey: () => provider().keys.album.list([search(), JSON.stringify(filter())]),
+		queryKey: () => provider().keys.album.list([search(), JSON.stringify(filter()), JSON.stringify(sort() ?? null)]),
 		get enabled() { return providerUrl() !== ""; },
 		queryFn: async ({ pageParam }) => {
 			const res = await provider().client.album.list.query({
-				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, ...filter() },
+				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, ...filter(), sort: sort()?.field, order: sort()?.order },
 			});
 			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider albums failed with status ${res.status}`);
 			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider albums failed with status ${res.status}`);
@@ -114,7 +120,7 @@ export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, provid
 			return loaded < lastPage.total ? loaded : undefined;
 		},
 		initialData: () => {
-			if (search() || Object.keys(filter()).length > 0) return undefined;
+			if (search() || Object.keys(filter()).length > 0 || sort()) return undefined;
 			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(provider().keys.info.all());
 			return all ? { pages: [all.body.album], pageParams: [0] } : undefined;
 		},
@@ -131,16 +137,16 @@ export const useProviderAlbumsInfiniteQuery = (providerUrl: () => string, provid
 	});
 };
 
-export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "") => {
+export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, providerUuid: () => string, search: () => string = () => "", sort: () => ArtistSort | undefined = () => undefined) => {
 	const provider = createMemo(() => getProviderClient(providerUrl(), providerUuid()));
 	const queryClient = useQueryClient();
 
 	return createInfiniteQuery({
-		queryKey: () => provider().keys.artist.list([search()]),
+		queryKey: () => provider().keys.artist.list([search(), JSON.stringify(sort() ?? null)]),
 		get enabled() { return providerUrl() !== ""; },
 		queryFn: async ({ pageParam }) => {
 			const res = await provider().client.artist.list.query({
-				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined },
+				query: { offset: (pageParam as number | undefined) ?? 0, limit: DEFAULT_PAGINATION_LIMIT, search: search() || undefined, sort: sort()?.field, order: sort()?.order },
 			});
 			if (res.status === 403) throw new ProviderError("FORBIDDEN", `Provider artists failed with status ${res.status}`);
 			if (res.status !== 200) throw new ProviderError("OFFLINE", `Provider artists failed with status ${res.status}`);
@@ -151,7 +157,7 @@ export const useProviderArtistsInfiniteQuery = (providerUrl: () => string, provi
 			return loaded < lastPage.total ? loaded : undefined;
 		},
 		initialData: () => {
-			if (search()) return undefined;
+			if (search() || sort()) return undefined;
 			const all = queryClient.getQueryData<{ status: 200; body: ProviderDataDto }>(provider().keys.info.all());
 			return all ? { pages: [all.body.artist], pageParams: [0] } : undefined;
 		},
@@ -208,7 +214,6 @@ export const useProviderAlbumQuery = (providerUrl: () => string, providerUuid: (
 
 export type ProviderAlbumQueryBody = Exclude<ReturnType<typeof useProviderAlbumQuery>["data"], undefined>["body"];
 
-/** Exact-match filters of the provider `search` route (dates are `YYYY-MM-DD`). */
 export type SearchFilters = {
 	music?: string;
 	artist?: string;
@@ -217,7 +222,12 @@ export type SearchFilters = {
 	dateBefore?: string;
 };
 
-const providerSearchOptions = (providerInfo: Provider, searchTerm: string, filters: SearchFilters) => {
+export type SearchOptions = {
+	sort?: SearchSort;
+	limit?: number;
+};
+
+const providerSearchOptions = (providerInfo: Provider, searchTerm: string, filters: SearchFilters, options: SearchOptions) => {
 	const providerClient = getProviderClient(providerInfo.address, providerInfo.uuid);
 	const { dateAfter, dateBefore, ...textFilters } = filters;
 	const query = {
@@ -225,9 +235,12 @@ const providerSearchOptions = (providerInfo: Provider, searchTerm: string, filte
 		...textFilters,
 		dateAfter: dateAfter ? new Date(dateAfter) : undefined,
 		dateBefore: dateBefore ? new Date(dateBefore) : undefined,
+		limit: options.limit,
+		sort: options.sort?.field,
+		order: options.sort?.order,
 	};
 	return {
-		queryKey: () => providerClient.keys.search.search([searchTerm, JSON.stringify(filters)]),
+		queryKey: () => providerClient.keys.search.search([searchTerm, JSON.stringify(filters), JSON.stringify(options)]),
 		enabled: providerInfo.address !== "",
 		queryFn: async () => {
 			const res = await providerClient.client.search.search.query({ query });
@@ -247,10 +260,10 @@ const providerSearchOptions = (providerInfo: Provider, searchTerm: string, filte
 	};
 };
 
-export const useProvidersSearchQueries = (providersInfos: () => Provider[], searchTerm: () => string, filters: () => SearchFilters = () => ({})) => {
+export const useProvidersSearchQueries = (providersInfos: () => Provider[], searchTerm: () => string, filters: () => SearchFilters = () => ({}), options: () => SearchOptions = () => ({})) => {
 	return createQueries({
 		get queries() {
-			return providersInfos().map((provider) => providerSearchOptions(provider, searchTerm(), filters()));
+			return providersInfos().map((provider) => providerSearchOptions(provider, searchTerm(), filters(), options()));
 		},
 	});
 };
