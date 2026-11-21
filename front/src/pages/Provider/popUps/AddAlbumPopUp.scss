@@ -65,4 +65,10 @@
 			}
 		}
 	}
+
+	.create-album-pop-up-controls {
+		display: flex;
+		justify-content: flex-end;
+		gap: .5rem;
+	}
 }

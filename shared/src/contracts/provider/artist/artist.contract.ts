@@ -70,6 +70,7 @@ export const artistContract = c.router(
 			method: "DELETE",
 			path: "/:uuid/avatar",
 			pathParams: uuidParamSchema,
+			body: null,
 			responses: {
 				204: null,
 				404: commonError404Schema,

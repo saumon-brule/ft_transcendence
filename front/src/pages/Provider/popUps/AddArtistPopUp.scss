@@ -23,4 +23,11 @@
 			flex: 1;
 		}
 	}
+
+
+	.create-artist-pop-up-controls {
+		display: flex;
+		justify-content: flex-end;
+		gap: .5rem;
+	}
 }

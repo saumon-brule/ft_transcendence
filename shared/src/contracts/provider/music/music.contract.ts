@@ -94,6 +94,7 @@ export const musicContract = c.router(
 			method: "DELETE",
 			path: "/:uuid/cover",
 			pathParams: uuidParamSchema,
+			body: null,
 			responses: {
 				204: null,
 				404: commonError404Schema,

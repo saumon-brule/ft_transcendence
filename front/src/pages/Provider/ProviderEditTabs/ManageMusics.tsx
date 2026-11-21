@@ -7,6 +7,7 @@ import { Music } from "~/class/Music";
 import MusicCover from "~/components/ui/MusicCover";
 import { Pencil, Trash } from "lucide-solid";
 import { providerRemoveMusic } from "~/api/queryHooks/providerManageCatalog";
+import { summonEditMusicPopUp } from "../popUps/summonEditMusicPopUp";
 
 export function ManageMusics(props: { search: string }) {
 	const provider = useProvider();
@@ -47,7 +48,7 @@ function ProviderAristCard(props: { music: Music }) {
 			</div>
 		</div>
 		<div class="actions">
-			<Button icon variant="ghost" onClick={() => {}}><Pencil size={18}/></Button>
+			<Button icon variant="ghost" onClick={() => summonEditMusicPopUp(props.music)}><Pencil size={18}/></Button>
 			<Button icon variant="danger" disabled={deleting()} onClick={() => void remove()}><Trash size={18}/></Button>
 		</div>
 	</div>;
