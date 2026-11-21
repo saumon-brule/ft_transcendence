@@ -1,4 +1,4 @@
-import { createMemo, For, Show } from "solid-js";
+import { createMemo, createSignal, For, Show } from "solid-js";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import Button from "~/components/inputs/Button";
 import "./ManageMusics.scss";
@@ -6,6 +6,7 @@ import { useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Music } from "~/class/Music";
 import MusicCover from "~/components/ui/MusicCover";
 import { Pencil, Trash } from "lucide-solid";
+import { providerRemoveMusic } from "~/api/queryHooks/providerManageCatalog";
 
 export function ManageMusics(props: { search: string }) {
 	const provider = useProvider();
@@ -28,6 +29,14 @@ export function ManageMusics(props: { search: string }) {
 }
 
 function ProviderAristCard(props: { music: Music }) {
+	const provider = useProvider();
+	const [deleting, setDeleting] = createSignal(false);
+
+	async function remove() {
+		setDeleting(true);
+		await providerRemoveMusic(provider, props.music.uuid);
+		setDeleting(false);
+	}
 
 	return <div class="provider-edit-music-card">
 		<div class="infos">
@@ -39,7 +48,7 @@ function ProviderAristCard(props: { music: Music }) {
 		</div>
 		<div class="actions">
 			<Button icon variant="ghost" onClick={() => {}}><Pencil size={18}/></Button>
-			<Button icon variant="danger" onClick={() => {}}><Trash size={18}/></Button>
+			<Button icon variant="danger" disabled={deleting()} onClick={() => void remove()}><Trash size={18}/></Button>
 		</div>
 	</div>;
 }
