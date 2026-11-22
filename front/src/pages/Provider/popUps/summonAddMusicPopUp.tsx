@@ -6,11 +6,12 @@ import Button from "~/components/inputs/Button";
 import { createMemo, createSignal, For, onCleanup, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import { getProviderClient } from "~/api/providerClients";
-import { Provider } from "@flex/shared";
+import { ArtistItemDto, Provider, providerContract } from "@flex/shared";
+import { settleResponse } from "~/api/utils/settleResponse";
+import UploadProgress from "~/components/ui/UploadProgress";
 import { Plus, X } from "lucide-solid";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { Artist } from "~/class/Artist";
-import { ArtistItemDto } from "node_modules/@flex/shared/dist/contracts/provider/schemas/items.schema";
 import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Album } from "~/class/Album";
 import "./AddMusicPopUp.scss";
@@ -101,6 +102,9 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		const musicUploadCoverMutation = providerClient.client.music.uploadCover.createMutation();
 		const musicRemoveMutation = providerClient.client.music.remove.createMutation();
 
+		const [audioProgress, setAudioProgress] = createSignal(0);
+		const [coverProgress, setCoverProgress] = createSignal(0);
+
 		function addArtistFromRest(artist: Artist, restIndex: number) {
 			setArtists([...artists(), artist]);
 			setNotFoundArtists((prev) => prev.filter((_, i) => i !== restIndex));
@@ -125,39 +129,49 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		let fileInputRef!: HTMLInputElement;
 
 		const handleSubmit = async () => {
+			let createdUuid: string | null = null;
+			const failCreation = (status?: number) => {
+				if (status === 413) summonErrorToast(() => "File to large");
+				else if (status === 415) summonErrorToast(() => "File not supported");
+				else summonErrorToast(() => "An error occured during creation of the music");
+				if (createdUuid) void musicRemoveMutation.mutate({ params: { uuid: createdUuid } });
+			};
+
 			try {
-				const createRes = await musicCreateMutation.mutateAsync({ body: {
+				const createRes = await settleResponse(musicCreateMutation.mutateAsync({ body: {
 					name: title(),
 					artistUuids: artists().map((artist) => artist.uuid),
 					duration: Math.floor(duration),
 					publishedAt: publishedDate(),
-				} });
+				} }), providerContract.music.create);
 				if (createRes.status !== 201) {
-					// if (createRes.status === 404) summonErrorToast(() => "Something not found");
-					summonErrorToast(() => "An error occured during creation of the music");
+					failCreation(createRes.status);
 					return;
 				}
 
 				const newMusic = createRes.body;
 				const uuid = newMusic.uuid;
-				const uploadAudioRes = await musicUploadAudioMutation.mutateAsync({ params: { uuid }, body: { file: musicFile } });
+				createdUuid = uuid;
+
+				const uploadAudioRes = await settleResponse(musicUploadAudioMutation.mutateAsync({
+					params: { uuid },
+					body: { file: musicFile },
+					onUploadProgress: setAudioProgress,
+				}), providerContract.music.uploadAudio);
 				if (uploadAudioRes.status !== 204) {
-					if (uploadAudioRes.status === 413) summonErrorToast(() => "File to large");
-					else if (uploadAudioRes.status === 415) summonErrorToast(() => "File not supported");
-					else summonErrorToast(() => "An error occured during creation of the music");
-					void musicRemoveMutation.mutate({ params: { uuid } });
+					failCreation(uploadAudioRes.status);
 					return;
 				}
 
 				const curCover = cover();
-
 				if (curCover) {
-					const uploadCoverRes = await musicUploadCoverMutation.mutateAsync({ params: { uuid }, body: { file: curCover } });
+					const uploadCoverRes = await settleResponse(musicUploadCoverMutation.mutateAsync({
+						params: { uuid },
+						body: { file: curCover },
+						onUploadProgress: setCoverProgress,
+					}), providerContract.music.uploadCover);
 					if (uploadCoverRes.status !== 204) {
-						if (uploadCoverRes.status === 413) summonErrorToast(() => "File to large");
-						else if (uploadCoverRes.status === 415) summonErrorToast(() => "File not supported");
-						else summonErrorToast(() => "An error occured during creation of the music");
-						void musicRemoveMutation.mutate({ params: { uuid } });
+						failCreation(uploadCoverRes.status);
 						return;
 					}
 					newMusic.hasCover = true;
@@ -166,7 +180,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 				props.close();
 			} catch (e) {
 				console.error(e);
-				summonErrorToast(() => "An error occured during creation of the music");
+				failCreation();
 			}
 		};
 
@@ -195,7 +209,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 								<div class="title">{album.name}</div>
 							</div>
 							<div class="actions">
-								<Button icon variant="danger" onClick={() => setAlbum(null)}><X size={18}/></Button>
+								<Button type="button" icon variant="danger" onClick={() => setAlbum(null)}><X size={18}/></Button>
 							</div>
 						</div>}
 					</Show>
@@ -210,7 +224,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 						{(artist) => <div class="artist">
 							<ArtistAvatar artist={artist}/>
 							<span>{artist.name}</span>
-							<Button icon variant="danger" onClick={() => removeArtist(artist)}><X size={18}/></Button>
+							<Button type="button" icon variant="danger" onClick={() => removeArtist(artist)}><X size={18}/></Button>
 						</div>}
 					</For>
 					<For each={notFoundArtists()} >
@@ -222,6 +236,12 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 					</For>
 				</div>
 			</div>
+			<Show when={musicUploadAudioMutation.isPending}>
+				<UploadProgress label="Audio upload" value={audioProgress()}/>
+			</Show>
+			<Show when={musicUploadCoverMutation.isPending}>
+				<UploadProgress label="Cover upload" value={coverProgress()}/>
+			</Show>
 			<div class="upload-music-pop-up-controls">
 				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
 				<Button disabled={isPending()} type="submit">Upload</Button>

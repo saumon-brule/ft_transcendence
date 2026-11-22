@@ -1,7 +1,7 @@
 import { initQueryClient } from "@ts-rest/solid-query";
 import { serverContract } from "@flex/shared";
 import { auth, authActions } from "../store/auth.store";
-import { ApiFetcher, tsRestFetchApi } from "@ts-rest/core";
+import { ApiFetcher, ApiFetcherArgs, tsRestFetchApi } from "@ts-rest/core";
 import { env } from "~/env";
 import { doRefresh } from "./doRefresh";
 import z from "zod";
@@ -9,9 +9,18 @@ import { serverBaseError401Schema } from "@flex/shared";
 import { summonWarningToast } from "~/components/ui/Toaster";
 import { t } from "~/i18n/context";
 import { queryKeyFromContract } from "./utils/queryKeys";
+import { xhrFetchApi } from "./xhrUtils";
 
-const fetchWithRefresh: ApiFetcher = async (args) => {
-	const response = await tsRestFetchApi(args);
+type ExtraArgs = { onUploadProgress?: (ratio: number) => void };
+
+const fetchWithRefresh = async (args: ApiFetcherArgs & ExtraArgs): ReturnType<ApiFetcher> => {
+	const doFetch = (a: ApiFetcherArgs) => (
+		args.onUploadProgress
+			? xhrFetchApi(a, args.onUploadProgress)
+			: tsRestFetchApi(a)
+	);
+
+	const response = await doFetch(args);
 
 	if (response.status === 429) {
 		summonWarningToast(() => t("errors.rateLimit"));
@@ -37,7 +46,7 @@ const fetchWithRefresh: ApiFetcher = async (args) => {
 
 	authActions.login(accessToken);
 
-	return tsRestFetchApi({
+	return doFetch({
 		...args,
 		headers: {
 			...args.headers,

@@ -1,3 +1,6 @@
+import { settleResponse } from "~/api/utils/settleResponse";
+import UploadProgress from "~/components/ui/UploadProgress";
+import { providerContract } from "@flex/shared";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { DEFAULT_ALBUM } from "~/utils/imageFallback";
 import TextInput from "~/components/inputs/TextInput";
@@ -32,6 +35,8 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 		const albumUploadCoverMutation = providerClient.client.album.uploadCover.createMutation();
 		const albumRemoveCoverMutation = providerClient.client.album.removeCover.createMutation();
 
+		const [coverProgress, setCoverProgress] = createSignal(0);
+
 		const coverPreviewUrl = createMemo(() => {
 			const f = cover();
 			if (!f) return f;
@@ -43,46 +48,64 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 		let fileInputRef!: HTMLInputElement;
 
 		const handleSubmit = async () => {
+			let updated: Parameters<typeof Album.fromRawObject>[0] | null = null;
+			const notifyUpdate = () => {
+				if (updated) setNewAlbum?.(Album.fromRawObject(updated, album.provider));
+			};
+			const failEdit = (message: string, status?: number) => {
+				if (status === 413) summonErrorToast(() => "File to large");
+				else if (status === 415) summonErrorToast(() => "File not supported");
+				else summonErrorToast(() => message);
+				notifyUpdate();
+			};
+
 			try {
-				const createRes = await albumUpdateMutation.mutateAsync({ params: { uuid: album.uuid },
+				const updateRes = await settleResponse(albumUpdateMutation.mutateAsync({ params: { uuid: album.uuid },
 					body: {
 						name: name(),
 						artistUuids: artists().map((artist) => artist.uuid),
-					} });
-				if (createRes.status !== 200) {
-					summonErrorToast(() => "An error occured during the edit of the artist");
+					} }), providerContract.album.update);
+				if (updateRes.status !== 200) {
+					failEdit("An error occured during the edit of the album", updateRes.status);
 					return;
 				}
-
-				setNewAlbum?.(Album.fromRawObject(createRes.body, album.provider));
+				updated = updateRes.body;
 
 				const curCover = cover();
 				if (curCover === null) {
-					const removeCoverRes = await albumRemoveCoverMutation.mutateAsync({ params: { uuid: album.uuid } });
+					const removeCoverRes = await settleResponse(
+						albumRemoveCoverMutation.mutateAsync({ params: { uuid: album.uuid } }),
+						providerContract.album.removeCover,
+					);
 					if (removeCoverRes.status !== 204) {
-						summonErrorToast(() => "An error occured during remove of the cover");
+						failEdit("An error occured during remove of the cover", removeCoverRes.status);
 						return;
 					}
+					updated.hasCover = false;
 				} else if (curCover !== undefined) {
-					const uploadCoverRes = await albumUploadCoverMutation.mutateAsync({ params: { uuid: album.uuid }, body: { file: curCover } });
+					const uploadCoverRes = await settleResponse(albumUploadCoverMutation.mutateAsync({
+						params: { uuid: album.uuid },
+						body: { file: curCover },
+						onUploadProgress: setCoverProgress,
+					}), providerContract.album.uploadCover);
 					if (uploadCoverRes.status !== 204) {
-						if (uploadCoverRes.status === 413) summonErrorToast(() => "File to large");
-						else if (uploadCoverRes.status === 415) summonErrorToast(() => "File not supported");
-						else summonErrorToast(() => "An error occured during upload of the cover");
+						failEdit("An error occured during upload of the cover", uploadCoverRes.status);
 						return;
 					}
+					updated.hasCover = true;
 				}
+				notifyUpdate();
 				props.close();
 			} catch (e) {
 				console.error(e);
-				summonErrorToast(() => "An error occured during creation of the artist");
+				failEdit("An error occured during the edit of the album");
 			}
 		};
 
 		const isPending = () => albumUpdateMutation.isPending || albumUploadCoverMutation.isPending || albumRemoveCoverMutation.isPending;
 
 		return <Form class="edit-album-pop-up" onSubmit={() => { void handleSubmit(); }}>
-			<h2 >Create new album</h2>
+			<h2 >Edit album</h2>
 			<div class="edit-album-info">
 				<div class="edit-album-cover-box">
 					<input
@@ -99,7 +122,7 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 						<Button icon size="sm" variant="ghost" type="button" onClick={() => setCover(null)} class="remove-cover-button"><X size={20}/></Button>
 					</Show>
 					<Show when={cover() !== undefined} >
-						<Button icon size="sm" variant="ghost" onClick={() => setCover(undefined)} ><Undo2 size={20}/></Button>
+						<Button icon size="sm" variant="ghost" type="button" onClick={() => setCover(undefined)} ><Undo2 size={20}/></Button>
 					</Show>
 				</div>
 				<div class="edit-album-details">
@@ -120,6 +143,9 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 					</For>
 				</div>
 			</div>
+			<Show when={albumUploadCoverMutation.isPending}>
+				<UploadProgress label="Cover upload" value={coverProgress()}/>
+			</Show>
 			<div class="edit-album-pop-up-controls">
 				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
 				<Button disabled={isPending()} type="submit">Edit</Button>
