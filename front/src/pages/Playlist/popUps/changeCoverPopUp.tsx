@@ -6,6 +6,7 @@ import Form from "~/components/inputs/Form/Form";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { playlistCoverUrl } from "~/utils/playlistCover";
+import ProgressRing from "~/components/ui/ProgressRing";
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
@@ -15,6 +16,7 @@ export const summonChangeCoverPopUp = (playlist: { uuid: string; name: string })
 
 	const [file, setFile] = createSignal<File | null>(null);
 	const [previewUrl, setPreviewUrl] = createSignal<string | null>(null);
+	const [uploadProgress, setUploadProgress] = createSignal(0);
 
 	function setPreview(url: string | null) {
 		const previous = previewUrl();
@@ -46,8 +48,9 @@ export const summonChangeCoverPopUp = (playlist: { uuid: string; name: string })
 		const selected = file();
 		if (!selected) return;
 
+		setUploadProgress(0);
 		uploadCover.mutate(
-			{ params: { uuid: playlist.uuid }, body: { cover: selected } },
+			{ params: { uuid: playlist.uuid }, body: { cover: selected }, onUploadProgress: setUploadProgress },
 			{ onSuccess: () => popUpControls.close() },
 		);
 	}
@@ -64,7 +67,12 @@ export const summonChangeCoverPopUp = (playlist: { uuid: string; name: string })
 	return <Form onSubmit={handleSubmit}>
 		<h2>Change cover</h2>
 		<div class="pop-up-inputs cover-pop-up-inputs">
-			<img class="cover-preview" src={previewUrl() ?? playlistCoverUrl(playlist.uuid)} alt="Cover preview" />
+			<div class="cover-preview-box">
+				<img class="cover-preview" src={previewUrl() ?? playlistCoverUrl(playlist.uuid)} alt="Cover preview" />
+				<Show when={uploadCover.isPending}>
+					<ProgressRing value={uploadProgress()}/>
+				</Show>
+			</div>
 			<input type="file" accept={ACCEPTED_TYPES.join(",")} onChange={handleFileChange} />
 		</div>
 		<div class="pop-up-buttons">

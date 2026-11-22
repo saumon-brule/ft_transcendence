@@ -1,3 +1,6 @@
+import { settleResponse } from "~/api/utils/settleResponse";
+import UploadProgress from "~/components/ui/UploadProgress";
+import { providerContract } from "@flex/shared";
 import { summonPopUp } from "~/components/ui/Overlay";
 import TextInput from "~/components/inputs/TextInput";
 import Button from "~/components/inputs/Button";
@@ -30,6 +33,8 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 		const musicUploadCoverMutation = providerClient.client.music.uploadCover.createMutation();
 		const musicRemoveCoverMutation = providerClient.client.music.removeCover.createMutation();
 
+		const [coverProgress, setCoverProgress] = createSignal(0);
+
 		function addArtist(artist: Artist) {
 			setArtists([...artists(), artist]);
 		}
@@ -49,50 +54,69 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 		let fileInputRef!: HTMLInputElement;
 
 		const handleSubmit = async () => {
+			let updated: Parameters<typeof Music.fromRawObject>[0] | null = null;
+			const notifyUpdate = () => {
+				if (updated) setNewMusic?.(Music.fromRawObject(updated, music.provider));
+			};
+			const failEdit = (message: string, status?: number) => {
+				if (status === 413) summonErrorToast(() => "File to large");
+				else if (status === 415) summonErrorToast(() => "File not supported");
+				else summonErrorToast(() => message);
+				notifyUpdate();
+			};
+
 			try {
 				const curTitle = title();
 				const curAlbum = album();
 				const curPublishedDate = publishedDate();
-				const updateRes = await musicUpdateMutation.mutateAsync({ params: { uuid: music.uuid },
+				const updateRes = await settleResponse(musicUpdateMutation.mutateAsync({ params: { uuid: music.uuid },
 					body: {
 						name: music.name === curTitle ? undefined : curTitle,
 						artistUuids: artists().map((artist) => artist.uuid),
 						albumUuid: curAlbum ? (curAlbum.uuid === music.album?.uuid ? undefined : curAlbum.uuid) : music.hasAlbum() ? null : undefined,
 						publishedAt: curPublishedDate === music.publishedAt ? undefined : curPublishedDate,
-					} });
+					} }), providerContract.music.update);
 				if (updateRes.status !== 200) {
-					// if (createRes.status === 404) summonErrorToast(() => "Something not found");
-					summonErrorToast(() => "An error occured during creation of the music");
+					failEdit("An error occured during the edit of the music", updateRes.status);
 					return;
 				}
-
-				setNewMusic?.(Music.fromRawObject(updateRes.body, music.provider));
+				updated = updateRes.body;
 
 				const curCover = cover();
 				if (curCover === null) {
-					const removeCoverRes = await musicRemoveCoverMutation.mutateAsync({ params: { uuid: music.uuid } });
-					if (removeCoverRes.status !== 204) summonErrorToast(() => "An error occured during remove of the cover");
-					return;
-				} else if (curCover !== undefined) {
-					const uploadCoverRes = await musicUploadCoverMutation.mutateAsync({ params: { uuid: music.uuid }, body: { file: curCover } });
-					if (uploadCoverRes.status !== 204) {
-						if (uploadCoverRes.status === 413) summonErrorToast(() => "File to large");
-						else if (uploadCoverRes.status === 415) summonErrorToast(() => "File not supported");
-						else summonErrorToast(() => "An error occured during upload of the cover");
+					const removeCoverRes = await settleResponse(
+						musicRemoveCoverMutation.mutateAsync({ params: { uuid: music.uuid } }),
+						providerContract.music.removeCover,
+					);
+					if (removeCoverRes.status !== 204) {
+						failEdit("An error occured during remove of the cover", removeCoverRes.status);
 						return;
 					}
+					updated.hasCover = false;
+				} else if (curCover !== undefined) {
+					const uploadCoverRes = await settleResponse(musicUploadCoverMutation.mutateAsync({
+						params: { uuid: music.uuid },
+						body: { file: curCover },
+						onUploadProgress: setCoverProgress,
+					}), providerContract.music.uploadCover);
+					if (uploadCoverRes.status !== 204) {
+						failEdit("An error occured during upload of the cover", uploadCoverRes.status);
+						return;
+					}
+					updated.hasCover = true;
 				}
+				notifyUpdate();
 				props.close();
 			} catch (e) {
 				console.error(e);
-				summonErrorToast(() => "An error occured during creation of the music");
+				failEdit("An error occured during the edit of the music");
 			}
 		};
 
-		const isPending = () => musicUpdateMutation.isPending || musicUploadCoverMutation.isPending;
+		const isPending = () => musicUpdateMutation.isPending || musicUploadCoverMutation.isPending || musicRemoveCoverMutation.isPending;
 
 		return <Form class="edit-music-pop-up" onSubmit={() => { void handleSubmit(); }}>
-			<h2 >Upload new music</h2>
+			<h2 >Edit music</h2>
 			<div class="edit-music-info">
 				<div class="edit-music-cover-box">
 					<input
@@ -109,7 +133,7 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 						<Button icon size="sm" variant="ghost" type="button" onClick={() => setCover(null)} class="remove-cover-button"><X/></Button>
 					</Show>
 					<Show when={cover() !== undefined} >
-						<Button icon size="sm" variant="ghost" onClick={() => setCover(undefined)} ><Undo2/></Button>
+						<Button icon size="sm" variant="ghost" type="button" onClick={() => setCover(undefined)} ><Undo2/></Button>
 					</Show>
 				</div>
 				<div class="edit-music-details">
@@ -122,7 +146,7 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 								<div class="title">{album.name}</div>
 							</div>
 							<div class="actions">
-								<Button icon variant="danger" onClick={() => setAlbum(null)}><X size={18}/></Button>
+								<Button type="button" icon variant="danger" onClick={() => setAlbum(null)}><X size={18}/></Button>
 							</div>
 						</div>}
 					</Show>
@@ -137,11 +161,14 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 						{(artist) => <div class="artist">
 							<ArtistAvatar artist={artist}/>
 							<span>{artist.name}</span>
-							<Button icon variant="danger" onClick={() => removeArtist(artist)}><X size={18}/></Button>
+							<Button type="button" icon variant="danger" onClick={() => removeArtist(artist)}><X size={18}/></Button>
 						</div>}
 					</For>
 				</div>
 			</div>
+			<Show when={musicUploadCoverMutation.isPending}>
+				<UploadProgress label="Cover upload" value={coverProgress()}/>
+			</Show>
 			<div class="edit-music-pop-up-controls">
 				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
 				<Button disabled={isPending()} type="submit">Edit</Button>

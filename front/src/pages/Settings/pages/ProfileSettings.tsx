@@ -1,5 +1,5 @@
 
-import { /* createSignal,*/ JSX, onCleanup, Show } from "solid-js";
+import { /* createSignal,*/ createSignal, JSX, onCleanup, Show } from "solid-js";
 import { client, queryKeys } from "~/api/client";
 import { queryClient } from "~/api/queryClient";
 import { ClientInferResponses } from "@ts-rest/core";
@@ -14,6 +14,7 @@ import { summonUsernameEditPopUp } from "./editionPopUps/usernamePopUp";
 import MusicBars from "~/components/graphics/icons/MusicBars";
 import { MAX_SIZE, serverContract } from "@flex/shared";
 import { X } from "lucide-solid";
+import ProgressRing from "~/components/ui/ProgressRing";
 
 type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
 type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;
@@ -39,6 +40,7 @@ export default function ProfileSettings() {
 	// 		if (!base) return;
 	// 		setDraft({ ...base, [key]: value });
 	// 	}
+	const [ imageProgress, setImageProgress ] = createSignal(0);
 
 	function updatePictureQuery() {
 		queryClient.setQueryData<UserMeResponse>(queryKeys.users.me(), (old) => {
@@ -57,8 +59,10 @@ export default function ProfileSettings() {
 			summonErrorToast(() => t("pages.settings.profile.profilePictureUpdateToolarge"));
 			return;
 		}
+		setImageProgress(0);
 		updatePictureMutation.mutate({
 			body: { avatar: file },
+			onUploadProgress: setImageProgress,
 		}, {
 			onSuccess: () => {
 				updatePictureQuery();
@@ -96,9 +100,13 @@ export default function ProfileSettings() {
 			{/* <img src={user().avatarUrl} alt="Profile picture" />*/}
 			<div class="profile-picture-container">
 				<div class="profile-picture" style={{ "background-image": `url(${user().avatarUrl}` }}>
-					<label for="avatar-upload">
-						<span>Change</span>
-					</label>
+					<Show when={updatePictureMutation.isPending} fallback={(
+						<label for="avatar-upload">
+							<span>Change</span>
+						</label>
+					)}>
+						<ProgressRing value={imageProgress()}/>
+					</Show>
 					<input type="file" id="avatar-upload" accept="image/*" onChange={updatePicture} />
 				</div>
 				<button type="button" onClick={removePP} class="remove-avatar-button"><X/></button>

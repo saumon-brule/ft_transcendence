@@ -2,10 +2,12 @@ import { summonPopUp } from "~/components/ui/Overlay";
 import { DEFAULT_ARTIST } from "~/utils/imageFallback";
 import TextInput from "~/components/inputs/TextInput";
 import Button from "~/components/inputs/Button";
-import { createMemo, createSignal, onCleanup } from "solid-js";
+import { createMemo, createSignal, onCleanup, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import { getProviderClient } from "~/api/providerClients";
-import { Provider } from "@flex/shared";
+import { Provider, providerContract } from "@flex/shared";
+import { settleResponse } from "~/api/utils/settleResponse";
+import UploadProgress from "~/components/ui/UploadProgress";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import "./AddArtistPopUp.scss";
 import { Artist } from "~/class/Artist";
@@ -20,6 +22,8 @@ export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", 
 		const artistUploadAvatarMutation = providerClient.client.artist.uploadAvatar.createMutation();
 		const artistRemoveMutation = providerClient.client.artist.remove.createMutation();
 
+		const [avatarProgress, setAvatarProgress] = createSignal(0);
+
 		const avatarPreviewUrl = createMemo(() => {
 			const f = avatar();
 			if (!f) return null;
@@ -31,23 +35,37 @@ export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", 
 		let fileInputRef!: HTMLInputElement;
 
 		const handleSubmit = async () => {
+			let createdUuid: string | null = null;
+			const failCreation = (status?: number) => {
+				if (status === 413) summonErrorToast(() => "File to large");
+				else if (status === 415) summonErrorToast(() => "File not supported");
+				else summonErrorToast(() => "An error occured during creation of the artist");
+				if (createdUuid) void artistRemoveMutation.mutate({ params: { uuid: createdUuid } });
+			};
+
 			try {
-				const createRes = await artistCreateMutation.mutateAsync({ body: { name: name() } });
+				const createRes = await settleResponse(
+					artistCreateMutation.mutateAsync({ body: { name: name() } }),
+					providerContract.artist.create,
+				);
 				if (createRes.status !== 201) {
-					summonErrorToast(() => "An error occured during creation of the artist");
+					failCreation(createRes.status);
 					return;
 				}
 
 				const newArtist = createRes.body;
 				const uuid = newArtist.uuid;
+				createdUuid = uuid;
+
 				const curAvatar = avatar();
 				if (curAvatar) {
-					const uploadAvatarRes = await artistUploadAvatarMutation.mutateAsync({ params: { uuid }, body: { file: curAvatar } });
+					const uploadAvatarRes = await settleResponse(artistUploadAvatarMutation.mutateAsync({
+						params: { uuid },
+						body: { file: curAvatar },
+						onUploadProgress: setAvatarProgress,
+					}), providerContract.artist.uploadAvatar);
 					if (uploadAvatarRes.status !== 204) {
-						if (uploadAvatarRes.status === 413) summonErrorToast(() => "File to large");
-						else if (uploadAvatarRes.status === 415) summonErrorToast(() => "File not supported");
-						else summonErrorToast(() => "An error occured during creation of the artist");
-						void artistRemoveMutation.mutate({ params: { uuid } });
+						failCreation(uploadAvatarRes.status);
 						return;
 					}
 					newArtist.hasAvatar = true;
@@ -56,7 +74,7 @@ export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", 
 				props.close();
 			} catch (e) {
 				console.error(e);
-				summonErrorToast(() => "An error occured during creation of the artist");
+				failCreation();
 			}
 		};
 
@@ -79,6 +97,9 @@ export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", 
 					<TextInput placeholder="Name" class="create-artist-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
 				</div>
 			</div>
+			<Show when={artistUploadAvatarMutation.isPending}>
+				<UploadProgress label="Avatar upload" value={avatarProgress()}/>
+			</Show>
 			<div class="create-artist-pop-up-controls">
 				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
 				<Button disabled={isPending()} type="submit">Upload</Button>

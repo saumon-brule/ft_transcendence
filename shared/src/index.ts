@@ -35,7 +35,7 @@ export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/bu
 
 export { type ProviderDataDto, type ProviderDataMusicDto, type ProviderDataAlbumDto, type ProviderDataArtistDto, type ProviderInfoDto } from "./contracts/provider/info/schemas/info.schema";
 export { DEFAULT_PAGINATION_LIMIT, healthResponseSchema, healthUnavailableSchema, type HealthResponseDto, type HealthUnavailableDto } from "./schemas/common.schema";
-export { musicItemSchema, artistItemSchema, albumItemSchema } from "./contracts/provider/schemas/items.schema";
+export { musicItemSchema, artistItemSchema, albumItemSchema, type ArtistItemDto } from "./contracts/provider/schemas/items.schema";
 export * from "./contracts/server/providers/schemas/provider.schema";
 
 export { type ArtistDetailedItemDto } from "./contracts/provider/artist/schemas/artist.schema";

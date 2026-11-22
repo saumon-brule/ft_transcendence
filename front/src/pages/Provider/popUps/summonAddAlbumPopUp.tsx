@@ -2,10 +2,12 @@ import { summonPopUp } from "~/components/ui/Overlay";
 import { DEFAULT_ALBUM } from "~/utils/imageFallback";
 import TextInput from "~/components/inputs/TextInput";
 import Button from "~/components/inputs/Button";
-import { createMemo, createSignal, For, onCleanup } from "solid-js";
+import { createMemo, createSignal, For, onCleanup, Show } from "solid-js";
 import Form from "~/components/inputs/Form/Form";
 import { getProviderClient } from "~/api/providerClients";
-import { Provider } from "@flex/shared";
+import { Provider, providerContract } from "@flex/shared";
+import { settleResponse } from "~/api/utils/settleResponse";
+import UploadProgress from "~/components/ui/UploadProgress";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import "./AddAlbumPopUp.scss";
 import { Artist } from "~/class/Artist";
@@ -32,6 +34,8 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 		const albumUploadCoverMutation = providerClient.client.album.uploadCover.createMutation();
 		const albumRemoveMutation = providerClient.client.album.remove.createMutation();
 
+		const [coverProgress, setCoverProgress] = createSignal(0);
+
 		const coverPreviewUrl = createMemo(() => {
 			const f = cover();
 			if (!f) return null;
@@ -43,27 +47,37 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 		let fileInputRef!: HTMLInputElement;
 
 		const handleSubmit = async () => {
+			let createdUuid: string | null = null;
+			const failCreation = (status?: number) => {
+				if (status === 413) summonErrorToast(() => "File to large");
+				else if (status === 415) summonErrorToast(() => "File not supported");
+				else summonErrorToast(() => "An error occured during creation of the album");
+				if (createdUuid) void albumRemoveMutation.mutate({ params: { uuid: createdUuid } });
+			};
+
 			try {
-				const createRes = await albumCreateMutation.mutateAsync({ body: {
+				const createRes = await settleResponse(albumCreateMutation.mutateAsync({ body: {
 					name: name(),
 					artistUuids: artists().map((artist) => artist.uuid),
-				} });
+				} }), providerContract.album.create);
 				if (createRes.status !== 201) {
-					summonErrorToast(() => "An error occured during creation of the artist");
+					failCreation(createRes.status);
 					return;
 				}
 
 				const newAlbum = createRes.body;
 				const uuid = newAlbum.uuid;
-				const curCover = cover();
+				createdUuid = uuid;
 
+				const curCover = cover();
 				if (curCover) {
-					const uploadCoverRes = await albumUploadCoverMutation.mutateAsync({ params: { uuid }, body: { file: curCover } });
+					const uploadCoverRes = await settleResponse(albumUploadCoverMutation.mutateAsync({
+						params: { uuid },
+						body: { file: curCover },
+						onUploadProgress: setCoverProgress,
+					}), providerContract.album.uploadCover);
 					if (uploadCoverRes.status !== 204) {
-						if (uploadCoverRes.status === 413) summonErrorToast(() => "File to large");
-						else if (uploadCoverRes.status === 415) summonErrorToast(() => "File not supported");
-						else summonErrorToast(() => "An error occured during creation of the artist");
-						void albumRemoveMutation.mutate({ params: { uuid } });
+						failCreation(uploadCoverRes.status);
 						return;
 					}
 					newAlbum.hasCover = true;
@@ -72,7 +86,7 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 				props.close();
 			} catch (e) {
 				console.error(e);
-				summonErrorToast(() => "An error occured during creation of the artist");
+				failCreation();
 			}
 		};
 
@@ -109,6 +123,9 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 					</For>
 				</div>
 			</div>
+			<Show when={albumUploadCoverMutation.isPending}>
+				<UploadProgress label="Cover upload" value={coverProgress()}/>
+			</Show>
 			<div class="create-album-pop-up-controls">
 				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
 				<Button disabled={isPending()} type="submit">Upload</Button>
