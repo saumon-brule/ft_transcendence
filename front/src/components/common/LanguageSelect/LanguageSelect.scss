@@ -1,0 +1,18 @@
+.language-select {
+	select {
+		padding: 0.4rem 2.25rem 0.4rem 0.75rem;
+		font-size: 0.875rem;
+		border-radius: 0.5rem;
+	}
+
+	.select-field::after {
+		right: 0.9rem;
+	}
+
+	&.floating {
+		position: fixed;
+		top: 1rem;
+		right: 1rem;
+		z-index: 10;
+	}
+}

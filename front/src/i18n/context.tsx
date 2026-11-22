@@ -36,7 +36,7 @@ function getInitLang() {
 	const browserLang = navigator.language.split("-")[0];
 	const params = new URLSearchParams(location.search);
 	const langValidation = localeSchema.safeParse(
-		params.get("lang") || browserLang || DEFAULT_LANG,
+		params.get("lang") || readStoredLocale() || browserLang || DEFAULT_LANG,
 	);
 	let lang;
 	if (langValidation.success) {
@@ -45,6 +45,22 @@ function getInitLang() {
 		lang = DEFAULT_LANG;
 	}
 	return lang;
+}
+
+const LOCALE_STORAGE_KEY = "locale";
+
+function readStoredLocale(): string | null {
+	try {
+		return localStorage.getItem(LOCALE_STORAGE_KEY);
+	} catch {
+		return null;
+	}
+}
+
+function storeLocale(locale: Locale) {
+	try {
+		localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+	} catch {}
 }
 
 const I18nContext = createContext<I18nContextType>();
@@ -59,7 +75,13 @@ export type Translator = I18nContextType["t"];
 
 export const { t, locale, setLocale } = createRoot(() => {
 	const lang = getInitLang();
-	const [locale, setLocale] = createSignal<Locale>(lang);
+	const [locale, setLocaleSignal] = createSignal<Locale>(lang);
+	document.documentElement.lang = lang;
+	const setLocale = (l: Locale) => {
+		setLocaleSignal(l);
+		storeLocale(l);
+		document.documentElement.lang = l;
+	};
 
 	const dict = createMemo<Dictionary>(() => i18n.flatten(dictionaries[locale()]));
 

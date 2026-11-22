@@ -2,6 +2,7 @@ import { A } from "@solidjs/router";
 import { JSX } from "solid-js";
 import FlexLogo from "~/components/common/logo/FlexLogo";
 import { legalInfo } from "./legalInfo";
+import LanguageSelect from "~/components/common/LanguageSelect/LanguageSelect";
 import { useTranslation } from "~/i18n/context";
 
 import "./Legal.scss";
@@ -19,6 +20,7 @@ export default function LegalLayout(props: LegalLayoutProps) {
 			<A href="/" class="logo" aria-label={t("pages.legal.backToFlex")}>
 				<FlexLogo />
 			</A>
+			<LanguageSelect class="legal-language-select" />
 		</header>
 		<main>
 			<article>

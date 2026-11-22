@@ -6,6 +6,7 @@ import FlexLogo from "~/components/common/logo/FlexLogo";
 
 import "./Landing.scss";
 import LinkParticles from "~/components/ui/LinkParticles";
+import LanguageSelect from "~/components/common/LanguageSelect/LanguageSelect";
 import { useTranslation } from "~/i18n/context";
 
 export default function Landing() {
@@ -52,7 +53,7 @@ export default function Landing() {
 			<div class="logo">
 				<FlexLogo/>
 			</div>
-			<div class="auth-buttons"><Show when={isLoggedIn()} fallback={<>
+			<div class="auth-buttons"><LanguageSelect /><Show when={isLoggedIn()} fallback={<>
 				<Button onClick={() => navigate("/login")}>{t("pages.landing.login")}</Button>
 				<Button onClick={() => navigate("/register")} variant="text">{t("pages.landing.signUp")}</Button>
 			</>}>
