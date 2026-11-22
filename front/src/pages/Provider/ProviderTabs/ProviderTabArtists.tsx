@@ -6,7 +6,7 @@ import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
 import InfiniteScroll from "~/components/ui/InfiniteScroll";
 import SortBar from "~/components/ui/SortBar";
 import { useSortParam } from "~/components/ui/SortBar/useSortParam";
-import { ARTIST_SORT_FIELDS, Provider } from "@flex/shared";
+import { ARTIST_SORT_FIELDS } from "@flex/shared";
 
 export default function ProviderTabArtists(props: { search: string }) {
 	const [sort, setSort] = useSortParam(() => ARTIST_SORT_FIELDS);

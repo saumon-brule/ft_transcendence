@@ -4,7 +4,7 @@ import MusicSection, { type MusicSortField } from "~/components/ui/MusicSection/
 import NoResult from "~/components/ui/NoResult/NoResult";
 import InfiniteScroll from "~/components/ui/InfiniteScroll";
 import { useSortParam } from "~/components/ui/SortBar/useSortParam";
-import { MUSIC_SORT_FIELDS, Provider } from "@flex/shared";
+import { MUSIC_SORT_FIELDS } from "@flex/shared";
 import type { SearchSort } from "~/api/queryHooks/providerInfo";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
 
@@ -18,7 +18,7 @@ export default function ProviderTabMusics(props: ProviderTabMusicProps) {
 		? { field: next.field, order: next.order }
 		: undefined);
 	const provider = useProvider();
-	const musicsQuery = useProviderMusicsInfiniteQuery(() => provider, () => props.search, sort);
+	const musicsQuery = useProviderMusicsInfiniteQuery(() => provider, () => props.search, () => ({}), sort);
 	const musics = createMemo(() => musicsQuery.data && {
 		musics: musicsQuery.data.pages.flatMap((page) => page.musics),
 		total: musicsQuery.data.pages[0]?.total ?? 0,

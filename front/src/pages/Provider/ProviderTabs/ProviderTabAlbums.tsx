@@ -6,12 +6,12 @@ import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 import InfiniteScroll from "~/components/ui/InfiniteScroll";
 import SortBar from "~/components/ui/SortBar";
 import { useSortParam } from "~/components/ui/SortBar/useSortParam";
-import { ALBUM_SORT_FIELDS, Provider } from "@flex/shared";
+import { ALBUM_SORT_FIELDS } from "@flex/shared";
 
 export default function ProviderTabAlbums(props: { search: string }) {
 	const [sort, setSort] = useSortParam(() => ALBUM_SORT_FIELDS);
 	const provider = useProvider();
-	const albumsQuery = useProviderAlbumsInfiniteQuery(() => provider, () => props.search, sort);
+	const albumsQuery = useProviderAlbumsInfiniteQuery(() => provider, () => props.search, () => ({}), sort);
 	const albums = createMemo(() => albumsQuery.data && {
 		albums: albumsQuery.data.pages.flatMap((page) => page.albums),
 		total: albumsQuery.data.pages[0]?.total ?? 0,

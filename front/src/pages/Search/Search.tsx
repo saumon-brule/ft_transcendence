@@ -19,7 +19,7 @@ import SearchFilters from "./SearchFilters";
 import SortBar from "~/components/ui/SortBar";
 import { useSortParam } from "~/components/ui/SortBar/useSortParam";
 import InfiniteScroll from "~/components/ui/InfiniteScroll";
-import { PAGE_SIZE, pickFilters, TAB_FILTER_FIELDS, TAB_SORT_FIELDS, useSearchFilters } from "./searchFilters";
+import { PAGE_SIZE, pickFilters, TAB_FILTER_FIELDS, TAB_SORT_FIELDS, useSearchFilters } from "./useSearchFilters";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
 import Tabs from "~/components/ui/Tabs/Tabs";
@@ -113,8 +113,8 @@ export default function Search() {
 			providers: Provider[];
 		} = {
 			musics: arrange(data.flatMap((d) => d.musics), (m) => scoreMusic(m, search()), (m) => m.provider.uuid, (a, b) => sorting ? compareMusics(a, b, sorting) : 0),
-			albums: arrange(data.flatMap((d) => d.albums), (a) => scoreAlbum(a, search()), (a) => a.providerUuid, (a, b) => sorting ? compareAlbums(a, b, sorting) : 0),
-			artists: arrange(data.flatMap((d) => d.artists), (a) => scoreArtist(a, search()), (a) => a.providerUuid, (a, b) => sorting ? compareArtists(a, b, sorting) : 0),
+			albums: arrange(data.flatMap((d) => d.albums), (a) => scoreAlbum(a, search()), (a) => a.provider.uuid, (a, b) => sorting ? compareAlbums(a, b, sorting) : 0),
+			artists: arrange(data.flatMap((d) => d.artists), (a) => scoreArtist(a, search()), (a) => a.provider.uuid, (a, b) => sorting ? compareArtists(a, b, sorting) : 0),
 			best: null,
 			providers: (data.filter((d) => d.musics.length + d.albums.length + d.artists.length > 0 || d.provider.name.toLocaleLowerCase().includes(search().toLowerCase()))).map((d) => d.provider),
 		};

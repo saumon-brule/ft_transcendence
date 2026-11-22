@@ -53,7 +53,7 @@ export default function Provider() {
 			</Match>
 			<Match when={providerStatus() === "success"}>
 				<Show when={providerInfoQuery.data?.body}>
-					<Tabs tabs={TABS} value={tab()} onChange={setTab} />
+					<Tabs tabs={TABS} value={tab()} onChange={changeTab} />
 					<ProviderSearchBar value={search()} onSearch={setSearch} />
 					<Switch>
 						<Match when={tab() === "All"}>
