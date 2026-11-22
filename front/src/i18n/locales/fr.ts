@@ -14,7 +14,7 @@ export default {
 			forgotPassword: "Mot de passe oublié ?",
 			submit: "Connexion",
 			intra: {
-				begin: "Se connecter avec l'",
+				begin: "Se connecter avec ",
 				end: " Intra",
 			},
 			switch: {
@@ -720,6 +720,9 @@ export default {
 		},
 	},
 	components: {
+		languageSelect: {
+			label: "Langue",
+		},
 		header: {
 			homeLabel: "Accueil Flex",
 			closeSidebar: "Fermer la barre latérale",

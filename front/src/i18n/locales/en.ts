@@ -718,6 +718,9 @@ export default {
 		albumCover: "Album cover",
 	},
 	components: {
+		languageSelect: {
+			label: "Language",
+		},
 		header: {
 			homeLabel: "Flex home",
 			closeSidebar: "Close sidebar",
