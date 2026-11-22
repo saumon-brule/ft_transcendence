@@ -71,11 +71,11 @@ export default function Queue(props: QueueProps) {
 					</Show>
 					<Show when={!audioManager.currentMusic && !audioManager.musicGroup && audioManager.queue.length === 0} keyed>
 						<div>
-							Rien à écouter ? :(
+							{t("pages.queue.empty")}
 						</div>
 					</Show>
 					<Show when={audioManager.musicGroup && audioManager.queue.length === 0 && !audioManager.currentMusic} keyed>
-						<div>Vous êtes arrivé à la fin de la liste.</div>
+						<div>{t("pages.queue.endOfList")}</div>
 					</Show>
 				</div>
 			</div>

@@ -22,6 +22,7 @@ import { Music } from "~/class/Music";
 import { summonAddArtistPopUp } from "./summonAddArtistPopUp";
 import { getProgressionPourcent } from "~/components/ui/Footer/Controller";
 import { MusicTimer } from "~/components/common/MusicTimer/MusicTimer";
+import { t } from "~/i18n/context";
 
 function pictureToFile(pic: IPicture, baseName = "cover"): File {
 	const ext = pic.format.split("/")[1]?.replace("jpeg", "jpg") ?? "bin";
@@ -66,7 +67,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 	const { duration } = metadata.format;
 
 	if (!duration) {
-		summonErrorToast(() => "Unreadable or unusable file");
+		summonErrorToast(() => t("pages.provider.popUps.unreadableFile"));
 		return null;
 	}
 
@@ -133,9 +134,9 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		const handleSubmit = async () => {
 			let createdUuid: string | null = null;
 			const failCreation = (status?: number) => {
-				if (status === 413) summonErrorToast(() => "File to large");
-				else if (status === 415) summonErrorToast(() => "File not supported");
-				else summonErrorToast(() => "An error occured during creation of the music");
+				if (status === 413) summonErrorToast(() => t("pages.provider.popUps.fileTooLarge"));
+				else if (status === 415) summonErrorToast(() => t("pages.provider.popUps.fileNotSupported"));
+				else summonErrorToast(() => t("pages.provider.popUps.music.createError"));
 				if (createdUuid) void musicRemoveMutation.mutate({ params: { uuid: createdUuid } });
 			};
 
@@ -251,7 +252,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		});
 
 		return <Form class="upload-music-pop-up" onSubmit={() => { void handleSubmit(); }}>
-			<h2 >Upload new music</h2>
+			<h2 >{t("pages.provider.popUps.music.addTitle")}</h2>
 			<div class="upload-music-info">
 				<div class="upload-music-cover-box">
 					<input
@@ -264,7 +265,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 					<img src={coverPpreviewUrl() ?? DEFAULT_COVER} onClick={() => fileInputRef.click()}/>
 				</div>
 				<div class="upload-music-details">
-					<TextInput placeholder="Name" class="upload-music-music-title" onChange={(a) => setTitle(a.currentTarget.value)} value={title()} />
+					<TextInput placeholder={t("pages.provider.popUps.namePlaceholder")} class="upload-music-music-title" onChange={(a) => setTitle(a.currentTarget.value)} value={title()} />
 					<TextInput type="date" size="sm" onInput={(e) => setPublishedDate(e.currentTarget.value ? new Date(e.currentTarget.value) : null)}/>
 					<Show when={album()} keyed fallback={<div class="upload-music-album no-album"><SelectAlbumMenu provider={provider} setAlbum={setAlbum}/></div>}>
 						{(album) => <div class="upload-music-album has-album">
@@ -302,7 +303,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 					</For>
 					<For each={notFoundArtists()}>
 						{(artistName) => <div class="artist">
-							<img src={DEFAULT_ARTIST} alt="artist avatar"/>
+							<img src={DEFAULT_ARTIST} alt={t("common.artistPicture")}/>
 							<span>{artistName}</span>
 							<Button type="button" icon onClick={() => summonAddArtistPopUp(provider, artistName, addArtistFromRest)}><Plus size={18}/></Button>
 						</div>}
@@ -310,14 +311,14 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 				</div>
 			</div>
 			<Show when={musicUploadAudioMutation.isPending}>
-				<UploadProgress label="Audio upload" value={audioProgress()}/>
+				<UploadProgress label={t("pages.provider.popUps.audioUpload")} value={audioProgress()}/>
 			</Show>
 			<Show when={musicUploadCoverMutation.isPending}>
-				<UploadProgress label="Cover upload" value={coverProgress()}/>
+				<UploadProgress label={t("pages.provider.popUps.coverUpload")} value={coverProgress()}/>
 			</Show>
 			<div class="upload-music-pop-up-controls">
-				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
-				<Button disabled={isPending()} type="submit">Upload</Button>
+				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>{t("common.cancel")}</Button>
+				<Button disabled={isPending()} type="submit">{t("pages.provider.popUps.upload")}</Button>
 			</div>
 		</Form>;
 	});

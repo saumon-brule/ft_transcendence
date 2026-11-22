@@ -13,12 +13,14 @@ import ProviderTabArtists from "./ProviderTabs/ProviderTabArtists";
 import OfflineProvider from "~/components/ui/NoResult/OfflineProvider";
 import ProviderSearchBar from "./ProviderSearchBar";
 import LoadingSplash from "../Loading/LoadingSplash";
+import { useTranslation } from "~/i18n/context";
 
 const TABS = ["All", "Musics", "Albums", "Artists"] as const;
 type Tab = typeof TABS[number];
 export type ProviderStatus = "loading" | "success" | "forbidden" | "offline";
 
 export default function Provider() {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const providerInfoQuery = useProviderInfoQuery(() => provider);
 	const providerStatus = createMemo<ProviderStatus>(() => {
@@ -46,14 +48,14 @@ export default function Provider() {
 				<LoadingSplash />
 			</Match>
 			<Match when={providerStatus() === "forbidden"}>
-				<div class="error">You don't have access to this provider</div>
+				<div class="error">{t("pages.provider.forbidden")}</div>
 			</Match>
 			<Match when={providerStatus() === "offline"}>
 				<OfflineProvider show={true}/>
 			</Match>
 			<Match when={providerStatus() === "success"}>
 				<Show when={providerInfoQuery.data?.body}>
-					<Tabs tabs={TABS} value={tab()} onChange={changeTab} />
+					<Tabs tabs={TABS} value={tab()} onChange={changeTab} label={(tab) => t(`common.tabs.${tab}`)} />
 					<ProviderSearchBar value={search()} onSearch={setSearch} />
 					<Switch>
 						<Match when={tab() === "All"}>

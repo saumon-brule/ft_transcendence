@@ -8,8 +8,10 @@ import { DiscAlbum, Home, Server } from "lucide-solid";
 import { usePlaylistsQuery } from "~/api/queryHooks/playlist";
 import PlaylistCard, { NewPlaylistCard } from "../PlaylistCard/PlaylistCard";
 import { summonNewPlaylistPopUp } from "~/pages/Playlists/popUps/newPlaylistPopUp";
+import { useTranslation } from "~/i18n/context";
 
 export default function Sidebar() {
+	const { t } = useTranslation();
 	const me = useProfile();
 	const providers = () => [...me().ownedProviders, ...me().connectedProviders];
 	const playlistsQuery = usePlaylistsQuery();
@@ -30,17 +32,17 @@ export default function Sidebar() {
 	return <div id="app-sidebar" classList={{ active: isSidebarOpen() }}>
 		<section>
 			<div class="link-container">
-				<A class="white-variant icon-link" href="/home" end><Home/> Home</A>
-				<A class="white-variant icon-link" href="/providers" end><Server/> Providers</A>
-				<A class="white-variant icon-link" href="/playlists" end><DiscAlbum/> Playlists</A>
+				<A class="white-variant icon-link" href="/home" end><Home/> {t("components.sidebar.home")}</A>
+				<A class="white-variant icon-link" href="/providers" end><Server/> {t("components.sidebar.providers")}</A>
+				<A class="white-variant icon-link" href="/playlists" end><DiscAlbum/> {t("components.sidebar.playlists")}</A>
 			</div>
 		</section>
 		<section>
 			<div class="section-heading">
-				<h2>Playlists</h2>
+				<h2>{t("components.sidebar.playlists")}</h2>
 				<Show when={playlists().length > 4}>
 					<a href="#" onClick={(event) => { event.preventDefault(); setShowAllPlaylists((value) => !value); }}>
-						{showAllPlaylists() ? "Show less" : "Show more"}
+						{showAllPlaylists() ? t("common.showLess") : t("common.showMore")}
 					</a>
 				</Show>
 			</div>
@@ -52,10 +54,10 @@ export default function Sidebar() {
 		<Show when={providers().length > 0}>
 			<section>
 				<div class="section-heading">
-					<h2>Providers</h2>
+					<h2>{t("components.sidebar.providers")}</h2>
 					<Show when={providers().length > 4}>
 						<a href="#" onClick={(event) => { event.preventDefault(); setShowAllProviders((value) => !value); }}>
-							{showAllProviders() ? "Show less" : "Show more"}
+							{showAllProviders() ? t("common.showLess") : t("common.showMore")}
 						</a>
 					</Show>
 				</div>
@@ -66,8 +68,8 @@ export default function Sidebar() {
 			</section>
 		</Show>
 		<section class="legal-links">
-			<A class="external-link" href="/privacy-policy">Privacy Policy</A>
-			<A class="external-link" href="/terms-of-service">Terms of Service</A>
+			<A class="external-link" href="/privacy-policy">{t("components.sidebar.privacyPolicy")}</A>
+			<A class="external-link" href="/terms-of-service">{t("components.sidebar.termsOfService")}</A>
 		</section>
 	</div>;
 }

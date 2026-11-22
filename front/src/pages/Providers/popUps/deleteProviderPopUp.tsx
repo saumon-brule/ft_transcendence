@@ -6,6 +6,7 @@ import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { t } from "~/i18n/context";
 
 export const summonDeleteProviderPopUp = (providerUUID: string, onClose?: () => void) => summonPopUp((popUpControls) => {
 	const deleteProviderMutation = client.providers.delete.createMutation();
@@ -27,24 +28,24 @@ export const summonDeleteProviderPopUp = (providerUUID: string, onClose?: () => 
 							},
 						},
 					);
-					summonSuccessToast(() => "Provider deleted successfully");
+					summonSuccessToast(() => t("pages.providers.deletePopUp.success"));
 					popUpControls.close();
 				},
 				onError: () => {
-					summonErrorToast(() => "Failed to delete provider");
+					summonErrorToast(() => t("pages.providers.deletePopUp.error"));
 				},
 			},
 		);
 	}
 
 	return <Form onSubmit={handleSubmit}>
-		<h2>Delete provider</h2>
+		<h2>{t("pages.providers.deletePopUp.title")}</h2>
 		<div class="pop-up-inputs">
-			<p>Are you sure you want to delete this provider? This action cannot be undone.</p>
+			<p>{t("pages.providers.deletePopUp.confirm")}</p>
 		</div>
 		<div class="pop-up-buttons">
-			<Button type="button" onClick={popUpControls.close} variant="text" size="md">Cancel</Button>
-			<Button type="submit" size="md" variant="danger" disabled={deleteProviderMutation.isPending}>Delete</Button>
+			<Button type="button" onClick={popUpControls.close} variant="text" size="md">{t("common.cancel")}</Button>
+			<Button type="submit" size="md" variant="danger" disabled={deleteProviderMutation.isPending}>{t("common.delete")}</Button>
 		</div>
 	</Form>;
 }, { customClass: "provider-pop-up", onClose });

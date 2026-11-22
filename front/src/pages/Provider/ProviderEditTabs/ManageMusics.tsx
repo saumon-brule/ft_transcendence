@@ -8,8 +8,10 @@ import MusicCover from "~/components/ui/MusicCover";
 import { Pencil, Trash } from "lucide-solid";
 import { providerRemoveMusic } from "~/api/queryHooks/providerManageCatalog";
 import { summonEditMusicPopUp } from "../popUps/summonEditMusicPopUp";
+import { useTranslation } from "~/i18n/context";
 
 export function ManageMusics(props: { search: string }) {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const musicsQuery = useProviderMusicsInfiniteQuery(() => provider, () => props.search);
 	const musics = createMemo(() => {
@@ -18,13 +20,13 @@ export function ManageMusics(props: { search: string }) {
 	});
 
 	return <div id="manage-musics-tab" class="tab-container">
-		<Show when={musics().length} keyed fallback={<div>No musics</div>}><section>
+		<Show when={musics().length} keyed fallback={<div>{t("pages.provider.edit.noMusics")}</div>}><section>
 			<div class="musics-list">
 				<For each={musics()}>{(music) => <ProviderAristCard music={music}/>}</For>
 			</div>
 		</section></Show>
 		<Show when={musicsQuery.hasNextPage}>
-			<Button onClick={() => void musicsQuery.fetchNextPage()} disabled={musicsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
+			<Button onClick={() => void musicsQuery.fetchNextPage()} disabled={musicsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">{t("pages.search.seeMore")}</Button>
 		</Show>
 	</div>;
 }

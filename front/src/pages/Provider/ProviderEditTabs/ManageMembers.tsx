@@ -10,6 +10,7 @@ import { textToCSS } from "~/utils/tex2col";
 import { providerMemberRemoveRole, providerRemoveMember, providerUserAccessDecide, useProviderMembersQuery, useProviderPendingMembersQuery } from "~/api/queryHooks/providerManageMembers";
 import { AddRoleMenu } from "./AddRoleMenu";
 import { useProviderInfoInfo } from "~/components/guards/EditPermissionGuard";
+import { locale, useTranslation } from "~/i18n/context";
 
 type PendingUser = {
 	status: "PENDING" | "APPROVED" | "REJECTED";
@@ -36,12 +37,11 @@ export type ProviderUser = {
 };
 
 function displayDate(date: Date | string) {
-	const d = new Date(date);
-	const pad = (n: number) => String(n).padStart(2, "0");
-	return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${pad(d.getFullYear() % 100)} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+	return new Date(date).toLocaleString(locale(), { dateStyle: "short", timeStyle: "short" });
 }
 
 export function ManageMembers(props: { search: string }) {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const providerPendingMembersQuery = useProviderPendingMembersQuery(provider);
 	const providerMembersQuery = useProviderMembersQuery(provider);
@@ -80,16 +80,16 @@ export function ManageMembers(props: { search: string }) {
 	return <div id="manage-member-tab" class="tab-container">
 		<section>
 			<div class="section-header">
-				<h2>Pending requests</h2>
+				<h2>{t("pages.provider.edit.pendingRequests")}</h2>
 				<Button size="sm" icon onClick={() => void providerPendingMembersQuery.refetch()}><RefreshCcw classList={{ spinning: providerPendingMembersQuery.isFetching }}/></Button>
 			</div>
-			<Show when={pendingMembers()} keyed fallback={<p class="empty-message">No pending requests at the moment.</p>}>{(members) => <div class="members-list">
+			<Show when={pendingMembers()} keyed fallback={<p class="empty-message">{t("pages.provider.edit.noPendingRequests")}</p>}>{(members) => <div class="members-list">
 				<For each={members}>{(member) => <PendingMemberCard member={member}/>}</For>
 			</div>}</Show>
 		</section>
 		<Show when={currentMembers()} keyed>{(members) => <section>
 			<div class="section-header">
-				<h2>Provider members</h2>
+				<h2>{t("pages.provider.edit.members")}</h2>
 				<Button size="sm" icon onClick={() => void providerMembersQuery.refetch()}><RefreshCcw classList={{ spinning: providerMembersQuery.isFetching }}/></Button>
 			</div>
 			<div class="members-list">
@@ -100,6 +100,7 @@ export function ManageMembers(props: { search: string }) {
 }
 
 function PendingMemberCard(props: { member: PendingUser }) {
+	const { t } = useTranslation();
 	const provider = useProvider();
 
 	async function acceptMember() {
@@ -113,16 +114,17 @@ function PendingMemberCard(props: { member: PendingUser }) {
 	return <div class="pending-member-card member-card">
 		<div class="infos">
 			<A class="username white-variant" href={`/user/${props.member.uuid}`}>{props.member.username}</A>
-			<span class="date">Requested: {displayDate(props.member.createdAt)}</span>
+			<span class="date">{t("pages.provider.edit.requestedAt", { date: displayDate(props.member.createdAt) })}</span>
 		</div>
 		<div class="actions">
-			<Button variant="text" onClick={() => void acceptMember()}>Accept</Button>
-			<Button variant="danger" onClick={() => void rejectMember()}>Reject</Button>
+			<Button variant="text" onClick={() => void acceptMember()}>{t("components.friendshipActions.accept")}</Button>
+			<Button variant="danger" onClick={() => void rejectMember()}>{t("pages.provider.edit.reject")}</Button>
 		</div>
 	</div>;
 }
 
 function ProviderMemberCard(props: { member: ProviderUser }) {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const providerInfo = useProviderInfoInfo();
 	const me = useProfile();
@@ -140,7 +142,7 @@ function ProviderMemberCard(props: { member: ProviderUser }) {
 			<A class="username white-variant" href={`/user/${props.member.uuid}`}>{props.member.username}</A>
 			<div class="roles">
 				<Show when={props.member.isOwner}>
-					<div class="role" style={{ "--role-color": "var(--text-accent-hover)" }}><span>Owner</span></div>
+					<div class="role" style={{ "--role-color": "var(--text-accent-hover)" }}><span>{t("pages.provider.edit.owner")}</span></div>
 				</Show>
 				<For each={props.member.roles}>{(role) => <div class="role" style={{ "--role-color": textToCSS(role.name) }}>
 					<span>{role.name}</span>
@@ -154,9 +156,9 @@ function ProviderMemberCard(props: { member: ProviderUser }) {
 			</div>
 		</div>
 		<div class="actions">
-			<Show when={!props.member.isOwner} fallback={<div class="owner">Owner</div>}>
-				<Show when={props.member.uuid !== me().uuid} fallback={<div class="owner">Myself</div>}>
-					<Button variant="danger" onClick={() => void removeMember()}>Remove</Button>
+			<Show when={!props.member.isOwner} fallback={<div class="owner">{t("pages.provider.edit.owner")}</div>}>
+				<Show when={props.member.uuid !== me().uuid} fallback={<div class="owner">{t("pages.provider.edit.myself")}</div>}>
+					<Button variant="danger" onClick={() => void removeMember()}>{t("common.remove")}</Button>
 				</Show>
 			</Show>
 		</div>

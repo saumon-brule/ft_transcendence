@@ -5,14 +5,16 @@ import Button from "~/components/inputs/Button";
 import { Plus } from "lucide-solid";
 import { summonNewProviderPopUp } from "./popUps/newProviderPopUp";
 import { useProfile } from "~/components/guards/ProfileGate";
+import { useTranslation } from "~/i18n/context";
 
 export default function Providers() {
+	const { t } = useTranslation();
 	const me = useProfile();
 
 	return <div id="providers-page" class="page">
 		<div class="providers-header">
-			<h1>My Providers</h1>
-			<Button onClick={() => summonNewProviderPopUp()} aria-label="New provider"><Plus/><span class="btn-label">New provider</span></Button>
+			<h1>{t("pages.providers.title")}</h1>
+			<Button onClick={() => summonNewProviderPopUp()} aria-label={t("pages.providers.newPopUp.title")}><Plus/><span class="btn-label">{t("pages.providers.newPopUp.title")}</span></Button>
 		</div>
 		<div class="providers-list">
 			<For each={me().ownedProviders}>{(provider) => <ProviderCard provider={provider} mine={true} />}</For>

@@ -9,6 +9,7 @@ import { Plus, Search } from "lucide-solid";
 import { ProviderUser } from "./ManageMembers";
 import { A } from "@solidjs/router";
 import { providerMemberAddRole } from "~/api/queryHooks/providerManageMembers";
+import { useTranslation } from "~/i18n/context";
 
 export function AddRoleMenu(props: { user: ProviderUser }) {
 	return <Menu
@@ -21,6 +22,7 @@ export function AddRoleMenu(props: { user: ProviderUser }) {
 }
 
 function AddRoleContent(props: { user: ProviderUser; onClose: () => void }) {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const [searchQuery, setSearchQuery] = createSignal("");
 	const rolesQuery = useProviderRolesQuery(provider);
@@ -38,9 +40,9 @@ function AddRoleContent(props: { user: ProviderUser; onClose: () => void }) {
 			e.preventDefault();
 		}}>
 			<Search class="search-icon" size={15}/>
-			<TextInput value={searchQuery()} placeholder="Search playlist" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
+			<TextInput value={searchQuery()} placeholder={t("pages.provider.edit.searchRole")} type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 		</Form>
-		<A href={`/provider/${provider.uuid}/edit?tab=Roles`} class="subtext white-variant">Manage roles</A>
+		<A href={`/provider/${provider.uuid}/edit?tab=Roles`} class="subtext white-variant">{t("pages.provider.edit.manageRoles")}</A>
 		<Show when={rolesQuery.data?.body.roles} keyed>
 			{(roles) => <For each={roles.filter((r) => !props.user.roles.map((rl) => rl.uuid).includes(r.uuid)).filter((r) => r.name.toLowerCase().includes(searchQuery().toLowerCase()))}>
 				{(role) => <button disabled={disableAddRole()} type="button" role="menuitem" onClick={() => void addRole(role)}>

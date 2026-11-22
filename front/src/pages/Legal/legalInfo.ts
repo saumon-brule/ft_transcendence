@@ -3,8 +3,7 @@ export const legalInfo = {
 	operator: "Emilien, Erwoan, Vadim, Liam",
 	contactEmail: "contact@flex.com",
 	hostingLocation: "Localhost",
-	lastUpdated: "November 3, 2026",
+	lastUpdated: new Date(2026, 10, 3),
 	minimumAge: 15,
-	governingLaw: "French law",
 	repositoryUrl: "https://github.com/saumon-brule/ft_transcendence",
 };

@@ -6,8 +6,10 @@ import FlexLogo from "~/components/common/logo/FlexLogo";
 
 import "./Landing.scss";
 import LinkParticles from "~/components/ui/LinkParticles";
+import { useTranslation } from "~/i18n/context";
 
 export default function Landing() {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	let observer!: IntersectionObserver;
@@ -51,84 +53,84 @@ export default function Landing() {
 				<FlexLogo/>
 			</div>
 			<div class="auth-buttons"><Show when={isLoggedIn()} fallback={<>
-				<Button onClick={() => navigate("/login")}>Login</Button>
-				<Button onClick={() => navigate("/register")} variant="text">Sign up</Button>
+				<Button onClick={() => navigate("/login")}>{t("pages.landing.login")}</Button>
+				<Button onClick={() => navigate("/register")} variant="text">{t("pages.landing.signUp")}</Button>
 			</>}>
-				<Button onClick={() => navigate("/home")}>Listen</Button>
+				<Button onClick={() => navigate("/home")}>{t("pages.landing.listen")}</Button>
 			</Show>
 			</div>
 		</header>
 		<section class="hero-banner">
 			<LinkParticles/>
 			<h1>Flex</h1>
-			<p>Another way to listen to music</p>
+			<p>{t("pages.landing.hero.subtitle")}</p>
 			<div class="hero-cta">
 				<A href="#learn-more" onClick={(event) => {
 					event.preventDefault();
 					scrollToSection("learn-more");
-				}}>Learn more</A>
-				<Button onClick={() => scrollToSection("get-started")}>Get started</Button>
+				}}>{t("pages.landing.hero.learnMore")}</A>
+				<Button onClick={() => scrollToSection("get-started")}>{t("pages.landing.hero.getStarted")}</Button>
 			</div>
 		</section>
 		<div id="learn-more" class="section-container">
 			<section class="appearing-section whats-flex" ref={easySectionRef}>
 				<div class="title-section">
-					<h2>What's Flex ?</h2>
-					<p>Flex is a platform that allow you to listen to music you and your friends host</p>
+					<h2>{t("pages.landing.whatsFlex.title")}</h2>
+					<p>{t("pages.landing.whatsFlex.description")}</p>
 				</div>
 				<div class="content-section">
 					<div class="content">
-						<h3>Flex servers</h3>
-						<p>Flex hosts the account related systeme, and the interface to connect to your provider(s)</p>
+						<h3>{t("pages.landing.whatsFlex.servers.title")}</h3>
+						<p>{t("pages.landing.whatsFlex.servers.description")}</p>
 					</div>
 					<div class="separator"/>
 					<div class="content">
-						<h3>Your provider</h3>
-						<p>You can install your own <A href="/#get-started">provider</A> to host your own music on your server. You just need to connect it to your flex account and you can start listening anywhere.</p>
+						<h3>{t("pages.landing.whatsFlex.provider.title")}</h3>
+						<p>{t("pages.landing.whatsFlex.provider.description.begin")}<A href="/#get-started">{t("pages.landing.whatsFlex.provider.description.link")}</A>{t("pages.landing.whatsFlex.provider.description.end")}</p>
 					</div>
 					<div class="separator"/>
 					<div class="content">
-						<h3>Your friends</h3>
-						<p>Share your providers with your friends and extend your music library. You can also chat, share, and listen music together.</p>
+						<h3>{t("pages.landing.whatsFlex.friends.title")}</h3>
+						<p>{t("pages.landing.whatsFlex.friends.description")}</p>
 					</div>
 				</div>
 			</section>
 			<div class="bottom-sections">
 				<section id="get-started" class="appearing-section get-started" ref={freeSectionRef}>
 					<div class="title-section">
-						<h2>Get started</h2>
-						<p>Ready to start using Flex? Here's how you can get started.</p>
+						<h2>{t("pages.landing.getStarted.title")}</h2>
+						<p>{t("pages.landing.getStarted.description")}</p>
 					</div>
 					<div class="content-section">
 						<div class="content">
-							<h3>Create an account</h3>
-							<p>You need a Flex account to connect your provider to. Once it's created, generate a provider key from your account settings.</p>
+							<h3>{t("pages.landing.getStarted.account.title")}</h3>
+							<p>{t("pages.landing.getStarted.account.description")}</p>
 						</div>
 						<div class="separator"/>
 						<div class="content">
-							<h3>Setup your provider</h3>
-							<p>You need docker to run your provider, and you can follow the install instructions</p>
+							<h3>{t("pages.landing.getStarted.setup.title")}</h3>
+							<p>{t("pages.landing.getStarted.setup.install")}</p>
 							<code>
 								git clone git@github.com:saumon-brule/ft_transcendence.git flex<br/>
 								cd flex<br/>
 							</code>
-							<p>Edit the configuration file config.json with your provider key et tout le reste.</p>
+							<p>{t("pages.landing.getStarted.setup.config")}</p>
 							<code>docker compose up -d</code>
-							<p>You can now fill your library from the flex interface, or by putting your music files in the directory you setup in your config. A automatic scan will try to recover the correct title, artist, album and cover info.</p>
+							<p>{t("pages.landing.getStarted.setup.fill")}</p>
 						</div>
 						<div class="separator"/>
 						<div class="content">
-							<h3>Share it</h3>
-							<p>Invite your friends on your provider to share your music with them.</p>
+							<h3>{t("pages.landing.getStarted.share.title")}</h3>
+							<p>{t("pages.landing.getStarted.share.description")}</p>
 						</div>
 					</div>
 				</section>
 				<section class="appearing-section contribute" ref={openSectionRef}>
-					<h2>Join the project!</h2>
-					<p class="mobile-center">Flex is open source, contribute on <A class="github-link" href="https://github.com/saumon-brule/ft_transcendence">GitHub</A></p>
+					<h2>{t("pages.landing.contribute.title")}</h2>
+					<p class="mobile-center">{t("pages.landing.contribute.description")}<A class="github-link" href="https://github.com/saumon-brule/ft_transcendence">GitHub</A></p>
 					<div class="legal-links">
-						<A href="/privacy-policy">Privacy Policy</A>
-						<A href="/terms-of-service">Terms of Service</A>
+						<A href="/privacy-policy">{t("components.sidebar.privacyPolicy")}</A>
+						<A href="/terms-of-service">{t("components.sidebar.termsOfService")}</A>
 					</div>
 				</section>
 			</div>

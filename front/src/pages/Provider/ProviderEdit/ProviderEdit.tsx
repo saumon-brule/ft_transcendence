@@ -21,6 +21,7 @@ import { summonAddAlbumPopUp } from "../popUps/summonAddAlbumPopUp";
 import { ManageArtists } from "../ProviderEditTabs/ManageArtists";
 import { ManageAlbums } from "../ProviderEditTabs/ManageAlbums";
 import { ManageMusics } from "../ProviderEditTabs/ManageMusics";
+import { useTranslation } from "~/i18n/context";
 
 const TABS = ["Musics", "Albums", "Artists", "Members", "Roles"] as const;
 type Tab = typeof TABS[number];
@@ -28,6 +29,7 @@ export type ProviderStatus = "loading" | "success";
 
 
 export default function ProviderEdit() {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const providerInfoInfo = useProviderInfoInfo();
 	const providerInfoQuery = useProviderInfoQuery(() => provider);
@@ -49,13 +51,13 @@ export default function ProviderEdit() {
 		if (hasPerm("MANAGE_CATALOG")) include = [...include, "Albums", "Artists", "Musics"];
 		if (hasPerm("MANAGE_MEMBERS")) include = [...include, "Members"];
 		if (hasPerm("ADMIN")) include = [...include, "Roles"];
-		return TABS.filter((t) => !include.includes(t));
+		return TABS.filter((tab) => !include.includes(tab));
 	});
 
 	return <div class="page" id="provider-edit">
 		<ProviderEditHeader providerInfo={providerInfoQuery.data?.body} />
 		<Show when={providerInfoQuery.data?.body} fallback={<LoadingSplash/>}>
-			<Tabs tabs={TABS} value={tab()} exclude={tabExclude()} onChange={setTab} />
+			<Tabs tabs={TABS} value={tab()} exclude={tabExclude()} onChange={setTab} label={(tab) => t(`common.tabs.${tab}`)} />
 			<div class="provider-controls">
 				<ProviderSearchBar value={search()} onSearch={setSearch} />
 				<Switch>
@@ -71,16 +73,16 @@ export default function ProviderEdit() {
 								void summonUploadMusicPopUp(file, provider);
 							}}
 						/>
-						<Button onClick={() => fileInputRef.click()}><Plus/>Add Music</Button>
+						<Button onClick={() => fileInputRef.click()}><Plus/>{t("pages.provider.edit.addMusic")}</Button>
 					</Match>
 					<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Albums"}>
-						<Button onClick={() => summonAddAlbumPopUp(provider)}><Plus/>Add Album</Button>
+						<Button onClick={() => summonAddAlbumPopUp(provider)}><Plus/>{t("pages.provider.edit.addAlbum")}</Button>
 					</Match>
 					<Match when={hasPerm("MANAGE_CATALOG") && tab() === "Artists"}>
-						<Button onClick={() => summonAddArtistPopUp(provider)}><Plus/>Add Artist</Button>
+						<Button onClick={() => summonAddArtistPopUp(provider)}><Plus/>{t("pages.provider.edit.addArtist")}</Button>
 					</Match>
 					<Match when={hasPerm("ADMIN") && tab() == "Roles"}>
-						<Button onClick={() => summonAddRolePopUp(provider)}><Plus/>Add role</Button>
+						<Button onClick={() => summonAddRolePopUp(provider)}><Plus/>{t("pages.provider.edit.addRole")}</Button>
 					</Match>
 				</Switch>
 			</div>

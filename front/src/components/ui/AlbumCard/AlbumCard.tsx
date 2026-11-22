@@ -1,4 +1,5 @@
 import { JSX, Show } from "solid-js";
+import { locale, t } from "~/i18n/context";
 import { A } from "@solidjs/router";
 import { buildMediaUrl, Provider } from "@flex/shared";
 import { useMediaToken } from "~/api/providerClients";
@@ -41,8 +42,8 @@ export default function AlbumCard(props: AlbumCardProps) {
 		<div class="album-info">
 			<A href={`/provider/${props.album.provider.uuid}/album/${props.album.uuid}`} class="white-variant album-name">{props.album.name}</A>
 			<Show when={shown("artists")}><div class="album-artist"><ArtistsLinks artists={props.album.artists} providerUUID={props.album.provider.uuid}/></div></Show>
-			<Show when={shown("published")}><Show when={props.album.publishedAt} keyed>{(albumDate) => <div class="album-date">Sorti le {toDate(albumDate).toLocaleDateString()}</div>}</Show></Show>
-			<Show when={props.providers?.find((provider) => provider.uuid === props.album.provider.uuid)}><div class="album-provider">From <A href={`/provider/${props.album.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === props.album.provider.uuid)?.name}</A></div></Show>
+			<Show when={shown("published")}><Show when={props.album.publishedAt} keyed>{(albumDate) => <div class="album-date">{t("common.releasedOn", { date: toDate(albumDate).toLocaleDateString(locale()) })}</div>}</Show></Show>
+			<Show when={props.providers?.find((provider) => provider.uuid === props.album.provider.uuid)}><div class="album-provider">{t("common.from")} <A href={`/provider/${props.album.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === props.album.provider.uuid)?.name}</A></div></Show>
 		</div>
 	</div>;
 }

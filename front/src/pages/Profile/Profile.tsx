@@ -8,9 +8,11 @@ import ProviderSection from "./ProviderSection";
 
 import "./Profile.scss";
 import { useUserProfileQuery } from "~/api/queryHooks/userProfile";
+import { useTranslation } from "~/i18n/context";
 
 
 export default function Profile() {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string }>();
 	const profile = useUserProfileQuery(() => params.uuid);
@@ -18,15 +20,15 @@ export default function Profile() {
 	createEffect(() => {
 		if (profile.isError) {
 			navigate("/home"); // !:! A remettre mais desact car chiant en dev
-			summonErrorToast(() => "Unknown user");
+			summonErrorToast(() => t("pages.profile.unknownUser"));
 		}
 	});
 
 	return <div class="page" id="user-profile">
 		<Show when={profile.data} keyed>{(data) => <>
 			<ProfileHeader profile={data.body} />
-			<ProviderSection title="Connected providers" emptyMessage="No connected providers" providers={data.body.connectedProviders} />
-			<ProviderSection title="Owned providers" emptyMessage="No owned providers" providers={data.body.ownedProviders} />
+			<ProviderSection title={t("pages.profile.connectedProviders")} emptyMessage={t("pages.profile.noConnectedProviders")} providers={data.body.connectedProviders} />
+			<ProviderSection title={t("pages.profile.ownedProviders")} emptyMessage={t("pages.profile.noOwnedProviders")} providers={data.body.ownedProviders} />
 			<PlaylistSection playlists={data.body.ownedPlaylists} />
 			<FriendsSection friends={data.body.friends}/>
 		</>}</Show>

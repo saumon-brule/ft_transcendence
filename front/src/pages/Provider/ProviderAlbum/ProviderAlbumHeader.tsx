@@ -10,12 +10,14 @@ import { everyMusicQuery, ProviderAlbumQueryBody } from "~/api/queryHooks/provid
 import { Album } from "~/class/Album";
 import { history } from "~/store/history.store";
 import { DEFAULT_ALBUM, imgFallback } from "~/utils/imageFallback";
+import { useTranslation } from "~/i18n/context";
 
 export type ProviderAlbumHeaderProps = {
 	album: ProviderAlbumQueryBody;
 };
 
 export default function ProviderAlbumHeader(props: ProviderAlbumHeaderProps) {
+	const { t, locale } = useTranslation();
 	const provider = useProvider();
 	const mediaToken = useMediaToken(() => provider.address, () => provider.uuid);
 	const audioManager = useAudioManagerContext();
@@ -48,16 +50,16 @@ export default function ProviderAlbumHeader(props: ProviderAlbumHeaderProps) {
 	}
 
 	return <header class="provider-image-header">
-		<img src={getCover(props.album)} alt="Album cover" onError={imgFallback(DEFAULT_ALBUM)} />
+		<img src={getCover(props.album)} alt={t("common.albumCover")} onError={imgFallback(DEFAULT_ALBUM)} />
 		<div class="header-info">
 			<h2>{props.album.name}</h2>
 			<div class="stats">
-				<div class="stat">{props.album.musicCount} tracks</div>
+				<div class="stat">{t("pages.provider.stats.tracks", { count: String(props.album.musicCount) })}</div>
 				<div class="separator" />
-				<div class="stat">{props.album.artists.length} artists</div>
+				<div class="stat">{t("pages.provider.stats.artists", { count: String(props.album.artists.length) })}</div>
 			</div>
-			<Show when={props.album.publishedAt} keyed>{(albumDate) => <div class="album-date">Sorti le {new Date(albumDate).toLocaleDateString()}</div>}</Show>
-			<p>From <A href={`/provider/${provider.uuid}`}>{provider.name}</A></p>
+			<Show when={props.album.publishedAt} keyed>{(albumDate) => <div class="album-date">{t("common.releasedOn", { date: new Date(albumDate).toLocaleDateString(locale()) })}</div>}</Show>
+			<p>{t("common.from")} <A href={`/provider/${provider.uuid}`}>{provider.name}</A></p>
 		</div>
 		<div class="header-controls">
 			<Button icon disabled={props.album.musicCount === 0 || loading()} onClick={() => void playAlbum()}><Play /></Button>

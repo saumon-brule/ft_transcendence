@@ -3,15 +3,16 @@ import { getProviderClient } from "../providerClients";
 import { queryClient } from "../queryClient";
 import { Provider, type ProviderDataDto, type ProviderInfoDto } from "@flex/shared";
 import { RolesResponse } from "./providerManageRoles";
+import { t } from "~/i18n/context";
 
 export const providerUpdateSettings = async (providerData: Provider, visibility?: "PUBLIC" | "PRIVATE", defaultRoleUuid?: string) => {
 	const provider = getProviderClient(providerData.address, providerData.uuid);
 
 	const res = await provider.client.setting.update.mutation({ body: { visibility, defaultRoleUuid } });
 	if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status !== 200) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		if (defaultRoleUuid) {
 			queryClient.setQueryData<RolesResponse>(provider.keys.role.list(), (old) => old && {

@@ -3,6 +3,7 @@ import { Check, Copy } from "lucide-solid";
 import Button from "~/components/inputs/Button";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { summonErrorToast } from "~/components/ui/Toaster";
+import { t } from "~/i18n/context";
 
 const COPIED_FEEDBACK_MS = 2_000;
 
@@ -19,19 +20,19 @@ export const summonProviderKeyPopUp = (key: string, onClose?: () => void) => sum
 			clearTimeout(resetTimer);
 			resetTimer = setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
 		} catch {
-			summonErrorToast(() => "Failed to copy the key, please copy it manually");
+			summonErrorToast(() => t("components.keyPopUp.copyError"));
 		}
 	}
 
 	return <div class="provider-pop-up-container">
-		<h2>Your provider key</h2>
+		<h2>{t("pages.providers.keyPopUp.title")}</h2>
 		<div class="pop-up-inputs">
-			<p>Copy this key to authentificate your provider. You can only see this key once.</p>
+			<p>{t("pages.providers.keyPopUp.description")}</p>
 			<div
 				class="provider-key-copy"
 				role="button"
 				tabindex="0"
-				title="Copy to clipboard"
+				title={t("components.keyPopUp.copyTitle")}
 				onClick={() => void copyKey()}
 				onKeyDown={(e) => {
 					if (e.key === "Enter" || e.key === " ") {
@@ -45,10 +46,10 @@ export const summonProviderKeyPopUp = (key: string, onClose?: () => void) => sum
 					<Show when={copied()} fallback={<Copy size={18} />}><Check size={18} /></Show>
 				</span>
 			</div>
-			<span class="provider-key-copy-status" aria-live="polite">{copied() ? "Copied to clipboard" : "Click the key to copy it"}</span>
+			<span class="provider-key-copy-status" aria-live="polite">{copied() ? t("components.keyPopUp.copied") : t("components.keyPopUp.clickToCopy")}</span>
 		</div>
 		<div class="pop-up-buttons">
-			<Button type="button" onClick={popUpControls.close} variant="text" size="md">Close</Button>
+			<Button type="button" onClick={popUpControls.close} variant="text" size="md">{t("common.close")}</Button>
 		</div>
 	</div>;
 }, { customClass: "provider-pop-up", onClose });

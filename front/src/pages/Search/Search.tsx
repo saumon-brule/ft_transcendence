@@ -24,12 +24,14 @@ import NoResult from "~/components/ui/NoResult/NoResult";
 import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
 import Tabs from "~/components/ui/Tabs/Tabs";
 import { useTabParam } from "~/components/ui/Tabs/useTabParam";
+import { useTranslation } from "~/i18n/context";
 import { compareAlbums, compareArtists, compareMusics, scoreAlbum, scoreArtist, scoreMusic, sortByScore } from "~/utils/sortUtils";
 
 const TABS = ["All", "Musics", "Albums", "Artists", "Playlists", "Users", "Providers"] as const;
 export type Tab = typeof TABS[number];
 
 export default function Search() {
+	const { t } = useTranslation();
 	const params = useParams<{ search: string }>();
 	const me = useProfile();
 
@@ -171,7 +173,7 @@ export default function Search() {
 	));
 
 	return <div class="page" id="search">
-		<Tabs tabs={TABS} value={tab()} onChange={setTab} />
+		<Tabs tabs={TABS} value={tab()} onChange={setTab} label={(tab) => t(`common.tabs.${tab}`)} />
 		<SearchFilters fields={TAB_FILTER_FIELDS[tab()]} value={filters()} onChange={setFilters} />
 		<Show when={tab() !== "Musics"}>
 			<SortBar fields={TAB_SORT_FIELDS[tab()]} value={sort()} onChange={setSort} />
@@ -181,23 +183,23 @@ export default function Search() {
 				<BestResult best={results().best} />
 				<Show when={results().musics.length > 0}>
 					<section class="musics">
-						<h2>Musics</h2>
+						<h2>{t("common.tabs.Musics")}</h2>
 						<MusicSection musics={results().musics.slice(0, 6)} providers={results().providers}/>
-						<A href={tabHref("Musics")} class="white-variant see-more">See more</A>
+						<A href={tabHref("Musics")} class="white-variant see-more">{t("pages.search.seeMore")}</A>
 					</section>
 				</Show>
 				<Show when={results().albums.length > 0}>
 					<section class="albums">
-						<h2>Albums</h2>
+						<h2>{t("common.tabs.Albums")}</h2>
 						<AlbumSection album={{ albums: results().albums.slice(0, 6), total: results().albums.length }} providers={results().providers}/>
-						<A href={tabHref("Albums")} class="white-variant see-more">See more</A>
+						<A href={tabHref("Albums")} class="white-variant see-more">{t("pages.search.seeMore")}</A>
 					</section>
 				</Show>
 				<Show when={results().artists.length > 0}>
 					<section class="artists">
-						<h2>Artists</h2>
+						<h2>{t("common.tabs.Artists")}</h2>
 						<ArtistSection artist={{ artists: results().artists.slice(0, 6), total: results().artists.length }} providers={results().providers}/>
-						<A href={tabHref("Artists")} class="white-variant see-more">See more</A>
+						<A href={tabHref("Artists")} class="white-variant see-more">{t("pages.search.seeMore")}</A>
 					</section>
 				</Show>
 				<NoResult show={results().musics.length + results().albums.length + results().artists.length === 0} />
@@ -205,7 +207,7 @@ export default function Search() {
 			<Match when={tab() === "Musics"}>
 				<Show when={results().musics.length > 0}>
 					<section class="musics">
-						<h2>Musics</h2>
+						<h2>{t("common.tabs.Musics")}</h2>
 						<MusicSection musics={visible(results().musics)} providers={results().providers} sort={{ value: sort(), onChange: setSort }}/>
 					</section>
 					<InfiniteScroll enabled={hasMore() && !isFetching()} onLoadMore={() => setLoadedPages((pages) => pages + 1)} />
@@ -215,7 +217,7 @@ export default function Search() {
 			<Match when={tab() === "Albums"}>
 				<Show when={results().albums.length > 0}>
 					<section class="albums">
-						<h2>Albums</h2>
+						<h2>{t("common.tabs.Albums")}</h2>
 						<AlbumSection album={{ albums: visible(results().albums), total: total() }} providers={results().providers} />
 					</section>
 					<InfiniteScroll enabled={hasMore() && !isFetching()} onLoadMore={() => setLoadedPages((pages) => pages + 1)} />
@@ -225,7 +227,7 @@ export default function Search() {
 			<Match when={tab() === "Artists"}>
 				<Show when={results().artists.length > 0}>
 					<section class="artists">
-						<h2>Artists</h2>
+						<h2>{t("common.tabs.Artists")}</h2>
 						<ArtistSection artist={{ artists: visible(results().artists), total: total() }} providers={results().providers} />
 					</section>
 					<InfiniteScroll enabled={hasMore() && !isFetching()} onLoadMore={() => setLoadedPages((pages) => pages + 1)} />
@@ -235,37 +237,37 @@ export default function Search() {
 			<Match when={tab() === "Playlists"}>
 				<Show when={(playlists.data?.body.length ?? 0) > 0}>
 					<section class="playlists">
-						<h2>Playlists</h2>
+						<h2>{t("common.tabs.Playlists")}</h2>
 						<div class="playlists-grid">
 							<For each={playlists.data?.body}>{(playlist) => <PlaylistCard playlist={playlist} showOwner />}</For>
 						</div>
 					</section>
 				</Show>
-				<Show when={playlists.isError}><p class="search-error">Failed to search playlists</p></Show>
+				<Show when={playlists.isError}><p class="search-error">{t("pages.search.playlistsError")}</p></Show>
 				<NoResult show={playlists.isSuccess && playlists.data.body.length === 0} />
 			</Match>
 			<Match when={tab() === "Users"}>
 				<Show when={(users.data?.body.length ?? 0) > 0}>
 					<section class="users">
-						<h2>Users</h2>
+						<h2>{t("common.tabs.Users")}</h2>
 						<div class="users-list">
 							<For each={users.data?.body}>{(user) => <UserCard user={user} />}</For>
 						</div>
 					</section>
 				</Show>
-				<Show when={users.isError}><p class="search-error">Failed to search users</p></Show>
+				<Show when={users.isError}><p class="search-error">{t("pages.search.usersError")}</p></Show>
 				<NoResult show={users.isSuccess && users.data.body.length === 0} />
 			</Match>
 			<Match when={tab() === "Providers"}>
 				<Show when={(providerSearch.data?.body.length ?? 0) > 0}>
 					<section class="providers">
-						<h2>Providers</h2>
+						<h2>{t("common.tabs.Providers")}</h2>
 						<div class="providers-list">
 							<For each={providerSearch.data?.body}>{(provider) => <ProviderCard provider={provider} mine={false}/>}</For>
 						</div>
 					</section>
 				</Show>
-				<Show when={providerSearch.isError}><p class="search-error">Failed to search providers</p></Show>
+				<Show when={providerSearch.isError}><p class="search-error">{t("pages.search.providersError")}</p></Show>
 				<NoResult show={providerSearch.isSuccess && providerSearch.data.body.length === 0} />
 			</Match>
 		</Switch>

@@ -3,6 +3,7 @@ import { type ClientInferResponseBody } from "@ts-rest/core";
 import { getProviderClient } from "../providerClients";
 import { queryClient } from "../queryClient";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { t } from "~/i18n/context";
 
 type InfiniteList<T> = { pages: T[]; pageParams: unknown[] };
 type MusicsList = InfiniteList<ClientInferResponseBody<typeof providerContract.music.list, 200>>;
@@ -14,11 +15,11 @@ export const providerRemoveMusic = async (providerData: Provider, uuid: string) 
 
 	const res = await providerClient.client.music.remove.mutation({ params: { uuid } });
 	if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status === 404) {
-		summonErrorToast("This music does not exist");
+		summonErrorToast(t("toasts.catalog.musicNotFound"));
 	} else if (res.status !== 204) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		queryClient.setQueriesData<MusicsList>({ queryKey: providerClient.keys.music.list() }, (old) => old && {
 			...old,
@@ -27,7 +28,7 @@ export const providerRemoveMusic = async (providerData: Provider, uuid: string) 
 				return { ...page, musics, total: page.total - (page.musics.length - musics.length) };
 			}),
 		});
-		summonSuccessToast("Music deleted");
+		summonSuccessToast(t("toasts.catalog.musicDeleted"));
 		return true;
 	}
 	return false;
@@ -38,11 +39,11 @@ export const providerRemoveAlbum = async (providerData: Provider, uuid: string) 
 
 	const res = await providerClient.client.album.remove.mutation({ params: { uuid } });
 	if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status === 404) {
-		summonErrorToast("This album does not exist");
+		summonErrorToast(t("toasts.catalog.albumNotFound"));
 	} else if (res.status !== 204) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		queryClient.setQueriesData<AlbumsList>({ queryKey: providerClient.keys.album.list() }, (old) => old && {
 			...old,
@@ -51,7 +52,7 @@ export const providerRemoveAlbum = async (providerData: Provider, uuid: string) 
 				return { ...page, albums, total: page.total - (page.albums.length - albums.length) };
 			}),
 		});
-		summonSuccessToast("Album deleted");
+		summonSuccessToast(t("toasts.catalog.albumDeleted"));
 		return true;
 	}
 	return false;
@@ -62,11 +63,11 @@ export const providerRemoveArtist = async (providerData: Provider, uuid: string)
 
 	const res = await providerClient.client.artist.remove.mutation({ params: { uuid } });
 	if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status === 404) {
-		summonErrorToast("This artist does not exist");
+		summonErrorToast(t("toasts.catalog.artistNotFound"));
 	} else if (res.status !== 204) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		queryClient.setQueriesData<ArtistsList>({ queryKey: providerClient.keys.artist.list() }, (old) => old && {
 			...old,
@@ -75,7 +76,7 @@ export const providerRemoveArtist = async (providerData: Provider, uuid: string)
 				return { ...page, artists, total: page.total - (page.artists.length - artists.length) };
 			}),
 		});
-		summonSuccessToast("Artist deleted");
+		summonSuccessToast(t("toasts.catalog.artistDeleted"));
 		return true;
 	}
 	return false;

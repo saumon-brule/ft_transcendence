@@ -6,8 +6,10 @@ import MusicSection from "~/components/ui/MusicSection/MusicSection";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import PlaylistHeader from "./PlaylistHeader";
 import "./Playlist.scss";
+import { useTranslation } from "~/i18n/context";
 
 export default function Playlist() {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const params = useParams<{ uuid: string }>();
 	const playlistQuery = usePlaylistQuery(() => params.uuid);
@@ -18,9 +20,9 @@ export default function Playlist() {
 
 		if (playlistQuery.error.status === 404) {
 			navigate("/home");
-			summonErrorToast("Unknown playlist");
+			summonErrorToast(t("pages.playlist.unknown"));
 		} else {
-			summonErrorToast("Failed to load the playlist");
+			summonErrorToast(t("pages.playlist.loadError"));
 		}
 	});
 

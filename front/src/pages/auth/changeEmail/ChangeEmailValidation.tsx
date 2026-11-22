@@ -32,7 +32,7 @@ export default function ChangeEmailValidation() {
 	});
 
 	return <><LinkParticles/><DialogPage id="confirm-email">
-		<h2>Confirme ton nouvel email</h2>
+		<h2>{t("pages.changeEmail.title")}</h2>
 		<hr/>
 		<div class="content">
 			<Switch>
@@ -40,7 +40,7 @@ export default function ChangeEmailValidation() {
 					<p>{t("pages.confirmEmail.loadingMessage")}</p>
 				</Match>
 				<Match when={state() === "CONFIRMED"}>
-					<p>Ton nouvel email a été confirmé.</p>
+					<p>{t("pages.changeEmail.success")}</p>
 					<A href="/home">{t("pages.confirmEmail.successLink")}</A>
 				</Match>
 				<Match when={state() === "MISSING_TOKEN"}>

@@ -1,6 +1,7 @@
 import { createSignal, For, Show } from "solid-js";
 import type { User } from "@flex/shared";
 import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
+import { useTranslation } from "~/i18n/context";
 
 type ProviderSectionProps = {
 	title: string;
@@ -9,6 +10,7 @@ type ProviderSectionProps = {
 };
 
 export default function ProviderSection(props: ProviderSectionProps) {
+	const { t } = useTranslation();
 	const [showAll, setShowAll] = createSignal(false);
 
 	return <section class="providers">
@@ -16,7 +18,7 @@ export default function ProviderSection(props: ProviderSectionProps) {
 			<h3>{props.title}</h3>
 			<Show when={props.providers.length > 3}>
 				<a href="#" onClick={(event) => { event.preventDefault(); setShowAll((value) => !value); }}>
-					{showAll() ? "Show less" : "Show more"}
+					{showAll() ? t("common.showLess") : t("common.showMore")}
 				</a>
 			</Show>
 		</div>

@@ -10,6 +10,7 @@ import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Provider } from "@flex/shared";
 import { summonAddArtistPopUp } from "./summonAddArtistPopUp";
 import "./SelectArtistMenu.scss";
+import { t } from "~/i18n/context";
 
 export function SelectArtistMenu(props: { provider: Provider; exclude?: Artist[]; addArtist: (artist: Artist) => void }) {
 	return <Menu
@@ -34,9 +35,9 @@ function SelectArtistContent(props: { provider: Provider; addArtist: (artist: Ar
 			e.preventDefault();
 		}}>
 			<Search class="search-icon" size={15}/>
-			<TextInput value={searchQuery()} placeholder="Search artist" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
+			<TextInput value={searchQuery()} placeholder={t("pages.provider.popUps.searchArtist")} type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 		</Form>
-		<Button type="button" size="sm" variant="text" class="subtext white-variant" onClick={() => summonAddArtistPopUp(props.provider, "", props.addArtist)}>New artist</Button>
+		<Button type="button" size="sm" variant="text" class="subtext white-variant" onClick={() => summonAddArtistPopUp(props.provider, "", props.addArtist)}>{t("pages.provider.popUps.newArtist")}</Button>
 		<Show when={artists()?.artists} keyed>
 			{(artists) => <For each={artists}>
 				{(artist) => <button class="artist-menu-card" type="button" role="menuitem" onClick={() => props.addArtist(artist)}>
@@ -46,7 +47,7 @@ function SelectArtistContent(props: { provider: Provider; addArtist: (artist: Ar
 			</For>}
 		</Show>
 		<Show when={artistsQuery.hasNextPage}>
-			<Button type="button" onClick={() => void artistsQuery.fetchNextPage()} disabled={artistsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
+			<Button type="button" onClick={() => void artistsQuery.fetchNextPage()} disabled={artistsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">{t("pages.search.seeMore")}</Button>
 		</Show>
 	</>;
 }

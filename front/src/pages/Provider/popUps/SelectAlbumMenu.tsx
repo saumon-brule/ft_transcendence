@@ -10,12 +10,13 @@ import { AlbumCover } from "~/components/ui/AlbumCard";
 import { Provider } from "@flex/shared";
 import "./SelectAlbumMenu.scss";
 import { summonAddAlbumPopUp } from "./summonAddAlbumPopUp";
+import { t } from "~/i18n/context";
 
 export function SelectAlbumMenu(props: { provider: Provider; setAlbum: (album: Album) => void }) {
 	return <Menu
 		align="left"
 		class="set-album-menu"
-		trigger={<Button type="button">Select the music album</Button>}
+		trigger={<Button type="button">{t("pages.provider.popUps.selectAlbum")}</Button>}
 	>
 		{(close) => <SelectAlbumContent provider={props.provider} setAlbum={props.setAlbum} onClose={close} />}
 	</Menu>;
@@ -34,9 +35,9 @@ function SelectAlbumContent(props: { provider: Provider; setAlbum: (album: Album
 			e.preventDefault();
 		}}>
 			<Search class="search-icon" size={15}/>
-			<TextInput value={searchQuery()} placeholder="Search album" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
+			<TextInput value={searchQuery()} placeholder={t("pages.provider.popUps.searchAlbum")} type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 		</Form>
-		<Button type="button" size="sm" variant="text" class="subtext white-variant" onClick={() => summonAddAlbumPopUp(props.provider, undefined, props.setAlbum)}>New album</Button>
+		<Button type="button" size="sm" variant="text" class="subtext white-variant" onClick={() => summonAddAlbumPopUp(props.provider, undefined, props.setAlbum)}>{t("pages.provider.popUps.newAlbum")}</Button>
 		<Show when={albums()?.albums} keyed>
 			{(albums) => <For each={albums}>
 				{(album) => <button class="album-menu-card" type="button" role="menuitem" onClick={() => props.setAlbum(album)}>
@@ -46,7 +47,7 @@ function SelectAlbumContent(props: { provider: Provider; setAlbum: (album: Album
 			</For>}
 		</Show>
 		<Show when={albumsQuery.hasNextPage}>
-			<Button onClick={() => void albumsQuery.fetchNextPage()} disabled={albumsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
+			<Button onClick={() => void albumsQuery.fetchNextPage()} disabled={albumsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">{t("pages.search.seeMore")}</Button>
 		</Show>
 	</>;
 }

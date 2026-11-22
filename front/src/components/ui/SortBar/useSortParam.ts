@@ -2,15 +2,11 @@ import { createMemo } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 import type { SearchSortField } from "@flex/shared";
 import type { SearchSort } from "~/api/queryHooks/providerInfo";
+import { t } from "~/i18n/context";
 
-export const SORT_FIELD_LABELS: Record<SearchSortField | "provider", string> = {
-	name: "Name",
-	artist: "Artist",
-	album: "Album",
-	published: "Published",
-	duration: "Duration",
-	provider: "Provider",
-};
+export function sortFieldLabel(field: SearchSortField | "provider"): string {
+	return t(`components.sortBar.fields.${field}`);
+}
 
 export function nextSort<F extends SearchSortField | "provider">(current: SearchSort<F> | undefined, field: F): SearchSort<F> | undefined {
 	if (current?.field !== field) return { field, order: "asc" };

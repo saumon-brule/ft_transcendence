@@ -6,10 +6,12 @@ import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
+import { useTranslation } from "~/i18n/context";
 
 const PREVIEW_SIZE = 6;
 
 export default function ProviderTabAll(props: { search: string }) {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const musicsQuery = useProviderMusicsInfiniteQuery(() => provider, () => props.search);
 	const albumsQuery = useProviderAlbumsInfiniteQuery(() => provider, () => props.search);
@@ -35,23 +37,23 @@ export default function ProviderTabAll(props: { search: string }) {
 	return <>
 		<Show when={musics()?.total}>
 			<section class="musics">
-				<h2>Musics</h2>
+				<h2>{t("common.tabs.Musics")}</h2>
 				<MusicSection musics={musics()!.musics}/>
-				<A href={seeMoreHref("Musics")} class="white-variant see-more">See more</A>
+				<A href={seeMoreHref("Musics")} class="white-variant see-more">{t("pages.search.seeMore")}</A>
 			</section>
 		</Show>
 		<Show when={albums()?.total}>
 			<section class="albums">
-				<h2>Albums</h2>
+				<h2>{t("common.tabs.Albums")}</h2>
 				<AlbumSection album={albums()!}/>
-				<A href={seeMoreHref("Albums")} class="white-variant see-more">See more</A>
+				<A href={seeMoreHref("Albums")} class="white-variant see-more">{t("pages.search.seeMore")}</A>
 			</section>
 		</Show>
 		<Show when={artists()?.total}>
 			<section class="artists">
-				<h2>Artists</h2>
+				<h2>{t("common.tabs.Artists")}</h2>
 				<ArtistSection artist={artists()!}/>
-				<A href={seeMoreHref("Artists")} class="white-variant see-more">See more</A>
+				<A href={seeMoreHref("Artists")} class="white-variant see-more">{t("pages.search.seeMore")}</A>
 			</section>
 		</Show>
 		<NoResult show={isLoaded() && total() === 0} />

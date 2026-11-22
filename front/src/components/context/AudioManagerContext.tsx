@@ -8,6 +8,7 @@ import { LocalStorageItem } from "~/utils/storageHelper";
 import { getMediaToken } from "~/api/providerClients";
 import { systemDark } from "~/store/appearance.store";
 import { history } from "~/store/history.store";
+import { t } from "~/i18n/context";
 
 const BACK_TIMER_THRESHOLD = 3; // secondesw
 const MAX_CONSECUTIVE_FAILURES = 2;
@@ -112,12 +113,12 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 	}
 
 	function skipBrokenTrack(music: Music) {
-		summonErrorToast(() => `${music.name || "This music"} couldn't be played, skipping`);
+		summonErrorToast(() => music.name ? t("components.audioManager.playError", { name: music.name }) : t("components.audioManager.playErrorNoName"));
 		consecutiveFailures++;
 
 		if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
 			consecutiveFailures = 0;
-			stopPlayback("Too many tracks failed to load, playback stopped");
+			stopPlayback(t("components.audioManager.tooManyFailures"));
 			return;
 		}
 		forward();
@@ -128,16 +129,16 @@ export const AudioPlayerProvider: ParentComponent = (props) => {
 		consecutiveFailures++;
 		if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
 			consecutiveFailures = 0;
-			stopPlayback("Too many tracks failed to load, playback stopped");
+			stopPlayback(t("components.audioManager.tooManyFailures"));
 			return;
 		}
 		if (nextMusic && nextMusic.provider.uuid !== music.provider.uuid) {
-			summonErrorToast(() => `${music.provider.name} is unreachable, skipping to the next track`);
+			summonErrorToast(() => t("components.audioManager.providerUnreachableSkip", { provider: music.provider.name }));
 			forward();
 			return;
 		}
 		consecutiveFailures = 0;
-		stopPlayback(`${music.provider.name} is unreachable`);
+		stopPlayback(t("components.audioManager.providerUnreachable", { provider: music.provider.name }));
 	}
 
 	const handleKeyDown = (e: KeyboardEvent) => {

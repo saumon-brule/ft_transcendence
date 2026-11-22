@@ -8,8 +8,10 @@ import { AlbumCover } from "~/components/ui/AlbumCard";
 import { Pencil, Trash } from "lucide-solid";
 import { providerRemoveAlbum } from "~/api/queryHooks/providerManageCatalog";
 import { summonEditAlbumPopUp } from "../popUps/summonEditAlbumPopUp";
+import { useTranslation } from "~/i18n/context";
 
 export function ManageAlbums(props: { search: string }) {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const albumsQuery = useProviderAlbumsInfiniteQuery(() => provider, () => props.search);
 	const albums = createMemo(() => {
@@ -18,13 +20,13 @@ export function ManageAlbums(props: { search: string }) {
 	});
 
 	return <div id="manage-albums-tab" class="tab-container">
-		<Show when={albums().length} keyed fallback={<div>No albums</div>}><section>
+		<Show when={albums().length} keyed fallback={<div>{t("pages.provider.edit.noAlbums")}</div>}><section>
 			<div class="albums-list">
 				<For each={albums()}>{(album) => <ProviderAlbumCard album={album}/>}</For>
 			</div>
 		</section></Show>
 		<Show when={albumsQuery.hasNextPage}>
-			<Button onClick={() => void albumsQuery.fetchNextPage()} disabled={albumsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
+			<Button onClick={() => void albumsQuery.fetchNextPage()} disabled={albumsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">{t("pages.search.seeMore")}</Button>
 		</Show>
 	</div>;
 }

@@ -4,6 +4,7 @@ import { getProviderClient } from "../providerClients";
 import { queryClient } from "../queryClient";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { ProviderUser } from "~/pages/Provider/ProviderEditTabs/ManageMembers";
+import { t } from "~/i18n/context";
 
 type MembersResponse = ClientInferResponses<typeof providerContract.member.list, 200>;
 type AccessRequestsResponse = ClientInferResponses<typeof providerContract.accessRequest.list, 200>;
@@ -43,13 +44,13 @@ export const providerUserAccessDecide = async (providerData: Provider, uuid: str
 		body: { decision: approved ? "APPROVED" : "REJECTED" },
 	});
 	if (res.status === 409) {
-		summonErrorToast("This request has already been decide");
+		summonErrorToast(t("toasts.members.requestAlreadyDecided"));
 	} else if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status === 404) {
-		summonErrorToast("This request does not exist");
+		summonErrorToast(t("toasts.members.requestNotFound"));
 	} else if (res.status !== 200) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		queryClient.setQueriesData<AccessRequestsResponse>(
 			{ queryKey: provider.keys.accessRequest.list() },
@@ -89,11 +90,11 @@ export const providerRemoveMember = async (providerData: Provider, uuid: string)
 		params: { uuid: uuid },
 	});
 	if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status === 404) {
-		summonErrorToast("This member does not exist");
+		summonErrorToast(t("toasts.members.memberNotFound"));
 	} else if (res.status !== 204) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		const memberQueries = queryClient.getQueriesData<MembersResponse>({ queryKey: provider.keys.member.list() });
 
@@ -128,11 +129,11 @@ export const providerMemberAddRole = async (providerData: Provider, userUuid: st
 		params: { uuid: userUuid, roleUuid: role.uuid },
 	});
 	if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status === 404) {
-		summonErrorToast("This member or role does not exist");
+		summonErrorToast(t("toasts.members.memberOrRoleNotFound"));
 	} else if (res.status !== 204) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		queryClient.setQueriesData<MembersResponse>(
 			{ queryKey: provider.keys.member.list() },
@@ -153,11 +154,11 @@ export const providerMemberRemoveRole = async (providerData: Provider, userUuid:
 		params: { uuid: userUuid, roleUuid },
 	});
 	if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status === 404) {
-		summonErrorToast("This member or role does not exist");
+		summonErrorToast(t("toasts.members.memberOrRoleNotFound"));
 	} else if (res.status !== 204) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		queryClient.setQueriesData<MembersResponse>(
 			{ queryKey: provider.keys.member.list() },

@@ -4,6 +4,7 @@ import { serverContract } from "@flex/shared";
 import { client, queryKeys } from "../client";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { bumpPlaylistCover } from "~/utils/playlistCover";
+import { t } from "~/i18n/context";
 
 export const usePlaylistQuery = (uuid: () => string) => client.playlists.getPlaylist.createQuery(
 	() => queryKeys.playlists.getPlaylist([uuid()]),
@@ -51,8 +52,8 @@ export const useRemoveMusicFromPlaylistMutation = () => {
 			});
 		},
 		onError: (e) => {
-			if (e.status === 404) summonErrorToast("Music isn't in this playlist");
-			else summonErrorToast("Failed to remove the music from the playlist");
+			if (e.status === 404) summonErrorToast(t("toasts.playlist.musicNotInPlaylist"));
+			else summonErrorToast(t("toasts.playlist.removeMusicError"));
 		},
 	});
 };
@@ -82,11 +83,11 @@ export const useAddMusicToPlaylistMutation = () => {
 							? { ...playlist, _count: { ...playlist._count, musics: playlist._count.musics + 1 } }
 							: playlist) } };
 			});
-			summonSuccessToast("Music added to the playlist");
+			summonSuccessToast(t("toasts.playlist.musicAdded"));
 		},
 		onError: (error) => {
-			if (error.status === 409) summonErrorToast("This music is already in the playlist");
-			else summonErrorToast("Failed to add the music to the playlist");
+			if (error.status === 409) summonErrorToast(t("toasts.playlist.musicAlreadyInPlaylist"));
+			else summonErrorToast(t("toasts.playlist.addMusicError"));
 		},
 	});
 };
@@ -122,7 +123,7 @@ export const useCreatePlaylistMutation = () => {
 						_count: { ...old.body._count, ownedPlaylists: old.body._count.ownedPlaylists + 1 } } };
 			});
 		},
-		onError: () => { summonErrorToast("Failed to create the playlist"); },
+		onError: () => { summonErrorToast(t("toasts.playlist.createError")); },
 	});
 };
 
@@ -150,9 +151,9 @@ export const useRenamePlaylistMutation = () => {
 	return client.playlists.updatePlaylistName.createMutation({
 		onSuccess: (_, vars) => {
 			patchPlaylistCaches(queryClient, vars.params.uuid, { name: vars.body.name });
-			summonSuccessToast("Playlist renamed");
+			summonSuccessToast(t("toasts.playlist.renamed"));
 		},
-		onError: () => { summonErrorToast("Failed to rename the playlist"); },
+		onError: () => { summonErrorToast(t("toasts.playlist.renameError")); },
 	});
 };
 
@@ -163,10 +164,10 @@ export const useSetPlaylistPrivacyMutation = () => {
 		onSuccess: (_, vars) => {
 			patchPlaylistCaches(queryClient, vars.params.uuid, { private: vars.body.private });
 			summonSuccessToast(vars.body.private
-				? "Playlist is now private"
-				: "Playlist is now public");
+				? t("toasts.playlist.nowPrivate")
+				: t("toasts.playlist.nowPublic"));
 		},
-		onError: () => { summonErrorToast("Failed to change the playlist visibility"); },
+		onError: () => { summonErrorToast(t("toasts.playlist.visibilityError")); },
 	});
 };
 
@@ -193,27 +194,27 @@ export const useDeletePlaylistMutation = () => {
 					_count: { ...old.body._count, ownedPlaylists: old.body._count.ownedPlaylists - 1 },
 				},
 			});
-			summonSuccessToast("Playlist deleted");
+			summonSuccessToast(t("toasts.playlist.deleted"));
 		},
-		onError: () => { summonErrorToast("Failed to delete the playlist"); },
+		onError: () => { summonErrorToast(t("toasts.playlist.deleteError")); },
 	});
 };
 
 export const useUploadPlaylistCoverMutation = () => client.playlists.uploadCover.createMutation({
 	onSuccess: (_, vars) => {
 		bumpPlaylistCover(vars.params.uuid);
-		summonSuccessToast("Playlist cover updated");
+		summonSuccessToast(t("toasts.playlist.coverUpdated"));
 	},
 	onError: (e) => {
-		if (e.status === 413) summonErrorToast("This image is too large");
-		else summonErrorToast("Failed to update the playlist cover");
+		if (e.status === 413) summonErrorToast(t("toasts.playlist.imageTooLarge"));
+		else summonErrorToast(t("toasts.playlist.coverUpdateError"));
 	},
 });
 
 export const useDeletePlaylistCoverMutation = () => client.playlists.deleteCover.createMutation({
 	onSuccess: (_, vars) => {
 		bumpPlaylistCover(vars.params.uuid);
-		summonSuccessToast("Playlist cover removed");
+		summonSuccessToast(t("toasts.playlist.coverRemoved"));
 	},
-	onError: () => { summonErrorToast("Failed to remove the playlist cover"); },
+	onError: () => { summonErrorToast(t("toasts.playlist.coverRemoveError")); },
 });

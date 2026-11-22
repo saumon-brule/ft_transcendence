@@ -8,8 +8,10 @@ import MusicSection from "../../../components/ui/MusicSection/MusicSection";
 import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 import Button from "~/components/inputs/Button";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
+import { useTranslation } from "~/i18n/context";
 
 export default function ProviderArtist() {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const provider = useProvider();
 	const params = useParams<{ uuid: string; artistUUID: string }>();
@@ -25,7 +27,7 @@ export default function ProviderArtist() {
 	createEffect(() => {
 		if (artist.isError) {
 			navigate(`/provider/${provider.uuid}`);
-			summonErrorToast("Unknown artist");
+			summonErrorToast(t("pages.provider.unknownArtist"));
 		}
 	});
 
@@ -40,19 +42,19 @@ export default function ProviderArtist() {
 			return <>
 				<ProviderArtistHeader artist={info} />
 				<section>
-					<h2>Musiques</h2>
+					<h2>{t("common.tabs.Musics")}</h2>
 					<Show when={musicGroup()} keyed>
 						{(musicGroup) => <MusicSection musicGroup={musicGroup} hiddenColumns={["artists"]} />}
 					</Show>
 					<Show when={musicsQuery.hasNextPage}>
-						<Button onClick={() => void musicsQuery.fetchNextPage()} disabled={musicsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
+						<Button onClick={() => void musicsQuery.fetchNextPage()} disabled={musicsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">{t("pages.search.seeMore")}</Button>
 					</Show>
 				</section>
 				<section>
-					<h2>Albums</h2>
+					<h2>{t("common.tabs.Albums")}</h2>
 					<Show when={albums()} keyed>{(album) => <AlbumSection album={album} hiddenProp={["artists"]} />}</Show>
 					<Show when={albumsQuery.hasNextPage}>
-						<Button onClick={() => void albumsQuery.fetchNextPage()} disabled={albumsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
+						<Button onClick={() => void albumsQuery.fetchNextPage()} disabled={albumsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">{t("pages.search.seeMore")}</Button>
 					</Show>
 				</section>
 			</>;

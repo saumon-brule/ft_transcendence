@@ -9,6 +9,7 @@ import TextInput from "~/components/inputs/TextInput";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { validateFromZod } from "~/utils/validateFromZod";
+import { t } from "~/i18n/context";
 
 export const summonEditProviderPopUp = (provider: Provider, onClose?: () => void) => summonPopUp((popUpControls) => {
 	const editProviderMutation = client.providers.edit.createMutation();
@@ -37,11 +38,11 @@ export const summonEditProviderPopUp = (provider: Provider, onClose?: () => void
 							},
 						},
 					);
-					summonSuccessToast(() => "Provider updated successfully");
+					summonSuccessToast(() => t("pages.providers.editPopUp.success"));
 					popUpControls.close();
 				},
 				onError: () => {
-					summonErrorToast(() => "Failed to update provider");
+					summonErrorToast(() => t("pages.providers.editPopUp.error"));
 				},
 			},
 		);
@@ -52,14 +53,14 @@ export const summonEditProviderPopUp = (provider: Provider, onClose?: () => void
 	});
 
 	return <Form onSubmit={handleSubmit}>
-		<h2>Edit provider</h2>
+		<h2>{t("pages.providers.editPopUp.title")}</h2>
 		<div class="pop-up-inputs">
-			<TextInput ref={(e) => nameInput = e.htmlElement} name="providerName" value={provider.name} placeholder="My provider" type="text" validator={(e) => validateFromZod(editProviderSchema.shape.name, e.value)} required/>
-			<TextInput ref={(e) => addressInput = e.htmlElement} name="providerAddress" value={provider.address} placeholder="https://my-provider.com" type="url" validator={(e) => validateFromZod(editProviderSchema.shape.address, e.value)} required/>
+			<TextInput ref={(e) => nameInput = e.htmlElement} name="providerName" value={provider.name} placeholder={t("pages.providers.namePlaceholder")} type="text" validator={(e) => validateFromZod(editProviderSchema.shape.name, e.value)} required/>
+			<TextInput ref={(e) => addressInput = e.htmlElement} name="providerAddress" value={provider.address} placeholder={t("pages.providers.addressPlaceholder")} type="url" validator={(e) => validateFromZod(editProviderSchema.shape.address, e.value)} required/>
 		</div>
 		<div class="pop-up-buttons">
-			<Button type="button" onClick={popUpControls.close} variant="text" size="md">Cancel</Button>
-			<Button type="submit" size="md" disabled={editProviderMutation.isPending}>Save</Button>
+			<Button type="button" onClick={popUpControls.close} variant="text" size="md">{t("common.cancel")}</Button>
+			<Button type="submit" size="md" disabled={editProviderMutation.isPending}>{t("common.save")}</Button>
 		</div>
 	</Form>;
 }, { customClass: "provider-pop-up", onClose });

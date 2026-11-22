@@ -16,6 +16,7 @@ import { SelectArtistMenu } from "./SelectArtistMenu";
 import { Album } from "~/class/Album";
 import { AlbumCover } from "~/components/ui/AlbumCard";
 import "./EditAlbumPopUp.scss";
+import { t } from "~/i18n/context";
 
 export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Album) => void) {
 	const providerClient = getProviderClient(album.provider.address, album.provider.uuid);
@@ -53,8 +54,8 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 				if (updated) setNewAlbum?.(Album.fromRawObject(updated, album.provider));
 			};
 			const failEdit = (message: string, status?: number) => {
-				if (status === 413) summonErrorToast(() => "File to large");
-				else if (status === 415) summonErrorToast(() => "File not supported");
+				if (status === 413) summonErrorToast(() => t("pages.provider.popUps.fileTooLarge"));
+				else if (status === 415) summonErrorToast(() => t("pages.provider.popUps.fileNotSupported"));
 				else summonErrorToast(() => message);
 				notifyUpdate();
 			};
@@ -66,7 +67,7 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 						artistUuids: artists().map((artist) => artist.uuid),
 					} }), providerContract.album.update);
 				if (updateRes.status !== 200) {
-					failEdit("An error occured during the edit of the album", updateRes.status);
+					failEdit(t("pages.provider.popUps.album.editError"), updateRes.status);
 					return;
 				}
 				updated = updateRes.body;
@@ -78,7 +79,7 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 						providerContract.album.removeCover,
 					);
 					if (removeCoverRes.status !== 204) {
-						failEdit("An error occured during remove of the cover", removeCoverRes.status);
+						failEdit(t("pages.provider.popUps.coverRemoveError"), removeCoverRes.status);
 						return;
 					}
 					updated.hasCover = false;
@@ -89,7 +90,7 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 						onUploadProgress: setCoverProgress,
 					}), providerContract.album.uploadCover);
 					if (uploadCoverRes.status !== 204) {
-						failEdit("An error occured during upload of the cover", uploadCoverRes.status);
+						failEdit(t("pages.provider.popUps.coverUploadError"), uploadCoverRes.status);
 						return;
 					}
 					updated.hasCover = true;
@@ -98,14 +99,14 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 				props.close();
 			} catch (e) {
 				console.error(e);
-				failEdit("An error occured during the edit of the album");
+				failEdit(t("pages.provider.popUps.album.editError"));
 			}
 		};
 
 		const isPending = () => albumUpdateMutation.isPending || albumUploadCoverMutation.isPending || albumRemoveCoverMutation.isPending;
 
 		return <Form class="edit-album-pop-up" onSubmit={() => { void handleSubmit(); }}>
-			<h2 >Edit album</h2>
+			<h2 >{t("pages.provider.popUps.album.editTitle")}</h2>
 			<div class="edit-album-info">
 				<div class="edit-album-cover-box">
 					<input
@@ -126,7 +127,7 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 					</Show>
 				</div>
 				<div class="edit-album-details">
-					<TextInput placeholder="Name" class="edit-album-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
+					<TextInput placeholder={t("pages.provider.popUps.namePlaceholder")} class="edit-album-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
 				</div>
 			</div>
 			<div class="edit-album-artists" >
@@ -144,11 +145,11 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 				</div>
 			</div>
 			<Show when={albumUploadCoverMutation.isPending}>
-				<UploadProgress label="Cover upload" value={coverProgress()}/>
+				<UploadProgress label={t("pages.provider.popUps.coverUpload")} value={coverProgress()}/>
 			</Show>
 			<div class="edit-album-pop-up-controls">
-				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
-				<Button disabled={isPending()} type="submit">Edit</Button>
+				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>{t("common.cancel")}</Button>
+				<Button disabled={isPending()} type="submit">{t("common.edit")}</Button>
 			</div>
 		</Form>;
 	});
