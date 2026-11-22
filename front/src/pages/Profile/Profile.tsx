@@ -19,7 +19,7 @@ export default function Profile() {
 
 	createEffect(() => {
 		if (profile.isError) {
-			navigate("/home"); // !:! A remettre mais desact car chiant en dev
+			navigate("/home", { replace: true }); // !:! A remettre mais desact car chiant en dev
 			summonErrorToast(() => t("pages.profile.unknownUser"));
 		}
 	});

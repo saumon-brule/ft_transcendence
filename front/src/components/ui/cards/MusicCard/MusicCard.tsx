@@ -5,7 +5,7 @@ import { buildMediaUrl, Provider } from "@flex/shared";
 import { useMediaToken } from "~/api/providerClients";
 import { DEFAULT_ALBUM, imgFallback } from "~/utils/imageFallback";
 import ArtistsLinks from "~/components/ui/elements/ArtistLinks";
-import "./MusicCard.scss";
+import "../MediaCard.scss";
 import { Music } from "~/class/Music";
 import Button from "~/components/inputs/Button";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
@@ -37,12 +37,20 @@ export default function MusicCard(props: MusicCardProps) {
 		audioManager.play();
 	}
 
-	return <div class="music-card">
+	const provider = () => props.providers?.find((p) => p.uuid === props.music.provider.uuid);
+
+	return <div class="media-card music-card">
 		<MusicCover music={props.music}/>
-		<div class="music-info">
-			<Button variant="text" class="music-name" onClick={playMusic}>{props.music.name}</Button>
-			<div class="music-artist"><ArtistsLinks artists={props.music.artists} providerUUID={props.music.provider.uuid}/></div>
-			<Show when={props.providers?.find((provider) => provider.uuid === props.music.provider.uuid)}><div class="music-provider">{t("common.from")} <A href={`/provider/${props.music.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === props.music.provider.uuid)?.name}</A></div></Show>
+		<div class="media-card-info">
+			<Button variant="text" class="media-card-name" onClick={playMusic} title={props.music.name}>{props.music.name}</Button>
+			<div class="media-card-subtitle">{t("components.mediaCard.music")}</div>
+			<Show when={props.music.artists.length > 0}>
+				<div class="media-card-subtitle"><ArtistsLinks artists={props.music.artists} providerUUID={props.music.provider.uuid}/></div>
+			</Show>
+			<Show when={props.music.hasAlbum() && props.music}>
+				{(music) => <div class="media-card-subtitle"><A href={music().albumRoute()} class="white-variant">{music().album.name}</A></div>}
+			</Show>
+			<Show when={provider()}>{(p) => <div class="media-card-provider">{t("common.from")}{" "}<A href={`/provider/${p().uuid}`}>{p().name}</A></div>}</Show>
 		</div>
 	</div>;
 }

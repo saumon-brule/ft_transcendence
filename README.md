@@ -19,6 +19,7 @@ A playlist can mix songs from several providers, and the browser plays each song
 - Search with filters, sort and infinite scroll.
 - Audio player with queue and listening history.
 - Public API with a personal API key.
+- Interface in four languages (English, French, Spanish, Japanese), with a light and a dark theme.
 - Docker deployment (read-only containers, Docker secrets, HTTPS), CI on every pull request.
 
 ## Instructions
@@ -27,67 +28,85 @@ A playlist can mix songs from several providers, and the browser plays each song
 
 - Docker and Docker Compose, `make`, and `openssl` (used to generate the secrets).
 - For local development without Docker images: Node.js >= 26 and [pnpm](https://pnpm.io) 12.
-- A [42 API application](https://profile.intra.42.fr/oauth/applications) if you want the 42 login (redirect URI: `<BASE_FRONT_URL>/auth/42/auth-callback`).
+- A [42 API application](https://profile.intra.42.fr/oauth/applications) if you want the 42 login (redirect URI: `https://<FRONT_HOST>[:<FRONT_PORT>]/auth/42/auth-callback`, without the port when it is 443).
 - An SMTP account (email verification and password reset).
+
+### Where things are
+
+- **Production** is at the root: `docker-compose.yml` (server) and `docker-compose.provider.yml` (providers), `.env` and `.env.provider-<name>` for the settings, `secrets/server/` and `secrets/provider-<name>/` for the secrets, `docker/` for the Docker helpers and the nginx templates. The Makefile drives all of it.
+- **Development** is in the applications and in `scripts/dev/`: `back/.env.example`, `front/.env.example`, `provider/.env.example`, pnpm scripts, seed scripts in the `dev/` folders.
 
 ### Run the server (database, migrations, back, front)
 
 ```bash
-cp .env.example .env        # fill in the public URL, the SMTP server and the 42 application
-make secrets                # creates secrets/ (see below)
-make server                 # docker compose up -d --build --wait
+make secrets-server    # creates secrets/server/ and .env (from .env.example)
 ```
 
-The site is served by nginx in HTTPS on `FRONT_PORT` (443 by default). `FRONT_HTTP_PORT` (80) redirects to `BASE_FRONT_URL`. The front calls the back through `/api`.
+Then fill in `.env` (host and ports of the site, SMTP server, 42 application) and put the SMTP password and the 42 secret in `secrets/server/smtp_pass` and `secrets/server/api42_client_secret`.
+
+```bash
+make server            # docker compose up -d --build --wait
+```
+
+The site is served by nginx in HTTPS on `FRONT_PORT` (443 by default). `FRONT_HTTP_PORT` (80) redirects to it. The host and both ports are set in `.env`, and the public address of the site (`https://<FRONT_HOST>:<FRONT_PORT>`, used for the 42 login and the emails) is computed from them. The front calls the back through `/api`.
 The database is only reachable from the stack, and the migrations are applied by the `migrate` service before the back starts.
 
-Everything sensitive is a [Docker secret](https://docs.docker.com/compose/how-tos/use-secrets/), a file of `secrets/` mounted in `/run/secrets` (the `NAME_FILE` variables are resolved by [docker/entrypoint.sh](docker/entrypoint.sh)):
+Everything sensitive is a [Docker secret](https://docs.docker.com/compose/how-tos/use-secrets/), a file of `secrets/server/` mounted in `/run/secrets` (the `NAME_FILE` variables are resolved by [docker/entrypoint.sh](docker/entrypoint.sh)):
 
 | File | Content |
 | --- | --- |
 | `postgres_password`, `jwt_secret`, `jwt_refresh_secret` | random, generated |
 | `provider.pem` | RSA key signing the provider tokens, generated |
-| `tls.crt`, `tls.key` | certificate and key of nginx: self-signed when generated, **replace them with a real certificate** in production (`DOMAIN=example.com make secrets` adds a name to the self-signed one) |
+| `tls.crt`, `tls.key` | certificate and key of nginx: self-signed when generated, **replace them with a real certificate** in production (`DOMAIN=example.com make secrets-server` adds a name to the self-signed one) |
 | `smtp_pass`, `api42_client_secret` | to fill in by hand |
 
-Existing files are never overwritten. Test accounts are seeded in `dev` only.
+Existing files are never overwritten. Nothing is seeded in production: the database starts empty and the first account is created from the site.
 
 `GET /api/health` answers 503 when the back cannot reach the database.
 
 ### Run a provider (database, migrations, provider, nginx)
 
-Create the provider on the app first (from the *Providers* page): it gives the API key, shown once.
+Every provider has a name (lowercase letters, digits and dashes), which is required by all the provider commands. Each one has its own secrets, settings, ports and Docker project (`flex-provider-<name>`, so its own database), so several providers can run on the same machine.
 
 ```bash
-cp provider/.env.example provider/.env        # FLEX_SERVER_URL, POSTGRES_*
-make secrets-provider   # then put the API key in provider/secrets/flex_api_key
-make provider           # docker compose -f provider/docker-compose.yml up -d --build --wait
+make secrets-provider NAME=music    # creates secrets/provider-music/ and .env.provider-music (from .env.provider.example)
 ```
 
-The provider is served in HTTPS by its own nginx on `PROVIDER_PORT` (443 by default, to change if the server runs on the same machine); `PROVIDER_HTTP_PORT` (80) redirects to `PROVIDER_URL`, its public address; `tls.crt` and `tls.key` work like the server's.
-`secrets/server_ca.crt` is the certificate (or CA) of the server, trusted by the provider when it calls it: the generator copies the server's self-signed certificate if `secrets/tls.crt` exists.
+Then:
+1. Edit `.env.provider-music`: the address of the server (`FLEX_SERVER_URL`), and the host and ports of the provider (`PROVIDER_HOST`, `PROVIDER_PORT`, `PROVIDER_HTTP_PORT`). Use other ports for each provider of the same machine.
+2. Create the provider on the app (from the *Providers* page), with the public address `https://<PROVIDER_HOST>:<PROVIDER_PORT>`. It gives the API key, shown once: put it in `secrets/provider-music/flex_api_key`.
+
+```bash
+make provider NAME=music            # docker compose up -d --build --wait for this provider
+```
+
+The provider is served in HTTPS by its own nginx on `PROVIDER_PORT`; `PROVIDER_HTTP_PORT` redirects to it. `tls.crt` and `tls.key` work like the server's.
+`server_ca.crt` is the certificate (or CA) of the server, trusted by the provider when it calls it: the generator copies the server's self-signed certificate from `secrets/server/tls.crt` if it exists.
 
 `FLEX_SERVER_URL` must be reachable from the container and end with `/api` when it targets the Docker front (`https://host.docker.internal:<FRONT_PORT>/api` for a server on the same machine).
-The `provider` URL registered on the server is the one browsers use to reach it (`https://…`), not a container name.
+The address registered on the server is the one browsers use to reach the provider (`https://…`), not a container name.
 
-`make server-down` / `provider-down` stop a stack (the volumes are kept), `server-logs` / `provider-logs` follow its logs.
-
-**Several providers on one machine.** `make provider NAME=1` runs a second provider next to the default one: its own Docker project (`flex-provider-1`, so its own database volume), its settings in `provider/.env.1` (copy `provider/.env.example` and change `PROVIDER_PORT`,
-`PROVIDER_HTTP_PORT` and `PROVIDER_URL`) and its secrets in `provider/secrets.1` (`make secrets-provider NAME=1`, then put the
-API key of this provider in `flex_api_key`). `NAME` works the same way with `provider-down`, `provider-logs`, `provider-seed`
-and `provider-reset`. Without `NAME`, they act on the default provider.
+`make server-down` / `provider-down NAME=music` stop a stack (the volumes are kept), `server-logs` / `provider-logs NAME=music` follow its logs,
+`server-reset` / `provider-reset NAME=music` delete its data (they ask for `CONFIRM=yes`).
 
 ### Development
 
+The Makefile only drives the production stacks (Docker). Everything for development goes through pnpm scripts, and the development settings are the `.env.example` files of `back`, `front` and `provider` (production settings are the ones at the root).
+
 ```bash
-pnpm install        # every package of the workspace
-make dev            # database in Docker (docker-compose.dev.yml) + back and front with hot reload
-make provider1      # a provider with a mock catalog (optional)
+pnpm install          # every package of the workspace
+pnpm run dev          # development database (Docker), migrations, test accounts, then back and front with hot reload
+pnpm run dev:provider1   # a provider with a mock catalog (optional, in another terminal)
 ```
+
+Test accounts (development only): `liam@test.com`, `chantal@test.com` and `machin@test.com`, password `abcdefgh`.
+The mock catalog of the providers lives in `provider/mock`, the seed scripts are in the `dev/` folders of `back` and `provider`, and the other development tools (database in Docker, YouTube audio download, Discord presence) are in `scripts/` (`pnpm --filter @flex/provider run seed:search` fills a provider with a large search test catalog).
+These folders are not part of the production images.
 
 `pnpm run dev:front` starts the front end only. The back and the provider read `shared/src` directly in development (`paths` in their `tsconfig.json`), so `shared` does not need to be built to run them.
 `shared/dist` is only needed by production builds (`tsconfig.build.json` ignores these `paths`), the Docker images and the front's type-check: `pnpm run build:shared`.
-`pnpm run lint` and `pnpm run check` lint and type-check the whole workspace. New migration: `make migrate-back NAME=what_you_changed` (or `migrate-provider`).
+`pnpm run lint` and `pnpm run check` lint and type-check the whole workspace.
+New migration: `pnpm run migrate:back --name what_you_changed` (or `migrate:provider`). `pnpm run reset:back` / `reset:provider` recreate a development database.
 
 ### Hardening and logs
 
@@ -390,4 +409,4 @@ The site is used and checked on Firefox and on Chromium-based browsers (Chromium
 ## Documentation
 
 - Public API: create a key in *Settings → API*, then send it as `Authorization: Bearer <key>`. The documentation is at `<backurl>/api/swagger` (or `<fronturl>/api/api/swagger`).
-- Design notes: [docs/modules.md](docs/modules.md), [docs/roles.md](docs/roles.md), [scripts/presence.md](scripts/presence.md).
+- Design notes: [docs/modules.md](docs/modules.md), [docs/roles.md](docs/roles.md), [scripts/discord/README.md](scripts/discord/README.md).

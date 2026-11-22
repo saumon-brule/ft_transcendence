@@ -10,7 +10,7 @@ Prérequis : Discord desktop ouvert, extension PreMiD installée.
    ```
 2. Copier l'activity :
    ```sh
-   cp -r <ft_transcendence>/scripts/Flex websites/F/Flex
+   cp -r <ft_transcendence>/scripts/discord/Flex websites/F/Flex
    ```
 3. Lancer le mode dev :
    ```sh

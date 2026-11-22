@@ -1,4 +1,5 @@
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
+import { A } from "@solidjs/router";
 import "./Providers.scss";
 import ProviderCard from "~/components/ui/cards/ProviderCard/ProviderCard";
 import Button from "~/components/inputs/Button";
@@ -20,5 +21,10 @@ export default function Providers() {
 			<For each={me().ownedProviders}>{(provider) => <ProviderCard provider={provider} mine={true} />}</For>
 			{/* <pre><code>{JSON.stringify(me().ownedProviders, null, 2)}</code></pre> */}
 		</div>
+		<Show when={me().ownedProviders.length === 0}>
+			<p class="no-provider">
+				{t("pages.providers.noProvider")} <A href="/#get-started">{t("pages.providers.setupGuide")}</A>
+			</p>
+		</Show>
 	</div>;
 }

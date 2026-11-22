@@ -19,7 +19,7 @@ export default function Playlist() {
 		if (!playlistQuery.isError) return;
 
 		if (playlistQuery.error.status === 404) {
-			navigate("/home");
+			navigate("/home", { replace: true });
 			summonErrorToast(t("pages.playlist.unknown"));
 		} else {
 			summonErrorToast(t("pages.playlist.loadError"));
@@ -34,7 +34,7 @@ export default function Playlist() {
 			return <>
 				<PlaylistHeader playlist={playlist} musicGroup={musicGroup} />
 				<section>
-					<Show when={playlist.musics.length > 0} fallback={<p class="empty">This playlist is empty</p>}>
+					<Show when={playlist.musics.length > 0} fallback={<p class="empty">{t("pages.playlist.emptyPlaylist")}</p>}>
 						<MusicSection
 							musicGroup={musicGroup}
 							playlist={{ uuid: playlist.uuid, isOwner: playlist.isOwner }}

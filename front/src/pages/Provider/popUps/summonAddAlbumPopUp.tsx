@@ -17,6 +17,7 @@ import { SelectArtistMenu } from "./SelectArtistMenu";
 import { Album } from "~/class/Album";
 import { t } from "~/i18n/context";
 import { devWarn } from "~/utils/devLog";
+import { invalidateProviderCatalog } from "~/api/queryHooks/providerManageCatalog";
 
 export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", onNewAlbum?: (newAlbum: Album) => void) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
@@ -84,6 +85,7 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 					}
 					newAlbum.hasCover = true;
 				}
+				invalidateProviderCatalog(provider);
 				onNewAlbum?.(Album.fromRawObject(newAlbum, provider));
 				props.close();
 			} catch (e) {

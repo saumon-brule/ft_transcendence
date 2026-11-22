@@ -106,7 +106,7 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 						<span classList={{ inactive: props.playlist.private }}><Lock /> {t("pages.playlist.makePrivate")}</span>
 					</span>
 				</Button>
-				<Button variant="danger" onClick={() => summonDeletePlaylistPopUp(props.playlist, () => navigate("/playlists"))}><Trash2 /> {t("common.delete")}</Button>
+				<Button variant="danger" onClick={() => summonDeletePlaylistPopUp(props.playlist, () => navigate("/playlists", { replace: true }))}><Trash2 /> {t("common.delete")}</Button>
 			</Show>
 			<Show when={!props.playlist.isOwner}>
 				<Show when={props.playlist.isFollowing} fallback={<Button variant="primary" disabled={followMutation.isPending} onClick={() => followPlaylist(props.playlist)}>{t("pages.playlist.follow")}</Button>}>

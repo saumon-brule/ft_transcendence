@@ -28,4 +28,4 @@ jobs:
           EXCLUDE: "/.git/, /.github/, /node_modules/, /.env, /secrets/, /provider/.env, /provider/secrets/"
           SCRIPT_AFTER: |
             cd ${{ secrets.REMOTE_TARGET }}
-            make prod-server
+            make server

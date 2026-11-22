@@ -26,7 +26,7 @@ export default function ProviderArtist() {
 
 	createEffect(() => {
 		if (artist.isError) {
-			navigate(`/provider/${provider.uuid}`);
+			navigate(`/provider/${provider.uuid}`, { replace: true });
 			summonErrorToast(t("pages.provider.unknownArtist"));
 		}
 	});

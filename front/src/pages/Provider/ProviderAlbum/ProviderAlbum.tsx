@@ -21,7 +21,7 @@ export default function ProviderAlbum() {
 
 	createEffect(() => {
 		if (album.isError) {
-			navigate(`/provider/${provider.uuid}`);
+			navigate(`/provider/${provider.uuid}`, { replace: true });
 			summonErrorToast(t("pages.provider.unknownAlbum"));
 		}
 	});

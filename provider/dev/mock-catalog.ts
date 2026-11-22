@@ -1,7 +1,7 @@
 import { copyFile, mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parseFile } from "music-metadata";
-import type { PrismaClient } from "../../generated/prisma/client";
+import type { PrismaClient } from "../src/generated/prisma/client";
 
 const MOCK_ARTISTS = [
 	{ uuid: "00000000-0000-4000-a000-000000000101", name: "Alpha Wann" },

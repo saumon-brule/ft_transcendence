@@ -18,6 +18,7 @@ import { AlbumCover } from "~/components/ui/cards/AlbumCard";
 import "./EditAlbumPopUp.scss";
 import { t } from "~/i18n/context";
 import { devWarn } from "~/utils/devLog";
+import { invalidateProviderCatalog } from "~/api/queryHooks/providerManageCatalog";
 
 export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Album) => void) {
 	const providerClient = getProviderClient(album.provider.address, album.provider.uuid);
@@ -52,7 +53,9 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 		const handleSubmit = async () => {
 			let updated: Parameters<typeof Album.fromRawObject>[0] | null = null;
 			const notifyUpdate = () => {
-				if (updated) setNewAlbum?.(Album.fromRawObject(updated, album.provider));
+				if (!updated) return;
+				invalidateProviderCatalog(album.provider);
+				setNewAlbum?.(Album.fromRawObject(updated, album.provider));
 			};
 			const failEdit = (message: string, status?: number) => {
 				if (status === 413) summonErrorToast(() => t("pages.provider.popUps.fileTooLarge"));

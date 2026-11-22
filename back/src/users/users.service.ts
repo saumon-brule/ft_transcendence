@@ -59,7 +59,6 @@ export class UsersService {
 					include: { provider: true },
 					orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 				},
-				currentlyListening: true,
 				ownedPlaylists: {
 					where: isSelf
 						? {}
@@ -92,10 +91,6 @@ export class UsersService {
 		});
 		if (!user) {
 			throw new NotFoundException("Cannot load the user profile");
-		}
-		if (user.listeningPrivate) {
-			user.currentlyListeningUUID = null;
-			user.listeningUntil = null;
 		}
 		const friends = [
 			...user.friendsRequests.map((request) => ({ id: request.id, friend: request.friend })),
