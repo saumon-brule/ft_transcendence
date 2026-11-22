@@ -1,4 +1,4 @@
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { getProviderClient } from "../providerClients";
 import { queryClient } from "../queryClient";
 import { Provider, type ProviderDataDto, type ProviderInfoDto } from "@flex/shared";

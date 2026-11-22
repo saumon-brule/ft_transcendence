@@ -4,7 +4,7 @@ import Button from "~/components/inputs/Button";
 import "./ManageArtists.scss";
 import { useProviderArtistsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Artist } from "~/class/Artist";
-import { ArtistAvatar } from "~/components/ui/ArtistCard";
+import { ArtistAvatar } from "~/components/ui/cards/ArtistCard";
 import { Pencil, Trash } from "lucide-solid";
 import { providerRemoveArtist } from "~/api/queryHooks/providerManageCatalog";
 import { summonEditArtistPopUp } from "../popUps/summonEditArtistPopUp";

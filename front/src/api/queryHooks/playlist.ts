@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/solid-query";
 import type { ClientInferResponses } from "@ts-rest/core";
 import { serverContract } from "@flex/shared";
 import { client, queryKeys } from "../client";
-import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/feedback/Toaster";
 import { bumpPlaylistCover } from "~/utils/playlistCover";
 import { t } from "~/i18n/context";
 

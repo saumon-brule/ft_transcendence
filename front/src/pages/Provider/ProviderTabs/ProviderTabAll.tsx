@@ -1,10 +1,10 @@
 import { A } from "@solidjs/router";
 import { createMemo, Show } from "solid-js";
 import { useProviderAlbumsInfiniteQuery, useProviderArtistsInfiniteQuery, useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
-import MusicSection from "~/components/ui/MusicSection/MusicSection";
-import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
-import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
-import NoResult from "~/components/ui/NoResult/NoResult";
+import MusicSection from "~/components/ui/sections/MusicSection/MusicSection";
+import AlbumSection from "~/components/ui/sections/AlbumSection/AlbumSection";
+import ArtistSection from "~/components/ui/sections/ArtistSection/ArtistSection";
+import NoResult from "~/components/ui/feedback/NoResult/NoResult";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
 import { useTranslation } from "~/i18n/context";
 

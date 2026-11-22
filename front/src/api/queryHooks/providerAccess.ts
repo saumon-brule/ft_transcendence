@@ -1,7 +1,7 @@
 import { createMutation, createQuery, useQueryClient } from "@tanstack/solid-query";
 import { client } from "../client";
 import { getProviderClient } from "../providerClients";
-import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/feedback/Toaster";
 import { Provider } from "@flex/shared";
 import { t } from "~/i18n/context";
 

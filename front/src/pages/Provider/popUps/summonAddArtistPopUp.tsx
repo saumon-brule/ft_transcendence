@@ -1,4 +1,4 @@
-import { summonPopUp } from "~/components/ui/Overlay";
+import { summonPopUp } from "~/components/ui/overlays/Overlay";
 import { DEFAULT_ARTIST } from "~/utils/imageFallback";
 import TextInput from "~/components/inputs/TextInput";
 import Button from "~/components/inputs/Button";
@@ -7,8 +7,8 @@ import Form from "~/components/inputs/Form/Form";
 import { getProviderClient } from "~/api/providerClients";
 import { Provider, providerContract } from "@flex/shared";
 import { settleResponse } from "~/api/utils/settleResponse";
-import UploadProgress from "~/components/ui/UploadProgress";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import UploadProgress from "~/components/ui/feedback/UploadProgress";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import "./AddArtistPopUp.scss";
 import { Artist } from "~/class/Artist";
 import { t } from "~/i18n/context";

@@ -3,7 +3,7 @@ import { createSignal } from "solid-js";
 import { Music } from "~/class/Music";
 import { ClearQueueFn, MusicGroup, PushMusicToQueueFn, PushMusicToQueueTopFn, SetCurrentMusicFn, SetMusicGroupFn, ShuffleFn, ToogleLoopFn, useTrackManager } from "~/store/trackManager.store";
 import { setupMediaSession, updateMediaMetadata } from "./mediaSession";
-import { summonErrorToast } from "../ui/Toaster";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { LocalStorageItem } from "~/utils/storageHelper";
 import { getMediaToken } from "~/api/providerClients";
 import { systemDark } from "~/store/appearance.store";

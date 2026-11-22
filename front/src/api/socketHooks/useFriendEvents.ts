@@ -7,7 +7,7 @@ import {
 } from "@flex/shared";
 import type { AppSocket } from "~/api/socket";
 import { getMeShortUser, setRelation, updateMe, updateTargetFriends } from "~/api/queryHooks/friendsCache";
-import { summonInfoToast } from "~/components/ui/Toaster";
+import { summonInfoToast } from "~/components/ui/feedback/Toaster";
 import { endChat } from "~/store/messages.store";
 import { setOnlineByUuid } from "~/store/presence.store";
 import { t } from "~/i18n/context";

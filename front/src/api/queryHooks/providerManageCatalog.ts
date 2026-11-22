@@ -2,7 +2,7 @@ import { Provider, providerContract } from "@flex/shared";
 import { type ClientInferResponseBody } from "@ts-rest/core";
 import { getProviderClient } from "../providerClients";
 import { queryClient } from "../queryClient";
-import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/feedback/Toaster";
 import { t } from "~/i18n/context";
 
 type InfiniteList<T> = { pages: T[]; pageParams: unknown[] };

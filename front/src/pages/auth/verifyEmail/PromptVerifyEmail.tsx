@@ -3,10 +3,10 @@ import "./PromptVerifyEmail.scss";
 import { authActions } from "~/store/auth.store";
 import { client, queryKeys } from "~/api/client";
 import { useTranslation } from "~/i18n/context";
-import DialogPage from "~/components/ui/DialogPage";
+import DialogPage from "~/components/ui/page/DialogPage";
 
 import "./PromptVerifyEmail.scss";
-import LinkParticles from "~/components/ui/LinkParticles";
+import LinkParticles from "~/components/ui/page/LinkParticles";
 
 export default function PromptVerifyEmail() {
 	const { t } = useTranslation();

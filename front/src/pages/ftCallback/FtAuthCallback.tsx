@@ -1,7 +1,7 @@
 import { useNavigate } from "@solidjs/router";
 import { onMount } from "solid-js";
 import { client } from "~/api/client";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { useTranslation } from "~/i18n/context";
 import { authActions } from "~/store/auth.store";
 import { MessageEventData } from "~/types/MessageEventData";

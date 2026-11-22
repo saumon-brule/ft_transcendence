@@ -1,6 +1,6 @@
 import { For, Show } from "solid-js";
 import { env } from "~/env";
-import { PresenceAvatar } from "~/components/ui/PresenceDot/PresenceDot";
+import { PresenceAvatar } from "~/components/ui/elements/PresenceDot/PresenceDot";
 import type { User } from "@flex/shared";
 import { A } from "@solidjs/router";
 import { useTranslation } from "~/i18n/context";

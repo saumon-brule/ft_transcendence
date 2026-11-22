@@ -1,6 +1,6 @@
 import Button from "~/components/inputs/Button";
 import { client } from "~/api/client";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { API_MAX_USAGE_PER_HOUR } from "@flex/shared";
 
 import "./ApiSettings.scss";
