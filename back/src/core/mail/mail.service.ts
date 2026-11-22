@@ -3,6 +3,8 @@ import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { env } from "../env";
 import { WinstonLoggerService } from "../logging/logger.service";
 import { LogBuilder } from "../logging/log-builder";
+import { languageEnum } from "@flex/shared";
+import { mailTexts, type MailTemplate } from "./mail.i18n";
 
 @Injectable()
 export class MailService {
@@ -13,16 +15,19 @@ export class MailService {
 
 	async sendEmail(
 		emailsList: string[],
-		subject: string,
-		template: string,
+		template: MailTemplate,
+		language: string | null | undefined,
 		context: ISendMailOptions["context"],
 	) {
+		const lang = languageEnum.catch("en").parse(language);
+		const t = mailTexts(template, lang);
+
 		try {
 			const sendMailParams: ISendMailOptions = {
 				to: emailsList,
-				subject: subject,
+				subject: t.subject,
 				template: template,
-				context: context,
+				context: { ...context, t, lang },
 				headers: {
 					"List-Unsubscribe": `<mailto:${env.SMTP_USER}?subject=unsubscribe>`,
 					"List-Unsubscribe-Post": "List-Unsubscribe=One-Click",

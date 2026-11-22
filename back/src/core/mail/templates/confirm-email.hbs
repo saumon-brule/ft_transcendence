@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{lang}}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Confirm your email - Flex</title>
+  <title>{{t.subject}}</title>
   <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     * {
@@ -177,33 +177,33 @@
       </div>
 
       <div class="body">
-        <p class="headline">Confirm your email address</p>
+        <p class="headline">{{t.headline}}</p>
 
         <p class="text">
-          Hey <strong>{{username}}</strong>, welcome to Flex.
+          {{t.greetingBegin}}<strong>{{username}}</strong>{{t.greetingEnd}}
         </p>
         <p class="text">
-          Tap the button below to verify your email address and finish setting up your account.
-          This link is only valid for <strong>15 minutes</strong>.
+          {{t.body}}
+          {{t.validityBegin}}<strong>{{t.validityDuration}}</strong>{{t.validityEnd}}
         </p>
 
         <div class="cta-wrapper">
           <a href="{{baseFrontUrl}}{{emailConfirmationPath}}?token={{token}}" class="cta-button">
-            Confirm my email
+            {{t.button}}
           </a>
         </div>
 
         <div class="divider"></div>
 
         <p class="expiry">
-          Didn't create an account? You can safely ignore this email - nothing will happen.
+          {{t.ignore}}
         </p>
       </div>
 
       <div class="footer">
         <p class="footer-text">
-          © {{year}} Flex · This is an automated message, please do not reply.<br />
-          <a href="{{baseFrontUrl}}/privacy-policy">Privacy policy</a>
+          © {{year}} Flex · {{t.footer}}<br />
+          <a href="{{baseFrontUrl}}/privacy-policy">{{t.privacy}}</a>
         </p>
       </div>
 

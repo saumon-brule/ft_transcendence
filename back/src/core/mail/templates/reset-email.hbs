@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{lang}}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Reset your email - Flex</title>
+  <title>{{t.subject}}</title>
   <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     * {
@@ -177,30 +177,30 @@
       </div>
 
       <div class="body">
-        <p class="headline">Set your new email</p>
+        <p class="headline">{{t.headline}}</p>
 
         <p class="text">
-          Tap the button below to set your new email.
-          This link is only valid for <strong>15 minutes</strong>.
+          {{t.body}}
+          {{t.validityBegin}}<strong>{{t.validityDuration}}</strong>{{t.validityEnd}}
         </p>
 
         <div class="cta-wrapper">
           <a href="{{baseFrontUrl}}/auth/set-email?token={{token}}" class="cta-button">
-            Set email
+            {{t.button}}
           </a>
         </div>
 
         <div class="divider"></div>
 
         <p class="expiry">
-          You didn't ask for this email change ? You can ignore this mail.
+          {{t.ignore}}
         </p>
       </div>
 
       <div class="footer">
         <p class="footer-text">
-          © {{year}} Flex · This is an automated message, please do not reply.<br />
-          <a href="{{baseFrontUrl}}/privacy-policy">Privacy policy</a>
+          © {{year}} Flex · {{t.footer}}<br />
+          <a href="{{baseFrontUrl}}/privacy-policy">{{t.privacy}}</a>
         </p>
       </div>
 
