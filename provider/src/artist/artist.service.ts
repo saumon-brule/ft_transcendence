@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import type { SearchSortField, SortOrder } from "@flex/shared";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import type { ArtistFilters } from "../core/catalog/catalog.filters";
@@ -10,6 +11,8 @@ interface ListQuery extends ArtistFilters {
 	limit: number;
 	offset: number;
 	search?: string;
+	sort?: SearchSortField;
+	order?: SortOrder;
 }
 
 interface CreateArtist {
@@ -27,8 +30,8 @@ export class ArtistService {
 		private readonly search: SearchService,
 	) {}
 
-	async list({ limit, offset, search, ...filters }: ListQuery) {
-		const { rows, total } = await this.search.page("Artist", { search, filters, limit, offset }, (ids) => this.prisma.artist.findMany({
+	async list({ limit, offset, search, sort, order, ...filters }: ListQuery) {
+		const { rows, total } = await this.search.page("Artist", { search, filters, limit, offset, sort, order }, (ids) => this.prisma.artist.findMany({
 			where: { id: { in: ids } },
 		}));
 		return { artists: rows.map(toArtistItem), total };

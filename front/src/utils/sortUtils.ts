@@ -1,3 +1,4 @@
+import type { SearchSortField, SortOrder } from "@flex/shared";
 import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
 import { Music } from "~/class/Music";
@@ -91,4 +92,48 @@ export function sortByScore<T>(items: T[], score: (item: T) => number) {
 	return items.map((item) => ({ item, score: score(item) }))
 		.sort((a, b) => b.score - a.score)
 		.map(({ item }) => item);
+}
+
+type Sorting = { field: SearchSortField; order: SortOrder };
+
+function compareValues(a: string | number | null, b: string | number | null, order: SortOrder) {
+	const missing = (value: string | number | null) => value === null || value === "";
+	if (missing(a) || missing(b)) return Number(missing(a)) - Number(missing(b));
+
+	const result = typeof a === "string" && typeof b === "string"
+		? a.localeCompare(b, undefined, { sensitivity: "base" })
+		: Number(a) - Number(b);
+	return order === "desc"
+		? -result
+		: result;
+}
+
+const timeOf = (date: Date | string | null) => date === null
+	? null
+	: new Date(date).getTime();
+const namesOf = (artists: { name: string }[]) => artists.map((artist) => artist.name).join(", ");
+
+export function compareMusics(a: Music, b: Music, { field, order }: Sorting) {
+	switch (field) {
+		case "name": return compareValues(a.name, b.name, order);
+		case "artist": return compareValues(namesOf(a.artists), namesOf(b.artists), order);
+		case "album": return compareValues(a.album?.name ?? null, b.album?.name ?? null, order);
+		case "published": return compareValues(timeOf(a.publishedAt), timeOf(b.publishedAt), order);
+		case "duration": return compareValues(a.duration, b.duration, order);
+	}
+}
+
+export function compareAlbums(a: Album, b: Album, { field, order }: Sorting) {
+	switch (field) {
+		case "name": return compareValues(a.name, b.name, order);
+		case "artist": return compareValues(namesOf(a.artists), namesOf(b.artists), order);
+		case "published": return compareValues(timeOf(a.publishedAt), timeOf(b.publishedAt), order);
+		default: return 0;
+	}
+}
+
+export function compareArtists(a: Artist, b: Artist, { field, order }: Sorting) {
+	return field === "name"
+		? compareValues(a.name, b.name, order)
+		: 0;
 }

@@ -1,6 +1,7 @@
 import { createMemo } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 import type { SearchFilters } from "~/api/queryHooks/providerInfo";
+import type { SearchSortField } from "@flex/shared";
 import type { Tab } from "./Search";
 
 export type SearchFilterField = keyof SearchFilters;
@@ -34,8 +35,22 @@ export function useSearchFilters() {
 	});
 
 	const setFilters = (next: SearchFilters) => {
-		setParams(Object.fromEntries(SEARCH_FILTER_FIELDS.map((field) => [field, next[field] || undefined])), { replace: true });
+		setParams({ ...Object.fromEntries(SEARCH_FILTER_FIELDS.map((field) => [field, next[field] || undefined])), page: undefined }, { replace: true });
 	};
 
 	return [filters, setFilters] as const;
 }
+
+export type SearchPageSortField = SearchSortField | "provider";
+
+export const TAB_SORT_FIELDS: Record<Tab, readonly SearchPageSortField[]> = {
+	All: [],
+	Musics: ["name", "artist", "album", "provider", "published", "duration"],
+	Albums: ["name", "artist", "provider", "published"],
+	Artists: ["name", "provider"],
+	Playlists: [],
+	Users: [],
+	Providers: [],
+};
+
+export const PAGE_SIZE = 10;

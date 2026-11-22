@@ -22,6 +22,23 @@ export const listQuerySchema = paginationQuerySchema.extend({
 		optional(),
 });
 
+export const SEARCH_SORT_FIELDS = ["name", "artist", "album", "published", "duration"] as const;
+export const searchSortFieldSchema = z.enum(SEARCH_SORT_FIELDS);
+export type SearchSortField = z.infer<typeof searchSortFieldSchema>;
+
+export const sortOrderSchema = z.enum(["asc", "desc"]);
+export type SortOrder = z.infer<typeof sortOrderSchema>;
+
+// Without `sort` a list keeps its default order (the relevance when searching).
+const sortQuery = <const F extends readonly [SearchSortField, ...SearchSortField[]]>(fields: F) => ({
+	sort: z.enum(fields).optional(),
+	order: sortOrderSchema.default("asc"),
+});
+
+export const MUSIC_SORT_FIELDS = SEARCH_SORT_FIELDS;
+export const ALBUM_SORT_FIELDS = ["name", "artist", "published"] as const satisfies readonly SearchSortField[];
+export const ARTIST_SORT_FIELDS = ["name"] as const satisfies readonly SearchSortField[];
+
 const filterTextSchema = z.string().trim().min(1).
 	max(100).
 	optional();
@@ -30,6 +47,7 @@ const filterUuidSchema = z.string().uuid().
 const filterDateSchema = z.coerce.date().optional();
 
 export const musicListQuerySchema = listQuerySchema.extend({
+	...sortQuery(MUSIC_SORT_FIELDS),
 	name: filterTextSchema,
 	artist: filterTextSchema,
 	album: filterTextSchema,
@@ -40,6 +58,7 @@ export const musicListQuerySchema = listQuerySchema.extend({
 });
 
 export const albumListQuerySchema = listQuerySchema.extend({
+	...sortQuery(ALBUM_SORT_FIELDS),
 	name: filterTextSchema,
 	artist: filterTextSchema,
 	artistUuid: filterUuidSchema,
@@ -48,6 +67,7 @@ export const albumListQuerySchema = listQuerySchema.extend({
 });
 
 export const artistListQuerySchema = listQuerySchema.extend({
+	...sortQuery(ARTIST_SORT_FIELDS),
 	name: filterTextSchema,
 });
 

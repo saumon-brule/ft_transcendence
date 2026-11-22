@@ -18,11 +18,13 @@
 		}
 	}
 
-	// .text-input input {
-	// 	padding: 0.4rem 0.7rem;
-	// 	border-radius: 0.5rem;
-	// 	font-size: 0.9rem;
-	// }
+	.text-input input {
+		box-sizing: border-box;
+		height: 2.25rem;
+		padding: 0.4rem 0.7rem;
+		border-radius: 0.5rem;
+		font-size: 0.9rem;
+	}
 
 	@media (max-width: 944px) {
 		.filter-field {

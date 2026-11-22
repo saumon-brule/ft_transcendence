@@ -1,6 +1,6 @@
 import { A, useLocation, useParams } from "@solidjs/router";
-import { createMemo, Match, Show, Switch } from "solid-js";
-import { useProvidersSearchQueries } from "~/api/queryHooks/providerInfo";
+import { createEffect, createMemo, createSignal, Match, on, Show, Switch } from "solid-js";
+import { type SearchSort, useProvidersSearchQueries } from "~/api/queryHooks/providerInfo";
 import "./Search.scss";
 import { useProfile } from "~/components/guards/ProfileGate";
 import { For } from "solid-js";
@@ -10,18 +10,21 @@ import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
 import { Music } from "~/class/Music";
 import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
-import { Provider } from "@flex/shared";
+import { Provider, SEARCH_MAX_LIMIT } from "@flex/shared";
 import { BestResult } from "./BestResult";
 import PlaylistCard from "~/components/ui/PlaylistCard/PlaylistCard";
 import UserCard from "~/components/ui/UserCard/UserCard";
 import { useSearchPlaylistsQuery, useSearchProvidersQuery, useSearchUsersQuery } from "~/api/queryHooks/search";
 import SearchFilters from "./SearchFilters";
-import { pickFilters, TAB_FILTER_FIELDS, useSearchFilters } from "./useSearchFilters";
+import SortBar from "~/components/ui/SortBar";
+import { useSortParam } from "~/components/ui/SortBar/useSortParam";
+import InfiniteScroll from "~/components/ui/InfiniteScroll";
+import { PAGE_SIZE, pickFilters, TAB_FILTER_FIELDS, TAB_SORT_FIELDS, useSearchFilters } from "./useSearchFilters";
 import NoResult from "~/components/ui/NoResult/NoResult";
 import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
 import Tabs from "~/components/ui/Tabs/Tabs";
 import { useTabParam } from "~/components/ui/Tabs/useTabParam";
-import { scoreAlbum, scoreArtist, scoreMusic, sortByScore } from "~/utils/sortUtils";
+import { compareAlbums, compareArtists, compareMusics, scoreAlbum, scoreArtist, scoreMusic, sortByScore } from "~/utils/sortUtils";
 
 const TABS = ["All", "Musics", "Albums", "Artists", "Playlists", "Users", "Providers"] as const;
 export type Tab = typeof TABS[number];
@@ -40,8 +43,27 @@ export default function Search() {
 	const [tab, setTab] = useTabParam(TABS, "All");
 	const location = useLocation();
 	const [filters, setFilters] = useSearchFilters();
+	const [sort, setSort] = useSortParam(() => TAB_SORT_FIELDS[tab()]);
+	const [loadedPages, setLoadedPages] = createSignal(1);
+	const visibleCount = () => loadedPages() * PAGE_SIZE;
 	const appliedFilters = createMemo(() => pickFilters(filters(), TAB_FILTER_FIELDS[tab()]));
-	const searches = useProvidersSearchQueries(() => providers(), search, () => appliedFilters());
+	const paginated = () => TAB_SORT_FIELDS[tab()].length > 0;
+	const providerSort = () => sort()?.field === "provider"
+		? sort()
+		: undefined;
+	const providersSort = (): SearchSort | undefined => {
+		const current = sort();
+		return current && current.field !== "provider"
+			? { field: current.field, order: current.order }
+			: undefined;
+	};
+	const searchOptions = createMemo(() => ({
+		sort: providersSort(),
+		limit: paginated()
+			? Math.min(SEARCH_MAX_LIMIT, visibleCount())
+			: undefined,
+	}));
+	const searches = useProvidersSearchQueries(() => providers(), search, () => appliedFilters(), () => searchOptions());
 
 	const users = useSearchUsersQuery(search, () => tab() === "Users");
 	const playlists = useSearchPlaylistsQuery(search, () => tab() === "Playlists");
@@ -63,6 +85,23 @@ export default function Search() {
 			artists: searches[i]?.data?.body.artists ?? [],
 		}));
 
+		const sorting = providersSort();
+		const byProvider = providerSort();
+		const names = new Map(providers().map((provider) => [provider.uuid, provider.name]));
+		const providerName = (uuid: string) => names.get(uuid) ?? "";
+		function arrange<T>(items: T[], score: (item: T) => number, providerUuid: (item: T) => string, compare: (a: T, b: T) => number) {
+			const ranked = sortByScore(items, score);
+			if (byProvider) {
+				const direction = byProvider.order === "desc"
+					? -1
+					: 1;
+				return ranked.sort((a, b) => direction * providerName(providerUuid(a)).localeCompare(providerName(providerUuid(b)), undefined, { sensitivity: "base" }));
+			}
+			return sorting
+				? ranked.sort(compare)
+				: ranked;
+		}
+
 		const organizedData: {
 			musics: Music[];
 			albums: Album[];
@@ -73,9 +112,9 @@ export default function Search() {
 			} | null;
 			providers: Provider[];
 		} = {
-			musics: sortByScore(data.flatMap((d) => d.musics), (m) => scoreMusic(m, search())),
-			albums: sortByScore(data.flatMap((d) => d.albums), (a) => scoreAlbum(a, search())),
-			artists: sortByScore(data.flatMap((d) => d.artists), (a) => scoreArtist(a, search())),
+			musics: arrange(data.flatMap((d) => d.musics), (m) => scoreMusic(m, search()), (m) => m.provider.uuid, (a, b) => sorting ? compareMusics(a, b, sorting) : 0),
+			albums: arrange(data.flatMap((d) => d.albums), (a) => scoreAlbum(a, search()), (a) => a.provider.uuid, (a, b) => sorting ? compareAlbums(a, b, sorting) : 0),
+			artists: arrange(data.flatMap((d) => d.artists), (a) => scoreArtist(a, search()), (a) => a.provider.uuid, (a, b) => sorting ? compareArtists(a, b, sorting) : 0),
 			best: null,
 			providers: (data.filter((d) => d.musics.length + d.albums.length + d.artists.length > 0 || d.provider.name.toLocaleLowerCase().includes(search().toLowerCase()))).map((d) => d.provider),
 		};
@@ -111,9 +150,32 @@ export default function Search() {
 		return organizedData;
 	});
 
+	const total = createMemo(() => {
+		const key = tab() === "Musics"
+			? "musics"
+			: tab() === "Albums"
+				? "albums"
+				: "artists";
+		return searches.reduce((sum, query) => sum + (query.data?.body.totals[key] ?? 0), 0);
+	});
+	const hasMore = () => visibleCount() < Math.min(total(), SEARCH_MAX_LIMIT);
+	const isFetching = () => searches.some((query) => query.isFetching);
+	function visible<T>(items: T[]) {
+		return items.slice(0, visibleCount());
+	}
+
+	createEffect(on(
+		() => [tab(), search(), JSON.stringify(filters()), JSON.stringify(sort())],
+		() => setLoadedPages(1),
+		{ defer: true },
+	));
+
 	return <div class="page" id="search">
 		<Tabs tabs={TABS} value={tab()} onChange={setTab} />
 		<SearchFilters fields={TAB_FILTER_FIELDS[tab()]} value={filters()} onChange={setFilters} />
+		<Show when={tab() !== "Musics"}>
+			<SortBar fields={TAB_SORT_FIELDS[tab()]} value={sort()} onChange={setSort} />
+		</Show>
 		<Switch>
 			<Match when={tab() === "All"}>
 				<BestResult best={results().best} />
@@ -144,8 +206,9 @@ export default function Search() {
 				<Show when={results().musics.length > 0}>
 					<section class="musics">
 						<h2>Musics</h2>
-						<MusicSection musics={results().musics} providers={results().providers}/>
+						<MusicSection musics={visible(results().musics)} providers={results().providers} sort={{ value: sort(), onChange: setSort }}/>
 					</section>
+					<InfiniteScroll enabled={hasMore() && !isFetching()} onLoadMore={() => setLoadedPages((pages) => pages + 1)} />
 				</Show>
 				<NoResult show={results().musics.length === 0} />
 			</Match>
@@ -153,8 +216,9 @@ export default function Search() {
 				<Show when={results().albums.length > 0}>
 					<section class="albums">
 						<h2>Albums</h2>
-						<AlbumSection album={{ albums: results().albums, total: results().albums.length }} providers={results().providers} />
+						<AlbumSection album={{ albums: visible(results().albums), total: total() }} providers={results().providers} />
 					</section>
+					<InfiniteScroll enabled={hasMore() && !isFetching()} onLoadMore={() => setLoadedPages((pages) => pages + 1)} />
 				</Show>
 				<NoResult show={results().albums.length === 0} />
 			</Match>
@@ -162,8 +226,9 @@ export default function Search() {
 				<Show when={results().artists.length > 0}>
 					<section class="artists">
 						<h2>Artists</h2>
-						<ArtistSection artist={{ artists: results().artists, total: results().artists.length }} providers={results().providers} />
+						<ArtistSection artist={{ artists: visible(results().artists), total: total() }} providers={results().providers} />
 					</section>
+					<InfiniteScroll enabled={hasMore() && !isFetching()} onLoadMore={() => setLoadedPages((pages) => pages + 1)} />
 				</Show>
 				<NoResult show={results().artists.length === 0} />
 			</Match>

@@ -31,9 +31,13 @@ export default function Provider() {
 	});
 
 	const [tab, setTab] = useTabParam<Tab>(TABS, "All");
-	const [searchParams, setSearchParams] = useSearchParams<{ q?: string }>();
+	const [searchParams, setSearchParams] = useSearchParams<{ q?: string; sort?: string; order?: string }>();
 	const search = () => decodeURIComponent(searchParams.q ?? "");
 	const setSearch = (value: string) => setSearchParams({ q: encodeURIComponent(value) || undefined }, { replace: true });
+	const changeTab = (value: Tab) => {
+		setTab(value);
+		setSearchParams({ sort: undefined, order: undefined }, { replace: true });
+	};
 
 	return <div class="page" id="provider">
 		<ProviderHeader provider={providerInfoQuery.data?.body} status={providerStatus()} />
@@ -49,7 +53,7 @@ export default function Provider() {
 			</Match>
 			<Match when={providerStatus() === "success"}>
 				<Show when={providerInfoQuery.data?.body}>
-					<Tabs tabs={TABS} value={tab()} onChange={setTab} />
+					<Tabs tabs={TABS} value={tab()} onChange={changeTab} />
 					<ProviderSearchBar value={search()} onSearch={setSearch} />
 					<Switch>
 						<Match when={tab() === "All"}>

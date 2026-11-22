@@ -1,0 +1,30 @@
+.search-sort {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px 16px;
+	margin-bottom: 16px;
+
+	.search-sort-label {
+		font-size: 0.8rem;
+		font-weight: 600;
+	}
+
+	.search-sort-field {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		color: var(--text-secondary);
+
+		.sort-arrow {
+			display: inline-flex;
+			width: 14px;
+			height: 14px;
+		}
+
+		&.active {
+			color: var(--text-primary);
+			font-weight: 700;
+		}
+	}
+}
