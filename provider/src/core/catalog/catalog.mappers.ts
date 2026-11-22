@@ -16,11 +16,13 @@ export const musicDetailInclude = {
 
 export const artistDetailInclude = {
 	addedBy: true,
+	_count: { select: { music: true, albums: true } },
 } satisfies Prisma.ArtistInclude;
 
 export const albumDetailInclude = {
 	addedBy: true,
 	artists: { include: { artist: true }, orderBy: { artist: { name: "asc" } } },
+	_count: { select: { musics: true } },
 } satisfies Prisma.AlbumInclude;
 
 export type AlbumItemRow = Prisma.AlbumGetPayload<{ include: typeof albumItemInclude }>;
@@ -68,6 +70,8 @@ export const toArtistDetail = (artist: ArtistDetailRow) => ({
 	addedAt: artist.createdAt,
 	biography: artist.biography,
 	hasAvatar: artist.hasAvatar,
+	musicCount: artist._count.music,
+	albumCount: artist._count.albums,
 });
 
 export const toAlbumDetail = (album: AlbumDetailRow) => ({
@@ -78,4 +82,5 @@ export const toAlbumDetail = (album: AlbumDetailRow) => ({
 	publishedAt: album.publishedAt,
 	hasCover: album.hasCover,
 	artists: album.artists.map((link) => toArtistItem(link.artist)),
+	musicCount: album._count.musics,
 });

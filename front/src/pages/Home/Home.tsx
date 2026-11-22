@@ -7,20 +7,22 @@ import { history } from "~/store/history.store";
 import "./Home.scss";
 import { Music } from "~/class/Music";
 import MusicCard from "~/components/ui/MusicCard";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 import { Playlist } from "~/class/Playlist";
 import PlaylistCard from "~/components/ui/PlaylistCard/PlaylistCard";
+import { useTranslation } from "~/i18n/context";
 
 export default function Home() {
-	const profile = useMeProfileQuery();
-	const providers = () => profile.data?.body ? [...profile.data.body.ownedProviders, ...profile.data.body.connectedProviders] : [];
+	const { t } = useTranslation();
+	const me = useProfile();
+	const providers = () => [...me().ownedProviders, ...me().connectedProviders];
 
 	return <div id="home" class="page">
 		<Show when={history.top().length + history.last().length === 0}>
-			<div>Vous n'avez encore rien écouté</div>
+			<div>{t("pages.home.empty")}</div>
 		</Show>
 		<Show when={history.top().length}>
-			<h2>Vous avez le plus écouté</h2>
+			<h2>{t("pages.home.mostListened")}</h2>
 			<div class="card-list">
 				<For each={history.top()}>{(e) => {
 					if (e instanceof Artist) return <ArtistCard artist={e} providers={providers()}/>;
@@ -31,7 +33,7 @@ export default function Home() {
 			</div>
 		</Show>
 		<Show when={history.last().length}>
-			<h2>Vos dernieres écoutes</h2>
+			<h2>{t("pages.home.recentlyListened")}</h2>
 			<div class="card-list">
 				<For each={history.last()}>{(e) => {
 					if (e instanceof Artist) return <ArtistCard artist={e} providers={providers()}/>;

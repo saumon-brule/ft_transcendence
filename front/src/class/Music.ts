@@ -1,6 +1,8 @@
-import { buildMediaUrl, musicItemSchema, type ProviderDataMusicDto, type ProviderDataArtistDto, Provider, providerSchema } from "@flex/shared";
+import { buildMediaUrl, musicItemSchema, type ProviderDataMusicDto, Provider, providerSchema } from "@flex/shared";
 import z from "zod";
 import { getMediaToken } from "~/api/providerClients";
+import { Artist } from "./Artist";
+import { Album } from "./Album";
 
 type MusicAlbumDto = NonNullable<ProviderDataMusicDto["album"]>;
 
@@ -19,8 +21,8 @@ export class Music {
 		public readonly duration: number,
 		public readonly publishedAt: Date | null,
 		public readonly hasCover: boolean,
-		public readonly artists: ProviderDataArtistDto[],
-		public readonly album: MusicAlbumDto | null,
+		public readonly artists: Artist[],
+		public readonly album: Album | null,
 		public readonly uuid: string,
 		public provider: Provider,
 		public state: MusicState,
@@ -59,7 +61,11 @@ export class Music {
 	}
 
 	public static fromRawObject(this: void, rawMusicObject: ProviderDataMusicDto, provider: Provider): Music {
-		const music = { ...rawMusicObject } as Music;
+		const music = {
+			...rawMusicObject,
+			artists: rawMusicObject.artists.map((rawArtist) => Artist.fromRawObject(rawArtist, provider)),
+			album: rawMusicObject.album ? Album.fromRawObject(rawMusicObject.album, provider) : null,
+		} as Music;
 		Object.setPrototypeOf(music, Music.prototype);
 		music.provider = provider;
 		music.state = "available";
@@ -69,5 +75,7 @@ export class Music {
 	public static zodSchema = musicItemSchema.extend({
 		provider: providerSchema,
 		state: musicStateSchema,
+		artists: z.array(Artist.zodSchema),
+		album: Album.zodSchema.nullable(),
 	}).transform(({ provider, ...music }): Music => Music.fromRawObject(music, provider));
 }

@@ -1,6 +1,7 @@
 export { serverContract } from "./contracts/server/server.contract";
 export { authContract } from "./contracts/server/auth/auth.contract";
 export { usersContract } from "./contracts/server/users/users.contract";
+export { apiContract } from "./contracts/server/api/api.contract";
 export { appConfigContract } from "./contracts/server/appConfig/app-config.contract";
 export { playlistsContract } from "./contracts/server/playlists/playlists.contract";
 export { createPlaylistBodySchema, playlistSummarySchema, type PlaylistDetailDto, type PlaylistListDto, type PlaylistSummaryDto } from "./contracts/server/playlists/schemas/playlist.schema";
@@ -25,7 +26,7 @@ export { getAppVariables } from "./contracts/server/appConfig/schemas/app-config
 export * from "./core/constants";
 export { createJwtPayload, type JwtPayload } from "./core/jwt.payload";
 
-export { providerPermissions, providerPermissionSchema, type ProviderPermission } from "./contracts/provider/role/schemas/role.schema";
+export { providerPermissions, providerPermissionSchema, createProviderRoleSchema, type ProviderPermission, type ProviderRole } from "./contracts/provider/role/schemas/role.schema";
 
 export { MEDIA_ROUTES, buildMediaUrl, type MediaType } from "./contracts/provider/media/media-routes";
 export * from "./errors/error-codes";
@@ -33,10 +34,12 @@ export * from "./errors/error-schemas";
 export { buildErrorResponse, type BuiltError, type ErrorBody } from "./errors/build-error-response";
 
 
-export { type ProviderDataDto, type ProviderDataMusicDto, type ProviderDataAlbumDto, type ProviderDataArtistDto } from "./contracts/provider/info/schemas/info.schema";
-export { DEFAULT_PAGINATION_LIMIT, healthResponseSchema, healthUnavailableSchema, type HealthResponseDto, type HealthUnavailableDto } from "./schemas/common.schema";
-export { musicItemSchema, artistItemSchema, albumItemSchema } from "./contracts/provider/schemas/items.schema";
+export { type ProviderDataDto, type ProviderDataMusicDto, type ProviderDataAlbumDto, type ProviderDataArtistDto, type ProviderInfoDto } from "./contracts/provider/info/schemas/info.schema";
+export { DEFAULT_PAGINATION_LIMIT, SEARCH_SORT_FIELDS, MUSIC_SORT_FIELDS, ALBUM_SORT_FIELDS, ARTIST_SORT_FIELDS, type SearchSortField, type SortOrder, healthResponseSchema, healthUnavailableSchema, type HealthResponseDto, type HealthUnavailableDto } from "./schemas/common.schema";
+export { musicItemSchema, artistItemSchema, albumItemSchema, type ArtistItemDto } from "./contracts/provider/schemas/items.schema";
 export * from "./contracts/server/providers/schemas/provider.schema";
 
 export { type ArtistDetailedItemDto } from "./contracts/provider/artist/schemas/artist.schema";
 export { type AlbumDetailedItemDto } from "./contracts/provider/album/schemas/album.schema";
+export { SEARCH_MAX_LIMIT } from "./contracts/provider/search/schemas/search.schema";
+export { API_MAX_USAGE_PER_HOUR, API_MAX_USAGE_PER_SECOND } from "./contracts/server/api/api.contract";

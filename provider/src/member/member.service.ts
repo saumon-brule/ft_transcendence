@@ -5,12 +5,12 @@ import { ServerClientService } from "../core/server/server-client.service";
 import type { MemberContext } from "../core/auth/auth.types";
 import { AppForbiddenException } from "../core/error/forbidden";
 
-const include = {
+export const memberInclude = {
 	roles: { include: { role: true }, orderBy: { role: { name: "asc" } } },
 } satisfies Prisma.MemberInclude;
-type MemberRow = Prisma.MemberGetPayload<{ include: typeof include }>;
+type MemberRow = Prisma.MemberGetPayload<{ include: typeof memberInclude }>;
 
-const toMember = (member: MemberRow, ownerUuid: string) => ({
+export const toMember = (member: MemberRow, ownerUuid: string) => ({
 	uuid: member.uuid,
 	isOwner: member.uuid === ownerUuid,
 	revokedAt: member.revokedAt,
@@ -19,8 +19,6 @@ const toMember = (member: MemberRow, ownerUuid: string) => ({
 });
 
 interface ListQuery {
-	limit: number;
-	offset: number;
 	revoked?: boolean;
 }
 
@@ -40,26 +38,23 @@ export class MemberService {
 		};
 	}
 
-	async list({ limit, offset, revoked }: ListQuery) {
+	async list({ revoked }: ListQuery) {
 		const where: Prisma.MemberWhereInput = revoked === undefined
 			? {}
 			: { revokedAt: revoked
 				? { not: null }
 				: null };
 
-		const [{ ownerUuid }, rows, total] = await Promise.all([
+		const [{ ownerUuid }, rows] = await Promise.all([
 			this.prisma.provider.findUniqueOrThrow({ where: { id: 1 } }),
 			this.prisma.member.findMany({
 				where,
-				include,
+				include: memberInclude,
 				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-				take: limit,
-				skip: offset,
 			}),
-			this.prisma.member.count({ where }),
 		]);
 
-		return { members: rows.map((row) => toMember(row, ownerUuid)), total };
+		return { members: rows.map((row) => toMember(row, ownerUuid)) };
 	}
 
 	async revoke(uuid: string, actorUuid: string) {
@@ -98,11 +93,42 @@ export class MemberService {
 				data: unique.map((roleUuid) => ({ memberUuid: uuid, roleUuid })),
 			});
 
-			const [{ ownerUuid }, updated] = await Promise.all([
-				tx.provider.findUniqueOrThrow({ where: { id: 1 } }),
-				tx.member.findUniqueOrThrow({ where: { uuid }, include }),
-			]);
-			return toMember(updated, ownerUuid);
+			return this.fetchMember(tx, uuid);
 		});
+	}
+
+	async addRole(uuid: string, roleUuid: string) {
+		await this.prisma.$transaction(async (tx) => {
+			const member = await tx.member.findUnique({ where: { uuid } });
+			if (!member || member.revokedAt) throw new NotFoundException("Member not found");
+
+			const role = await tx.role.findUnique({ where: { uuid: roleUuid } });
+			if (!role) throw new NotFoundException("Role not found");
+
+			await tx.memberRole.createMany({
+				data: [{ memberUuid: uuid, roleUuid }],
+				skipDuplicates: true,
+			});
+		});
+	}
+
+	async removeRole(uuid: string, roleUuid: string) {
+		await this.prisma.$transaction(async (tx) => {
+			const member = await tx.member.findUnique({ where: { uuid } });
+			if (!member || member.revokedAt) throw new NotFoundException("Member not found");
+
+			const role = await tx.role.findUnique({ where: { uuid: roleUuid } });
+			if (!role) throw new NotFoundException("Role not found");
+
+			await tx.memberRole.deleteMany({ where: { memberUuid: uuid, roleUuid } });
+		});
+	}
+
+	private async fetchMember(tx: Prisma.TransactionClient, uuid: string) {
+		const [{ ownerUuid }, updated] = await Promise.all([
+			tx.provider.findUniqueOrThrow({ where: { id: 1 } }),
+			tx.member.findUniqueOrThrow({ where: { uuid }, include: memberInclude }),
+		]);
+		return toMember(updated, ownerUuid);
 	}
 }

@@ -1,126 +1,118 @@
 import { A } from "@solidjs/router";
 import LegalLayout from "./LegalLayout";
 import { legalInfo } from "./legalInfo";
+import { useTranslation } from "~/i18n/context";
 
 export default function PrivacyPolicy() {
+	const { t } = useTranslation();
 	const mail = `mailto:${legalInfo.contactEmail}`;
+	const service = { service: legalInfo.serviceName };
 
-	return <LegalLayout title="Privacy Policy">
+	return <LegalLayout title={t("pages.legal.privacy.title")}>
 		<p>
-			This policy explains what personal data {legalInfo.serviceName} collects, why, and what you can do about it.
-			{" "}{legalInfo.serviceName} is operated by <strong>{legalInfo.operator}</strong>, which is the data controller
-			for the data processed by the {legalInfo.serviceName} servers.
+			{t("pages.legal.privacy.intro.begin", service)}<strong>{legalInfo.operator}</strong>{t("pages.legal.privacy.intro.end", service)}
 		</p>
 
 		<section>
-			<h2>What Flex is</h2>
+			<h2>{t("pages.legal.privacy.whatIsFlex.title")}</h2>
 			<p>
-				Flex hosts your account and the interface you use to listen to music. The music itself is not stored by Flex:
-				it lives on <strong>providers</strong>, servers that users install and run themselves. When you listen to a track,
-				your browser fetches it directly from the provider that hosts it.
+				{t("pages.legal.privacy.whatIsFlex.begin")}<strong>{t("pages.legal.privacy.whatIsFlex.providers")}</strong>{t("pages.legal.privacy.whatIsFlex.end")}
 			</p>
 		</section>
 
 		<section>
-			<h2>Data we collect</h2>
-			<h3>Account</h3>
+			<h2>{t("pages.legal.privacy.collect.title")}</h2>
+			<h3>{t("pages.legal.privacy.collect.account.title")}</h3>
 			<ul>
-				<li>Your email address and username.</li>
-				<li>Your password, stored only as a hash. We never store it in clear text.</li>
-				<li>Your 42 Intra identifier, if you sign in with or link a 42 account.</li>
-				<li>Your avatar, if you upload one, and your preferred language.</li>
+				<li>{t("pages.legal.privacy.collect.account.email")}</li>
+				<li>{t("pages.legal.privacy.collect.account.password")}</li>
+				<li>{t("pages.legal.privacy.collect.account.intra")}</li>
+				<li>{t("pages.legal.privacy.collect.account.avatar")}</li>
 			</ul>
-			<h3>Activity on Flex</h3>
+			<h3>{t("pages.legal.privacy.collect.activity.title")}</h3>
 			<ul>
-				<li>Your friends and friend requests.</li>
-				<li>Your playlists and the tracks (title, artist, duration) they contain.</li>
-				<li>The providers you own, the ones you joined and your access requests to providers.</li>
-				<li>The track you are currently listening to, shown to your friends unless you make it private in your settings.</li>
+				<li>{t("pages.legal.privacy.collect.activity.friends")}</li>
+				<li>{t("pages.legal.privacy.collect.activity.playlists")}</li>
+				<li>{t("pages.legal.privacy.collect.activity.providers")}</li>
+				<li>{t("pages.legal.privacy.collect.activity.listening")}</li>
 			</ul>
-			<h3>Sessions and security</h3>
+			<h3>{t("pages.legal.privacy.collect.sessions.title")}</h3>
 			<ul>
-				<li>For each active session: its creation and expiry date, your IP address and your browser's user agent.</li>
-				<li>Single-use tokens for email verification, email change, password reset and 42 sign-in.</li>
-			</ul>
-		</section>
-
-		<section>
-			<h2>Why we use it</h2>
-			<ul>
-				<li><strong>Providing the service</strong> (performance of the contract): creating your account, signing you in, showing your library, playlists, friends and providers.</li>
-				<li><strong>Security</strong> (legitimate interest): keeping your sessions safe, letting you see and revoke them, preventing abuse.</li>
-				<li><strong>Emails</strong> (performance of the contract): verifying your address and resetting your password. We do not send marketing emails.</li>
-			</ul>
-			<p>We do not sell your data, show ads, or use your data for profiling.</p>
-		</section>
-
-		<section>
-			<h2>Cookies and local storage</h2>
-			<p>Flex only uses what is strictly necessary to work, so no consent banner is needed:</p>
-			<ul>
-				<li><code>refresh_token</code>: an HTTP-only cookie that keeps you signed in. It expires after 7 days or when you log out.</li>
-				<li>Your browser's local storage keeps a few preferences, such as your playback position.</li>
-			</ul>
-			<p>There are no analytics or advertising trackers.</p>
-		</section>
-
-		<section>
-			<h2>Who can see your data</h2>
-			<ul>
-				<li><strong>Other users</strong> can see your username, avatar, public playlists, the providers you display publicly and, unless you hide it, what you are listening to.</li>
-				<li><strong>Provider operators</strong>: when you join or use a provider, its operator knows your Flex account identifier and receives your requests (including your IP address) when you stream from it. Each provider is run by a third party who is responsible for the data it processes.</li>
-				<li><strong>42</strong>, if you use the 42 Intra sign-in. Its own privacy policy applies.</li>
-				<li><strong>Our email provider</strong>, which receives your email address to deliver our messages.</li>
-				<li><strong>Our host</strong>: {legalInfo.hostingLocation}.</li>
+				<li>{t("pages.legal.privacy.collect.sessions.sessions")}</li>
+				<li>{t("pages.legal.privacy.collect.sessions.tokens")}</li>
 			</ul>
 		</section>
 
 		<section>
-			<h2>How long we keep it</h2>
+			<h2>{t("pages.legal.privacy.why.title")}</h2>
 			<ul>
-				<li>Account data is kept as long as your account exists, and deleted when the account is deleted.</li>
-				<li>Sessions are kept until they expire (7 days) or until you log out.</li>
-				<li>Single-use tokens are kept until they are used or expire.</li>
+				<li><strong>{t("pages.legal.privacy.why.service.label")}</strong>{t("pages.legal.privacy.why.service.content")}</li>
+				<li><strong>{t("pages.legal.privacy.why.security.label")}</strong>{t("pages.legal.privacy.why.security.content")}</li>
+				<li><strong>{t("pages.legal.privacy.why.emails.label")}</strong>{t("pages.legal.privacy.why.emails.content")}</li>
+			</ul>
+			<p>{t("pages.legal.privacy.why.noSale")}</p>
+		</section>
+
+		<section>
+			<h2>{t("pages.legal.privacy.cookies.title")}</h2>
+			<p>{t("pages.legal.privacy.cookies.intro")}</p>
+			<ul>
+				<li><code>refresh_token</code>{t("pages.legal.privacy.cookies.refreshToken")}</li>
+				<li>{t("pages.legal.privacy.cookies.localStorage")}</li>
+			</ul>
+			<p>{t("pages.legal.privacy.cookies.noTrackers")}</p>
+		</section>
+
+		<section>
+			<h2>{t("pages.legal.privacy.visibility.title")}</h2>
+			<ul>
+				<li><strong>{t("pages.legal.privacy.visibility.users.label")}</strong>{t("pages.legal.privacy.visibility.users.content")}</li>
+				<li><strong>{t("pages.legal.privacy.visibility.operators.label")}</strong>{t("pages.legal.privacy.visibility.operators.content")}</li>
+				<li><strong>42</strong>{t("pages.legal.privacy.visibility.intra")}</li>
+				<li><strong>{t("pages.legal.privacy.visibility.email.label")}</strong>{t("pages.legal.privacy.visibility.email.content")}</li>
+				<li><strong>{t("pages.legal.privacy.visibility.host.label")}</strong>{t("pages.legal.privacy.visibility.host.content", { host: legalInfo.hostingLocation })}</li>
 			</ul>
 		</section>
 
 		<section>
-			<h2>Your rights</h2>
+			<h2>{t("pages.legal.privacy.retention.title")}</h2>
+			<ul>
+				<li>{t("pages.legal.privacy.retention.account")}</li>
+				<li>{t("pages.legal.privacy.retention.sessions")}</li>
+				<li>{t("pages.legal.privacy.retention.tokens")}</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>{t("pages.legal.privacy.rights.title")}</h2>
 			<p>
-				Under the GDPR you can access, correct, delete or export your data, object to or restrict its processing.
-				You can change most of your information directly from your settings. For anything else, including deleting
-				your account, write to <a href={mail}>{legalInfo.contactEmail}</a>.
+				{t("pages.legal.privacy.rights.p1")}<a href={mail}>{legalInfo.contactEmail}</a>.
 			</p>
 			<p>
-				If you think we do not respect your rights, you can file a complaint with the CNIL (<a href="https://www.cnil.fr">cnil.fr</a>)
-				or your local data protection authority.
+				{t("pages.legal.privacy.rights.p2.begin")}<a href="https://www.cnil.fr">cnil.fr</a>{t("pages.legal.privacy.rights.p2.end")}
 			</p>
 		</section>
 
 		<section>
-			<h2>Security</h2>
+			<h2>{t("pages.legal.privacy.security.title")}</h2>
+			<p>{t("pages.legal.privacy.security.content")}</p>
+		</section>
+
+		<section>
+			<h2>{t("pages.legal.privacy.children.title")}</h2>
+			<p>{t("pages.legal.privacy.children.content", { age: String(legalInfo.minimumAge) })}</p>
+		</section>
+
+		<section>
+			<h2>{t("pages.legal.privacy.changes.title")}</h2>
 			<p>
-				All traffic is encrypted with HTTPS, passwords are hashed, and the database is only reachable from inside our infrastructure.
-				No system is perfectly secure, but we will inform you if a breach affects your data.
+				{t("pages.legal.privacy.changes.content")}<A href="/terms-of-service">{t("components.sidebar.termsOfService")}</A>.
 			</p>
 		</section>
 
 		<section>
-			<h2>Children</h2>
-			<p>Flex is not intended for children under {legalInfo.minimumAge}.</p>
-		</section>
-
-		<section>
-			<h2>Changes</h2>
-			<p>
-				We may update this policy. The date at the top of the page shows the latest version, and important changes will be
-				announced on Flex. See also our <A href="/terms-of-service">Terms of Service</A>.
-			</p>
-		</section>
-
-		<section>
-			<h2>Contact</h2>
-			<p>Questions about this policy: <a href={mail}>{legalInfo.contactEmail}</a>.</p>
+			<h2>{t("pages.legal.contact.title")}</h2>
+			<p>{t("pages.legal.privacy.contact")}<a href={mail}>{legalInfo.contactEmail}</a>.</p>
 		</section>
 	</LegalLayout>;
 }

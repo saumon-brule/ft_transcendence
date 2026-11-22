@@ -5,15 +5,17 @@ import TextInput from "~/components/inputs/TextInput";
 import { authActions } from "~/store/auth.store";
 import type { FormEmbeddedComponentRef } from "~/types/ComponentRef";
 import { useMatch, useNavigate, useSearchParams } from "@solidjs/router";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 
 import "./Header.scss";
 import { hasUnreadMessages } from "~/store/messages.store";
 import { Tab } from "~/pages/Search/Search";
 import { isSidebarOpen, sidebarActions } from "~/store/sidebar.store";
+import { useTranslation } from "~/i18n/context";
 
 export default function Header() {
-	const meProfileQuery = useMeProfileQuery();
+	const { t } = useTranslation();
+	const me = useProfile();
 	const navigate = useNavigate();
 
 	const [isMenuOpen, setIsMenuOpen] = createSignal(false);
@@ -25,7 +27,7 @@ export default function Header() {
 	let searchInput!: FormEmbeddedComponentRef<HTMLInputElement>;
 	let profileMenu!: HTMLDivElement;
 
-	const hasFriendNotification = createMemo(() => (meProfileQuery.data?.body.friendRequests.length ?? 0) > 0 || hasUnreadMessages());
+	const hasFriendNotification = createMemo(() => me().friendRequests.length > 0 || hasUnreadMessages());
 
 	function handleDocumentClick(event: MouseEvent) {
 		if (profileMenu && !profileMenu.contains(event.target as Node)) {
@@ -66,11 +68,11 @@ export default function Header() {
 	return <header id="app-header">
 		<div class="header-content">
 			<div class="header-leading">
-				<a class="header-brand" href="/home" aria-label="Flex home">Flex</a>
+				<a class="header-brand" href="/home" aria-label={t("components.header.homeLabel")}>Flex</a>
 				<button
 					class="sidebar-toggle"
 					type="button"
-					aria-label={isSidebarOpen() ? "Close sidebar" : "Open sidebar"}
+					aria-label={isSidebarOpen() ? t("components.header.closeSidebar") : t("components.header.openSidebar")}
 					aria-expanded={isSidebarOpen()}
 					aria-controls="app-sidebar"
 					onClick={() => sidebarActions.toggle()}
@@ -84,8 +86,8 @@ export default function Header() {
 					<Search class="search-icon" size={18}/>
 					<TextInput
 						type="search"
-						placeholder="Search"
-						aria-label="Search"
+						placeholder={t("components.header.search")}
+						aria-label={t("components.header.search")}
 						value={searchValue()}
 						onInput={(event) => { setSearchValue(event.currentTarget.value); search(); }}
 						ref={searchInput}
@@ -94,7 +96,7 @@ export default function Header() {
 						<button
 							class="search-clear"
 							type="button"
-							aria-label="Erase"
+							aria-label={t("components.header.clearSearch")}
 							onClick={() => {
 								setSearchValue("");
 								searchInput.htmlElement.focus();
@@ -116,40 +118,34 @@ export default function Header() {
 					aria-haspopup="menu"
 					onClick={() => setIsMenuOpen((open) => !open)}
 				>
-					<Show when={meProfileQuery.data ? meProfileQuery.data.body : undefined}>
-						{(user) => <>
-							<img class="profile-avatar" src={user().avatarUrl}/>
-							<span class="profile-username">{user().username}</span>
-						</>}
-					</Show>
+					<img class="profile-avatar" src={me().avatarUrl}/>
+					<span class="profile-username">{me().username}</span>
 					<ChevronDown class="profile-chevron" size={16} aria-hidden="true" />
 				</button>
 
 				<Show when={isMenuOpen()}>
 					<div class="profile-dropdown" role="menu">
-						<Show when={meProfileQuery.data ? meProfileQuery.data.body : undefined}>
-							{(user) => <button type="button" role="menuitem" onClick={() => { navigate(`/user/${user().uuid}`); setIsMenuOpen(false); }}>
-								<User size={17} aria-hidden="true" />
-								<span>Profile</span>
-							</button>}
-						</Show>
+						<button type="button" role="menuitem" onClick={() => { navigate(`/user/${me().uuid}`); setIsMenuOpen(false); }}>
+							<User size={17} aria-hidden="true" />
+							<span>{t("components.header.profile")}</span>
+						</button>
 						<button type="button" role="menuitem" onClick={() => { navigate("/friends"); setIsMenuOpen(false); }}>
 							<span class="icon-badge" classList={{ notification: hasFriendNotification() }}>
 								<Users size={17} aria-hidden="true" />
 							</span>
-							<span>Friends</span>
+							<span>{t("components.header.friends")}</span>
 						</button>
 						<button type="button" role="menuitem" onClick={() => { navigate("/settings"); setIsMenuOpen(false); }}>
 							<Settings size={17} aria-hidden="true" />
-							<span>Settings</span>
+							<span>{t("components.header.settings")}</span>
 						</button>
 						<button type="button" role="menuitem" onClick={() => { navigate("/providers"); setIsMenuOpen(false); }}>
 							<Server size={17} aria-hidden="true" />
-							<span>Providers</span>
+							<span>{t("components.header.providers")}</span>
 						</button>
 						<button type="button" role="menuitem" onClick={() => authActions.logout()}>
 							<LogOut size={17} aria-hidden="true" />
-							<span>Logout</span>
+							<span>{t("components.header.logout")}</span>
 						</button>
 					</div>
 				</Show>

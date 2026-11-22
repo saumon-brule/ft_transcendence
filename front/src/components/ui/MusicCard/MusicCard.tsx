@@ -1,4 +1,5 @@
 import { Show } from "solid-js";
+import { t } from "~/i18n/context";
 import { A } from "@solidjs/router";
 import { buildMediaUrl, Provider } from "@flex/shared";
 import { useMediaToken } from "~/api/providerClients";
@@ -41,7 +42,7 @@ export default function MusicCard(props: MusicCardProps) {
 		<div class="music-info">
 			<Button variant="text" class="music-name" onClick={playMusic}>{props.music.name}</Button>
 			<div class="music-artist"><ArtistsLinks artists={props.music.artists} providerUUID={props.music.provider.uuid}/></div>
-			<Show when={props.providers?.find((provider) => provider.uuid === props.music.provider.uuid)}><div class="music-provider">From <A href={`/provider/${props.music.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === props.music.provider.uuid)?.name}</A></div></Show>
+			<Show when={props.providers?.find((provider) => provider.uuid === props.music.provider.uuid)}><div class="music-provider">{t("common.from")} <A href={`/provider/${props.music.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === props.music.provider.uuid)?.name}</A></div></Show>
 		</div>
 	</div>;
 }

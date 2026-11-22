@@ -19,6 +19,7 @@ import { HealthModule } from "./health/health.module";
 import { PresenceModule } from "./users/presence/presence.module";
 import { ChatModule } from "./users/chat/chat.module";
 import { RealtimeModule } from "./realtime/realtime.module";
+import { PublicApiModule } from "./publicAPI/public-api.module";
 
 @Module({
 	providers: [
@@ -46,6 +47,7 @@ import { RealtimeModule } from "./realtime/realtime.module";
 		RealtimeModule,
 		PresenceModule,
 		ChatModule,
+		PublicApiModule,
 		ThrottlerModule.forRoot({
 			throttlers: [{ ttl: 60000, limit: 1000 }],
 		}),

@@ -1,0 +1,180 @@
+.upload-music-pop-up {
+	h2 {
+		margin-bottom: 16px;
+	}
+
+	.upload-music-info {
+		width: 100%;
+		display: flex;
+		gap: 1rem;
+
+		.upload-music-cover-box {
+			width: 35%;
+
+			& > img {
+				width: 100%;
+				aspect-ratio: 1/1;
+				object-fit: cover;
+				background-color: black;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+		}
+
+		.upload-music-details {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+
+			.upload-music-album.has-album {
+				height: 80px;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				padding: 5px;
+				background-color: var(--background-card);
+				border: 1px solid var(--background-overlay);
+				border-radius: 9px;
+
+				.infos {
+					height: 100%;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					gap: 8px;
+
+					img {
+						height: 100%;
+						aspect-ratio: 1/1;
+						border-radius: 4px;
+					}
+
+					.title {
+						font-weight: 700;
+					}
+				}
+
+				.actions {
+					padding-right: 16px;
+				}
+			}
+		}
+	}
+
+	.upload-music-preview {
+		width: 100%;
+		height: 34px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 8px;
+		margin-top: 8px;
+
+		.progression-bar {
+			flex: 1;
+			position: relative;
+			width: 100%;
+			min-width: 181px;
+			background-color: var(--background-overlay);
+			height: 1.75rem;
+			border-radius: 0.5rem;
+			overflow: hidden;
+
+			& > div {
+				position: absolute;
+				width: calc((100% - 1rem) * var(--progression-bar));
+				background-color: var(--background-accent);
+				height: 100%;
+				border-top-left-radius: 0.5rem;
+				border-bottom-left-radius: 0.5rem;
+			}
+
+			& > button {
+				cursor: pointer;
+				padding: 0;
+				display: block;
+				position: absolute;
+				left: calc((100% - 1rem) * var(--progression-bar));
+				background-color: var(--background-accent);
+				height: 100%;
+				padding: 0.35rem;
+				border-top-right-radius: 0.5rem;
+				border-bottom-right-radius: 0.5rem;
+				width: 1rem;
+				transition: padding 0.2s;
+
+				& > span {
+					display: inline-block;
+					width: 100%;
+					height: 100%;
+					border-radius: 99999px;
+					opacity: 60%;
+					background-color: white;
+					transition: opacity 0.2s;
+				}
+
+				&:hover {
+					padding: 0.2rem 0.3rem;
+				}
+
+				&:hover > span {
+					opacity: 100%;
+				}
+			}
+		}
+
+		.time {
+			min-width: 40px;
+		}
+	}
+
+	.upload-music-music-artists {
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
+		padding: 16px 0;
+
+		.music-artists-scrollable {
+			overflow-x: scroll;
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+		}
+
+		.artist {
+			width: 120px;
+			min-width: 120px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+			justify-content: center;
+			padding: 5px;
+			background-color: var(--background-card);
+			border: 1px solid var(--background-overlay);
+			border-radius: 9px;
+			gap: 8px;
+
+			> img {
+				width: 100%;
+				border-radius: 1000px;
+			}
+
+			> span {
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				width: 100%;
+				text-align: center;
+			}
+		}
+	}
+
+	.upload-music-pop-up-controls {
+		display: flex;
+		justify-content: flex-end;
+		gap: .5rem;
+	}
+}

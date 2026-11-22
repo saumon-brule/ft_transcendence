@@ -1,6 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { serverContract } from "@flex/shared";
+import { apiContract, serverContract } from "@flex/shared";
 import { SwaggerModule } from "@nestjs/swagger";
 import { generateOpenApi } from "@ts-rest/open-api";
 import cookieParser from "cookie-parser";
@@ -21,6 +21,33 @@ async function bootstrap() {
 
 	app.use(cookieParser());
 	app.useGlobalFilters(new TsRestValidationFilter());
+
+	const apiDocument = generateOpenApi(apiContract, {
+		info: {
+			title: "Flex public API",
+			version: "1.0.0",
+		},
+		servers: [
+			{ url: "/api", description: "From front (proxy)" },
+			{ url: "/", description: "From back" },
+		],
+		components: {
+			securitySchemes: {
+				apiKey: {
+					type: "http",
+					scheme: "bearer",
+					description: "Your Flex API key",
+				},
+			},
+		},
+		security: [{ apiKey: [] }],
+	});
+
+	SwaggerModule.setup("api/swagger", app, apiDocument, {
+		swaggerOptions: {
+			persistAuthorization: true,
+		},
+	});
 
 	if (env.NODE_ENV === "dev") {
 		const document = generateOpenApi(serverContract, {

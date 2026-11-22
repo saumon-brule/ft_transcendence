@@ -4,6 +4,7 @@ import { A } from "@solidjs/router";
 import { Lock, Plus } from "lucide-solid";
 import type { PlaylistSummaryDto } from "@flex/shared";
 import "./PlaylistCard.scss";
+import { useTranslation } from "~/i18n/context";
 
 type PlaylistCardProps = {
 	playlist: PlaylistSummaryDto;
@@ -12,15 +13,16 @@ type PlaylistCardProps = {
 };
 
 export default function PlaylistCard(props: PlaylistCardProps) {
+	const { t } = useTranslation();
 	return <A class={`playlist-card ${props.variant === "row" ? "playlist-card--row" : ""}`} href={`/playlist/${props.playlist.uuid}`}>
 		<img src={playlistCoverUrl(props.playlist.uuid)} alt="" />
 		<div class="playlist-card-info">
 			<h4>
 				{props.playlist.name}
-				<Show when={props.playlist.private}><Lock class="playlist-card-lock" size={14} aria-label="Private" /></Show>
+				<Show when={props.playlist.private}><Lock class="playlist-card-lock" size={14} aria-label={t("common.private")} /></Show>
 			</h4>
 			<p>
-				{props.playlist.musicCount} musics
+				{t("components.playlistCard.musicCount", { count: String(props.playlist.musicCount) })}
 				<Show when={props.showOwner}> · {props.playlist.owner.username}</Show>
 			</p>
 		</div>
@@ -28,13 +30,14 @@ export default function PlaylistCard(props: PlaylistCardProps) {
 }
 
 export function NewPlaylistCard(props: { onClick: () => void; variant?: "card" | "row" }) {
+	const { t } = useTranslation();
 	const row = () => props.variant === "row";
 
 	return <button type="button" class={`playlist-card playlist-card-new ${row() ? "playlist-card--row" : ""}`} onClick={() => props.onClick()}>
 		<span class="playlist-card-new-icon"><Plus size={row() ? 24 : 40} /></span>
 		<div class="playlist-card-info">
-			<h4>New playlist</h4>
-			<p>Create an empty playlist</p>
+			<h4>{t("components.playlistCard.newPlaylist")}</h4>
+			<p>{t("components.playlistCard.newPlaylistDescription")}</p>
 		</div>
 	</button>;
 }

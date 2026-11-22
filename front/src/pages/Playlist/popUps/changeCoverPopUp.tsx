@@ -6,6 +6,8 @@ import Form from "~/components/inputs/Form/Form";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { playlistCoverUrl } from "~/utils/playlistCover";
+import ProgressRing from "~/components/ui/ProgressRing";
+import { t } from "~/i18n/context";
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
@@ -15,6 +17,7 @@ export const summonChangeCoverPopUp = (playlist: { uuid: string; name: string })
 
 	const [file, setFile] = createSignal<File | null>(null);
 	const [previewUrl, setPreviewUrl] = createSignal<string | null>(null);
+	const [uploadProgress, setUploadProgress] = createSignal(0);
 
 	function setPreview(url: string | null) {
 		const previous = previewUrl();
@@ -29,11 +32,11 @@ export const summonChangeCoverPopUp = (playlist: { uuid: string; name: string })
 		if (!selected) return;
 
 		if (!ACCEPTED_TYPES.includes(selected.type)) {
-			summonErrorToast("Please choose a JPEG, PNG or WebP image");
+			summonErrorToast(t("pages.playlist.coverPopUp.invalidType"));
 			return;
 		}
 		if (selected.size > MAX_SIZE) {
-			summonErrorToast("This image is too large");
+			summonErrorToast(t("toasts.playlist.imageTooLarge"));
 			return;
 		}
 
@@ -46,8 +49,9 @@ export const summonChangeCoverPopUp = (playlist: { uuid: string; name: string })
 		const selected = file();
 		if (!selected) return;
 
+		setUploadProgress(0);
 		uploadCover.mutate(
-			{ params: { uuid: playlist.uuid }, body: { cover: selected } },
+			{ params: { uuid: playlist.uuid }, body: { cover: selected }, onUploadProgress: setUploadProgress },
 			{ onSuccess: () => popUpControls.close() },
 		);
 	}
@@ -62,16 +66,21 @@ export const summonChangeCoverPopUp = (playlist: { uuid: string; name: string })
 	const busy = () => uploadCover.isPending || deleteCover.isPending;
 
 	return <Form onSubmit={handleSubmit}>
-		<h2>Change cover</h2>
+		<h2>{t("pages.playlist.changeCover")}</h2>
 		<div class="pop-up-inputs cover-pop-up-inputs">
-			<img class="cover-preview" src={previewUrl() ?? playlistCoverUrl(playlist.uuid)} alt="Cover preview" />
+			<div class="cover-preview-box">
+				<img class="cover-preview" src={previewUrl() ?? playlistCoverUrl(playlist.uuid)} alt={t("pages.playlist.coverPopUp.preview")} />
+				<Show when={uploadCover.isPending}>
+					<ProgressRing value={uploadProgress()}/>
+				</Show>
+			</div>
 			<input type="file" accept={ACCEPTED_TYPES.join(",")} onChange={handleFileChange} />
 		</div>
 		<div class="pop-up-buttons">
-			<Button type="button" onClick={popUpControls.close} variant="text" size="md">Cancel</Button>
-			<Button type="button" onClick={handleRemove} variant="danger" size="md" disabled={busy()}>Remove cover</Button>
+			<Button type="button" onClick={popUpControls.close} variant="text" size="md">{t("common.cancel")}</Button>
+			<Button type="button" onClick={handleRemove} variant="danger" size="md" disabled={busy()}>{t("pages.playlist.coverPopUp.remove")}</Button>
 			<Button type="submit" size="md" disabled={busy() || file() === null}>
-				<Show when={uploadCover.isPending} fallback="Save">Saving…</Show>
+				<Show when={uploadCover.isPending} fallback={t("common.save")}>{t("common.saving")}</Show>
 			</Button>
 		</div>
 	</Form>;

@@ -1,0 +1,85 @@
+.edit-album-pop-up {
+	.edit-album-info {
+		width: 100%;
+		display: flex;
+		gap: 1rem;
+		flex-direction: column;
+		align-items: center;
+
+		.edit-album-cover-box {
+			width: 25%;
+			position: relative;
+			height: fit-content;
+			line-height: 0;
+
+			& > img {
+				width: 100%;
+				aspect-ratio: 1/1;
+				object-fit: cover;
+				background-color: black;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+
+			> button {
+				position:absolute;
+				top: 100%;
+				left: 100%;
+				border-radius: 1000px;
+				transform: translate(-50%, -50%);
+			}
+		}
+
+		.edit-album-details {
+			flex: 1;
+		}
+	}
+
+	.edit-album-artists {
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
+		padding: 16px 0;
+
+		.album-artists-scrollable {
+			overflow-x: scroll;
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+		}
+
+		.artist {
+			width: 120px;
+			min-width: 120px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+			justify-content: center;
+			padding: 5px;
+			background-color: var(--background-card);
+			border: 1px solid var(--background-overlay);
+			border-radius: 9px;
+			gap: 8px;
+
+			> img {
+				width: 100%;
+				border-radius: 1000px;
+			}
+
+			> span {
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				width: 100%;
+				text-align: center;
+			}
+		}
+	}
+
+	.edit-album-pop-up-controls {
+		display: flex;
+		justify-content: flex-end;
+		gap: .5rem;
+	}
+}

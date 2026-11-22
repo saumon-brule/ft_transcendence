@@ -10,7 +10,7 @@
 
 	&.visible {
 		pointer-events: all;
-		background-color: #0000007f;
+		background-color: #000000Bf;
 	}
 
 	& > .overlay {
@@ -19,6 +19,7 @@
 		left: 50%;
 		scale: 100%;
 		translate: -50% -50%;
+		box-shadow: 0 0 10px black;
 
 		&.overlay-wrapper-enter {
 			opacity: 0;
@@ -45,12 +46,13 @@
 			background-color: var(--background-card);
 			padding: 1.5rem 2rem;
 			border-radius: 1rem;
-
-			min-width: 40%;
+			width: 800px;
+			max-width: 80%;
 
 			@include breakpoints.respond-to("mobile") {
-				min-width: 90%;
-				max-width: 90%;
+				max-width: calc(100dvw - 100px);
+				width: 100%;
+				min-width: 40%;
 				padding: 1rem 1.5rem;
 			}
 		}

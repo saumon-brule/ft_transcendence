@@ -3,6 +3,7 @@ import { createStore, produce } from "solid-js/store";
 import z from "zod";
 import { Music } from "~/class/Music";
 import { LocalStorageItem } from "~/utils/storageHelper";
+import { devWarn } from "~/utils/devLog";
 
 const trackManagerStateSchema = z.object({
 	current: Music.zodSchema.nullable(),
@@ -29,7 +30,7 @@ const trackStateItem = new LocalStorageItem<TrackManagerState>(
 		try {
 			return trackManagerStateSchema.parse(JSON.parse(stored));
 		} catch (e: unknown) {
-			console.error(e);
+			devWarn(e);
 			return defaultFactory();
 		}
 	},

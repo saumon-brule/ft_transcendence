@@ -178,6 +178,42 @@ export class PlaylistsService {
 		}
 	}
 
+	public async overwritePlaylist(
+		uuid: string,
+		musics: { musicUUID: string; providerUUID: string }[],
+		ownerUUID: string,
+	) {
+		await this.assertPlaylistOwner(uuid, ownerUUID);
+
+		const unique = [
+			...new Map(musics.map((m) => [`${m.providerUUID}:${m.musicUUID}`, m])).values(),
+		];
+
+		const providerUUIDs = [...new Set(unique.map((m) => m.providerUUID))];
+		if (providerUUIDs.length > 0) {
+			const found = await this.prisma.provider.findMany({
+				where: { uuid: { in: providerUUIDs } },
+				select: { uuid: true },
+			});
+			if (found.length !== providerUUIDs.length) {
+				throw new NotFoundException("Provider not found");
+			}
+		}
+
+		await this.prisma.$transaction([
+			this.prisma.playlistMusic.deleteMany({
+				where: { playlistUUID: uuid },
+			}),
+			this.prisma.playlistMusic.createMany({
+				data: unique.map((m) => ({
+					playlistUUID: uuid,
+					musicUUID: m.musicUUID,
+					providerUUID: m.providerUUID,
+				})),
+			}),
+		]);
+	}
+
 	public async deletePlaylist(uuid: string, ownerUUID: string) {
 		await this.assertPlaylistOwner(uuid, ownerUUID);
 		const result = await this.prisma.playlist.deleteMany({

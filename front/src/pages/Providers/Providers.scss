@@ -100,7 +100,16 @@
 	align-items: center;
 	gap: 12px;
 
+	.cover-preview-box {
+		position: relative;
+		width: 160px;
+		height: 160px;
+		border-radius: 8px;
+		overflow: hidden;
+	}
+
 	.cover-preview {
+		display: block;
 		width: 160px;
 		height: 160px;
 		border-radius: 8px;

@@ -42,7 +42,7 @@ export default function RegisterForm() {
 					if (e.status === 409) {
 						setError(t("errors.register.conflictingEmail"));
 					} else {
-						setError("An error occured. There is nothing to do :/");
+						setError(t("errors.unknownFallback"));
 					}
 				},
 			},
@@ -51,10 +51,10 @@ export default function RegisterForm() {
 
 	return <Form onSubmit={handleSubmit} id="register-form">
 		<div class="register-inputs">
-			<TextInput ref={(e) => emailInput = e.htmlElement} type="email" validator={(e) => validateFromZod(registerSchema.shape.email, e.value)} placeholder="Email" required />
-			<TextInput ref={(e) => usernameInput = e.htmlElement} type="text" validator={(e) => validateFromZod(registerSchema.shape.username, e.value)} placeholder="Username" required />
-			<TextInput ref={(e) => passwordInput = e.htmlElement} type="password" validator={(e) => validateFromZod(registerSchema.shape.password, e.value)} placeholder="Password" required />
-			<TextInput type="password" validator={(e) => e.value !== passwordInput.value && t("errors.input.text.password.confirmationMismatch")} placeholder="Confirm password" />
+			<TextInput ref={(e) => emailInput = e.htmlElement} type="email" validator={(e) => validateFromZod(registerSchema.shape.email, e.value)} placeholder={t("pages.auth.email")} required />
+			<TextInput ref={(e) => usernameInput = e.htmlElement} type="text" validator={(e) => validateFromZod(registerSchema.shape.username, e.value)} placeholder={t("pages.auth.username")} required />
+			<TextInput ref={(e) => passwordInput = e.htmlElement} type="password" validator={(e) => validateFromZod(registerSchema.shape.password, e.value)} placeholder={t("pages.auth.password")} required />
+			<TextInput type="password" validator={(e) => e.value !== passwordInput.value && t("errors.input.text.password.confirmationMismatch")} placeholder={t("pages.auth.confirmPassword")} />
 			<Show when={error()}>
 				<p class="invalid-message" role="alert">
 					{error()}
@@ -62,18 +62,18 @@ export default function RegisterForm() {
 			</Show>
 		</div>
 		<Button type="submit">
-			Register
+			{t("pages.register.submit")}
 		</Button>
 		<div class="separator">
 			<hr />
-			OR
+			{t("pages.auth.or")}
 			<hr />
 		</div>
 		<IntraButton linkType="auth">
-			Register with <Logo42/> Intra
+			{t("pages.register.intra.begin")}<Logo42/>{t("pages.register.intra.end")}
 		</IntraButton>
 		<p class="register-details">
-			Already have an account? <A href="/login">Login</A>.
+			{t("pages.register.switch.begin")}<A href="/login">{t("pages.register.switch.link")}</A>{t("pages.register.switch.end")}
 		</p>
 	</Form>;
 }

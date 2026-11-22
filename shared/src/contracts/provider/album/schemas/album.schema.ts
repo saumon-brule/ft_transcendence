@@ -9,6 +9,7 @@ export const albumDetailedItemSchema = z.object({
 	publishedAt: z.coerce.date().nullable(),
 	hasCover: z.boolean(),
 	artists: z.array(artistItemSchema),
+	musicCount: z.number().int(),
 });
 export type AlbumDetailedItemDto = z.infer<typeof albumDetailedItemSchema>;
 
@@ -16,6 +17,7 @@ export const albumListResponseSchema = z.object({
 	albums: z.array(albumItemSchema),
 	total: z.number(),
 });
+export type AlbumListResponseDto = z.infer<typeof albumListResponseSchema>;
 
 export const createAlbumSchema = z.object({
 	name: z.string().trim().min(1).

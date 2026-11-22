@@ -75,3 +75,7 @@ export const playlistListSchema = z.object({
 	followed: z.array(playlistSummarySchema),
 });
 export type PlaylistListDto = z.infer<typeof playlistListSchema>;
+
+export const overwritePlaylistBodySchema = z.object({
+	musics: z.array(MusicBodySchema).max(5000),
+});

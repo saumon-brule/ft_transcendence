@@ -11,6 +11,7 @@ import { summonErrorToast } from "~/components/ui/Toaster";
 import { getProviderClient } from "~/api/providerClients";
 import { createMemo } from "solid-js";
 import { createQuery } from "@tanstack/solid-query";
+import { useTranslation } from "~/i18n/context";
 
 export type ProviderStatus = "pinging" | "online" | "offline";
 
@@ -47,6 +48,7 @@ export default function ProviderCard(props: ProviderCardProps) {
 
 	});
 
+	const { t } = useTranslation();
 	const regenerateKeyMutation = client.providers.regenerateKey.createMutation();
 
 	function regenerateKey(uuid: string) {
@@ -57,16 +59,16 @@ export default function ProviderCard(props: ProviderCardProps) {
 					summonProviderKeyPopUp(data.body.apiKey);
 				},
 				onError: () => {
-					summonErrorToast(() => "Failed to regenerate provider key");
+					summonErrorToast(() => t("components.providerCard.regenerateKeyError"));
 				},
 			},
 		);
 	}
 
 	const statusLabel = () => {
-		if (status() === "online") return "Online";
-		if (status() === "offline") return "Offline";
-		return "Checking";
+		if (status() === "online") return t("common.online");
+		if (status() === "offline") return t("common.offline");
+		return t("components.providerCard.checking");
 	};
 
 	return <div class={`provider-card ${props.small ? "small" : ""}`} onClick={() => navigate(`/provider/${props.provider.uuid}`)}>
@@ -78,9 +80,9 @@ export default function ProviderCard(props: ProviderCardProps) {
 				<p>{props.provider.address}</p>
 			</div>
 			<Show when={props.mine}><div class="provider-actions">
-				<Button type="button" onClick={(e) => { e.stopPropagation(); summonEditProviderPopUp(props.provider); }} variant="text" size="md">Edit</Button>
-				<Button type="button" onClick={(e) => { e.stopPropagation(); regenerateKey(props.provider.uuid); }} variant="text" size="md">Regenerate Key</Button>
-				<Button type="button" onClick={(e) => { e.stopPropagation(); summonDeleteProviderPopUp(props.provider.uuid); }} variant="text" size="md">Delete</Button>
+				<Button type="button" onClick={(e) => { e.stopPropagation(); summonEditProviderPopUp(props.provider); }} variant="text" size="md">{t("common.edit")}</Button>
+				<Button type="button" onClick={(e) => { e.stopPropagation(); regenerateKey(props.provider.uuid); }} variant="text" size="md">{t("components.providerCard.regenerateKey")}</Button>
+				<Button type="button" onClick={(e) => { e.stopPropagation(); summonDeleteProviderPopUp(props.provider.uuid); }} variant="text" size="md">{t("common.delete")}</Button>
 			</div></Show>
 		</div>
 		<div class={`provider-status ${status()}`}>

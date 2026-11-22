@@ -1,4 +1,4 @@
-import { createSelector, createSignal, For, Match, onCleanup, onMount, Show, Switch } from "solid-js";
+import { For, Match, Show, Switch } from "solid-js";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import { Music } from "~/class/Music";
 import "./MusicSection.scss";
@@ -11,10 +11,21 @@ import { Provider } from "@flex/shared";
 import { MusicGroup } from "~/store/trackManager.store";
 import UnavailableMusicRow, { type PlaylistContext } from "./UnavailableTrackRow";
 import { MusicActionMenu } from "./MusicActionMenu";
-import { Ellipsis } from "lucide-solid";
+import { ArrowDown, ArrowUp } from "lucide-solid";
+import type { SearchSort } from "~/api/queryHooks/providerInfo";
+import { nextSort } from "~/components/ui/SortBar/useSortParam";
+import { useTranslation } from "~/i18n/context";
 
 
 export type MusicSectionColumn = "actions" | "artists" | "album" | "published" | "duration";
+
+export type MusicSortField = "name" | "artist" | "album" | "provider" | "published" | "duration";
+
+/** When given, the headers of the sortable columns become buttons that cycle through ascending, descending and the default order. */
+export type MusicSectionSort = {
+	value: SearchSort<MusicSortField> | undefined;
+	onChange: (sort: SearchSort<MusicSortField> | undefined) => void;
+};
 
 function isGroupMusicSection(props: MusicSectionProps | GroupMusicSectionProps): props is GroupMusicSectionProps {
 	return "musicGroup" in props;
@@ -24,6 +35,7 @@ export type MusicSectionProps = {
 	hiddenColumns?: MusicSectionColumn[];
 	providers?: Provider[];
 	playlist?: PlaylistContext;
+	sort?: MusicSectionSort;
 	musics: Array<Music>;
 };
 
@@ -32,14 +44,14 @@ export type GroupMusicSectionProps = {
 	providers?: Provider[];
 	showCurrent?: boolean;
 	playlist?: PlaylistContext;
+	sort?: MusicSectionSort;
 	musicGroup: MusicGroup;
 };
 
 export default function MusicSection(props: MusicSectionProps | GroupMusicSectionProps) {
+	const { t, locale } = useTranslation();
 	const audioManager = useAudioManagerContext();
 	const shown = (column: MusicSectionColumn) => !props.hiddenColumns?.includes(column);
-	const [openMenu, setOpenMenu] = createSignal<number | null>(null);
-	const isMenuOpen = createSelector(openMenu);
 
 	function toDate(value: Date | string): Date {
 		return value instanceof Date ? value : new Date(value);
@@ -64,26 +76,24 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 		+ (shown("duration") ? 1 : 0);
 
 
-	function toggleMenu(index: number) {
-		setOpenMenu((current) => current === index ? null : index);
-	}
+	const ariaSort = (field: MusicSortField) => props.sort?.value?.field === field
+		? props.sort.value.order === "asc"
+			? "ascending"
+			: "descending"
+		: undefined;
 
-	onMount(() => {
-		const onPointerDown = (e: PointerEvent) => {
-			if (!(e.target as Element | null)?.closest(".col-actions")) {
-				setOpenMenu(null);
-			}
-		};
-		const onKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "Escape") setOpenMenu(null);
-		};
-		document.addEventListener("pointerdown", onPointerDown);
-		document.addEventListener("keydown", onKeyDown);
-		onCleanup(() => {
-			document.removeEventListener("pointerdown", onPointerDown);
-			document.removeEventListener("keydown", onKeyDown);
-		});
-	});
+	function SortHeader(headerProps: { field: MusicSortField; children: string }) {
+		return <Show when={props.sort} fallback={headerProps.children}>
+			{(sort) => <Button type="button" variant="text" class="sort-header" classList={{ active: sort().value?.field === headerProps.field }} onClick={() => sort().onChange(nextSort(sort().value, headerProps.field))}>
+				{headerProps.children}
+				<span class="sort-arrow" aria-hidden="true">
+					<Show when={sort().value?.field === headerProps.field}>
+						{sort().value?.order === "asc" ? <ArrowUp size={14} /> : <ArrowDown size={14} />}
+					</Show>
+				</span>
+			</Button>}
+		</Show>;
+	}
 
 	const musicList = () => isGroupMusicSection(props) ? props.musicGroup.musics : props.musics;
 
@@ -91,13 +101,13 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 		<table class="data">
 			<thead>
 				<tr>
-					<th class="col-title" scope="col">Title</th>
+					<th class="col-title" scope="col" aria-sort={ariaSort("name")}><SortHeader field="name">{t("components.musicSection.title")}</SortHeader></th>
 					<Show when={shown("actions")}><th class="col-actions" scope="col" /></Show>
-					<Show when={shown("artists")}><th class="col-artists" scope="col">Artists</th></Show>
-					<Show when={shown("album")}><th class="col-album" scope="col">Album</th></Show>
-					<Show when={props.providers?.length}><th class="col-provider" scope="col">Provider</th></Show>
-					<Show when={shown("published")}><th class="col-published" scope="col">Published</th></Show>
-					<Show when={shown("duration")}><th class="col-duration" scope="col">Duration</th></Show>
+					<Show when={shown("artists")}><th class="col-artists" scope="col" aria-sort={ariaSort("artist")}><SortHeader field="artist">{t("components.musicSection.artists")}</SortHeader></th></Show>
+					<Show when={shown("album")}><th class="col-album" scope="col" aria-sort={ariaSort("album")}><SortHeader field="album">{t("components.musicSection.album")}</SortHeader></th></Show>
+					<Show when={props.providers?.length}><th class="col-provider" scope="col" aria-sort={ariaSort("provider")}><SortHeader field="provider">{t("components.musicSection.provider")}</SortHeader></th></Show>
+					<Show when={shown("published")}><th class="col-published" scope="col" aria-sort={ariaSort("published")}><SortHeader field="published">{t("components.musicSection.published")}</SortHeader></th></Show>
+					<Show when={shown("duration")}><th class="col-duration" scope="col" aria-sort={ariaSort("duration")}><SortHeader field="duration">{t("components.musicSection.duration")}</SortHeader></th></Show>
 				</tr>
 			</thead>
 			<tbody>
@@ -123,17 +133,13 @@ export default function MusicSection(props: MusicSectionProps | GroupMusicSectio
 								</td>
 								<Show when={shown("actions")}>
 									<td class="col-actions">
-										<Button class="action-button" icon={true} variant="text" onClick={() => toggleMenu(i())}><Ellipsis /></Button>
-										<Show when={isMenuOpen(i())}>
-											<MusicActionMenu music={music} onClose={() => setOpenMenu(null)} playlist={props.playlist} />
-
-										</Show>
+										<MusicActionMenu music={music} playlist={props.playlist} />
 									</td>
 								</Show>
 								<Show when={shown("artists")}><td class="col-artists"><ArtistsLinks artists={music.artists} providerUUID={music.provider.uuid} /></td></Show>
 								<Show when={shown("album")}><td class="col-album">{music.hasAlbum() ? <A href={music.albumRoute()} class="white-variant">{music.album.name}</A> : "-"}</td></Show>
 								<Show when={props.providers?.length}><td class="col-provider"><A href={`/provider/${music.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === music.provider.uuid)?.name}</A></td></Show>
-								<Show when={shown("published")}><td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString() : "-"}</td></Show>
+								<Show when={shown("published")}><td class="col-published">{music.publishedAt ? toDate(music.publishedAt).toLocaleDateString(locale()) : "-"}</td></Show>
 								<Show when={shown("duration")}><td class="col-duration">{formatTimer(music.duration)}</td></Show>
 							</tr>
 						</Match>

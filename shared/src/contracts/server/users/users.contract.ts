@@ -39,6 +39,12 @@ export const usersContract = c.router(
 			body: usersBatchSchema,
 			responses: { 200: usersBatchResponseSchema },
 		},
+		regenerateApiKey: {
+			method: "POST",
+			path: "/regenerate-api-key",
+			body: null,
+			responses: { 200: z.object({ apiKey: z.string() }) },
+		},
 		getUser: {
 			method: "GET",
 			path: "/:uuid",

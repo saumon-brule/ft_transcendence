@@ -3,8 +3,10 @@ import { Search, X } from "lucide-solid";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import type { FormEmbeddedComponentRef } from "~/types/ComponentRef";
+import { useTranslation } from "~/i18n/context";
 
 export default function ProviderSearchBar(props: { value: string; onSearch: (value: string) => void }) {
+	const { t } = useTranslation();
 	const [value, setValue] = createSignal(untrack(() => props.value));
 	let input!: FormEmbeddedComponentRef<HTMLInputElement>;
 	let timeout: ReturnType<typeof setTimeout> | undefined;
@@ -20,7 +22,7 @@ export default function ProviderSearchBar(props: { value: string; onSearch: (val
 
 	return <Form class="provider-search" role="search" onSubmit={() => search(value(), 0)}>
 		<Search class="search-icon" size={18}/>
-		<TextInput type="search" placeholder="Search" value={value()} onInput={(event) => search(event.currentTarget.value)} ref={input}/>
+		<TextInput type="search" placeholder={t("components.header.search")} value={value()} onInput={(event) => search(event.currentTarget.value)} ref={input}/>
 		<Show when={value()}>
 			<button class="search-clear" type="button" onClick={() => { search("", 0); input.htmlElement.focus(); }}>
 				<X size={18}/>

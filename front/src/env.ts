@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { devWarn } from "~/utils/devLog";
 
 const envSchema = z.object({
 	VITE_API_URL: z.string(),
@@ -10,7 +11,7 @@ try {
 	result = envSchema.parse(import.meta.env);
 } catch (e) {
 	if (!(e instanceof z.ZodError)) throw e;
-	console.error(e.issues.map((issue) => `env.${issue.path[0]}: ${issue.message}`).join("\n"));
+	devWarn(e.issues.map((issue) => `env.${issue.path[0]}: ${issue.message}`).join("\n"));
 	throw new Error("Invalid env provided", { cause: e });
 }
 

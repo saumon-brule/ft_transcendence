@@ -6,6 +6,7 @@ import { Cron } from "@nestjs/schedule";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 import { LogBuilder } from "../core/logging/log-builder";
 import { PresenceService } from "./presence/presence.service";
+import { generateUserApiKey } from "../publicAPI/user-api-key";
 
 @Injectable()
 export class UsersService {
@@ -177,6 +178,15 @@ export class UsersService {
 			where: { uuid },
 			data: { avatarUpdatedAt: new Date() },
 		});
+	}
+
+	public async regenerateApiKey(uuid: string): Promise<string> {
+		const { key, keyHash } = generateUserApiKey();
+		await this.prisma.user.update({
+			where: { uuid },
+			data: { apiKeyHash: keyHash },
+		});
+		return key;
 	}
 
 	public async linkIntraAccount(uuid: string, intraId: number) {

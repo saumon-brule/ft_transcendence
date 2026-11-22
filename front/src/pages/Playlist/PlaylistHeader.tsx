@@ -13,6 +13,7 @@ import { summonDeletePlaylistPopUp } from "./popUps/deletePlaylistPopUp";
 import { summonChangeCoverPopUp } from "./popUps/changeCoverPopUp";
 import { Playlist } from "~/class/Playlist";
 import { history } from "~/store/history.store";
+import { useTranslation } from "~/i18n/context";
 
 type PlaylistHeaderProps = {
 	playlist: PlaylistDetailDto;
@@ -28,6 +29,7 @@ function formatTotalDuration(seconds: number): string {
 }
 
 export default function PlaylistHeader(props: PlaylistHeaderProps) {
+	const { t } = useTranslation();
 	const audioManager = useAudioManagerContext();
 	const navigate = useNavigate();
 	const setPrivacy = useSetPlaylistPrivacyMutation();
@@ -50,30 +52,30 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 	}
 
 	return <header class="playlist-header">
-		<Show when={props.playlist.isOwner} fallback={<img src={playlistCoverUrl(props.playlist.uuid)} alt="Playlist cover" />}>
-			<button type="button" class="cover-button" aria-label="Change cover" onClick={() => summonChangeCoverPopUp(props.playlist)}>
-				<img src={playlistCoverUrl(props.playlist.uuid)} alt="Playlist cover" />
+		<Show when={props.playlist.isOwner} fallback={<img src={playlistCoverUrl(props.playlist.uuid)} alt={t("common.playlistCover")} />}>
+			<button type="button" class="cover-button" aria-label={t("pages.playlist.changeCover")} onClick={() => summonChangeCoverPopUp(props.playlist)}>
+				<img src={playlistCoverUrl(props.playlist.uuid)} alt={t("common.playlistCover")} />
 				<span class="cover-overlay"><Pencil /></span>
 			</button>
 		</Show>
 		<div class="header-container">
 			<div class="header-info">
 				<span class="badge">
-					<Show when={props.playlist.private} fallback={<><Globe size={12} /> Public</>}><Lock size={12} /> Private</Show>
+					<Show when={props.playlist.private} fallback={<><Globe size={12} /> {t("common.public")}</>}><Lock size={12} /> {t("common.private")}</Show>
 				</span>
 				<h2>{props.playlist.name}</h2>
 				<div class="stats">
-					<span class="stat">{props.playlist.musics.length} musics</span>
+					<span class="stat">{t("components.playlistCard.musicCount", { count: String(props.playlist.musics.length) })}</span>
 					<Show when={!loading() && musics().length > 0}>
 						<div class="separator" />
 						<span class="stat">{formatTotalDuration(totalDuration())}</span>
 					</Show>
 					<Show when={!loading() && unavailable() > 0}>
 						<div class="separator" />
-						<span class="stat">{unavailable()} unavailable</span>
+						<span class="stat">{t("pages.playlist.unavailableCount", { count: String(unavailable()) })}</span>
 					</Show>
 				</div>
-				<p>By <A href={`/user/${props.playlist.owner.uuid}`}>{props.playlist.owner.username}</A></p>
+				<p>{t("pages.playlist.by")} <A href={`/user/${props.playlist.owner.uuid}`}>{props.playlist.owner.username}</A></p>
 			</div>
 			<div class="header-controls">
 				<Show when={props.musicGroup} fallback={<><Button icon disabled><Play /></Button><Button icon disabled><Shuffle /></Button></>}>
@@ -86,14 +88,14 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 		</div>
 		<div class="header-actions">
 			<Show when={props.playlist.isOwner}>
-				<Button variant="text" onClick={() => summonRenamePlaylistPopUp(props.playlist)}><Pencil /> Rename</Button>
+				<Button variant="text" onClick={() => summonRenamePlaylistPopUp(props.playlist)}><Pencil /> {t("pages.playlist.rename")}</Button>
 				<Button variant="text" disabled={setPrivacy.isPending} onClick={togglePrivacy}>
 					<span class="toggle-labels">
-						<span classList={{ inactive: !props.playlist.private }}><Globe /> Make public</span>
-						<span classList={{ inactive: props.playlist.private }}><Lock /> Make private</span>
+						<span classList={{ inactive: !props.playlist.private }}><Globe /> {t("pages.playlist.makePublic")}</span>
+						<span classList={{ inactive: props.playlist.private }}><Lock /> {t("pages.playlist.makePrivate")}</span>
 					</span>
 				</Button>
-				<Button variant="danger" onClick={() => summonDeletePlaylistPopUp(props.playlist, () => navigate("/playlists"))}><Trash2 /> Delete</Button>
+				<Button variant="danger" onClick={() => summonDeletePlaylistPopUp(props.playlist, () => navigate("/playlists"))}><Trash2 /> {t("common.delete")}</Button>
 			</Show>
 		</div>
 	</header>;

@@ -52,7 +52,7 @@ export default function LoginForm() {
 								setError(e.body.message);
 						}
 					} else {
-						setError("An error occured. There is nothing to do :/");
+						setError(t("errors.unknownFallback"));
 					}
 				},
 			},
@@ -61,10 +61,10 @@ export default function LoginForm() {
 
 	return <Form onSubmit={handleSubmit} id="login-form">
 		<div class="login-inputs">
-			<TextInput ref={(e) => usernameInput = e.htmlElement} type="email" validator={(e) => validateFromZod(loginSchema.shape.email, e.value)} placeholder="Email" required />
-			<TextInput ref={(e) => passwordInput = e.htmlElement} type="password" validator={(e) => validateFromZod(loginSchema.shape.password, e.value)} placeholder="Password" required />
+			<TextInput ref={(e) => usernameInput = e.htmlElement} type="email" validator={(e) => validateFromZod(loginSchema.shape.email, e.value)} placeholder={t("pages.auth.email")} required />
+			<TextInput ref={(e) => passwordInput = e.htmlElement} type="password" validator={(e) => validateFromZod(loginSchema.shape.password, e.value)} placeholder={t("pages.auth.password")} required />
 			<p class="password-reset">
-				<A href="/auth/request-password-reset">Forgot password?</A>
+				<A href="/auth/request-password-reset">{t("pages.login.forgotPassword")}</A>
 			</p>
 			<Show when={error()}>
 				<p class="invalid-message" role="alert">
@@ -72,15 +72,15 @@ export default function LoginForm() {
 				</p>
 			</Show>
 		</div>
-		<Button type="submit">Login</Button>
+		<Button type="submit">{t("pages.login.submit")}</Button>
 		<div class="separator">
 			<hr />
-			OR
+			{t("pages.auth.or")}
 			<hr />
 		</div>
-		<IntraButton linkType="auth">Login with <Logo42/> Intra</IntraButton>
+		<IntraButton linkType="auth">{t("pages.login.intra.begin")}<Logo42/>{t("pages.login.intra.end")}</IntraButton>
 		<p class="auth-switcher">
-			Need an account? <A href="/register">Register</A>.
+			{t("pages.login.switch.begin")}<A href="/register">{t("pages.login.switch.link")}</A>{t("pages.login.switch.end")}
 		</p>
 	</Form>;
 }

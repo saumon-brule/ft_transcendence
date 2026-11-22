@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import type { SearchSortField, SortOrder } from "@flex/shared";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { FILTER_CONDITIONS, type CatalogFilters } from "../core/catalog/catalog.filters";
@@ -14,6 +15,8 @@ interface SearchQuery {
 	albumUuid?: string;
 	dateBefore?: Date;
 	dateAfter?: Date;
+	sort?: SearchSortField;
+	order?: SortOrder;
 }
 
 interface Page {
@@ -24,6 +27,8 @@ interface Page {
 export interface PageQuery<T extends SearchTable> extends Page {
 	search?: string;
 	filters?: CatalogFilters[T];
+	sort?: SearchSortField;
+	order?: SortOrder;
 }
 
 export type SearchTable = "Music" | "Artist" | "Album";
@@ -41,10 +46,28 @@ const TABLES: Record<SearchTable, { from: Prisma.Sql; fields: SearchField[] }> =
 	Album: { from: Prisma.raw("\"Album\""), fields: [field("name", 3), field("searchArtists", 2)] },
 };
 
+// Text columns are compared case-insensitively and an empty value (no artist, no album) goes last. A field a table does not have cannot be sorted on and is ignored.
+const SORT_EXPRESSIONS: Record<SearchTable, Partial<Record<SearchSortField, string>>> = {
+	Music: { name: "lower(\"name\")", artist: "nullif(lower(\"searchArtists\"), '')", album: "nullif(lower(\"searchAlbum\"), '')", published: "\"publishedAt\"", duration: "\"duration\"" },
+	Album: { name: "lower(\"name\")", artist: "nullif(lower(\"searchArtists\"), '')", published: "\"publishedAt\"" },
+	Artist: { name: "lower(\"name\")" },
+};
+
+const sortOf = (table: SearchTable, sort?: SearchSortField, order: SortOrder = "asc") => {
+	const expression = sort && SORT_EXPRESSIONS[table][sort];
+	return expression
+		? { expression: Prisma.raw(expression),
+			direction: Prisma.raw(order === "desc"
+				? "DESC"
+				: "ASC") }
+		: undefined;
+};
+
+type Sort = NonNullable<ReturnType<typeof sortOf>>;
+
 const FUZZY_DISTANCES = [
 	{ minLength: 3, distance: 1 },
 	{ minLength: 6, distance: 2 },
-	{ minLength: 8, distance: 3 },
 ];
 const MIN_RELATIVE_SCORE = 0.2;
 
@@ -54,15 +77,19 @@ const tokensOf = (value: string) => value.split(/[^\p{L}\p{N}]+/u).filter(Boolea
 export class SearchService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	private async ids<T extends SearchTable>(table: T, { search, filters, limit, offset }: PageQuery<T>) {
+	private async ids<T extends SearchTable>(table: T, { search, filters, limit, offset, sort, order }: PageQuery<T>) {
 		const conditions = (FILTER_CONDITIONS[table])(filters ?? {});
+		const sorting = sortOf(table, sort, order);
 		return search === undefined
-			? this.list(table, conditions, { limit, offset })
-			: this.rank(table, search, conditions, { limit, offset });
+			? this.list(table, conditions, { limit, offset }, sorting)
+			: this.rank(table, search, conditions, { limit, offset }, sorting);
 	}
 
-	private async list(table: SearchTable, conditions: Prisma.Sql[], { limit, offset }: Page) {
+	private async list(table: SearchTable, conditions: Prisma.Sql[], { limit, offset }: Page, sort?: Sort) {
 		const { from } = TABLES[table];
+		const ordering = sort
+			? Prisma.sql`ORDER BY ${sort.expression} ${sort.direction} NULLS LAST, "id" ASC`
+			: Prisma.empty;
 		const where = conditions.length > 0
 			? Prisma.sql`WHERE ${Prisma.join(conditions, " AND ")}`
 			: Prisma.empty;
@@ -70,7 +97,7 @@ export class SearchService {
 		const [rows, [{ total }]] = await this.prisma.$transaction([
 			this.prisma.$queryRaw<{ id: number }[]>(Prisma.sql`
 				SELECT "id" FROM ${from} ${where}
-				/* ORDER BY "name" ASC, "id" ASC */
+				${ordering}
 				LIMIT ${limit}::int OFFSET ${offset}::int
 			`),
 			this.prisma.$queryRaw<{ total: number }[]>(Prisma.sql`
@@ -81,7 +108,7 @@ export class SearchService {
 		return { ids: rows.map((row) => row.id), total };
 	}
 
-	private async rank(table: SearchTable, rawTerm: string, conditions: Prisma.Sql[], { limit, offset }: Page) {
+	private async rank(table: SearchTable, rawTerm: string, conditions: Prisma.Sql[], { limit, offset }: Page, sort?: Sort) {
 		const tokens = tokensOf(rawTerm);
 		if (tokens.length === 0) return { ids: [], total: 0 };
 
@@ -110,11 +137,17 @@ export class SearchService {
   		OR    "searchAlbum"   ||| $6::pdb.fuzzy(1, t, t)::pdb.boost(1)
 		*/
 
+		const sortKey = sort
+			? Prisma.sql`, ${sort.expression} AS "sortKey"`
+			: Prisma.empty;
+		const sortOrdering = sort
+			? Prisma.sql`"sortKey" ${sort.direction} NULLS LAST, `
+			: Prisma.empty;
 		const restriction = conditions.length > 0
 			? Prisma.sql` AND ${Prisma.join(conditions, " AND ")}`
 			: Prisma.empty;
 		const matches = Prisma.sql`(
-			SELECT "id", pdb.score("id") AS "score", max(pdb.score("id")) OVER () AS "best"
+			SELECT "id", pdb.score("id") AS "score", max(pdb.score("id")) OVER () AS "best"${sortKey}
 			FROM ${from}
 			WHERE (${where})${restriction}
 		) AS "matches"`;
@@ -125,7 +158,7 @@ export class SearchService {
 			this.prisma.$queryRaw<{ id: number }[]>(Prisma.sql`
 				SELECT "id" FROM ${matches}
 				WHERE ${relevant}
-				ORDER BY "score" DESC, "id" ASC
+				ORDER BY ${sortOrdering}"score" DESC, "id" ASC
 				LIMIT ${limit}::int OFFSET ${offset}::int
 			`),
 			this.prisma.$queryRaw<{ total: number }[]>(Prisma.sql`
@@ -148,8 +181,8 @@ export class SearchService {
 		return { rows: ids.flatMap((id) => loaded.get(id) ?? []), total };
 	}
 
-	async search({ query, limit, music, artist, album, artistUuid, albumUuid, dateBefore, dateAfter }: SearchQuery) {
-		const base = { search: query, limit, offset: 0 };
+	async search({ query, limit, music, artist, album, artistUuid, albumUuid, dateBefore, dateAfter, sort, order }: SearchQuery) {
+		const base = { search: query, limit, offset: 0, sort, order };
 		const hasDate = dateBefore !== undefined || dateAfter !== undefined;
 		const none = { rows: [], total: 0 };
 
@@ -181,6 +214,7 @@ export class SearchService {
 			musics: musics.rows.map(toMusicItem),
 			artists: artists.rows.map(toArtistItem),
 			albums: albums.rows.map(toAlbumItem),
+			totals: { musics: musics.total, artists: artists.total, albums: albums.total },
 		};
 	}
 }

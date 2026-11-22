@@ -10,6 +10,7 @@ import { getMeShortUser, setRelation, updateMe, updateTargetFriends } from "~/ap
 import { summonInfoToast } from "~/components/ui/Toaster";
 import { endChat } from "~/store/messages.store";
 import { setOnlineByUuid } from "~/store/presence.store";
+import { t } from "~/i18n/context";
 
 export function useFriendEvents(socket: AppSocket) {
 	socket.on("friend:request-received", (payload) => {
@@ -50,7 +51,7 @@ export function useFriendEvents(socket: AppSocket) {
 		if (!parsed.success) return;
 
 		setRelation(parsed.data.uuid, "NO");
-		summonInfoToast(() => `${parsed.data.username} declined your friend request`);
+		summonInfoToast(() => t("toasts.friends.requestDeclined", { username: parsed.data.username }));
 	});
 
 	socket.on("friend:removed", (payload) => {

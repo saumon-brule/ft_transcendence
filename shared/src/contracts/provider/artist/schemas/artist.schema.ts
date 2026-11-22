@@ -8,6 +8,8 @@ export const artistDetailedItemSchema = z.object({
 	addedAt: z.coerce.date(),
 	biography: z.string().nullable(),
 	hasAvatar: z.boolean(),
+	musicCount: z.number().int(),
+	albumCount: z.number().int(),
 });
 export type ArtistDetailedItemDto = z.infer<typeof artistDetailedItemSchema>;
 

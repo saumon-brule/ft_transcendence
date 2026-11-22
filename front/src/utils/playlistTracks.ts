@@ -1,3 +1,4 @@
+import { t } from "~/i18n/context";
 import { Provider } from "@flex/shared";
 import { Music, UnavailableMusicState } from "~/class/Music";
 
@@ -64,7 +65,7 @@ export function buildMusics(
 		const outcome = outcomes.get(key(entry.providerUuid, entry.musicUuid)) ?? "loading";
 		if (typeof outcome !== "string") return outcome;
 
-		const provider = providerByUuid.get(entry.providerUuid) ?? { uuid: entry.providerUuid, name: "Unknown provider", address: "" };
+		const provider = providerByUuid.get(entry.providerUuid) ?? { uuid: entry.providerUuid, name: t("common.unknownProvider"), address: "" };
 		return Music.createUnavailable(entry.musicUuid, provider, outcome);
 	});
 }
