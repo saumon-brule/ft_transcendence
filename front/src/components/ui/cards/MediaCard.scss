@@ -71,7 +71,8 @@
 	}
 
 	&.album-card,
-	&.artist-card {
+	&.artist-card,
+	&.music-card {
 		cursor: pointer;
 
 		.media-card-name::after {
