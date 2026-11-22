@@ -130,9 +130,6 @@ export default function ProfileSettings() {
 					<div class="separator" />
 					<div class="stat">{t("components.profileStats.playlists", { count: String(user()._count.ownedPlaylists) })}</div>
 				</div>
-				<Show when={user().currentlyListening && user().listeningUntil && toDate(user().listeningUntil!) > new Date()}>
-					<div class="listening"><MusicBars />{t("components.profileStats.listening", { title: user().currentlyListening!.title, artist: user().currentlyListening!.artist })}</div>
-				</Show>
 			</div>
 		</div>
 	</main>;

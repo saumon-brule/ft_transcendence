@@ -181,23 +181,6 @@ export class DatabaseBootstrapService implements OnModuleInit {
 		// 	},
 		// });
 
-		const musicData = [
-			{ title: "the newer sweet groove", artist: "Chris Gouge", duration: 214 },
-			{ title: "Afterglow", artist: "Paper Satellites", duration: 189 },
-			{ title: "Static Hearts", artist: "The Frequency", duration: 242 },
-			{ title: "Blue Hour", artist: "Lumen Coast", duration: 201 },
-			{ title: "Last Signal", artist: "Northbound", duration: 227 },
-		];
-		const musics: { uuid: string }[] = [];
-		for (const data of musicData) {
-			const existingMusic = await this.prisma.music.findFirst({
-				where: { title: data.title, artist: data.artist },
-			});
-			musics.push(
-				existingMusic ?? (await this.prisma.music.create({ data })),
-			);
-		}
-
 		const privatePlaylist = await this.prisma.playlist.findFirst({
 			where: { ownerUUID: liamUser.uuid, name: "Liam's Private Playlist" },
 		});
@@ -275,15 +258,6 @@ export class DatabaseBootstrapService implements OnModuleInit {
 		// for (const music of musics.slice(2)) {
 		// 	await addMusicToPlaylist(liamPublicPlaylist.uuid, music.uuid);
 		// }
-
-		await this.prisma.user.update({
-			where: { uuid: liamUser.uuid },
-			data: {
-				currentlyListeningUUID: musics[0].uuid,
-				listeningUntil: new Date(Date.now() + 5 * 60 * 1000),
-				listeningPrivate: false,
-			},
-		});
 
 		console.log("Seed finished!");
 	}
