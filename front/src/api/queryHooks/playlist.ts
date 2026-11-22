@@ -200,6 +200,49 @@ export const useDeletePlaylistMutation = () => {
 	});
 };
 
+function setFollowingInCaches(queryClient: ReturnType<typeof useQueryClient>, playlistUuid: string, isFollowing: boolean) {
+	const detail = queryClient.getQueryData<GetPlaylistResponse>(queryKeys.playlists.getPlaylist([playlistUuid]));
+
+	queryClient.setQueryData<GetPlaylistResponse>(queryKeys.playlists.getPlaylist([playlistUuid]), (old) => old && {
+		...old,
+		body: { ...old.body, isFollowing },
+	});
+
+	queryClient.setQueryData<ListPlaylistsResponse>(queryKeys.playlists.listPlaylists(), (old) => {
+		if (!old) return old;
+		const followed = old.body.followed.filter((playlist) => playlist.uuid !== playlistUuid);
+		if (isFollowing && detail) {
+			followed.push({
+				uuid: detail.body.uuid,
+				name: detail.body.name,
+				private: detail.body.private,
+				createdAt: detail.body.createdAt,
+				owner: detail.body.owner,
+				musicCount: detail.body.musics.length,
+			});
+		}
+		return { ...old, body: { ...old.body, followed } };
+	});
+
+	if (isFollowing && !detail) void queryClient.invalidateQueries({ queryKey: queryKeys.playlists.listPlaylists() });
+}
+
+export const useFollowPlaylistMutation = () => {
+	const queryClient = useQueryClient();
+
+	return client.playlists.followPlaylist.createMutation({
+		onSuccess: (_, vars) => { setFollowingInCaches(queryClient, vars.params.uuid, true); },
+	});
+};
+
+export const useUnfollowPlaylistMutation = () => {
+	const queryClient = useQueryClient();
+
+	return client.playlists.unfollowPlaylist.createMutation({
+		onSuccess: (_, vars) => { setFollowingInCaches(queryClient, vars.params.uuid, false); },
+	});
+};
+
 export const useUploadPlaylistCoverMutation = () => client.playlists.uploadCover.createMutation({
 	onSuccess: (_, vars) => {
 		bumpPlaylistCover(vars.params.uuid);
