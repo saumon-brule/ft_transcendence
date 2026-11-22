@@ -1,0 +1,16 @@
+# The server without the TLS of the bundled nginx, to put behind your own reverse proxy (make server-standalone).
+# The front then only listens in HTTP on 127.0.0.1:FRONT_UPSTREAM_PORT, and serves the site and /api.
+services:
+  front:
+    ports: !override
+      - "127.0.0.1:${FRONT_UPSTREAM_PORT:?set FRONT_UPSTREAM_PORT in .env}:80"
+    secrets: !reset []
+    volumes:
+      - ./docker/nginx/server-standalone.conf.template:/etc/nginx/templates/default.conf.template:ro
+    healthcheck:
+      test: !override ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:80/"]
+
+  back:
+    environment:
+      # your reverse proxy, then the front nginx
+      TRUST_PROXY: "2"

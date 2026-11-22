@@ -89,6 +89,43 @@ The address registered on the server is the one browsers use to reach the provid
 `make server-down` / `provider-down NAME=music` stop a stack (the volumes are kept), `server-logs` / `provider-logs NAME=music` follow its logs,
 `server-reset` / `provider-reset NAME=music` delete its data (they ask for `CONFIRM=yes`).
 
+### Behind your own reverse proxy
+
+If you already have an nginx (or any reverse proxy) on the machine, run only the containers and plug it in: the bundled nginx/TLS is not started.
+
+```sh
+# server: set FRONT_HOST, FRONT_PORT (your public address) and FRONT_UPSTREAM_PORT in .env
+make server-standalone        # the front listens in HTTP on 127.0.0.1:FRONT_UPSTREAM_PORT
+
+# provider: set PROVIDER_HOST, PROVIDER_PORT (public) and PROVIDER_UPSTREAM_PORT in .env.provider-<name>
+make provider-standalone NAME=<name>   # the provider listens in HTTP on 127.0.0.1:PROVIDER_UPSTREAM_PORT
+```
+
+`server-down`, `server-logs`, `provider-down`... work the same. Your proxy must terminate TLS on the public address and forward `Host`, `X-Forwarded-For` and `X-Forwarded-Proto`. Example for the server:
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name flex.example.com;
+    # ssl_certificate ...
+
+    client_max_body_size 6m;
+
+    location / {
+        proxy_pass http://127.0.0.1:8081;
+        proxy_http_version 1.1;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;       # websockets (/api/socket.io/)
+        proxy_set_header Connection $connection_upgrade;  # map $http_upgrade $connection_upgrade { default upgrade; '' close; }
+        proxy_read_timeout 1h;
+    }
+}
+```
+
+For a provider, use the same block with `proxy_pass http://127.0.0.1:4081;`, `client_max_body_size 201m;`, `proxy_request_buffering off;` and `proxy_buffering off;`. If the server uses a certificate from a public CA, the provider's `server_ca.crt` secret can simply be that CA bundle.
+
 ### Development
 
 The Makefile only drives the production stacks (Docker). Everything for development goes through pnpm scripts, and the development settings are the `.env.example` files of `back`, `front` and `provider` (production settings are the ones at the root).

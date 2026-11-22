@@ -1,0 +1,9 @@
+# A provider without the bundled nginx, to put behind your own reverse proxy (make provider-standalone NAME=<name>).
+# The provider then listens in HTTP on 127.0.0.1:PROVIDER_UPSTREAM_PORT.
+services:
+  provider:
+    ports:
+      - "127.0.0.1:${PROVIDER_UPSTREAM_PORT:?set PROVIDER_UPSTREAM_PORT in .env.provider-<name>}:3002"
+
+  proxy:
+    profiles: ["bundled-proxy"]
