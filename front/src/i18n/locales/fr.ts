@@ -5,11 +5,11 @@ export default {
 		login: {
 			error: {
 				intraOnly: {
-					begin: "FR: This account is only accessible with the ",
-					link: "FR: 42's Intra login",
+					begin: "Ce compte est uniquement accessible avec la ",
+					link: "connexion Intra 42",
 					end: "",
 				},
-				invalidCredentials: "FR: Invalid credential combination",
+				invalidCredentials: "Email ou mot de passe incorrect",
 			},
 			forgotPassword: "Mot de passe oublié ?",
 			submit: "Connexion",
@@ -649,33 +649,33 @@ export default {
 				valueMissing: "Veuillez sélectionner une option",
 			},
 			text: {
-				tooShort: "FR: Input too short",
-				tooLong: "FR: Input too long",
-				patternMismatch: "FR: Invalid input format",
+				tooShort: "Valeur trop courte",
+				tooLong: "Valeur trop longue",
+				patternMismatch: "Format invalide",
 				text: {
 					valueMissing: "Ce champ est requis",
-					typeMismatch: "FR: Une valeur valide est requise pour ce champ",
+					typeMismatch: "Une valeur valide est requise pour ce champ",
 				},
 				email: {
-					valueMissing: "FR: Please enter an email",
-					typeMismatch: "FR: Please enter a valid email",
+					valueMissing: "Veuillez entrer un email",
+					typeMismatch: "Veuillez entrer un email valide",
 				},
 				password: {
-					valueMissing: "FR: Please enter a password",
-					typeMismatch: "FR: Please enter a valid password",
-					confirmationMismatch: "FR: Password and confirmation password are different",
+					valueMissing: "Veuillez entrer un mot de passe",
+					typeMismatch: "Veuillez entrer un mot de passe valide",
+					confirmationMismatch: "Le mot de passe et sa confirmation sont différents",
 				},
 				tel: {
-					valueMissing: "FR: Please enter a phone number",
-					typeMismatch: "FR: Please enter a valid phone number",
+					valueMissing: "Veuillez entrer un numéro de téléphone",
+					typeMismatch: "Veuillez entrer un numéro de téléphone valide",
 				},
 				url: {
-					valueMissing: "FR: Please enter a url",
-					typeMismatch: "FR: Please enter a valid url",
+					valueMissing: "Veuillez entrer une URL",
+					typeMismatch: "Veuillez entrer une URL valide",
 				},
 				search: {
-					valueMissing: "FR: Please enter a research",
-					typeMismatch: "FR: Please enter a valid research",
+					valueMissing: "Veuillez entrer une recherche",
+					typeMismatch: "Veuillez entrer une recherche valide",
 				},
 				date: {
 					valueMissing: "Veuillez entrer une date",
@@ -684,10 +684,10 @@ export default {
 			},
 		},
 		auth: {
-			invalidPassword: "FR: Password is incorrect",
+			invalidPassword: "Mot de passe incorrect",
 		},
 		register: {
-			conflictingEmail: "FR: This email is already taken",
+			conflictingEmail: "Cet email est déjà utilisé",
 		},
 		generic: "Une erreur est survenue",
 	},

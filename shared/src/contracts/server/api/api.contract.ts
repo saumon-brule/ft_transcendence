@@ -43,7 +43,7 @@ export const apiContract = c.router(
 		},
 		updatePlaylistName: {
 			method: "PATCH",
-			path: "playlist/:uuid",
+			path: "/playlist/:uuid",
 			pathParams: uuidParamSchema,
 			body: updatePlaylistNameSchema,
 			responses: {
@@ -53,7 +53,7 @@ export const apiContract = c.router(
 		},
 		setPlaylistPrivacy: {
 			method: "PATCH",
-			path: "/:uuid/privacy",
+			path: "/playlist/:uuid/privacy",
 			pathParams: uuidParamSchema,
 			body: updatePlaylistPrivacySchema,
 			responses: {
