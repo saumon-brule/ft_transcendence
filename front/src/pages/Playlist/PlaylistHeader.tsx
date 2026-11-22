@@ -7,7 +7,7 @@ import { MusicGroup } from "~/store/trackManager.store";
 import { useAudioManagerContext } from "~/components/context/AudioManagerContext";
 import Button from "~/components/inputs/Button";
 import { Globe, Lock, Pencil, Play, Shuffle, Trash2 } from "lucide-solid";
-import { useSetPlaylistPrivacyMutation } from "~/api/queryHooks/playlist";
+import { useFollowPlaylistMutation, useSetPlaylistPrivacyMutation, useUnfollowPlaylistMutation } from "~/api/queryHooks/playlist";
 import { summonRenamePlaylistPopUp } from "./popUps/renamePlaylistPopUp";
 import { summonDeletePlaylistPopUp } from "./popUps/deletePlaylistPopUp";
 import { summonChangeCoverPopUp } from "./popUps/changeCoverPopUp";
@@ -39,6 +39,9 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 	const unavailable = () => props.musicGroup.musics.length - musics().length;
 	const totalDuration = () => musics().reduce((total, music) => total + music.duration, 0);
 
+	const followMutation = useFollowPlaylistMutation();
+	const unfollowMutation = useUnfollowPlaylistMutation();
+
 	function playMusicGroup(musicGroup: MusicGroup, shuffle: boolean = false) {
 		audioManager.setMusicGroup(musicGroup);
 		if (shuffle) audioManager.shuffle();
@@ -49,6 +52,14 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 
 	function togglePrivacy() {
 		setPrivacy.mutate({ params: { uuid: props.playlist.uuid }, body: { private: !props.playlist.private } });
+	}
+
+	function followPlaylist(playlist: PlaylistDetailDto) {
+		followMutation.mutate({ params: { uuid: playlist.uuid } });
+	}
+
+	function unfollowPlaylist(playlist: PlaylistDetailDto) {
+		unfollowMutation.mutate({ params: { uuid: playlist.uuid } });
 	}
 
 	return <header class="playlist-header">
@@ -96,6 +107,11 @@ export default function PlaylistHeader(props: PlaylistHeaderProps) {
 					</span>
 				</Button>
 				<Button variant="danger" onClick={() => summonDeletePlaylistPopUp(props.playlist, () => navigate("/playlists"))}><Trash2 /> {t("common.delete")}</Button>
+			</Show>
+			<Show when={!props.playlist.isOwner}>
+				<Show when={props.playlist.isFollowing} fallback={<Button variant="primary" disabled={followMutation.isPending} onClick={() => followPlaylist(props.playlist)}>{t("pages.playlist.follow")}</Button>}>
+					<Button variant="primary" disabled={unfollowMutation.isPending} onClick={() => unfollowPlaylist(props.playlist)}>{t("pages.playlist.unfollow")}</Button>
+				</Show>
 			</Show>
 		</div>
 	</header>;
