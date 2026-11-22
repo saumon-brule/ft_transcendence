@@ -69,7 +69,7 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>;
 
-const languageEnum = z.enum(["en", "fr"]);
+export const languageEnum = z.enum(["en", "fr", "ja", "es"]);
 
 export const meSchema = z.object({
 	uuid: z.string().uuid(),
