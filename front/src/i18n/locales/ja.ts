@@ -442,6 +442,8 @@ export default {
 			makePublic: "公開にする",
 			makePrivate: "非公開にする",
 			namePlaceholder: "マイプレイリスト",
+			follow: "フォローする",
+			unfollow: "フォロー解除",
 			coverPopUp: {
 				invalidType: "JPEG、PNG、またはWebPの画像を選択してください",
 				preview: "カバーのプレビュー",

@@ -442,6 +442,8 @@ export default {
 			makePublic: "Hacer pública",
 			makePrivate: "Hacer privada",
 			namePlaceholder: "Mi lista de reproducción",
+			follow: "Seguir",
+			unfollow: "Dejar de seguir",
 			coverPopUp: {
 				invalidType: "Elige una imagen JPEG, PNG o WebP",
 				preview: "Vista previa de la portada",
