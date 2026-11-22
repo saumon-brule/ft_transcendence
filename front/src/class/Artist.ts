@@ -1,34 +1,30 @@
-import { buildMediaUrl, ProviderDataArtistDto } from "@flex/shared";
+import { buildMediaUrl, Provider, ProviderDataArtistDto, providerSchema } from "@flex/shared";
 import { artistItemSchema } from "@flex/shared";
-import z from "zod";
 
 export class Artist {
 	private constructor(
 		public readonly uuid: string,
 		public readonly name: string,
 		public readonly hasAvatar: boolean,
-		public providerUuid: string,
-		public providerUrl: string,
+		public provider: Provider,
 	) {}
 
 	public avatarUrl(token: string) {
-		return buildMediaUrl(this.providerUrl, "artistAvatar", this.uuid, token);
+		return buildMediaUrl(this.provider.address, "artistAvatar", this.uuid, token);
 	}
 
 	public route() {
-		return `/provider/${this.providerUuid}/artist/${this.uuid}`;
+		return `/provider/${this.provider.uuid}/artist/${this.uuid}`;
 	}
 
-	public static fromRawObject(this: void, rawArtistObject: ProviderDataArtistDto, providerUrl: string, providerUuid: string): Artist {
+	public static fromRawObject(this: void, rawArtistObject: ProviderDataArtistDto, provider: Provider): Artist {
 		const artist = { ...rawArtistObject } as Artist;
 		Object.setPrototypeOf(artist, Artist.prototype);
-		artist.providerUrl = providerUrl;
-		artist.providerUuid = providerUuid;
+		artist.provider = provider;
 		return artist;
 	}
 
 	public static zodSchema = artistItemSchema.extend({
-		providerUrl: z.string(),
-		providerUuid: z.string(),
-	}).transform(({ providerUrl, providerUuid, ...artist }): Artist => Artist.fromRawObject(artist, providerUrl, providerUuid));
+		provider: providerSchema,
+	}).transform(({ provider, ...artist }): Artist => Artist.fromRawObject(artist, provider));
 }

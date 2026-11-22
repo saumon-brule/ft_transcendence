@@ -1,6 +1,6 @@
-import { createSignal, JSX, onCleanup, Show } from "solid-js";
+import { createSignal, JSX, onCleanup } from "solid-js";
 import Button from "~/components/inputs/Button";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 import { summonPasswordEditPopUp } from "./editionPopUps/passwordPopUp";
 import { summonEmailEditPopUp } from "./editionPopUps/emailPopUp";
 import { OverlayControls } from "~/components/ui/Overlay";
@@ -23,19 +23,18 @@ export default function AccountSettings() {
 	const { t } = useTranslation();
 	const [isLanguageChanging, setIsLanguageChanging] = createSignal(false);
 
-	const profileQuery = useMeProfileQuery();
+	const user = useProfile();
 	const requestPasswordResetMutation = client.auth.requestPasswordReset.createMutation();
 	const updateMeMutation = client.users.updateMe.createMutation();
 	const unlinkIntraMutation = client.auth.unlink42.createMutation();
 
 	function requestSetPassword(e: MouseEvent) {
 		e.preventDefault();
-		if (!profileQuery.data?.body.email) return;
 		requestPasswordResetMutation.mutate(
-			{ body: { email: profileQuery.data.body.email } },
+			{ body: { email: user().email } },
 			{
 				onSuccess: () => {
-					summonSuccessToast(() => <>{t("pages.settings.account.password.passwordSetEmailSent")}<b>{profileQuery.data.body.email}</b></>);
+					summonSuccessToast(() => <>{t("pages.settings.account.password.passwordSetEmailSent")}<b>{user().email}</b></>);
 				},
 				onError: (err) => {
 					if (err.status !== 429) {
@@ -65,7 +64,7 @@ export default function AccountSettings() {
 
 	function unlinkIntra(e: MouseEvent) {
 		e.preventDefault();
-		if (profileQuery.data && !profileQuery.data.body.hasPassword) {
+		if (!user().hasPassword) {
 			summonErrorToast(() => t("pages.settings.account.connexions.unsetPassword"));
 			return;
 		}
@@ -96,54 +95,52 @@ export default function AccountSettings() {
 	});
 
 	return <section class="account-settings">
-		<Show when={profileQuery.data ? profileQuery.data.body : undefined}>
-			{(user) => <div class="settings-content">
-				<div class="setting-field">
-					<div class="setting-field-title">
-						<h3>{t("pages.settings.account.email.title")}</h3>
-						<Button variant="link" onClick={(e) => {
+		<div class="settings-content">
+			<div class="setting-field">
+				<div class="setting-field-title">
+					<h3>{t("pages.settings.account.email.title")}</h3>
+					<Button variant="link" onClick={(e) => {
+						e.preventDefault();
+						emailEditPopUpControls = summonEmailEditPopUp(() => emailEditPopUpControls = null);
+					}} >{t("pages.settings.edit")}</Button>
+				</div>
+				<div class="setting-field-value">{user().email}</div>
+			</div>
+			<div class="setting-field">
+				<div class="setting-field-title">
+					<h3>{t("pages.settings.account.password.title")}<span class="secondary-info">{user().hasPassword ? t("pages.settings.account.password.set") : t("pages.settings.account.password.unset")}</span></h3>
+					<Button variant="link" disabled={requestPasswordResetMutation.isPending} onClick={user().hasPassword
+						? (e) => {
 							e.preventDefault();
-							emailEditPopUpControls = summonEmailEditPopUp(() => emailEditPopUpControls = null);
-						}} >{t("pages.settings.edit")}</Button>
-					</div>
-					<div class="setting-field-value">{user().email}</div>
+							passwordEditPopUpControls = summonPasswordEditPopUp(() => passwordEditPopUpControls = null);
+						}
+						: requestSetPassword} >{user().hasPassword ? t("pages.settings.edit") : t("pages.settings.set")}</Button>
 				</div>
-				<div class="setting-field">
-					<div class="setting-field-title">
-						<h3>{t("pages.settings.account.password.title")}<span class="secondary-info">{user().hasPassword ? t("pages.settings.account.password.set") : t("pages.settings.account.password.unset")}</span></h3>
-						<Button variant="link" disabled={requestPasswordResetMutation.isPending} onClick={user().hasPassword
-							? (e) => {
-								e.preventDefault();
-								passwordEditPopUpControls = summonPasswordEditPopUp(() => passwordEditPopUpControls = null);
-							}
-							: requestSetPassword} >{user().hasPassword ? t("pages.settings.edit") : t("pages.settings.set")}</Button>
-					</div>
+			</div>
+			<div class="setting-field">
+				<div class="setting-field-title">
+					<h3>{t("pages.settings.account.language.title")}</h3>
 				</div>
-				<div class="setting-field">
-					<div class="setting-field-title">
-						<h3>{t("pages.settings.account.language.title")}</h3>
-					</div>
-					<Select disabled={isLanguageChanging()} onChange={changeLanguage}>
-						<option value="en" selected={user().language === "en"}>{t("pages.settings.account.language.english")}</option>
-						<option value="fr" selected={user().language === "fr"}>{t("pages.settings.account.language.french")}</option>
-					</Select>
+				<Select disabled={isLanguageChanging()} onChange={changeLanguage}>
+					<option value="en" selected={user().language === "en"}>{t("pages.settings.account.language.english")}</option>
+					<option value="fr" selected={user().language === "fr"}>{t("pages.settings.account.language.french")}</option>
+				</Select>
+			</div>
+			<div class="setting-field">
+				<div class="setting-field-title">
+					<h3 class="intra-link-title"><span>{t("pages.settings.account.connexions.title")}</span></h3>
 				</div>
-				<div class="setting-field">
-					<div class="setting-field-title">
-						<h3 class="intra-link-title"><span>{t("pages.settings.account.connexions.title")}</span></h3>
-					</div>
-					<div class="setting-field-value">
-						<div class="connexion">
-							<div>
-								<Logo42 /><span class="connexion-name">42's Intra</span>
-							</div>
-							{user().intraId === null
-								? <IntraButton unstyled size="sm" linkType="link">link</IntraButton>
-								: <Button variant="danger" disabled={unlinkIntraMutation.isPending} class="unlink-intra-button" size="sm" onClick={unlinkIntra}>unlink</Button>}
+				<div class="setting-field-value">
+					<div class="connexion">
+						<div>
+							<Logo42 /><span class="connexion-name">42's Intra</span>
 						</div>
+						{user().intraId === null
+							? <IntraButton unstyled size="sm" linkType="link">link</IntraButton>
+							: <Button variant="danger" disabled={unlinkIntraMutation.isPending} class="unlink-intra-button" size="sm" onClick={unlinkIntra}>unlink</Button>}
 					</div>
 				</div>
-			</div>}
-		</Show>
+			</div>
+		</div>
 	</section>;
 }

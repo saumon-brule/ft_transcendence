@@ -36,17 +36,17 @@ export function BestResult(props: BestResultProps) {
 			<Match when={best.item instanceof Artist && best.item}>{(artist) => <>
 				<ArtistAvatar artist={artist()}/>
 				<div class="info">
-					<A href={`/provider/${artist().providerUuid}/artist/${artist().uuid}`} class="white-variant name">{artist().name}</A>
-					<p>From <A href={`/provider/${artist().providerUuid}`}>{best.providerName}</A></p>
+					<A href={`/provider/${artist().provider.uuid}/artist/${artist().uuid}`} class="white-variant name">{artist().name}</A>
+					<p>From <A href={`/provider/${artist().provider.uuid}`}>{best.providerName}</A></p>
 				</div>
 			</>}</Match>
 			<Match when={best.item instanceof Album && best.item}>{(album) => <>
 				<AlbumCover album={album()}/>
 				<div class="info">
-					<A href={`/provider/${album().providerUuid}/album/${album().uuid}`} class="white-variant name">{album().name}</A>
-					<div class="artist">Album • <ArtistsLinks artists={album().artists} providerUUID={album().providerUuid}/></div>
+					<A href={`/provider/${album().provider.uuid}/album/${album().uuid}`} class="white-variant name">{album().name}</A>
+					<div class="artist">Album • <ArtistsLinks artists={album().artists} providerUUID={album().provider.uuid}/></div>
 					<Show when={album().publishedAt} keyed>{(albumDate) => <div class="date">Sorti le {toDate(albumDate).toLocaleDateString()}</div>}</Show>
-					<p>From <A href={`/provider/${album().providerUuid}`}>{best.providerName}</A></p>
+					<p>From <A href={`/provider/${album().provider.uuid}`}>{best.providerName}</A></p>
 				</div>
 			</>}</Match>
 			<Match when={best.item instanceof Music && best.item}>{(music) => <>

@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { providerPermissions } from "@flex/shared";
 import { PrismaService } from "../../prisma/prisma.service";
 import type { AuthenticatedRequest } from "../auth.types";
+import { resolvePermissions } from "../permissions";
 import { AppForbiddenException } from "../../error/forbidden";
 
 @Injectable()
@@ -30,12 +30,11 @@ export class MemberGuard implements CanActivate {
 		});
 		const isOwner = ownerUuid === member.uuid;
 		const granted = new Set(member.roles.flatMap((r) => r.role.permissions.map((p) => p.permission)));
-		const hasEverything = isOwner || granted.has("ADMIN");
 
 		request.member = {
 			uuid: member.uuid,
 			isOwner,
-			permissions: providerPermissions.filter((p) => hasEverything || granted.has(p)),
+			permissions: resolvePermissions(isOwner, granted),
 			roles: member.roles.map((r) => ({ uuid: r.role.uuid, name: r.role.name })),
 		};
 		return true;

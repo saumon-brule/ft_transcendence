@@ -1,8 +1,9 @@
 import { Controller } from "@nestjs/common";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 import { providerContract } from "@flex/shared";
+import type { CurrentUserData } from "../core/auth/auth.types";
 import { InfoService } from "./info.service";
-import { Authenticated, MemberOnly } from "../core/auth/auth.decorators";
+import { Authenticated, CurrentUser, MemberOnly } from "../core/auth/auth.decorators";
 
 @Controller()
 export class InfoController {
@@ -10,10 +11,10 @@ export class InfoController {
 
 	@TsRestHandler(providerContract.info.info)
 	@Authenticated()
-	get() {
+	get(@CurrentUser() user: CurrentUserData) {
 		return tsRestHandler(providerContract.info.info, async () => ({
 			status: 200,
-			body: await this.infoService.get(),
+			body: await this.infoService.getWithMember(user.userUuid),
 		}));
 	}
 

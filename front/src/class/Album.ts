@@ -1,5 +1,6 @@
-import { buildMediaUrl, ProviderDataAlbumDto } from "@flex/shared";
+import { buildMediaUrl, Provider, ProviderDataAlbumDto, providerSchema } from "@flex/shared";
 import { albumItemSchema } from "@flex/shared";
+import { Artist } from "./Artist";
 import z from "zod";
 
 export class Album {
@@ -7,26 +8,27 @@ export class Album {
 		public readonly uuid: string,
 		public readonly name: string,
 		public readonly hasCover: boolean,
-		public readonly artists: { uuid: string; name: string; hasAvatar: boolean }[],
+		public readonly artists: Artist[],
 		public readonly publishedAt: Date | null,
-		public providerUuid: string,
-		public providerUrl: string,
+		public provider: Provider,
 	) {}
 
 	public coverUrl(token: string) {
-		return buildMediaUrl(this.providerUrl, "albumCover", this.uuid, token);
+		return buildMediaUrl(this.provider.address, "albumCover", this.uuid, token);
 	}
 
-	public static fromRawObject(this: void, rawAlbumObject: ProviderDataAlbumDto, providerUrl: string, providerUuid: string): Album {
-		const album = { ...rawAlbumObject } as Album;
+	public static fromRawObject(this: void, rawAlbumObject: ProviderDataAlbumDto, provider: Provider): Album {
+		const album = {
+			...rawAlbumObject,
+			artists: rawAlbumObject.artists.map((rawArtist) => Artist.fromRawObject(rawArtist, provider)),
+		} as Album;
 		Object.setPrototypeOf(album, Album.prototype);
-		album.providerUrl = providerUrl;
-		album.providerUuid = providerUuid;
+		album.provider = provider;
 		return album;
 	}
 
 	public static zodSchema = albumItemSchema.extend({
-		providerUrl: z.string(),
-		providerUuid: z.string(),
-	}).transform(({ providerUrl, providerUuid, ...album }): Album => Album.fromRawObject(album, providerUrl, providerUuid));
+		provider: providerSchema,
+		artists: z.array(Artist.zodSchema),
+	}).transform(({ provider, ...album }): Album => Album.fromRawObject(album, provider));
 }

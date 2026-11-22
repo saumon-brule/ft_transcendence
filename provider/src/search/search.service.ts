@@ -68,7 +68,6 @@ type Sort = NonNullable<ReturnType<typeof sortOf>>;
 const FUZZY_DISTANCES = [
 	{ minLength: 3, distance: 1 },
 	{ minLength: 6, distance: 2 },
-	{ minLength: 8, distance: 3 },
 ];
 const MIN_RELATIVE_SCORE = 0.2;
 

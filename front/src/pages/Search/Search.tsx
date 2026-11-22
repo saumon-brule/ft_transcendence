@@ -2,7 +2,7 @@ import { A, useLocation, useParams } from "@solidjs/router";
 import { createEffect, createMemo, createSignal, Match, on, Show, Switch } from "solid-js";
 import { type SearchSort, useProvidersSearchQueries } from "~/api/queryHooks/providerInfo";
 import "./Search.scss";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 import { For } from "solid-js";
 import MusicSection from "~/components/ui/MusicSection/MusicSection";
 import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
@@ -31,11 +31,10 @@ export type Tab = typeof TABS[number];
 
 export default function Search() {
 	const params = useParams<{ search: string }>();
-	const profileQuery = useMeProfileQuery();
+	const me = useProfile();
 
 	const providers = createMemo(() => {
-		const body = profileQuery.data?.body;
-		if (!body) return [];
+		const body = me();
 		const all = [...body.ownedProviders, ...body.connectedProviders];
 		return all.filter((provider, i) => all.findIndex((p) => p.uuid === provider.uuid) === i);
 	});
@@ -136,14 +135,14 @@ export default function Search() {
 			if (organizedData.albums[0]) {
 				organizedData.best = {
 					item: organizedData.albums[0],
-					providerName: organizedData.providers.find((p) => p.uuid === organizedData.albums[0].providerUuid)?.name ?? "",
+					providerName: organizedData.providers.find((p) => p.uuid === organizedData.albums[0].provider.uuid)?.name ?? "",
 				};
 			}
 		} else if (bestScores.artists > 0) {
 			if (organizedData.artists[0]) {
 				organizedData.best = {
 					item: organizedData.artists[0],
-					providerName: organizedData.providers.find((p) => p.uuid === organizedData.artists[0].providerUuid)?.name ?? "",
+					providerName: organizedData.providers.find((p) => p.uuid === organizedData.artists[0].provider.uuid)?.name ?? "",
 				};
 			}
 		}

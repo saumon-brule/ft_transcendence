@@ -1,16 +1,25 @@
 import { createResource } from "solid-js";
 import { initQueryClient } from "@ts-rest/solid-query";
 import { providerContract, providerError401Schema } from "@flex/shared";
-import { ApiFetcher, tsRestFetchApi } from "@ts-rest/core";
+import { ApiFetcher, ApiFetcherArgs, tsRestFetchApi } from "@ts-rest/core";
 import { summonWarningToast } from "~/components/ui/Toaster";
 import { t } from "~/i18n/context";
 import { queryKeyFromContract } from "./utils/queryKeys";
 import { z } from "zod";
 import { doproviderRefresh } from "./doRefresh";
 import { providerTokens, authActions } from "~/store/auth.store";
+import { xhrFetchApi } from "./xhrUtils";
 
-const createFetchWithRefresh = (providerUuid: string): ApiFetcher => async (args) => {
+type ExtraArgs = { onUploadProgress?: (ratio: number) => void };
+
+const createFetchWithRefresh = (providerUuid: string) => async (args: ApiFetcherArgs & ExtraArgs): ReturnType<ApiFetcher> => {
 	if (args.route === providerContract.info.health) return tsRestFetchApi(args);
+
+	const doFetch = (a: ApiFetcherArgs) => (
+		args.onUploadProgress
+			? xhrFetchApi(a, args.onUploadProgress)
+			: tsRestFetchApi(a)
+	);
 
 	let token = providerTokens[providerUuid];
 	if (!token) {
@@ -26,7 +35,7 @@ const createFetchWithRefresh = (providerUuid: string): ApiFetcher => async (args
 		},
 	});
 
-	const response = await tsRestFetchApi(withToken(token));
+	const response = await doFetch(withToken(token));
 
 	if (response.status === 429) {
 		summonWarningToast(() => t("errors.rateLimit"));
@@ -45,7 +54,7 @@ const createFetchWithRefresh = (providerUuid: string): ApiFetcher => async (args
 		return response;
 	}
 
-	return tsRestFetchApi(withToken(accessToken));
+	return doFetch(withToken(accessToken));
 };
 
 const createProviderClient = (providerUrl: string, providerUuid: string) => ({
@@ -58,7 +67,7 @@ const createProviderClient = (providerUrl: string, providerUuid: string) => ({
 	mediaToken: { token: "", expiresAt: new Date(0) },
 });
 
-type ProviderClient = ReturnType<typeof createProviderClient>;
+export type ProviderClient = ReturnType<typeof createProviderClient>;
 
 const providerClientsMap = new Map<string, ProviderClient>();
 

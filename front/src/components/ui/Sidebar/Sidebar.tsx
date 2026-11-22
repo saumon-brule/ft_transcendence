@@ -1,6 +1,6 @@
 import { A, useLocation, useNavigate } from "@solidjs/router";
 import "./Sidebar.scss";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 import { createEffect, createSignal, For, on, Show } from "solid-js";
 import { isSidebarOpen, sidebarActions } from "~/store/sidebar.store";
 import ProviderCard from "../ProviderCard/ProviderCard";
@@ -10,8 +10,8 @@ import PlaylistCard, { NewPlaylistCard } from "../PlaylistCard/PlaylistCard";
 import { summonNewPlaylistPopUp } from "~/pages/Playlists/popUps/newPlaylistPopUp";
 
 export default function Sidebar() {
-	const profileQuery = useMeProfileQuery();
-	const providers = () => profileQuery.data?.body ? [...profileQuery.data.body.ownedProviders, ...profileQuery.data.body.connectedProviders] : [];
+	const me = useProfile();
+	const providers = () => [...me().ownedProviders, ...me().connectedProviders];
 	const playlistsQuery = usePlaylistsQuery();
 	const playlists = () => playlistsQuery.data
 		? [

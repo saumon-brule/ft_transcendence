@@ -30,9 +30,9 @@
 	--button-primary-text: var(--neutral-0);
 
 	--button-ghost-background: var(--background-overlay);
-	--button-ghost-background-hover: var(--background-overlay);
-	--button-ghost-background-active: var(--background-overlay);
-	--button-ghost-background-disabled: var(--background-overlay);
+	--button-ghost-background-hover: var(--neutral-600);
+	--button-ghost-background-active: var(--background-card);
+	--button-ghost-background-disabled: color-mix(in oklab, var(--background-overlay) 40%, var(--mix-disabled));
 	--button-ghost-text: var(--text-primary);
 
 	--button-danger-background: var(--background-danger);

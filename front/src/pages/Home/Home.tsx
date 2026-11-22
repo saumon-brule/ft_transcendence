@@ -7,13 +7,13 @@ import { history } from "~/store/history.store";
 import "./Home.scss";
 import { Music } from "~/class/Music";
 import MusicCard from "~/components/ui/MusicCard";
-import { useMeProfileQuery } from "~/api/queryHooks/meProfile";
+import { useProfile } from "~/components/guards/ProfileGate";
 import { Playlist } from "~/class/Playlist";
 import PlaylistCard from "~/components/ui/PlaylistCard/PlaylistCard";
 
 export default function Home() {
-	const profile = useMeProfileQuery();
-	const providers = () => profile.data?.body ? [...profile.data.body.ownedProviders, ...profile.data.body.connectedProviders] : [];
+	const me = useProfile();
+	const providers = () => [...me().ownedProviders, ...me().connectedProviders];
 
 	return <div id="home" class="page">
 		<Show when={history.top().length + history.last().length === 0}>

@@ -142,6 +142,7 @@ export default {
 	},
 	errors: {
 		rateLimit: "Euh... Bro tu vas trop vite là !",
+		noPermission: "T'as pas la permission de faire ça",
 		unavailableFtApi: "We are not currently able to reach 42's API",
 		unknownFallback: "Une erreur s'est produite, réessayez plus tard",
 		profileUnavailable: "Impossible de charger ton profil",
@@ -178,6 +179,10 @@ export default {
 				search: {
 					valueMissing: "FR: Please enter a research",
 					typeMismatch: "FR: Please enter a valid research",
+				},
+				date: {
+					valueMissing: "Veuillez entrer une date",
+					typeMismatch: "Veuillez entrer une date valide",
 				},
 			},
 		},

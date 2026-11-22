@@ -60,7 +60,7 @@ const history = {
 					}
 
 					for (const raw of album.artists) {
-						bumpArtist(s, Artist.fromRawObject(raw, album.providerUrl, album.providerUuid), 0.7, false);
+						bumpArtist(s, Artist.fromRawObject(raw, album.provider), 0.7, false);
 					}
 				}),
 			);
@@ -106,7 +106,7 @@ const history = {
 					}
 
 					for (const raw of music.artists) {
-						bumpArtist(s, Artist.fromRawObject(raw, music.provider.address, music.provider.uuid), 0.1, false);
+						bumpArtist(s, Artist.fromRawObject(raw, music.provider), 0.1, false);
 					}
 				}),
 			);

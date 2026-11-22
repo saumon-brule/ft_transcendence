@@ -1,10 +1,11 @@
-import { createEffect, For, type JSX, on, onCleanup, onMount } from "solid-js";
+import { createEffect, createMemo, For, type JSX, on, onCleanup, onMount } from "solid-js";
 import Button from "~/components/inputs/Button";
 import "./Tabs.scss";
 
 type TabsProps<T extends string> = {
 	tabs: readonly T[];
 	value: T;
+	exclude?: readonly T[];
 	onChange: (tab: T) => void;
 	label?: (tab: T) => JSX.Element;
 	class?: string;
@@ -12,6 +13,9 @@ type TabsProps<T extends string> = {
 
 export default function Tabs<T extends string>(props: TabsProps<T>) {
 	let nav!: HTMLElement;
+	const tabs = createMemo(() => {
+		return props.tabs.filter((t) => !props.exclude?.includes(t));
+	});
 
 	const updateIndicator = () => {
 		const selected = nav.querySelector<HTMLElement>("[aria-selected=true]");
@@ -27,7 +31,7 @@ export default function Tabs<T extends string>(props: TabsProps<T>) {
 	});
 
 	return <nav class={`tabs ${props.class ?? ""}`} role="tablist" ref={nav}>
-		<For each={props.tabs}>
+		<For each={tabs()}>
 			{(tab) => <Button
 				type="button"
 				role="tab"
