@@ -9,6 +9,7 @@ import TextInput from "~/components/inputs/TextInput";
 import { summonPopUp } from "~/components/ui/overlays/Overlay";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/feedback/Toaster";
 import { validateFromZod } from "~/utils/validateFromZod";
+import { validateProviderAddress } from "~/utils/validateProviderAddress";
 import { t } from "~/i18n/context";
 import { summonProviderKeyPopUp } from "./providerKeyPopUp";
 
@@ -49,7 +50,7 @@ export const summonNewProviderPopUp = (onClose?: () => void) => summonPopUp((pop
 		<h2>{t("pages.providers.newPopUp.title")}</h2>
 		<div class="pop-up-inputs">
 			<TextInput ref={(e) => nameInput = e.htmlElement} name="providerName" placeholder={t("pages.providers.namePlaceholder")} type="text" validator={(e) => validateFromZod(createProviderSchema.shape.name, e.value)} required/>
-			<TextInput ref={(e) => addressInput = e.htmlElement} name="providerAddress" placeholder={t("pages.providers.addressPlaceholder")} type="url" validator={(e) => validateFromZod(createProviderSchema.shape.address, e.value)} required/>
+			<TextInput ref={(e) => addressInput = e.htmlElement} name="providerAddress" placeholder={t("pages.providers.addressPlaceholder")} type="url" validator={(e) => validateProviderAddress(e.value)} required/>
 		</div>
 		<div class="pop-up-buttons">
 			<Button type="button" onClick={popUpControls.close} variant="text" size="md">{t("common.cancel")}</Button>

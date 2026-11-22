@@ -645,6 +645,18 @@ export default {
 		profileUnavailable: "Impossible de charger ton profil",
 		retry: "Réessayer",
 		input: {
+			providerAddress: {
+				invalid: "Veuillez entrer une adresse http:// ou https://, sans identifiant ni mot de passe",
+				httpsRequired: "L'adresse doit commencer par https://",
+			},
+			password: {
+				tooShort: "Le mot de passe doit contenir au moins {{min}} caractères",
+				needsLowercase: "Le mot de passe doit contenir une minuscule",
+				needsUppercase: "Le mot de passe doit contenir une majuscule",
+				needsDigit: "Le mot de passe doit contenir un chiffre",
+				needsSpecial: "Le mot de passe doit contenir un caractère spécial",
+				tooLong: "Le mot de passe est trop long ({{max}} octets maximum)",
+			},
 			select: {
 				valueMissing: "Veuillez sélectionner une option",
 			},

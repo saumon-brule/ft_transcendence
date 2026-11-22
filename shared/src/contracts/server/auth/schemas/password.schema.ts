@@ -8,9 +8,9 @@ export const PasswordSchema = z.string().
 	regex(/[a-z]/, { message: "PASSWORD_NEEDS_LOWERCASE" }).
 	regex(/[A-Z]/, { message: "PASSWORD_NEEDS_UPPERCASE" }).
 	regex(/\d/, { message: "PASSWORD_NEEDS_DIGIT" }).
-	regex(/[^A-Za-z0-9]/, { message: "PASSWORD_NEDDS_SPECIAL" }).
+	regex(/[^A-Za-z0-9]/, { message: "PASSWORD_NEEDS_SPECIAL" }).
 	refine((v) => new TextEncoder().encode(v).length <= PASSWORD_MAX_BYTES, {
-		message: "PASSWOWRD_TOO_LONG",
+		message: "PASSWORD_TOO_LONG",
 	});
 
 export const changePasswordSchema = z.object({

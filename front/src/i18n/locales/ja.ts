@@ -643,6 +643,18 @@ export default {
 		profileUnavailable: "プロフィールを読み込めませんでした",
 		retry: "再試行",
 		input: {
+			providerAddress: {
+				invalid: "ユーザー名やパスワードを含まない http:// または https:// のアドレスを入力してください",
+				httpsRequired: "アドレスは https:// で始まる必要があります",
+			},
+			password: {
+				tooShort: "パスワードは{{min}}文字以上である必要があります",
+				needsLowercase: "パスワードには小文字を含める必要があります",
+				needsUppercase: "パスワードには大文字を含める必要があります",
+				needsDigit: "パスワードには数字を含める必要があります",
+				needsSpecial: "パスワードには記号を含める必要があります",
+				tooLong: "パスワードが長すぎます（最大{{max}}バイト）",
+			},
 			select: {
 				valueMissing: "値を選択してください",
 			},

@@ -69,7 +69,9 @@ export class AuthService {
 
 		this.logger.log(LogBuilder.auth.registration(dto.email, insertedUser.uuid));
 
-		await this.sendEmailValidation(insertedUser);
+		try {
+			await this.sendEmailValidation(insertedUser);
+		} catch (_) {}
 
 		return {
 			accessToken: await this.generateAccessToken(insertedUser.uuid, insertedUser.emailValidated),

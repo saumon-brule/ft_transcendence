@@ -5,6 +5,7 @@ set -e
 cd "$(dirname "$0")/../.."
 
 mkdir -p back/uploads/avatars back/uploads/cover
+mkdir -p /tmp/flex-db
 docker compose -f scripts/dev/docker-compose.yml up -d --wait
 
 pnpm --filter @flex/back exec prisma generate
