@@ -7,7 +7,7 @@ import { REM } from "~/utils/constants";
 
 import "./Controller.scss";
 
-function getProgressionPourcent(progressBar: HTMLDivElement, mouseX: number) {
+export function getProgressionPourcent(progressBar: HTMLDivElement, mouseX: number) {
 	const { left, width } = progressBar.getBoundingClientRect();
 	const elementMouseX = mouseX - left;
 
