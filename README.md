@@ -1,26 +1,25 @@
-*This project has been created as part of the 42 curriculum by <login1>, <login2>, <login3>, <login4>.*
-<!-- TODO: replace with the 42 logins of the four team members (Erwoan, Liam, Emilien, Vadim) -->
+*This project has been created as part of the 42 curriculum by lilefebv, ebini, ethebaul, vaamonch.*
 
 # Flex — ft_transcendence
 
 ## Description
 
-**Flex** is a music streaming platform where the music is not hosted by one central server.
-Anyone can run their own **provider**: a small self-hosted server that owns a music catalog (songs, albums, artists, covers, audio files) and decides who may listen to it.
-The Flex **server** ties everything together: it handles accounts, friends, chat, playlists, and tells the browser which providers a user can reach.
-A playlist can mix songs coming from several providers, and the browser talks directly to each provider to stream them.
-
-The goal is a social music experience (profiles, friends, live presence, chat, shared playlists) on top of an architecture where catalog owners keep control of their content.
+Flex is a music streaming website where the music is not stored on one central server.
+Anyone can run a **provider**: a small server that holds a music catalog (songs, albums, artists, covers, audio files) and chooses who can listen to it.
+The Flex server manages the accounts, friends, chat and playlists, and tells the browser which providers a user can use.
+A playlist can mix songs from several providers, and the browser plays each song directly from its provider.
 
 ### Key features
 
-- Account system with email/password, email verification and **42 OAuth** login, refresh-token sessions.
-- Profiles with avatar, "currently listening" status, and friends with **live online presence**.
-- **Ephemeral real-time chat** between friends and real-time friend events over WebSockets.
-- Playlists: create, rename, public/private, custom cover, delete, follow other people's playlists.
-- **Self-hosted providers** with their own catalog, members, roles and permissions, and an access request flow (public or approval-based).
-- Search with filters and pagination, audio player with queue, listening history.
-- Hardened Docker deployment (read-only containers, Docker secrets, HTTPS), CI on every pull request.
+- Full account system, 42 OAuth, and email verification / account recovery.
+- Profiles with avatar, friends and online presence.
+- Ephemeral chat between friends.
+- Playlists: create, rename, public/private, custom cover, delete, follow the public playlists of other users.
+- Self hosted providers with your own catalog, members, permissions and access management.
+- Search with filters, sort and infinite scroll.
+- Audio player with queue and listening history.
+- Public API with a personal API key.
+- Docker deployment (read-only containers, Docker secrets, HTTPS), CI on every pull request.
 
 ## Instructions
 
@@ -58,7 +57,7 @@ Existing files are never overwritten. Test accounts are seeded in `dev` only.
 
 ### Run a provider (database, migrations, provider, nginx)
 
-Create the provider on the server first (from the *Providers* page): it gives the API key, shown once.
+Create the provider on the app first (from the *Providers* page): it gives the API key, shown once.
 
 ```bash
 cp provider/.env.example provider/.env        # FLEX_SERVER_URL, POSTGRES_*
@@ -67,17 +66,14 @@ make provider           # docker compose -f provider/docker-compose.yml up -d --
 ```
 
 The provider is served in HTTPS by its own nginx on `PROVIDER_PORT` (443 by default, to change if the server runs on the same machine); `PROVIDER_HTTP_PORT` (80) redirects to `PROVIDER_URL`, its public address; `tls.crt` and `tls.key` work like the server's.
-`secrets/server_ca.crt` is the certificate (or CA) of the server, trusted by the provider when it calls it: the generator
-copies the server's self-signed certificate if `secrets/tls.crt` exists.
+`secrets/server_ca.crt` is the certificate (or CA) of the server, trusted by the provider when it calls it: the generator copies the server's self-signed certificate if `secrets/tls.crt` exists.
 
-`FLEX_SERVER_URL` must be reachable from the container and end with `/api` when it targets the Docker front
-(`https://host.docker.internal:<FRONT_PORT>/api` for a server on the same machine).
+`FLEX_SERVER_URL` must be reachable from the container and end with `/api` when it targets the Docker front (`https://host.docker.internal:<FRONT_PORT>/api` for a server on the same machine).
 The `provider` URL registered on the server is the one browsers use to reach it (`https://…`), not a container name.
 
 `make server-down` / `provider-down` stop a stack (the volumes are kept), `server-logs` / `provider-logs` follow its logs.
 
-**Several providers on one machine.** `make provider NAME=1` runs a second provider next to the default one: its own Docker project (`flex-provider-1`, so its own
-database volume), its settings in `provider/.env.1` (copy `provider/.env.example` and change `PROVIDER_PORT`,
+**Several providers on one machine.** `make provider NAME=1` runs a second provider next to the default one: its own Docker project (`flex-provider-1`, so its own database volume), its settings in `provider/.env.1` (copy `provider/.env.example` and change `PROVIDER_PORT`,
 `PROVIDER_HTTP_PORT` and `PROVIDER_URL`) and its secrets in `provider/secrets.1` (`make secrets-provider NAME=1`, then put the
 API key of this provider in `flex_api_key`). `NAME` works the same way with `provider-down`, `provider-logs`, `provider-seed`
 and `provider-reset`. Without `NAME`, they act on the default provider.
@@ -86,8 +82,8 @@ and `provider-reset`. Without `NAME`, they act on the default provider.
 
 ```bash
 pnpm install        # every package of the workspace
-make run            # database in Docker (docker-compose.dev.yml) + back and front with hot reload
-make provider       # a provider (optional)
+make dev            # database in Docker (docker-compose.dev.yml) + back and front with hot reload
+make provider1      # a provider with a mock catalog (optional)
 ```
 
 `pnpm run dev:front` starts the front end only. The back and the provider read `shared/src` directly in development (`paths` in their `tsconfig.json`), so `shared` does not need to be built to run them.
@@ -96,118 +92,94 @@ make provider       # a provider (optional)
 
 ### Hardening and logs
 
-Every container drops all Linux capabilities (Postgres keeps the few it needs to start), cannot gain new privileges and has a
-read-only filesystem: only the volumes and a `/tmp` in memory are writable. Docker logs are rotated (3 files of 10 MB).
+Every container drops all Linux capabilities (Postgres keeps the few it needs to start), cannot gain new privileges and has a read-only filesystem: only the volumes and a `/tmp` in memory are writable. Docker logs are rotated (3 files of 10 MB).
 CI builds the three images and starts the server stack (`docker-stack` job) on each pull request.
 
 ## Resources
 
-- [NestJS](https://docs.nestjs.com), [Prisma](https://www.prisma.io/docs), [PostgreSQL](https://www.postgresql.org/docs/16/), [ParadeDB](https://docs.paradedb.com)
-- [SolidJS](https://docs.solidjs.com), [TanStack Query](https://tanstack.com/query/v4), [Vite](https://vite.dev)
-- [ts-rest](https://ts-rest.com) (typed contracts shared by the back, the provider and the front), [Zod](https://zod.dev)
-- [Socket.IO](https://socket.io/docs/v4/), [OAuth 2.0 (RFC 6749)](https://datatracker.ietf.org/doc/html/rfc6749), [42 API documentation](https://api.intra.42.fr/apidoc)
-- [JSON Web Tokens (RFC 7519)](https://datatracker.ietf.org/doc/html/rfc7519), [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org)
-- [Docker secrets](https://docs.docker.com/compose/how-tos/use-secrets/), [Docker Compose](https://docs.docker.com/compose/)
+- [NestJS](https://docs.nestjs.com), [SolidJS](https://docs.solidjs.com), [Prisma](https://www.prisma.io/docs), [PostgreSQL](https://www.postgresql.org/docs/16/), [ParadeDB](https://docs.paradedb.com)
+- [ts-rest](https://ts-rest.com), [Zod](https://zod.dev), [TanStack Query](https://tanstack.com/query/v4), [Socket.IO](https://socket.io/docs/v4/)
+- [OAuth 2.0 (RFC 6749)](https://datatracker.ietf.org/doc/html/rfc6749), [JWT (RFC 7519)](https://datatracker.ietf.org/doc/html/rfc7519), [42 API](https://api.intra.42.fr/apidoc), [OWASP Cheat Sheets](https://cheatsheetseries.owasp.org)
 
 ### Use of AI
 
-<!-- TODO: each team member must complete this section with their own real usage -->
-AI assistants (Claude Code) were used as a pair-programming and review tool, never as the only author of a change: every change was read, tested and committed by a team member.
-They were used for:
+We used AI assistants (such as Claude Code) as a help, not as a replacement: every change was read, tested and committed by a team member.
 
-- reviewing branches and pull requests (spotting bugs, missing error handling, security issues);
-- implementing and refactoring parts of the real-time layer (friend events, ephemeral chat, token renewal over WebSocket), the playlist edition (rename, privacy, cover, delete) and some front pages;
-- diagnosing production-like problems from logs (rate limiting, OAuth errors);
-- drafting this README from the code and the subject.
+- **Tasks:** code review and bug hunting, writing and refactoring code, explaining the stack (NestJS, SolidJS, Prisma, ts-rest) and writing documentation.
+- **Parts of the project:** the real-time layer (chat, friends, presence), playlists, provider management, search (sorting, infinite scroll), and this README.
 
 ## Team
 
 | Member | Role(s) | Responsibilities |
 | --- | --- | --- |
-| Erwoan | Product Owner, Developer | Defines the product vision and priorities, maintains the backlog, validates finished work. |
-| Liam | Project Manager / Scrum Master, Developer | Organizes meetings and planning, tracks progress and deadlines, removes blockers. |
-| Emilien | Technical Lead / Architect, Developer | Defines the architecture and the technology stack, ensures code quality, reviews critical changes. |
-| Vadim | Developer | Implements features and modules, takes part in code reviews, tests and documents his work. |
-
-<!-- TODO: check that the roles match reality (docs/roles.md) and add the 42 logins -->
-
-All members also write code, take part in reviews and test their work.
+| Erwoan (ethebaul) | Product Owner, Developer | Decides what the product should do and in which order, keeps the backlog, validates finished work. |
+| Liam (lilefebv) | Project Manager, Developer | Organizes the meetings and the planning, follows progress and deadlines, helps unblock the others. |
+| Emilien (ebini) | Technical Lead, Developer | Chooses the architecture and the technologies, takes care of code quality, reviews the important changes. |
+| Vadim (vaamonch) | Developer | Builds and tests features and modules, and documents them. |
 
 ## Project management
 
-- **Organization:** work is split in issues, one branch per issue (`<issue number>-<short-name>`), merged through pull requests reviewed by another member.
-- **Tools:** GitHub Issues and Pull Requests, GitHub Actions for the checks (lint, type-check and Docker build on every pull request, see `.github/workflows`).
-- **Communication:** <!-- TODO: Discord / Slack / meetings, frequency --> to be completed.
+- **Organization:** one GitHub issue and one branch per task (`<issue number>-<name>`), merged with a pull request that another member reviews.
+- **Tools:** GitHub Issues and Pull Requests, GitHub Actions (lint, type-check and Docker build on every pull request).
+- **Communication:** a Discord server for everyday discussions, and meetings in person at the campus.
 
 ## Technical stack
 
 | Part | Technologies |
 | --- | --- |
-| Front end | [SolidJS](https://www.solidjs.com) + TypeScript, Vite, [@solidjs/router](https://github.com/solidjs/solid-router), TanStack Query, Sass, lucide icons, socket.io-client |
-| Back end (server) | [NestJS](https://nestjs.com) 11 + TypeScript, Passport/JWT, Socket.IO gateway, Prisma 7, sharp (images), Nodemailer, Winston, Swagger |
-| Provider | NestJS, Prisma, music-metadata (audio tags), image-size, multer (uploads) |
-| Shared | `shared` package: [ts-rest](https://ts-rest.com) contracts and [Zod](https://zod.dev) schemas used by the three apps |
-| Databases | PostgreSQL 16 for the server, [ParadeDB](https://www.paradedb.com) (PostgreSQL with full-text search) for the providers |
-| Infrastructure | Docker Compose, nginx (HTTPS, reverse proxy), Docker secrets, GitHub Actions, pnpm workspace |
+| Front end | [SolidJS](https://www.solidjs.com), TypeScript, Vite, TanStack Query, Sass, lucide icons, socket.io-client |
+| Server | [NestJS](https://nestjs.com) 11, Passport / JWT, Socket.IO, Prisma 7, sharp, Nodemailer, Swagger |
+| Provider | NestJS, Prisma, music-metadata, multer |
+| Shared | `shared` package: [ts-rest](https://ts-rest.com) contracts and [Zod](https://zod.dev) schemas used by the three applications |
+| Databases | PostgreSQL 16 (server), [ParadeDB](https://www.paradedb.com) = PostgreSQL with ranked full-text search (providers) |
+| Infrastructure | Docker Compose, nginx (HTTPS), Docker secrets, GitHub Actions, pnpm workspace |
 
-### Justification of the main choices
-
-- **A monorepo with a shared contract package.** The three applications talk to each other (front ↔ back, front ↔ provider, provider ↔ back). ts-rest + Zod give one definition of each route that types the client, validates the server and the responses, and generates the OpenAPI documentation, so the apps cannot drift apart.
-- **NestJS** for the back and the provider: modules, dependency injection, guards and interceptors fit an API with several authentication levels (user JWT, provider API key, provider-scoped access tokens).
-- **SolidJS** for the front: fine-grained reactivity avoids re-rendering while the player, the presence dots and the chat update many times per second, with a small runtime.
-- **Prisma** as ORM: typed queries and versioned migrations for both databases.
-- **PostgreSQL**: relational data (users, friends, playlists, memberships) with integrity constraints. The providers use ParadeDB for ranked full-text search over their catalog.
-- **Socket.IO** for presence, chat and friend events: rooms per user, automatic reconnection, typed events shared through `shared`.
+**Why these choices.** The three applications talk to each other, so we put the routes in one shared package (ts-rest + Zod). It types the clients, validates the servers and generates the API documentation, so they cannot get out of sync.
+NestJS gives us modules, guards and interceptors, which helps with an API that has several kinds of authentication (user token, provider API key, provider token). SolidJS is light and fast to update, which suits a player, presence dots and a chat that change all the time.
+We use a relational database for users, friendships, playlists and memberships. ParadeDB (PostgreSQL with full-text search) gives the providers a ranked search that tolerates typos.
 
 ## Database schema
 
-### Server database
+### Server database (PostgreSQL)
 
 ```mermaid
 erDiagram
     User ||--o{ Session : has
     User ||--o{ Token : has
+    User ||--o{ FriendRequest : "sends / receives"
+    User ||--o{ Playlist : owns
     User ||--o{ Provider : owns
     User ||--o{ ProviderUser : "member of"
-    Provider ||--o{ ProviderUser : has
     User ||--o{ ProviderAccessRequest : asks
+    Provider ||--o{ ProviderUser : has
     Provider ||--o{ ProviderAccessRequest : receives
-    User ||--o{ Playlist : owns
-    User ||--o{ UserPlaylist : follows
-    Playlist ||--o{ UserPlaylist : "followed by"
     Playlist ||--o{ PlaylistMusic : contains
-    Provider ||--o{ PlaylistMusic : "serves"
-    User ||--o{ FriendRequest : "sends / receives"
-    Music ||--o{ User : "currently listened by"
+    Provider ||--o{ PlaylistMusic : serves
+    Playlist ||--o{ UserPlaylist : "followed by"
 
     User {
         int id PK
         string uuid UK
         string email UK
-        string password "nullable (42 only)"
+        string password "null for 42 only accounts"
         string username
         bool emailValidated
-        int intraId UK "nullable"
+        int intraId UK "42 account"
         string language
-        datetime listeningUntil
-        bool listeningPrivate
-        datetime avatarUpdatedAt
     }
     FriendRequest {
-        int id PK
         string userUUID FK
         string friendUUID FK
         enum status "PENDING ACCEPTED DENIED"
     }
     Session {
-        int id PK
         string userUUID FK
         string jti
         datetime expiresAt
     }
     Token {
         string token UK
-        enum purpose "EMAIL_VERIFICATION PASSWORD_RESET STATE_42AUTH ..."
+        enum purpose "EMAIL_VERIFICATION PASSWORD_RESET ..."
         datetime expiresAt
     }
     Provider {
@@ -225,7 +197,6 @@ erDiagram
         string providerUUID FK
         string userUUID FK
         enum status "PENDING APPROVED REJECTED"
-        datetime decidedAt
     }
     Playlist {
         string uuid UK
@@ -239,20 +210,14 @@ erDiagram
     }
     PlaylistMusic {
         string playlistUUID FK
-        string musicUUID
+        string musicUUID "song of a provider"
         string providerUUID FK
-    }
-    Music {
-        string uuid UK
-        string title
-        string artist
-        int duration
     }
 ```
 
-`AppConfig` (key/value) stores the 42 application credentials. A song only exists in a provider's catalog: the server stores `PlaylistMusic(musicUUID, providerUUID)` references and a small `Music` cache for the "currently listening" status.
+A song only exists in the catalog of its provider: the server only stores a reference (`musicUUID`, `providerUUID`). `AppConfig` (key / value) holds the 42 application credentials.
 
-### Provider database
+### Provider database (ParadeDB)
 
 ```mermaid
 erDiagram
@@ -262,12 +227,11 @@ erDiagram
     Role ||--o{ MemberRole : "granted to"
     Role ||--o{ RolePermission : has
     Member ||--o{ AccessRequest : decides
-    Member ||--o{ Music : adds
+    Album ||--o{ Music : contains
     Music ||--o{ MusicArtist : has
     Artist ||--o{ MusicArtist : has
     Album ||--o{ AlbumArtist : has
     Artist ||--o{ AlbumArtist : has
-    Album ||--o{ Music : contains
 
     Provider {
         int id PK "always 1"
@@ -277,7 +241,7 @@ erDiagram
         string defaultRoleUuid FK
     }
     Member {
-        string uuid UK "same uuid as the server user"
+        string uuid UK "uuid of the server user"
         datetime revokedAt
     }
     AccessRequest {
@@ -300,6 +264,7 @@ erDiagram
         bool hasAudio
         bool hasCover
         string albumUuid FK
+        datetime publishedAt
     }
     Artist {
         string uuid UK
@@ -309,91 +274,90 @@ erDiagram
     Album {
         string uuid UK
         string name
-        bool hasCover
+        datetime publishedAt
     }
 ```
 
 ## Features
 
-<!-- TODO: fill in the "Who" column with the real contributors of each feature -->
-
 | Feature | Description | Who |
 | --- | --- | --- |
-| Authentication | Email/password with verification email and password reset, 42 OAuth login/link/unlink, short-lived access token + httpOnly refresh cookie (stored sessions). | |
-| Profile & settings | Username, language, avatar upload (resized to WebP) with default avatar, listening privacy. | |
-| Friends & presence | Send/accept/decline/remove requests, live online/offline status through WebSocket. | |
-| Chat | Ephemeral one-to-one chat between online friends, with a shared message contract and error codes. | |
-| Real-time events | Friend requests, acceptances, removals and token renewal pushed over the socket; caches are updated without reloading. | |
-| Playlists | Create, rename, public/private, custom cover, delete with confirmation, follow/unfollow, add or remove songs from any provider. | |
-| Providers | Register a provider, API key (shown once, regenerable), address, members, access requests (automatic for public providers). | |
-| Provider catalog | Songs, albums and artists with audio/cover upload and tag extraction, management restricted by roles. | |
-| Roles & permissions | Per-provider roles (`MANAGE_CATALOG`, `MANAGE_MEMBERS`, `ADMIN`), default role for new members, member revocation. | |
-| Search | Search for users, playlists, providers and catalog content with filters, sorting and pagination (ranked full-text search in providers). | |
-| Player | Queue, shuffle, media session integration, listening history. | |
-| Design system | Reusable inputs, buttons, overlays, toaster, cards, tabs, themed with design tokens. | |
-| Deployment | Docker images, hardened containers, Docker secrets, HTTPS, health check, CI. | |
+| Authentication | Email and password with email verification and password reset, 42 OAuth (login, link and unlink an account), short-lived access token plus a refresh cookie. | Liam |
+| Profile and settings | Change the username, email and password, upload an avatar (there is a default one), choose the language and the light or dark theme. | Emilien |
+| Friends and presence | Send, accept, decline and remove friend requests, see who is online in real time. | Vadim |
+| Chat | Ephemeral chat between online friends. Friend requests and other friend events reach the other user instantly through WebSockets. | Vadim |
+| Playlists | Create, rename, make public or private, set a cover, delete; add and remove songs from any provider; follow and unfollow the public playlists of other users. | Erwoan, Emilien, Liam |
+| Providers | Create, edit and delete a provider, regenerate its API key, access requests that are accepted automatically (public provider) or by a manager. | Erwoan |
+| Provider management | Manage members and roles (`MANAGE_CATALOG`, `MANAGE_MEMBERS`, `ADMIN`), create, edit and delete songs, albums and artists with audio and cover upload. | Liam, Emilien |
+| Search | Search users, playlists, providers and the catalog of all your providers. The catalog can be filtered (song, album, artist, dates), sorted (by column or by provider) and loads more results as you scroll. | Erwoan |
+| Player | Queue, shuffle, repeat, listening history on the home page, browser media controls. | Emilien |
+| Public API | Personal API key, hourly quota, 9 endpoints on the profile and the playlists, Swagger documentation at `/api/swagger`. | Vadim |
+| Deployment | Docker images, hardened containers (no capabilities, read-only filesystem), Docker secrets, HTTPS, health checks and CI. | Erwoan |
 
 ## Modules
 
-<!-- TODO: confirm every module below is really finished before the evaluation -->
+<!-- TODO: add the Spanish locale (front/src/i18n/locales) so that the multiple languages module holds with 3 complete translations -->
 
 Major = 2 points, Minor = 1 point.
 
 | Module | Type | Points | Justification / implementation | Who |
 | --- | --- | --- | --- | --- |
-| Framework for frontend and backend | Major | 2 | SolidJS for the front, NestJS for the back and the provider. | |
-| Users interacting with each other | Major | 2 | Chat, profile pages, friends system with presence. | |
-| Standard user management and authentication | Major | 2 | Profile update, avatar with default, friends and online status, profile page. | |
-| Advanced permissions system | Major | 2 | Roles and permissions per provider (members, roles, `MANAGE_*` permissions, admin), different views and actions according to the role. | |
-| Custom module: decentralized provider architecture | Major | 2 | See below. | |
-| ORM for the database | Minor | 1 | Prisma on both databases, with versioned migrations. | |
-| Custom design system | Minor | 1 | More than ten reusable components (Button, TextInput, Select, Toggle, Form, Overlay/pop-ups, Toaster, Tabs, cards…), colour tokens, typography and icons. | |
-| Advanced search | Minor | 1 | Filters, sorting and pagination on users, playlists, providers and catalog. | |
-| File upload and management | Minor | 1 | Avatars, playlist covers, audio and cover files on providers, with client and server validation of type and size and deletion. | |
-| Multiple languages | Minor | 1 | i18n system with a language switcher. | |
-| Additional browsers | Minor | 1 | Tested on Firefox and Chromium-based browsers. | |
-| OAuth 2.0 remote authentication | Minor | 1 | 42 login, with the possibility to link/unlink an existing account. | |
-| Health check and status | Minor | 1 | `/api/health` and the provider `/health`, shown in the UI as the provider status. | |
+| Framework for frontend and backend | Major | 2 | SolidJS for the front, NestJS for the server and the provider. | Whole team |
+| Users interacting with each other | Major | 2 | Chat, profile pages, friends system with presence. | Emilien, Vadim |
+| Standard user management and authentication | Major | 2 | Profile update, avatar with default, friends and online status, profile page. | Liam, Emilien, Vadim |
+| Advanced permissions system | Major | 2 | Roles and permissions in each provider: manage members and roles, and what a user sees or can do depends on their permissions. | Liam, Emilien |
+| Public API | Major | 2 | Personal API key (stored hashed, sent as a Bearer token), rate limiting and an hourly quota, Swagger documentation, 9 endpoints (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`). | Vadim |
+| Custom module: decentralized providers | Major | 2 | See below. | Erwoan, Liam, Emilien |
+| ORM for the database | Minor | 1 | Prisma on both databases, with migrations. | Erwoan, Liam, Vadim |
+| Custom design system | Minor | 1 | More than ten reusable components (Button, TextInput, Select, Checkbox, Toggle, Form, pop-ups, Toaster, Menu, Tabs, SortBar, cards…), a color palette with light and dark themes, fonts and icons. | Emilien |
+| Advanced search | Minor | 1 | Catalog search with filters, sorting (by column or by provider) and results loaded page by page while scrolling. | Erwoan |
+| File upload and management | Minor | 1 | Avatars, playlist covers, audio and cover files on providers: type and size checks on the front and the back, previews, progress bars, deletion, and access to the files with provider media tokens. | Erwoan, Liam |
+| OAuth 2.0 remote authentication | Minor | 1 | 42 login, and linking or unlinking a 42 account to an existing account. | Liam |
+| Multiple languages | Minor | 1 | Translation system with a language picker. All the texts are translated in English, French and Spanish. | Liam, Emilien |
+| Support for additional browsers | Minor | 1 | Firefox and Chromium-based browsers, see below. | Whole team |
 
-**Total: 18 points** (10 from major modules, 8 from minor modules).
+**Total: 19 points** (12 from the six major modules, 7 from the seven minor modules).
 
-### Custom major module: decentralized provider architecture
+### Custom major module: decentralized providers
 
-- **Why:** a streaming service normally owns its catalog. Here, catalog owners keep their content and decide who may listen, which makes the platform usable for independent artists, labels or friends sharing a collection, and shows a realistic multi-party architecture.
-- **Technical challenges:**
-  - three applications that must trust each other without sharing a database: the server signs short-lived, provider-scoped JWTs (RS256, one audience per provider), and the provider verifies them with the server's public key;
-  - a two-step access protocol (the user asks the server, then the provider checks that request with the server before creating its own), with the provider authenticating to the server with an API key;
-  - a provider is an independent server with its own database, roles, permissions, media storage and migrations, deployable several times on the same machine;
-  - the front aggregates several providers inside a single playlist and refreshes one token per provider.
-- **Added value:** the whole project (playlists, access requests, roles, catalog, search, media) is built around it.
-- **Why Major:** it is a second full back end (catalog, media pipeline, permissions) plus the server-side trust and token infrastructure and the front-end orchestration across origins.
+- **Why:** a streaming service usually owns its whole catalog. Here the owners of the catalogs keep their content and choose who can listen to it. It works for independent artists, labels, or friends who want to share a collection.
+- **Challenges:** three applications have to trust each other without sharing a database.
+  - The server signs short-lived tokens for one provider only (RS256, one audience per provider), and the provider checks them with the server's public key.
+  - Joining a provider takes two steps: the user asks the server, then the provider checks that request with the server before creating its own.
+  - A provider is a server of its own, with its own database, roles, media storage and migrations. You can run several of them on one machine.
+  - The front mixes songs from several providers in the same playlist and keeps one token per provider.
+- **Why it is a major module:** most of the project is built around it (playlists, access requests, roles, catalog, search, media). It is a second full back end (catalog, media, permissions), plus the trust and token system between the applications, plus the front end that works with several providers at once.
+
+### Browser support
+
+The site is used and checked on Firefox and on Chromium-based browsers (Chromium, Chrome). Known differences: the date picker of the search filters looks different in each browser (the filters have a fixed height to keep the same layout), and the browser media controls (Media Session API) are not the same everywhere.
 
 ## Individual contributions
 
-<!-- TODO: each member completes their own section (features, modules, difficulties and how they were solved) -->
 
-### Erwoan
-- Features / modules:
-- Challenges and solutions:
+### Erwoan (ethebaul)
+- Features / modules: playlists, providers (creation, API key, access protocol), search, Docker deployment and CI; modules custom providers, ORM, advanced search, file upload.
+- Challenges and solutions: learning a new web stack (NestJS and SolidJS) and learning how to organize the shared ts-rest contracts and the Prisma schemas. Overcome by learning while building the providers and the search, with one shared contract per route so the front and the back stay in sync.
 
-### Liam
-- Features / modules:
-- Challenges and solutions:
+### Liam (lilefebv)
+- Features / modules: authentication (email, 42 OAuth), playlists, provider management (members, roles, catalog); modules standard user management, advanced permissions, custom providers, ORM, file upload, OAuth, multiple languages.
+- Challenges and solutions: discovering NestJS and SolidJS. Overcome by learning them while building the authentication, the playlists and the provider management.
 
-### Emilien
-- Features / modules:
-- Challenges and solutions:
+### Emilien (ebini)
+- Features / modules: profile and settings, playlists, provider management, player, design system; modules users interacting, standard user management, advanced permissions, custom providers, design system, multiple languages.
+- Challenges and solutions: thinking through the architecture of the whole project (server, providers, shared contracts) and the technical choices before building on them.
 
-### Vadim
-- Features / modules:
-- Challenges and solutions:
+### Vadim (vaamonch)
+- Features / modules: friends and presence, chat and real-time events, public API; modules users interacting, standard user management, public API, ORM.
+- Challenges and solutions: learning NestJS, SolidJS and Prisma. Overcome by learning them while building the friends system, the chat and the public API.
 
 ## Known limitations
 
-- Chat messages are ephemeral on purpose: they are neither stored nor delivered to offline users.
-- Regenerating a provider's API key is done on the server and the new key must then be copied into the provider's secrets.
+- Chat messages are ephemeral on purpose: they are not stored and they are not delivered to offline users.
+- A provider's API key is regenerated from the website, and the new key must then be copied into the secrets of the provider.
+- Search shows at most the first 100 results of each provider (the infinite scroll stops there).
 
 ## Documentation
 
-- Swagger documentation of the server API is exposed in development.
+- Public API: create a key in *Settings → API*, then send it as `Authorization: Bearer <key>`. The documentation is at `/api/swagger`.
 - Design notes: [docs/modules.md](docs/modules.md), [docs/roles.md](docs/roles.md), [scripts/presence.md](scripts/presence.md).
