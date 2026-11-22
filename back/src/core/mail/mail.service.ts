@@ -37,9 +37,7 @@ export class MailService {
 		} catch (_e) {
 			console.log(_e);
 			this.logger.error(LogBuilder.error("SEND_EMAIL", "Failed to send the email"));
-			throw new InternalServerErrorException(
-				"An error occurred while sending the email",
-			);
+			throw new InternalServerErrorException("An error occurred while sending the email");
 		}
 	}
 }

@@ -3,6 +3,7 @@ import { PrismaService } from "../../core/prisma/prisma.service";
 import { Prisma } from "../../generated/prisma/client";
 import { RealtimeService } from "../../realtime/realtime.service";
 import { PresenceService } from "../presence/presence.service";
+import { retryOnWriteConflict } from "../../core/prisma/write-conflict";
 
 @Injectable()
 export class FriendsService {
@@ -72,52 +73,50 @@ export class FriendsService {
 
 	public async makeRequest(userUUID: string, targetUUID: string) {
 		if (userUUID === targetUUID) throw new BadRequestException();
-		const pendingRequest = await this.prisma.friendRequest.findUnique({
-			where: {
-				userUUID_friendUUID: {
-					userUUID: targetUUID,
-					friendUUID: userUUID,
-				},
-			},
-		});
-		if (pendingRequest?.status === "PENDING") {
-			const accepted = await this.prisma.friendRequest.update({
+
+		const outcome = await retryOnWriteConflict(() => this.prisma.$transaction(async (tx) => {
+			const relations = await tx.friendRequest.findMany({
 				where: {
-					userUUID_friendUUID: {
-						userUUID: targetUUID,
-						friendUUID: userUUID,
-					},
+					OR: [
+						{ userUUID, friendUUID: targetUUID },
+						{ userUUID: targetUUID, friendUUID: userUUID },
+					],
 				},
-				data: { status: "ACCEPTED" },
 			});
-			await this.notify(() => this.notifyAccepted(targetUUID, userUUID));
-			return accepted;
-		}
-		const request = await this.prisma.friendRequest.upsert({
-			where: {
-				userUUID_friendUUID: {
-					userUUID: userUUID,
-					friendUUID: targetUUID,
-				},
-				status: "DENIED",
-			},
-			update: { status: "PENDING" },
-			create: {
-				userUUID: userUUID,
-				friendUUID: targetUUID,
-				status: "PENDING",
-			},
-		}).catch((error: unknown) => {
+			const outgoing = relations.find((relation) => relation.userUUID === userUUID);
+			const incoming = relations.find((relation) => relation.userUUID === targetUUID);
+
+			if (relations.some((relation) => relation.status === "ACCEPTED")) return "NONE";
+
+			if (incoming?.status === "PENDING") {
+				await tx.friendRequest.update({ where: { id: incoming.id }, data: { status: "ACCEPTED" } });
+				if (outgoing) await tx.friendRequest.delete({ where: { id: outgoing.id } });
+				return "ACCEPTED";
+			}
+
+			if (outgoing?.status === "PENDING") return "NONE";
+
+			if (outgoing) {
+				await tx.friendRequest.update({ where: { id: outgoing.id }, data: { status: "PENDING" } });
+			} else {
+				await tx.friendRequest.create({ data: { userUUID, friendUUID: targetUUID, status: "PENDING" } });
+			}
+			return "REQUESTED";
+		}, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable })).catch((error: unknown) => {
 			if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
 				throw new NotFoundException("User not found");
 			}
 			throw error;
 		});
-		await this.notify(async () => {
-			const requester = await this.getShortUser(userUUID);
-			this.realtime.emitToUser(targetUUID, "friend:request-received", requester);
-		});
-		return request;
+
+		if (outcome === "ACCEPTED") {
+			await this.notify(() => this.notifyAccepted(targetUUID, userUUID));
+		} else if (outcome === "REQUESTED") {
+			await this.notify(async () => {
+				const requester = await this.getShortUser(userUUID);
+				this.realtime.emitToUser(targetUUID, "friend:request-received", requester);
+			});
+		}
 	}
 
 	public async removeFriend(userUUID: string, friendUUID: string) {

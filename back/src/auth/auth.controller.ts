@@ -49,7 +49,7 @@ export class AuthController {
 		});
 	}
 
-	@Throttle({ default: { limit: 3, ttl: 60000 } })
+	@Throttle({ default: { limit: 10, ttl: 60000 } })
 	@UseGuards(JwtNoAuthGuard)
 	@TsRestHandler(authContract.register)
 	public register(
@@ -130,7 +130,7 @@ export class AuthController {
 		});
 	}
 
-	@Throttle({ default: { limit: 1, ttl: 60000 } })
+	@Throttle({ default: { limit: 2, ttl: 60000 } })
 	@TsRestHandler(authContract.askNewConfirmationEmail)
 	@UseGuards(JwtAuthGuardWithoutEmailVerif)
 	public askNewConfirmationEmail(@CurrentUser() user: AuthUser) {
@@ -154,7 +154,7 @@ export class AuthController {
 		});
 	}
 
-	@Throttle({ default: { limit: 1, ttl: 60000 } })
+	@Throttle({ default: { limit: 2, ttl: 60000 } })
 	@TsRestHandler(authContract.requestPasswordReset)
 	public requestPasswordReset() {
 		return tsRestHandler(
@@ -174,7 +174,7 @@ export class AuthController {
 		});
 	}
 
-	@Throttle({ default: { limit: 1, ttl: 60000 } })
+	@Throttle({ default: { limit: 2, ttl: 60000 } })
 	@TsRestHandler(authContract.requestEmailReset)
 	@UseGuards(JwtAuthGuard)
 	public requestEmailReset(@CurrentUser() user: AuthUser) {

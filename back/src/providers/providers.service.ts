@@ -1,7 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
-import type { CreateProviderDto } from "@flex/shared";
+import { type CreateProviderDto, isHttpsUrl } from "@flex/shared";
 import { Prisma } from "../generated/prisma/client";
+import { env } from "../core/env";
 import { LogBuilder } from "../core/logging/log-builder";
 import { WinstonLoggerService } from "../core/logging/logger.service";
 import { PrismaService } from "../core/prisma/prisma.service";
@@ -9,6 +10,9 @@ import { generateApiKey } from "../providersAPI/providersAPIKey";
 import { ProviderSigningKeyService } from "../providersAPI/providersSigningKey.service";
 
 function normalizeAddress(address: string) {
+	if (env.NODE_ENV === "prod" && !isHttpsUrl(address)) {
+		throw new BadRequestException("The provider address must be an https:// URL");
+	}
 	const url = new URL(address);
 	return `${url.origin}${url.pathname.replace(/\/+$/, "")}`;
 }
