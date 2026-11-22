@@ -107,9 +107,9 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 		const [audioProgress, setAudioProgress] = createSignal(0);
 		const [coverProgress, setCoverProgress] = createSignal(0);
 
-		function addArtistFromRest(artist: Artist, restIndex: number) {
-			setArtists([...artists(), artist]);
-			setNotFoundArtists((prev) => prev.filter((_, i) => i !== restIndex));
+		function addArtistFromRest(artist: Artist) {
+			setArtists((prev) => [...prev, artist]);
+			setNotFoundArtists((prev) => prev.filter((a) => a !== artist.name));
 		}
 
 		function addArtist(artist: Artist) {
@@ -300,11 +300,11 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 							<Button type="button" icon variant="danger" onClick={() => removeArtist(artist)}><X size={18}/></Button>
 						</div>}
 					</For>
-					<For each={notFoundArtists()} >
-						{(artistName, i) => <div class="artist">
+					<For each={notFoundArtists()}>
+						{(artistName) => <div class="artist">
 							<img src={DEFAULT_ARTIST} alt="artist avatar"/>
 							<span>{artistName}</span>
-							<Button type="button" icon onClick={() => summonAddArtistPopUp(provider, artistName, (artist) => addArtistFromRest(artist, i()))}><Plus size={18}/></Button>
+							<Button type="button" icon onClick={() => summonAddArtistPopUp(provider, artistName, addArtistFromRest)}><Plus size={18}/></Button>
 						</div>}
 					</For>
 				</div>
