@@ -1,5 +1,6 @@
 
 .best-result {
+	position: relative;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -43,5 +44,25 @@
 		display: flex;
 		gap: 6px;
 		align-items: center;
+	}
+
+	&--link {
+		cursor: pointer;
+
+		.info .name::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+		}
+
+		.info a:not(.name) {
+			position: relative;
+			z-index: 1;
+		}
+
+		&:has(.name:focus-visible) {
+			outline: 2px solid var(--text-accent);
+			outline-offset: 2px;
+		}
 	}
 }

@@ -203,13 +203,13 @@ export default {
 				description: "Flexを使い始める準備はできましたか？始め方はこちらです。",
 				account: {
 					title: "アカウントを作成",
-					description: "プロバイダーを接続するにはFlexアカウントが必要です。作成後、アカウント設定からプロバイダーキーを生成してください。",
+					description: "プロバイダーを接続するにはFlexアカウントが必要です。作成後、Providersページからプロバイダーを作成すると、そのキーが発行されます。",
 				},
 				setup: {
 					title: "プロバイダーをセットアップ",
-					install: "プロバイダーの実行にはDockerが必要です。インストール手順に従ってください",
-					config: "config.json設定ファイルを編集し、プロバイダーキーとその他の設定を入力してください。",
-					fill: "Flexのインターフェースから、または設定したディレクトリに音楽ファイルを置いて、ライブラリを充実させられます。自動スキャンにより、正しいタイトル、アーティスト、アルバム、カバー情報の取得が試みられます。",
+					install: "プロバイダーの実行にはDockerとmakeが必要です。Flexをダウンロードして、プロバイダーの設定とシークレットを作成してください：",
+					config: ".env.provider-my-provider（Flexサーバーのアドレス、プロバイダーのホストとポート）を編集し、プロバイダーのキーをsecrets/provider-my-provider/flex_api_keyに入れてから、起動してください：",
+					fill: "Flexのインターフェースからライブラリを充実させられます。曲、アルバム、アーティストを、音声ファイルとカバー画像と一緒に追加してください。",
 				},
 				share: {
 					title: "共有する",
@@ -468,6 +468,8 @@ export default {
 		},
 		providers: {
 			title: "マイプロバイダー",
+			noProvider: "まだプロバイダーがありません。",
+			setupGuide: "プロバイダーのセットアップ方法を見る",
 			namePlaceholder: "マイプロバイダー",
 			addressPlaceholder: "https://my-provider.com",
 			newPopUp: {
@@ -787,6 +789,11 @@ export default {
 			offlineProvider: "このプロバイダーはオフラインです",
 			pageNotFound: "ページが見つかりません",
 			home: "ホーム",
+		},
+		mediaCard: {
+			album: "アルバム",
+			artist: "アーティスト",
+			music: "曲",
 		},
 		playlistCard: {
 			musicCount: "{{count}}曲",

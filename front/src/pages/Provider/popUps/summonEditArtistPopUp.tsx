@@ -15,6 +15,7 @@ import { Undo2, X } from "lucide-solid";
 import "./EditArtistPopUp.scss";
 import { t } from "~/i18n/context";
 import { devWarn } from "~/utils/devLog";
+import { invalidateProviderCatalog } from "~/api/queryHooks/providerManageCatalog";
 
 export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist: Artist) => void) {
 	const providerClient = getProviderClient(artist.provider.address, artist.provider.uuid);
@@ -41,7 +42,9 @@ export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist:
 		const handleSubmit = async () => {
 			let updated: Parameters<typeof Artist.fromRawObject>[0] | null = null;
 			const notifyUpdate = () => {
-				if (updated) setNewArtist?.(Artist.fromRawObject(updated, artist.provider));
+				if (!updated) return;
+				invalidateProviderCatalog(artist.provider);
+				setNewArtist?.(Artist.fromRawObject(updated, artist.provider));
 			};
 			const failEdit = (message: string, status?: number) => {
 				if (status === 413) summonErrorToast(() => t("pages.provider.popUps.fileTooLarge"));

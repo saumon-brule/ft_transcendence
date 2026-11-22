@@ -19,7 +19,7 @@ export default function Playlist() {
 		if (!playlistQuery.isError) return;
 
 		if (playlistQuery.error.status === 404) {
-			navigate("/home");
+			navigate("/home", { replace: true });
 			summonErrorToast(t("pages.playlist.unknown"));
 		} else {
 			summonErrorToast(t("pages.playlist.loadError"));

@@ -205,13 +205,13 @@ export default {
 				description: "Prêt à utiliser Flex ? Voici comment démarrer.",
 				account: {
 					title: "Créer un compte",
-					description: "Il vous faut un compte Flex auquel connecter votre provider. Une fois créé, générez une clé de provider depuis les paramètres de votre compte.",
+					description: "Il vous faut un compte Flex auquel connecter votre provider. Une fois créé, créez votre provider depuis la page Providers : elle vous donne sa clé.",
 				},
 				setup: {
 					title: "Installer votre provider",
-					install: "Il vous faut Docker pour lancer votre provider, puis suivez les instructions d'installation",
-					config: "Modifiez le fichier de configuration config.json avec votre clé de provider et le reste de vos réglages.",
-					fill: "Vous pouvez maintenant remplir votre bibliothèque depuis l'interface Flex, ou en déposant vos fichiers musicaux dans le dossier défini dans votre config. Un scan automatique essaiera de retrouver le bon titre, l'artiste, l'album et la pochette.",
+					install: "Il vous faut Docker et make pour lancer votre provider. Téléchargez Flex et créez les réglages et les secrets de votre provider :",
+					config: "Modifiez .env.provider-my-provider (adresse du serveur Flex, hôte et ports de votre provider), mettez la clé de votre provider dans secrets/provider-my-provider/flex_api_key, puis démarrez-le :",
+					fill: "Vous pouvez maintenant remplir votre bibliothèque depuis l'interface Flex : ajoutez vos musiques, albums et artistes avec leurs fichiers audio et leurs pochettes.",
 				},
 				share: {
 					title: "Partagez-le",
@@ -470,6 +470,8 @@ export default {
 		},
 		providers: {
 			title: "Mes providers",
+			noProvider: "Vous n'avez pas encore de provider.",
+			setupGuide: "Découvrir comment installer un provider",
 			namePlaceholder: "Mon provider",
 			addressPlaceholder: "https://mon-provider.com",
 			newPopUp: {
@@ -789,6 +791,11 @@ export default {
 			offlineProvider: "Ce provider est hors ligne",
 			pageNotFound: "Page introuvable",
 			home: "Accueil",
+		},
+		mediaCard: {
+			album: "Album",
+			artist: "Artiste",
+			music: "Titre",
 		},
 		playlistCard: {
 			musicCount: "{{count}} musiques",

@@ -1,3 +1,32 @@
+div.artist:has(> .menu-wrapper.select-artist) {
+	padding: 0;
+}
+
+.select-artist {
+	flex: 1;
+	align-self: stretch;
+
+	.menu-trigger {
+		flex: 1;
+	}
+
+	.add-artist {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 8px !important;
+		cursor: pointer;
+		transition: background-color 0.2s;
+
+		&:hover,
+		&:focus-visible {
+			background-color: var(--background-overlay);
+			text-decoration: none;
+		}
+	}
+}
+
 
 .set-artist-menu {
 	.menu-content {

@@ -6,6 +6,7 @@ export type MenuProps = {
 	children: (close: () => void) => JSX.Element;
 	align?: "left" | "right";
 	class?: string;
+	wrapperClass?: string;
 };
 
 export function Menu(props: MenuProps) {
@@ -67,7 +68,7 @@ export function Menu(props: MenuProps) {
 		});
 	});
 
-	return <div class="menu-wrapper" ref={ref}>
+	return <div class={`menu-wrapper ${props.wrapperClass ?? ""}`} ref={ref}>
 		<div class="menu-trigger" onClick={() => setOpen((o) => !o)}>{props.trigger}</div>
 		<Show when={open()}>
 			<div ref={menuRef} class={`menu ${side()} ${up() ? "up" : ""} ${props.class ?? ""}`} role="menu">

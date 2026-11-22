@@ -24,6 +24,7 @@ import { getProgressionPourcent } from "~/components/layout/Footer/Controller";
 import { MusicTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { t } from "~/i18n/context";
 import { devWarn } from "~/utils/devLog";
+import { invalidateProviderCatalog } from "~/api/queryHooks/providerManageCatalog";
 
 function pictureToFile(pic: IPicture, baseName = "cover"): File {
 	const ext = pic.format.split("/")[1]?.replace("jpeg", "jpg") ?? "bin";
@@ -180,6 +181,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 					}
 					newMusic.hasCover = true;
 				}
+				invalidateProviderCatalog(provider);
 				onNewMusic?.(Music.fromRawObject(newMusic, provider));
 				props.close();
 			} catch (e) {
