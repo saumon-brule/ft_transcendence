@@ -439,6 +439,8 @@ export default {
 			makePublic: "Make public",
 			makePrivate: "Make private",
 			namePlaceholder: "My playlist",
+			follow: "Follow",
+			unfollow: "Unfollow",
 			coverPopUp: {
 				invalidType: "Please choose a JPEG, PNG or WebP image",
 				preview: "Cover preview",
