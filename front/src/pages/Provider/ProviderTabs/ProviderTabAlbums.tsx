@@ -1,11 +1,11 @@
 import { createMemo, Show } from "solid-js";
 import { useProviderAlbumsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
-import NoResult from "~/components/ui/NoResult/NoResult";
-import AlbumSection from "~/components/ui/AlbumSection/AlbumSection";
-import InfiniteScroll from "~/components/ui/InfiniteScroll";
-import SortBar from "~/components/ui/SortBar";
-import { useSortParam } from "~/components/ui/SortBar/useSortParam";
+import NoResult from "~/components/ui/feedback/NoResult/NoResult";
+import AlbumSection from "~/components/ui/sections/AlbumSection/AlbumSection";
+import InfiniteScroll from "~/components/ui/navigation/InfiniteScroll";
+import SortBar from "~/components/ui/navigation/SortBar";
+import { useSortParam } from "~/components/ui/navigation/SortBar/useSortParam";
 import { ALBUM_SORT_FIELDS } from "@flex/shared";
 
 export default function ProviderTabAlbums(props: { search: string }) {

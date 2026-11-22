@@ -4,7 +4,7 @@ import { createSignal, For, Show } from "solid-js";
 import Button from "~/components/inputs/Button";
 import { useProviderRolesQuery } from "~/api/queryHooks/providerManageRoles";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
-import { Menu } from "~/components/ui/Menu/Menu";
+import { Menu } from "~/components/ui/overlays/Menu/Menu";
 import { Plus, Search } from "lucide-solid";
 import { ProviderUser } from "./ManageMembers";
 import { A } from "@solidjs/router";

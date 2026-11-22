@@ -1,0 +1,54 @@
+@use "../../../../styles/breakpoints" as breakpoints;
+
+.music-card {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	padding: 15px;
+	background-color: var(--background-card);
+	border: 1px solid var(--background-overlay);
+	border-radius: 9px;
+
+	@include breakpoints.respond-to("mobile") {
+		gap: 10px;
+		padding: 10px;
+	}
+
+	img {
+		width: 100%;
+		aspect-ratio: 1;
+		object-fit: cover;
+		border-radius: 4px;
+	}
+
+	.music-info {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		height: 100%;
+
+		.music-name {
+			font-size: 16px;
+			font-weight: 600;
+			text-overflow: ellipsis;
+			text-align: left;
+			padding: 0;
+
+			@include breakpoints.respond-to("mobile") {
+				font-size: 14px;
+			}
+		}
+
+		.music-date {
+			font-size: 12px;
+			color: var(--text-secondary);
+		}
+
+		.music-provider {
+			margin-top: auto;
+		}
+	}
+}

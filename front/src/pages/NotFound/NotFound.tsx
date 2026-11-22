@@ -1,4 +1,4 @@
-import PageNotFound from "~/components/ui/NoResult/PageNotFound";
+import PageNotFound from "~/components/ui/feedback/NoResult/PageNotFound";
 
 export default function NotFound() {
 	return <div class="page" id="not-found">

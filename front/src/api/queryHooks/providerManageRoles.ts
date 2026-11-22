@@ -2,7 +2,7 @@ import { Provider, ProviderPermission, providerContract } from "@flex/shared";
 import { type ClientInferResponses } from "@ts-rest/core";
 import { getProviderClient } from "../providerClients";
 import { queryClient } from "../queryClient";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { t } from "~/i18n/context";
 
 export type RolesResponse = ClientInferResponses<typeof providerContract.role.list, 200>;

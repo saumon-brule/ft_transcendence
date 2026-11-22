@@ -5,8 +5,8 @@ import Button from "~/components/inputs/Button";
 import Checkbox from "~/components/inputs/Checkbox/Checkbox";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
-import { summonPopUp } from "~/components/ui/Overlay";
-import { summonSuccessToast } from "~/components/ui/Toaster";
+import { summonPopUp } from "~/components/ui/overlays/Overlay";
+import { summonSuccessToast } from "~/components/ui/feedback/Toaster";
 import { validateFromZod } from "~/utils/validateFromZod";
 import { t } from "~/i18n/context";
 

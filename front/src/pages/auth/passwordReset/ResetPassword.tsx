@@ -9,9 +9,9 @@ import { client } from "~/api/client";
 import { useLocation, useNavigate } from "@solidjs/router";
 import { createSignal, onMount, Show } from "solid-js";
 import Button from "~/components/inputs/Button";
-import DialogPage from "~/components/ui/DialogPage";
-import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
-import LinkParticles from "~/components/ui/LinkParticles";
+import DialogPage from "~/components/ui/page/DialogPage";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/feedback/Toaster";
+import LinkParticles from "~/components/ui/page/LinkParticles";
 
 export default function ResetPassword() {
 	const { t } = useTranslation();

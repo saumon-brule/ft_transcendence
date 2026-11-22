@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "@solidjs/router";
 import { createEffect, Show } from "solid-js";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import PlaylistSection from "./PlaylistSection";
 import ProfileHeader from "./ProfileHeader";
 import FriendsSection from "./FriendsSection";

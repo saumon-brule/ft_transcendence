@@ -9,7 +9,7 @@ import { client } from "~/api/client";
 import { createEffect, Match, Show, Switch } from "solid-js";
 import "./RequestPasswordReset.scss";
 import { A } from "@solidjs/router";
-import { summonSuccessToast } from "~/components/ui/Toaster";
+import { summonSuccessToast } from "~/components/ui/feedback/Toaster";
 
 export default function RequestPasswordReset() {
 	const { t } = useTranslation();

@@ -2,7 +2,7 @@ import { createResource } from "solid-js";
 import { initQueryClient } from "@ts-rest/solid-query";
 import { providerContract, providerError401Schema } from "@flex/shared";
 import { ApiFetcher, ApiFetcherArgs, tsRestFetchApi } from "@ts-rest/core";
-import { summonWarningToast } from "~/components/ui/Toaster";
+import { summonWarningToast } from "~/components/ui/feedback/Toaster";
 import { t } from "~/i18n/context";
 import { queryKeyFromContract } from "./utils/queryKeys";
 import { z } from "zod";

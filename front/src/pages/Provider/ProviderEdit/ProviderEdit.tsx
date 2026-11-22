@@ -1,8 +1,8 @@
 import { useSearchParams } from "@solidjs/router";
 import { createMemo, Match, Show, Switch } from "solid-js";
 import { useProviderInfoQuery } from "~/api/queryHooks/providerInfo";
-import { useTabParam } from "~/components/ui/Tabs/useTabParam";
-import Tabs from "~/components/ui/Tabs/Tabs";
+import { useTabParam } from "~/components/ui/navigation/Tabs/useTabParam";
+import Tabs from "~/components/ui/navigation/Tabs/Tabs";
 import ProviderSearchBar from "../ProviderSearchBar";
 import LoadingSplash from "../../Loading/LoadingSplash";
 import { useProviderInfoInfo } from "~/components/guards/EditPermissionGuard";

@@ -1,6 +1,6 @@
 import { Accessor, createContext, createEffect, JSXElement, Match, Switch, useContext } from "solid-js";
 import Button from "~/components/inputs/Button";
-import DialogPage from "~/components/ui/DialogPage";
+import DialogPage from "~/components/ui/page/DialogPage";
 import { MeProfile, useMeProfileQuery } from "~/api/queryHooks/meProfile";
 import { useTranslation } from "~/i18n/context";
 import LoadingSplash from "~/pages/Loading/LoadingSplash";

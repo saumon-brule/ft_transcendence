@@ -1,6 +1,6 @@
 import { RouteSectionProps } from "@solidjs/router";
 import { Transition } from "solid-transition-group";
-import LinkParticles from "~/components/ui/LinkParticles";
+import LinkParticles from "~/components/ui/page/LinkParticles";
 import LanguageSelect from "~/components/common/LanguageSelect/LanguageSelect";
 
 import "./AuthLayout.scss";

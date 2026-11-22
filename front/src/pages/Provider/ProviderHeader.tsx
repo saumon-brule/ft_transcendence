@@ -4,7 +4,7 @@ import { ProviderStatus } from "./Provider";
 import Button from "~/components/inputs/Button/Button";
 import { useLeaveProviderMutation, useAccessRequestQuery, useJoinProvider as useJoinProviderMutation, useProviderInfoInfoQuery } from "~/api/queryHooks/providerAccess";
 import { DoorOpen, Pencil } from "lucide-solid";
-import { summonPopUp } from "~/components/ui/Overlay";
+import { summonPopUp } from "~/components/ui/overlays/Overlay";
 // import { summonEditProviderPopUp } from "../Providers/popUps/editProviderPopUp";
 import { useNavigate } from "@solidjs/router";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";

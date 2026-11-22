@@ -1,8 +1,8 @@
 import { createSignal, onCleanup, Show } from "solid-js";
 import { Check, Copy } from "lucide-solid";
 import Button from "~/components/inputs/Button";
-import { summonPopUp } from "~/components/ui/Overlay";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonPopUp } from "~/components/ui/overlays/Overlay";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { t } from "~/i18n/context";
 
 const COPIED_FEEDBACK_MS = 2_000;

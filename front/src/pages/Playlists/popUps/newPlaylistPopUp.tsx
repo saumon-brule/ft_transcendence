@@ -5,8 +5,8 @@ import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import Toggle from "~/components/inputs/Toggle/Toggle";
-import { summonPopUp } from "~/components/ui/Overlay";
-import { summonSuccessToast } from "~/components/ui/Toaster";
+import { summonPopUp } from "~/components/ui/overlays/Overlay";
+import { summonSuccessToast } from "~/components/ui/feedback/Toaster";
 import { validateFromZod } from "~/utils/validateFromZod";
 import { t } from "~/i18n/context";
 

@@ -3,10 +3,10 @@ import { MAX_SIZE } from "@flex/shared";
 import { useDeletePlaylistCoverMutation, useUploadPlaylistCoverMutation } from "~/api/queryHooks/playlist";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
-import { summonPopUp } from "~/components/ui/Overlay";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonPopUp } from "~/components/ui/overlays/Overlay";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { playlistCoverUrl } from "~/utils/playlistCover";
-import ProgressRing from "~/components/ui/ProgressRing";
+import ProgressRing from "~/components/ui/feedback/ProgressRing";
 import { t } from "~/i18n/context";
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];

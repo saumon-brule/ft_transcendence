@@ -1,7 +1,7 @@
 import { Match, Switch } from "solid-js";
 import { useTranslation } from "~/i18n/context";
-import Tabs from "~/components/ui/Tabs/Tabs";
-import { useTabParam } from "~/components/ui/Tabs/useTabParam";
+import Tabs from "~/components/ui/navigation/Tabs/Tabs";
+import { useTabParam } from "~/components/ui/navigation/Tabs/useTabParam";
 import AccountSettings from "./pages/AccountSettings";
 import ProfileSettings from "./pages/ProfileSettings";
 import AppearanceSettings from "./pages/AppearanceSettings";

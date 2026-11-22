@@ -5,16 +5,16 @@ import { queryClient } from "~/api/queryClient";
 import { ClientInferResponses } from "@ts-rest/core";
 import { useProfile } from "~/components/guards/ProfileGate";
 import Button from "~/components/inputs/Button";
-import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/feedback/Toaster";
 import { useTranslation } from "~/i18n/context";
 
 import "./ProfileSettings.scss";
-import { OverlayControls } from "~/components/ui/Overlay";
+import { OverlayControls } from "~/components/ui/overlays/Overlay";
 import { summonUsernameEditPopUp } from "./editionPopUps/usernamePopUp";
 import MusicBars from "~/components/graphics/icons/MusicBars";
 import { MAX_SIZE, serverContract } from "@flex/shared";
 import { X } from "lucide-solid";
-import ProgressRing from "~/components/ui/ProgressRing";
+import ProgressRing from "~/components/ui/feedback/ProgressRing";
 
 type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
 type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;

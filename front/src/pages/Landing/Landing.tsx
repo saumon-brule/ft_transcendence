@@ -5,7 +5,7 @@ import Button from "~/components/inputs/Button";
 import FlexLogo from "~/components/common/logo/FlexLogo";
 
 import "./Landing.scss";
-import LinkParticles from "~/components/ui/LinkParticles";
+import LinkParticles from "~/components/ui/page/LinkParticles";
 import LanguageSelect from "~/components/common/LanguageSelect/LanguageSelect";
 import { useTranslation } from "~/i18n/context";
 

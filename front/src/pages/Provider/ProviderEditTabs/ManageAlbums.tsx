@@ -4,7 +4,7 @@ import Button from "~/components/inputs/Button";
 import "./ManageAlbums.scss";
 import { useProviderAlbumsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Album } from "~/class/Album";
-import { AlbumCover } from "~/components/ui/AlbumCard";
+import { AlbumCover } from "~/components/ui/cards/AlbumCard";
 import { Pencil, Trash } from "lucide-solid";
 import { providerRemoveAlbum } from "~/api/queryHooks/providerManageCatalog";
 import { summonEditAlbumPopUp } from "../popUps/summonEditAlbumPopUp";

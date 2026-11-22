@@ -6,7 +6,7 @@ import { env } from "~/env";
 import { doRefresh } from "./doRefresh";
 import z from "zod";
 import { serverBaseError401Schema } from "@flex/shared";
-import { summonWarningToast } from "~/components/ui/Toaster";
+import { summonWarningToast } from "~/components/ui/feedback/Toaster";
 import { t } from "~/i18n/context";
 import { queryKeyFromContract } from "./utils/queryKeys";
 import { xhrFetchApi } from "./xhrUtils";

@@ -1,11 +1,11 @@
 import { createMemo, Show } from "solid-js";
 import { useProviderArtistsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
-import NoResult from "~/components/ui/NoResult/NoResult";
-import ArtistSection from "~/components/ui/ArtistSection/ArtistSection";
-import InfiniteScroll from "~/components/ui/InfiniteScroll";
-import SortBar from "~/components/ui/SortBar";
-import { useSortParam } from "~/components/ui/SortBar/useSortParam";
+import NoResult from "~/components/ui/feedback/NoResult/NoResult";
+import ArtistSection from "~/components/ui/sections/ArtistSection/ArtistSection";
+import InfiniteScroll from "~/components/ui/navigation/InfiniteScroll";
+import SortBar from "~/components/ui/navigation/SortBar";
+import { useSortParam } from "~/components/ui/navigation/SortBar/useSortParam";
 import { ARTIST_SORT_FIELDS } from "@flex/shared";
 
 export default function ProviderTabArtists(props: { search: string }) {
