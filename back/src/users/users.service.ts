@@ -130,9 +130,10 @@ export class UsersService {
 		email: string,
 		password: string,
 		username: string,
+		language?: string,
 	): Promise<User | null> {
 		const newUser = await this.prisma.user.create({
-			data: { email: this.normalizeEmail(email), password: await bcrypt.hash(password, 10), username },
+			data: { email: this.normalizeEmail(email), password: await bcrypt.hash(password, 10), username, language },
 		});
 
 		return newUser;
