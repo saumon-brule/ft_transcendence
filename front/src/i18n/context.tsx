@@ -8,20 +8,23 @@ import {
 } from "solid-js";
 import en from "./locales/en";
 import fr from "./locales/fr";
+import ja from "./locales/ja";
+import es from "./locales/es";
 import { setupZodErrorMap } from "./zodErrorMap";
 import { Shape } from "~/types/generics/Shape";
 import { z } from "zod";
 import { createRoot } from "solid-js";
+import { languageEnum } from "@flex/shared";
 
-export const localeSchema = z.enum(["en", "fr"]);
-
-export type Locale = z.infer<typeof localeSchema>;
+export type Locale = z.infer<typeof languageEnum>;
 export type RawDictionary = Shape<typeof en>;
 export type Dictionary = i18n.Flatten<RawDictionary>;
 
 export const dictionaries = {
 	en,
 	fr,
+	ja,
+	es,
 } as const satisfies Record<Locale, RawDictionary>;
 
 type I18nContextType = {
@@ -35,7 +38,7 @@ const DEFAULT_LANG: Locale = "en";
 function getInitLang() {
 	const browserLang = navigator.language.split("-")[0];
 	const params = new URLSearchParams(location.search);
-	const langValidation = localeSchema.safeParse(
+	const langValidation = languageEnum.safeParse(
 		params.get("lang") || readStoredLocale() || browserLang || DEFAULT_LANG,
 	);
 	let lang;

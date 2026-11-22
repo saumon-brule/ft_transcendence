@@ -125,6 +125,8 @@ export default {
 					title: "Langue",
 					english: "English",
 					french: "Français",
+					japanese: "日本語",
+					spanish: "Español",
 				},
 				connexions: {
 					title: "Connexions",
@@ -416,6 +418,7 @@ export default {
 			loadError: "Impossible de charger la playlist",
 			changeCover: "Changer la couverture",
 			unavailableCount: "{{count}} indisponibles",
+			emptyPlaylist: "Cette playlist est vide",
 			by: "Par",
 			rename: "Renommer",
 			makePublic: "Rendre publique",
