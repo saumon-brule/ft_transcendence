@@ -50,7 +50,7 @@ export default function Friends() {
 
 		const removed = openedFriendUuid === params.uuid;
 		openedFriendUuid = undefined;
-		navigate("/friends");
+		navigate("/friends", { replace: true });
 		if (removed) {
 			endChat(params.uuid);
 		} else {

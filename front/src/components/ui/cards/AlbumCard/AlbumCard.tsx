@@ -5,7 +5,7 @@ import { buildMediaUrl, Provider } from "@flex/shared";
 import { useMediaToken } from "~/api/providerClients";
 import { DEFAULT_ALBUM, imgFallback } from "~/utils/imageFallback";
 import ArtistsLinks from "~/components/ui/elements/ArtistLinks";
-import "./AlbumCard.scss";
+import "../MediaCard.scss";
 import { Album } from "~/class/Album";
 
 export type AlbumCoverProps = JSX.IntrinsicElements["img"] & { album: Album };
@@ -37,13 +37,18 @@ function toDate(value: Date | string): Date {
 export default function AlbumCard(props: AlbumCardProps) {
 	const shown = (column: AlbumCardData) => !props.hiddenProp?.includes(column);
 
-	return <div class="album-card">
+	const provider = () => props.providers?.find((p) => p.uuid === props.album.provider.uuid);
+
+	return <div class="media-card album-card">
 		<AlbumCover album={props.album}/>
-		<div class="album-info">
-			<A href={`/provider/${props.album.provider.uuid}/album/${props.album.uuid}`} class="white-variant album-name">{props.album.name}</A>
-			<Show when={shown("artists")}><div class="album-artist"><ArtistsLinks artists={props.album.artists} providerUUID={props.album.provider.uuid}/></div></Show>
-			<Show when={shown("published")}><Show when={props.album.publishedAt} keyed>{(albumDate) => <div class="album-date">{t("common.releasedOn", { date: toDate(albumDate).toLocaleDateString(locale()) })}</div>}</Show></Show>
-			<Show when={props.providers?.find((provider) => provider.uuid === props.album.provider.uuid)}><div class="album-provider">{t("common.from")} <A href={`/provider/${props.album.provider.uuid}`}>{props.providers?.find((provider) => provider.uuid === props.album.provider.uuid)?.name}</A></div></Show>
+		<div class="media-card-info">
+			<A href={`/provider/${props.album.provider.uuid}/album/${props.album.uuid}`} class="white-variant media-card-name" title={props.album.name}>{props.album.name}</A>
+			<div class="media-card-subtitle">{t("components.mediaCard.album")}</div>
+			<Show when={shown("artists") && props.album.artists.length > 0}>
+				<div class="media-card-subtitle"><ArtistsLinks artists={props.album.artists} providerUUID={props.album.provider.uuid}/></div>
+			</Show>
+			<Show when={shown("published")}><Show when={props.album.publishedAt} keyed>{(albumDate) => <div class="media-card-date">{t("common.releasedOn", { date: toDate(albumDate).toLocaleDateString(locale()) })}</div>}</Show></Show>
+			<Show when={provider()}>{(p) => <div class="media-card-provider">{t("common.from")}{" "}<A href={`/provider/${p().uuid}`}>{p().name}</A></div>}</Show>
 		</div>
 	</div>;
 }

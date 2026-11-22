@@ -11,9 +11,10 @@
     "start:dev": "nodemon",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\" --fix",
-    "check": "tsc --noEmit && eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\"",
-    "seed": "ts-node --transpile-only src/seed.ts"
+    "lint": "eslint \"{src,dev,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\" --fix",
+    "check": "tsc --noEmit && eslint \"{src,dev,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\"",
+    "seed:mock": "ts-node --transpile-only dev/seed-mock.ts",
+    "seed:search": "ts-node --transpile-only dev/seed-search.ts"
   },
   "dependencies": {
     "@flex/shared": "workspace:*",

@@ -16,7 +16,8 @@ export function SelectArtistMenu(props: { provider: Provider; exclude?: Artist[]
 	return <Menu
 		align="left"
 		class="set-artist-menu"
-		trigger={<Button class="add-artist" type="button" variant="text" icon><Plus size={40}/></Button>}
+		wrapperClass="select-artist"
+		trigger={<Button class="add-artist" type="button" variant="text" icon aria-label={t("pages.provider.popUps.newArtist")}><Plus size={40}/></Button>}
 	>
 		{(close) => <SelectArtistContent provider={props.provider} exclude={props.exclude} addArtist={props.addArtist} onClose={close} />}
 	</Menu>;

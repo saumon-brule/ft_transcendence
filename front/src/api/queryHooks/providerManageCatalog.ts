@@ -10,6 +10,14 @@ type MusicsList = InfiniteList<ClientInferResponseBody<typeof providerContract.m
 type AlbumsList = InfiniteList<ClientInferResponseBody<typeof providerContract.album.list, 200>>;
 type ArtistsList = InfiniteList<ClientInferResponseBody<typeof providerContract.artist.list, 200>>;
 
+export const invalidateProviderCatalog = (providerData: Provider) => {
+	const { keys } = getProviderClient(providerData.address, providerData.uuid);
+
+	for (const key of [keys.info.all(), keys.music.list(), keys.music.get(), keys.album.list(), keys.album.get(), keys.artist.list(), keys.artist.get()]) {
+		void queryClient.invalidateQueries({ queryKey: key });
+	}
+};
+
 export const providerRemoveMusic = async (providerData: Provider, uuid: string) => {
 	const providerClient = getProviderClient(providerData.address, providerData.uuid);
 

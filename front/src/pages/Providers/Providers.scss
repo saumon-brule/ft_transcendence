@@ -29,6 +29,10 @@
 		flex-direction: column;
 		gap: 12px;
 	}
+
+	.no-provider {
+		color: var(--text-secondary);
+	}
 }
 .provider-pop-up {
 	min-width: 40%;

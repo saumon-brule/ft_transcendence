@@ -26,6 +26,8 @@ export default function Landing() {
 	};
 
 	onMount(() => {
+		if (window.location.hash) setTimeout(() => scrollToSection(window.location.hash.slice(1)), 0);
+
 		observer = new IntersectionObserver((intersections) => {
 			for (const intersection of intersections) {
 				if (intersection.isIntersecting) {
@@ -114,9 +116,10 @@ export default function Landing() {
 							<code>
 								git clone git@github.com:saumon-brule/ft_transcendence.git flex<br/>
 								cd flex<br/>
+								make secrets-provider NAME=my-provider
 							</code>
 							<p>{t("pages.landing.getStarted.setup.config")}</p>
-							<code>docker compose up -d</code>
+							<code>make provider NAME=my-provider</code>
 							<p>{t("pages.landing.getStarted.setup.fill")}</p>
 						</div>
 						<div class="separator"/>

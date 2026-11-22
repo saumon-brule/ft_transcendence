@@ -203,13 +203,13 @@ export default {
 				description: "Ready to start using Flex? Here's how you can get started.",
 				account: {
 					title: "Create an account",
-					description: "You need a Flex account to connect your provider to. Once it's created, generate a provider key from your account settings.",
+					description: "You need a Flex account to connect your provider to. Once it's created, create your provider from the Providers page: it gives you its key.",
 				},
 				setup: {
 					title: "Set up your provider",
-					install: "You need Docker to run your provider, then follow the install instructions",
-					config: "Edit the config.json configuration file with your provider key and the rest of your settings.",
-					fill: "You can now fill your library from the Flex interface, or by putting your music files in the directory set up in your config. An automatic scan will try to recover the correct title, artist, album and cover info.",
+					install: "You need Docker and make to run your provider. Download Flex and create the settings and the secrets of your provider:",
+					config: "Edit .env.provider-my-provider (address of the Flex server, host and ports of your provider), put the key of your provider in secrets/provider-my-provider/flex_api_key, then start it:",
+					fill: "You can now fill your library from the Flex interface: add your songs, albums and artists with their audio and cover files.",
 				},
 				share: {
 					title: "Share it",
@@ -468,6 +468,8 @@ export default {
 		},
 		providers: {
 			title: "My Providers",
+			noProvider: "You don't have a provider yet.",
+			setupGuide: "Learn how to set up a provider",
 			namePlaceholder: "My provider",
 			addressPlaceholder: "https://my-provider.com",
 			newPopUp: {
@@ -787,6 +789,11 @@ export default {
 			offlineProvider: "This provider is offline",
 			pageNotFound: "Page not found",
 			home: "Home",
+		},
+		mediaCard: {
+			album: "Album",
+			artist: "Artist",
+			music: "Song",
 		},
 		playlistCard: {
 			musicCount: "{{count}} musics",

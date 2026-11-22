@@ -13,6 +13,7 @@ import "./AddArtistPopUp.scss";
 import { Artist } from "~/class/Artist";
 import { t } from "~/i18n/context";
 import { devWarn } from "~/utils/devLog";
+import { invalidateProviderCatalog } from "~/api/queryHooks/providerManageCatalog";
 
 export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", onNewArtist?: (newArtist: Artist) => void) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
@@ -72,6 +73,7 @@ export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", 
 					}
 					newArtist.hasAvatar = true;
 				}
+				invalidateProviderCatalog(provider);
 				onNewArtist?.(Artist.fromRawObject(newArtist, provider));
 				props.close();
 			} catch (e) {

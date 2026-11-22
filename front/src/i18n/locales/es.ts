@@ -203,13 +203,13 @@ export default {
 				description: "¿Listo para empezar a usar Flex? Así puedes hacerlo.",
 				account: {
 					title: "Crea una cuenta",
-					description: "Necesitas una cuenta de Flex a la que conectar tu proveedor. Una vez creada, genera una clave de proveedor desde los ajustes de tu cuenta.",
+					description: "Necesitas una cuenta de Flex a la que conectar tu proveedor. Una vez creada, crea tu proveedor desde la página Providers: te da su clave.",
 				},
 				setup: {
 					title: "Configura tu proveedor",
-					install: "Necesitas Docker para ejecutar tu proveedor; después, sigue las instrucciones de instalación",
-					config: "Edita el archivo de configuración config.json con tu clave de proveedor y el resto de tus ajustes.",
-					fill: "Ahora puedes llenar tu biblioteca desde la interfaz de Flex, o colocando tus archivos de música en el directorio definido en tu configuración. Un escaneo automático intentará recuperar el título, el artista, el álbum y la portada correctos.",
+					install: "Necesitas Docker y make para ejecutar tu proveedor. Descarga Flex y crea los ajustes y los secretos de tu proveedor:",
+					config: "Edita .env.provider-my-provider (dirección del servidor de Flex, host y puertos de tu proveedor), pon la clave de tu proveedor en secrets/provider-my-provider/flex_api_key y arráncalo:",
+					fill: "Ahora puedes llenar tu biblioteca desde la interfaz de Flex: añade tus canciones, álbumes y artistas con sus archivos de audio y de portada.",
 				},
 				share: {
 					title: "Compártelo",
@@ -468,6 +468,8 @@ export default {
 		},
 		providers: {
 			title: "Mis proveedores",
+			noProvider: "Todavía no tienes ningún proveedor.",
+			setupGuide: "Aprende a instalar un proveedor",
 			namePlaceholder: "Mi proveedor",
 			addressPlaceholder: "https://mi-proveedor.com",
 			newPopUp: {
@@ -787,6 +789,11 @@ export default {
 			offlineProvider: "Este proveedor está desconectado",
 			pageNotFound: "Página no encontrada",
 			home: "Inicio",
+		},
+		mediaCard: {
+			album: "Álbum",
+			artist: "Artista",
+			music: "Canción",
 		},
 		playlistCard: {
 			musicCount: "{{count}} canciones",

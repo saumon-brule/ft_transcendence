@@ -17,10 +17,10 @@ CREATE TABLE "User" (
     "emailValidated" BOOLEAN NOT NULL DEFAULT false,
     "intraId" INTEGER,
     "language" TEXT DEFAULT 'en',
-    "currentlyListeningUUID" TEXT,
-    "listeningUntil" TIMESTAMP(3),
-    "listeningPrivate" BOOLEAN NOT NULL DEFAULT false,
     "avatarUpdatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "apiKeyHash" TEXT,
+    "apiOneHourUsage" INTEGER NOT NULL DEFAULT 0,
+    "apiUsage" INTEGER NOT NULL DEFAULT 0,
     "updatedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
 
@@ -80,7 +80,6 @@ CREATE TABLE "Provider" (
     "address" TEXT NOT NULL,
     "ownerUUID" TEXT NOT NULL,
     "hashedKey" TEXT NOT NULL,
-    "publicDisplay" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -92,7 +91,6 @@ CREATE TABLE "ProviderUser" (
     "id" SERIAL NOT NULL,
     "providerUUID" TEXT NOT NULL,
     "userUUID" TEXT NOT NULL,
-    "publicDisplay" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -148,19 +146,6 @@ CREATE TABLE "PlaylistMusic" (
     CONSTRAINT "PlaylistMusic_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "Music" (
-    "id" SERIAL NOT NULL,
-    "uuid" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "artist" TEXT NOT NULL,
-    "duration" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Music_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "User_uuid_key" ON "User"("uuid");
 
@@ -169,6 +154,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_intraId_key" ON "User"("intraId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_apiKeyHash_key" ON "User"("apiKeyHash");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "FriendRequest_user_uuid_friend_uuid_key" ON "FriendRequest"("user_uuid", "friend_uuid");
@@ -184,9 +172,6 @@ CREATE UNIQUE INDEX "Provider_uuid_key" ON "Provider"("uuid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Provider_name_key" ON "Provider"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Provider_address_key" ON "Provider"("address");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Provider_hashedKey_key" ON "Provider"("hashedKey");
@@ -208,12 +193,6 @@ CREATE UNIQUE INDEX "UserPlaylist_userUUID_playlistUUID_key" ON "UserPlaylist"("
 
 -- CreateIndex
 CREATE UNIQUE INDEX "PlaylistMusic_playlistUUID_providerUUID_musicUUID_key" ON "PlaylistMusic"("playlistUUID", "providerUUID", "musicUUID");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Music_uuid_key" ON "Music"("uuid");
-
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_currentlyListeningUUID_fkey" FOREIGN KEY ("currentlyListeningUUID") REFERENCES "Music"("uuid") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "FriendRequest" ADD CONSTRAINT "FriendRequest_user_uuid_fkey" FOREIGN KEY ("user_uuid") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -256,3 +235,4 @@ ALTER TABLE "PlaylistMusic" ADD CONSTRAINT "PlaylistMusic_playlistUUID_fkey" FOR
 
 -- AddForeignKey
 ALTER TABLE "PlaylistMusic" ADD CONSTRAINT "PlaylistMusic_providerUUID_fkey" FOREIGN KEY ("providerUUID") REFERENCES "Provider"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
+

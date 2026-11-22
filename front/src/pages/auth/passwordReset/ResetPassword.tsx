@@ -43,12 +43,12 @@ export default function ResetPassword() {
 			{
 				onSuccess: () => {
 					summonSuccessToast(() => t("pages.resetPassword.success"));
-					navigate("/login");
+					navigate("/login", { replace: true });
 				},
 				onError: (error) => {
 					if (error.status === 401) {
 						summonErrorToast(() => t("pages.resetPassword.error"));
-						navigate("/auth/request-password-reset");
+						navigate("/auth/request-password-reset", { replace: true });
 					} else {
 						setError(true);
 					}

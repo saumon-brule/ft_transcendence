@@ -21,6 +21,7 @@ import "./EditMusicPopUp.scss";
 import { DEFAULT_COVER } from "~/utils/imageFallback";
 import { t } from "~/i18n/context";
 import { devWarn } from "~/utils/devLog";
+import { invalidateProviderCatalog } from "~/api/queryHooks/providerManageCatalog";
 
 export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Music) => void) {
 	const providerClient = getProviderClient(music.provider.address, music.provider.uuid);
@@ -58,7 +59,9 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 		const handleSubmit = async () => {
 			let updated: Parameters<typeof Music.fromRawObject>[0] | null = null;
 			const notifyUpdate = () => {
-				if (updated) setNewMusic?.(Music.fromRawObject(updated, music.provider));
+				if (!updated) return;
+				invalidateProviderCatalog(music.provider);
+				setNewMusic?.(Music.fromRawObject(updated, music.provider));
 			};
 			const failEdit = (message: string, status?: number) => {
 				if (status === 413) summonErrorToast(() => t("pages.provider.popUps.fileTooLarge"));

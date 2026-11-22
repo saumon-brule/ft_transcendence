@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Download the audio of one or more YouTube videos as mp3 into provider/mock.
-# Usage: ./scripts/yt-download.sh <url> [url...]
+# Usage: ./scripts/dev/yt-download.sh <url> [url...]
 # Env: OUT_DIR (output directory), OUTPUT (yt-dlp output template, default "%(title)s.%(ext)s")
 # Requires: yt-dlp, ffmpeg
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-OUT_DIR="${OUT_DIR:-$SCRIPT_DIR/../mock}"
+OUT_DIR="${OUT_DIR:-$SCRIPT_DIR/../../provider/mock}"
 OUTPUT="${OUTPUT:-%(title)s.%(ext)s}"
 
 if [ "$#" -eq 0 ]; then

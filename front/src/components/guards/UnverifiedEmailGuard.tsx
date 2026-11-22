@@ -7,7 +7,7 @@ export default function UnverifiedEmailGuard(props: RouteSectionProps) {
 	const auth = useAuth();
 
 	createEffect(() => {
-		if (auth.jwtPayload.emailVerified) navigate("/home");
+		if (auth.jwtPayload.emailVerified) navigate("/home", { replace: true });
 	});
 
 	return <Show when={!auth.jwtPayload.emailVerified}>{props.children}</Show>;

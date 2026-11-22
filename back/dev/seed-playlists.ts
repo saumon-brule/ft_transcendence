@@ -1,14 +1,15 @@
 /*
- * Mock playlists to check every state of a track in the playlist page.
+ * Mock playlists to check every state of a track in the playlist page (development only, not part of the
+ * production image).
  *
- *   make server-seed                              -> playlists of the oldest account, on the first provider it owns
- *   make server-seed ARGS="--user=me@mail.com"    -> playlists of another account
- *   make server-seed ARGS="--provider=<uuid>"     -> provider holding the playable tracks
- *   make server-seed ARGS="--restricted-provider=<uuid>"  -> provider the account is not a member of
- *   make server-seed ARGS=--clean                 -> removes everything this script created
+ *   pnpm run seed:playlists                       -> playlists of the oldest account, on the first provider it owns
+ *   pnpm run seed:playlists --user=me@mail.com    -> playlists of another account
+ *   pnpm run seed:playlists --provider=<uuid>     -> provider holding the playable tracks
+ *   pnpm run seed:playlists --restricted-provider=<uuid>  -> provider the account is not a member of
+ *   pnpm run seed:playlists --clean               -> removes everything this script created
  *
- * The playable tracks are the three mp3 of provider/mock (make provider-seed imports them with
- * fixed uuids), so run it first on the provider. Offline tracks live on a mock provider whose
+ * The playable tracks are the three mp3 of provider/mock (pnpm --filter @flex/provider run seed:mock
+ * imports them with fixed uuids), so run it first on the provider. Offline tracks live on a mock provider whose
  * address never answers. Restricted tracks need a real provider the account has not joined: the
  * first one found is used, there is none to invent. Everything is named "[mock] ..." and the
  * mock listener owns the followed playlist; running the script again recreates it all.
@@ -17,7 +18,7 @@ import "dotenv/config";
 import { randomBytes } from "node:crypto";
 import * as bcrypt from "bcrypt";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "./generated/prisma/client";
+import { PrismaClient } from "../src/generated/prisma/client";
 
 const MOCK_PREFIX = "[mock] ";
 const MOCK_EMAIL_SUFFIX = "@flex.invalid";

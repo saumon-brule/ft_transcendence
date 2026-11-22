@@ -16,7 +16,7 @@
 
 > 2pts
 
-<!-- 
+
 ### Major: A public API to interact with the database with a secured API key, rate
 limiting, documentation, and at least 5 endpoints:
 - GET /api/{something}
@@ -25,7 +25,6 @@ limiting, documentation, and at least 5 endpoints:
 - DELETE /api/{something}
 
 > 2
--->
 
 ### Minor: Use an ORM for the database.
 
@@ -53,7 +52,7 @@ limiting, documentation, and at least 5 endpoints:
 
 > 1pt
 
-### TOTAL : 8 + 1 si les notif ça passe + 2 si on fait une public api en plus
+### TOTAL : 10 + 1 si les notif ça passe
 
 ## Accessibility and Internationalization
 
@@ -97,36 +96,7 @@ etc.).
 
 > 2pts
 
-<!-- ### Minor: User activity analytics and insights dashboard. -->
-
 ### TOTAL : 5pts
-
-## Cybersecu
-
-<!-- Major: Implement WAF/ModSecurity (hardened) + HashiCorp Vault for secrets:
-- Configure strict ModSecurity/WAF.
-- Manage secrets in Vault (API keys, credentials, environment variables), encrypted and isolated. -->
-
-## Devops
-
-### Minor: Health check and status page system with automated backups and disaster recovery procedures.
-
-> 1pt
-
-### TOTAL : 1pt
-
-## Data and analytics
-<!-- 
-Minor: Data export and import functionality.
-- Export data in multiple formats (JSON, CSV, XML, etc.).
-- Import data with validation.
-- Bulk operations support. -->
-
-<!-- Minor: GDPR compliance features.
-- Allow users to request their data.
-- Data deletion with confirmation.
-- Export user data in a readable format.
-- Confirmation emails for data operations. -->
 
 ## Custom
 
@@ -140,3 +110,5 @@ Minor: Data export and import functionality.
 - Taking shortcuts or implementing trivial features will result in rejection.
 - Be creative and think outside the box.
 - The module should be relevant to your project context
+
+> 2 pts

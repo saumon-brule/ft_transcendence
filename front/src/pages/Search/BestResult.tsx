@@ -33,7 +33,7 @@ export function BestResult(props: BestResultProps) {
 		audioManager.play();
 	}
 
-	return <Show when={props.best} keyed>{(best) => <div class="best-result">
+	return <Show when={props.best} keyed>{(best) => <div class="best-result" classList={{ "best-result--link": !(best.item instanceof Music) }}>
 		<Switch>
 			<Match when={best.item instanceof Artist && best.item}>{(artist) => <>
 				<ArtistAvatar artist={artist()}/>
