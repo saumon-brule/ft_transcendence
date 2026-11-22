@@ -32,11 +32,22 @@ function isPlainHttpUrl(value: string) {
 	}
 }
 
+export function isHttpsUrl(value: string) {
+	try {
+		return new URL(value).protocol === "https:";
+	} catch {
+		return false;
+	}
+}
+
+export const PROVIDER_ADDRESS_INVALID = "PROVIDER_ADDRESS_INVALID";
+export const PROVIDER_ADDRESS_HTTPS_REQUIRED = "PROVIDER_ADDRESS_HTTPS_REQUIRED";
+
 export const createProviderSchema = z.object({
 	name: z.string().trim().min(1).
 		max(50),
 	address: z.string().trim().max(255).
-		refine(isPlainHttpUrl, { message: "The address must be an https:// URL, without credentials" }),
+		refine(isPlainHttpUrl, { message: PROVIDER_ADDRESS_INVALID }),
 });
 export type CreateProviderDto = z.infer<typeof createProviderSchema>;
 

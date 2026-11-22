@@ -643,6 +643,18 @@ export default {
 		profileUnavailable: "No pudimos cargar tu perfil",
 		retry: "Reintentar",
 		input: {
+			providerAddress: {
+				invalid: "Introduce una dirección http:// o https://, sin usuario ni contraseña",
+				httpsRequired: "La dirección debe empezar por https://",
+			},
+			password: {
+				tooShort: "La contraseña debe tener al menos {{min}} caracteres",
+				needsLowercase: "La contraseña debe contener una letra minúscula",
+				needsUppercase: "La contraseña debe contener una letra mayúscula",
+				needsDigit: "La contraseña debe contener un número",
+				needsSpecial: "La contraseña debe contener un carácter especial",
+				tooLong: "La contraseña es demasiado larga (máximo {{max}} bytes)",
+			},
 			select: {
 				valueMissing: "Selecciona un valor",
 			},

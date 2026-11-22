@@ -15,7 +15,12 @@ export function setupZodErrorMap(t: Translator) {
 
 			case "too_small":
 				result = t("errors.input.text.tooShort", { min: String(iss.minimum) });
+				break;
+
+			case "too_big":
+				result = t("errors.input.text.tooLong", { max: String(iss.maximum) });
+				break;
 		}
-		return { message: result ?? undefined };
+		return { message: result || t("errors.input.text.patternMismatch") };
 	});
 }

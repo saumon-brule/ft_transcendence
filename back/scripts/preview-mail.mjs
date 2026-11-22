@@ -25,18 +25,28 @@ const context = {
 	year: new Date().getFullYear(),
 };
 
+const { mailTexts, MAIL_TEMPLATES } = await import("../src/core/mail/mail.i18n.ts");
+const LANGUAGES = ["en", "fr", "es", "ja"];
+
 function render() {
 	mkdirSync(outDir, { recursive: true });
 	for (const file of readdirSync(templatesDir).filter((f) => f.endsWith(".hbs"))) {
 		const name = basename(file, ".hbs");
-		try {
-			const tpl = Handlebars.compile(readFileSync(join(templatesDir, file), "utf8"), {
-				strict: true,
-			});
-			writeFileSync(join(outDir, `${name}.html`), tpl(context));
-			console.log(`✓ ${name} → .mail-preview/${name}.html`);
-		} catch (e) {
-			console.error(`✗ ${name}: ${e.message}`);
+		if (!MAIL_TEMPLATES.includes(name)) {
+			console.log(`- ${name}: no texts in mail.i18n.ts, skipped`);
+			continue;
+		}
+		for (const lang of LANGUAGES) {
+			const out = `${name}.${lang}.html`;
+			try {
+				const tpl = Handlebars.compile(readFileSync(join(templatesDir, file), "utf8"), {
+					strict: true,
+				});
+				writeFileSync(join(outDir, out), tpl({ ...context, lang, t: mailTexts(name, lang) }));
+				console.log(`✓ ${name} (${lang}) → .mail-preview/${out}`);
+			} catch (e) {
+				console.error(`✗ ${name} (${lang}): ${e.message}`);
+			}
 		}
 	}
 }

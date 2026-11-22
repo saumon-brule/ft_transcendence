@@ -15,7 +15,7 @@ import Logo42 from "~/components/graphics/icons/Logo42";
 
 export default function RegisterForm() {
 	const [error, setError] = createSignal<JSXElement>(null);
-	const { t } = useTranslation();
+	const { t, locale } = useTranslation();
 
 	const registerMutation = client.auth.register.createMutation();
 
@@ -32,6 +32,7 @@ export default function RegisterForm() {
 					username: usernameInput.value,
 					email: emailInput.value,
 					password: passwordInput.value,
+					language: locale(),
 				},
 			},
 			{

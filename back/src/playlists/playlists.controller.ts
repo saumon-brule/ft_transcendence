@@ -35,7 +35,9 @@ import { ASSET_DIR, COVER_DIR } from "../core/utils/constants";
 export class PlaylistsController {
 	constructor(private readonly playlistsService: PlaylistsService) {}
 
-	@UseInterceptors(FileInterceptor("cover"))
+	@UseInterceptors(FileInterceptor("cover", {
+		limits: { fileSize: MAX_SIZE },
+	}))
 	@TsRestHandler(playlistsContract.uploadCover)
 	@UseGuards(JwtAuthGuard)
 	public uploadCover(

@@ -18,8 +18,8 @@ export { CHAT_MAX_MESSAGE_LENGTH, chatErrorCodeSchema, sendChatMessageSchema, ch
 export { loginSchema, type LoginDto } from "./contracts/server/auth/schemas/login.schema";
 export { requestEmailResetSchema, resetEmailSchema, type RequestEmailResetDto, type ResetEmailDto } from "./contracts/server/auth/schemas/email.schema";
 export { registerSchema, type RegisterDto } from "./contracts/server/auth/schemas/register.schema";
-export { resetPasswordSchema, changePasswordSchema, type RequestPasswordResetDto, type ChangePasswordDto } from "./contracts/server/auth/schemas/password.schema";
-export { userSchema, meSchema, updateMeSchema, usersBatchSchema, usersBatchResponseSchema, USERS_BATCH_MAX, type UsersBatchDto, type UsersBatchResponse, type User, type ShortUser, onlineStatusSchema, friendSchema, type OnlineStatus, type Friend, type Profile, type UpdateMeDto, languageEnum } from "./contracts/server/users/schemas/user.schema";
+export { resetPasswordSchema, changePasswordSchema, PASSWORD_MIN_LENGTH, PASSWORD_MAX_BYTES, type RequestPasswordResetDto, type ChangePasswordDto } from "./contracts/server/auth/schemas/password.schema";
+export { userSchema, meSchema, updateMeSchema, usersBatchSchema, usersBatchResponseSchema, USERS_BATCH_MAX, type UsersBatchDto, type UsersBatchResponse, type User, type ShortUser, onlineStatusSchema, friendSchema, type OnlineStatus, type Friend, type Profile, type UpdateMeDto, languageEnum, type Language } from "./contracts/server/users/schemas/user.schema";
 export { createProviderSchema, editProviderSchema, type CreateProviderDto, type Provider } from "./contracts/server/providers/schemas/provider.schema";
 export { getAppVariables } from "./contracts/server/appConfig/schemas/app-config.schema";
 

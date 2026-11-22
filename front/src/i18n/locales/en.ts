@@ -643,6 +643,18 @@ export default {
 		profileUnavailable: "We couldn't load your profile",
 		retry: "Retry",
 		input: {
+			providerAddress: {
+				invalid: "Please enter an http:// or https:// address, without username or password",
+				httpsRequired: "The address must start with https://",
+			},
+			password: {
+				tooShort: "Password must be at least {{min}} characters long",
+				needsLowercase: "Password must contain a lowercase letter",
+				needsUppercase: "Password must contain an uppercase letter",
+				needsDigit: "Password must contain a digit",
+				needsSpecial: "Password must contain a special character",
+				tooLong: "Password is too long (maximum {{max}} bytes)",
+			},
 			select: {
 				valueMissing: "Please select a value",
 			},

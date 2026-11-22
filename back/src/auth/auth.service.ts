@@ -60,6 +60,7 @@ export class AuthService {
 			dto.email,
 			dto.password,
 			dto.username,
+			dto.language,
 		);
 
 		if (!insertedUser) {
@@ -69,7 +70,9 @@ export class AuthService {
 
 		this.logger.log(LogBuilder.auth.registration(dto.email, insertedUser.uuid));
 
-		await this.sendEmailValidation(insertedUser);
+		try {
+			await this.sendEmailValidation(insertedUser);
+		} catch (_) {}
 
 		return {
 			accessToken: await this.generateAccessToken(insertedUser.uuid, insertedUser.emailValidated),
@@ -201,7 +204,7 @@ export class AuthService {
 			throw new AppForbiddenException("FORBIDDEN", "your email is already validated");
 		}
 
-		await this.mailService.sendEmail([user.email], "Confirm your email - Flex", "confirm-email", {
+		await this.mailService.sendEmail([user.email], "confirm-email", user.language, {
 			username: user.username,
 			token: await this.tokensService.createConfirmEmailToken(user.uuid),
 			baseFrontUrl: env.BASE_FRONT_URL,
@@ -227,8 +230,8 @@ export class AuthService {
 	private async sendResetPasswordEmail(user: User) {
 		await this.mailService.sendEmail(
 			[user.email],
-			"Reset your password - Flex",
 			"reset-password",
+			user.language,
 			{
 				token: await this.tokensService.createResetPasswordToken(user.uuid),
 				baseFrontUrl: env.BASE_FRONT_URL,
@@ -322,8 +325,8 @@ export class AuthService {
 	private async sendChangeEmail(user: User, newEmail: string) {
 		await this.mailService.sendEmail(
 			[newEmail],
-			"Change your email - Flex",
 			"reset-email",
+			user.language,
 			{
 				token: await this.tokensService.createResetEmailToken(
 					user.uuid,
