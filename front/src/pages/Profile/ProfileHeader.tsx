@@ -1,6 +1,5 @@
 import { Show } from "solid-js";
 import type { User } from "@flex/shared";
-import MusicBars from "~/components/graphics/icons/MusicBars";
 import { env } from "~/env";
 import { auth } from "~/store/auth.store";
 import FriendshipActions from "~/components/ui/elements/FriendshipAction/FriendshipActions";

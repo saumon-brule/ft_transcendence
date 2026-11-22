@@ -11,17 +11,12 @@ import { useTranslation } from "~/i18n/context";
 import "./ProfileSettings.scss";
 import { OverlayControls } from "~/components/ui/overlays/Overlay";
 import { summonUsernameEditPopUp } from "./editionPopUps/usernamePopUp";
-import MusicBars from "~/components/graphics/icons/MusicBars";
 import { MAX_SIZE, serverContract } from "@flex/shared";
 import { X } from "lucide-solid";
 import ProgressRing from "~/components/ui/feedback/ProgressRing";
 
 type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
 type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;
-
-function toDate(value: Date | string): Date {
-	return value instanceof Date ? value : new Date(value);
-}
 
 export default function ProfileSettings() {
 	const user = useProfile();
