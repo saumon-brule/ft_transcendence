@@ -4,7 +4,7 @@ import Button from "~/components/inputs/Button";
 import "./ManageMusics.scss";
 import { useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
 import { Music } from "~/class/Music";
-import MusicCover from "~/components/ui/MusicCover";
+import MusicCover from "~/components/ui/elements/MusicCover";
 import { Pencil, Trash } from "lucide-solid";
 import { providerRemoveMusic } from "~/api/queryHooks/providerManageCatalog";
 import { summonEditMusicPopUp } from "../popUps/summonEditMusicPopUp";

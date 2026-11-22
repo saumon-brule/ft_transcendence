@@ -1,6 +1,6 @@
 import { createSignal, For, Show } from "solid-js";
 import type { User } from "@flex/shared";
-import ProviderCard from "~/components/ui/ProviderCard/ProviderCard";
+import ProviderCard from "~/components/ui/cards/ProviderCard/ProviderCard";
 import { useTranslation } from "~/i18n/context";
 
 type ProviderSectionProps = {

@@ -1,7 +1,7 @@
 import { useDeletePlaylistMutation } from "~/api/queryHooks/playlist";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
-import { summonPopUp } from "~/components/ui/Overlay";
+import { summonPopUp } from "~/components/ui/overlays/Overlay";
 import { t } from "~/i18n/context";
 
 export const summonDeletePlaylistPopUp = (playlist: { uuid: string; name: string }, onDeleted?: () => void) => summonPopUp((popUpControls) => {

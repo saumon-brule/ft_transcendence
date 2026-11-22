@@ -1,15 +1,15 @@
 import { For, Show } from "solid-js";
 import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
-import AlbumCard from "~/components/ui/AlbumCard";
-import ArtistCard from "~/components/ui/ArtistCard";
+import AlbumCard from "~/components/ui/cards/AlbumCard";
+import ArtistCard from "~/components/ui/cards/ArtistCard";
 import { history } from "~/store/history.store";
 import "./Home.scss";
 import { Music } from "~/class/Music";
-import MusicCard from "~/components/ui/MusicCard";
+import MusicCard from "~/components/ui/cards/MusicCard";
 import { useProfile } from "~/components/guards/ProfileGate";
 import { Playlist } from "~/class/Playlist";
-import PlaylistCard from "~/components/ui/PlaylistCard/PlaylistCard";
+import PlaylistCard from "~/components/ui/cards/PlaylistCard/PlaylistCard";
 import { useTranslation } from "~/i18n/context";
 
 export default function Home() {

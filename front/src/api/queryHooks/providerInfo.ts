@@ -1,7 +1,7 @@
 import { createMemo } from "solid-js";
 import { createInfiniteQuery, createQueries, createQuery, useQueryClient } from "@tanstack/solid-query";
 import { getProviderClient } from "../providerClients";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { Music } from "~/class/Music";
 import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";

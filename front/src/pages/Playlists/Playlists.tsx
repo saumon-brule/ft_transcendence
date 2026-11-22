@@ -1,7 +1,7 @@
 import { useNavigate } from "@solidjs/router";
 import { For, Show } from "solid-js";
 import { usePlaylistsQuery } from "~/api/queryHooks/playlist";
-import PlaylistCard, { NewPlaylistCard } from "~/components/ui/PlaylistCard/PlaylistCard";
+import PlaylistCard, { NewPlaylistCard } from "~/components/ui/cards/PlaylistCard/PlaylistCard";
 import { summonNewPlaylistPopUp } from "./popUps/newPlaylistPopUp";
 import "./Playlists.scss";
 import { useTranslation } from "~/i18n/context";

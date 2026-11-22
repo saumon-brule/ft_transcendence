@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "@solidjs/router";
 import { chatErrorSchema, chatMessageSchema, presenceSchema, type ChatError, type ChatErrorCode } from "@flex/shared";
 import type { AppSocket } from "~/api/socket";
-import { summonErrorToast, summonInfoToast } from "~/components/ui/Toaster";
+import { summonErrorToast, summonInfoToast } from "~/components/ui/feedback/Toaster";
 import { auth } from "~/store/auth.store";
 import { clearChats, getChat, receiveMessage } from "~/store/messages.store";
 import { t } from "~/i18n/context";

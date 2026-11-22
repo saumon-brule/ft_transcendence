@@ -4,7 +4,7 @@ import { useRenamePlaylistMutation } from "~/api/queryHooks/playlist";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
-import { summonPopUp } from "~/components/ui/Overlay";
+import { summonPopUp } from "~/components/ui/overlays/Overlay";
 import { validateFromZod } from "~/utils/validateFromZod";
 import { t } from "~/i18n/context";
 

@@ -1,7 +1,7 @@
 import { useNavigate, RouteSectionProps, useParams } from "@solidjs/router";
 import { createContext, createEffect, Show, useContext } from "solid-js";
 import { client, queryKeys } from "~/api/client";
-import { summonErrorToast } from "../ui/Toaster";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { Provider } from "@flex/shared";
 import LoadingSplash from "~/pages/Loading/LoadingSplash";
 import { useTranslation } from "~/i18n/context";

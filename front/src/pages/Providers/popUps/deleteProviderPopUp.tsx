@@ -4,8 +4,8 @@ import { queryClient } from "~/api/queryClient";
 import { client, queryKeys } from "~/api/client";
 import Button from "~/components/inputs/Button";
 import Form from "~/components/inputs/Form/Form";
-import { summonPopUp } from "~/components/ui/Overlay";
-import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
+import { summonPopUp } from "~/components/ui/overlays/Overlay";
+import { summonErrorToast, summonSuccessToast } from "~/components/ui/feedback/Toaster";
 import { t } from "~/i18n/context";
 
 export const summonDeleteProviderPopUp = (providerUUID: string, onClose?: () => void) => summonPopUp((popUpControls) => {

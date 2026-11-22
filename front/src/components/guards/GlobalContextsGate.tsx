@@ -3,8 +3,8 @@ import { RouteSectionProps } from "@solidjs/router";
 import { QueryClientProvider } from "@tanstack/solid-query";
 import { queryClient } from "~/api/queryClient";
 import { I18nProvider } from "~/i18n/context";
-import { ToasterAnchor } from "../ui/Toaster";
-import { OverlayRoot } from "../ui/Overlay";
+import { ToasterAnchor } from "~/components/ui/feedback/Toaster";
+import { OverlayRoot } from "~/components/ui/overlays/Overlay";
 import { initialized } from "~/store/auth.store";
 import LoadingSplash from "~/pages/Loading/LoadingSplash";
 

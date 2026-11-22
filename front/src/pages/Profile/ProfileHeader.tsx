@@ -3,7 +3,7 @@ import type { User } from "@flex/shared";
 import MusicBars from "~/components/graphics/icons/MusicBars";
 import { env } from "~/env";
 import { auth } from "~/store/auth.store";
-import FriendshipActions from "~/components/ui/FriendshipAction/FriendshipActions";
+import FriendshipActions from "~/components/ui/elements/FriendshipAction/FriendshipActions";
 import { useTranslation } from "~/i18n/context";
 
 function toDate(value: Date | string): Date {

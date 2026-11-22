@@ -2,7 +2,7 @@ import { createSignal, splitProps } from "solid-js";
 import { client } from "~/api/client";
 import Button from "~/components/inputs/Button";
 import { ButtonProps } from "~/components/inputs/Button/Button";
-import { summonErrorToast } from "~/components/ui/Toaster";
+import { summonErrorToast } from "~/components/ui/feedback/Toaster";
 import { useTranslation } from "~/i18n/context";
 import { encodeOauthState } from "~/utils/encodeOauthState";
 import { MessageEventData } from "~/types/MessageEventData";

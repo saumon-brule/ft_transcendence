@@ -1,9 +1,9 @@
 import { createMemo, Show } from "solid-js";
 import { useProviderMusicsInfiniteQuery } from "~/api/queryHooks/providerInfo";
-import MusicSection, { type MusicSortField } from "~/components/ui/MusicSection/MusicSection";
-import NoResult from "~/components/ui/NoResult/NoResult";
-import InfiniteScroll from "~/components/ui/InfiniteScroll";
-import { useSortParam } from "~/components/ui/SortBar/useSortParam";
+import MusicSection, { type MusicSortField } from "~/components/ui/sections/MusicSection/MusicSection";
+import NoResult from "~/components/ui/feedback/NoResult/NoResult";
+import InfiniteScroll from "~/components/ui/navigation/InfiniteScroll";
+import { useSortParam } from "~/components/ui/navigation/SortBar/useSortParam";
 import { MUSIC_SORT_FIELDS } from "@flex/shared";
 import type { SearchSort } from "~/api/queryHooks/providerInfo";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";

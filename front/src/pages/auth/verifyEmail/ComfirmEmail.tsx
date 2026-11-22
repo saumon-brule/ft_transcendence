@@ -2,9 +2,9 @@ import { createSignal, Match, onMount, Switch } from "solid-js";
 import { client } from "~/api/client";
 import "./ComfirmEmail.scss";
 import { A, useLocation } from "@solidjs/router";
-import DialogPage from "~/components/ui/DialogPage";
+import DialogPage from "~/components/ui/page/DialogPage";
 import { useTranslation } from "~/i18n/context";
-import LinkParticles from "~/components/ui/LinkParticles";
+import LinkParticles from "~/components/ui/page/LinkParticles";
 
 type State = "WAITING" | "CONFIRMED" | "MISSING_TOKEN" | "ERROR";
 
