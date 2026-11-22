@@ -9,6 +9,7 @@ import { z } from "zod";
 import { doproviderRefresh } from "./doRefresh";
 import { providerTokens, authActions } from "~/store/auth.store";
 import { xhrFetchApi } from "./xhrUtils";
+import { devWarn } from "~/utils/devLog";
 
 type ExtraArgs = { onUploadProgress?: (ratio: number) => void };
 
@@ -93,12 +94,12 @@ export function refreshProviderMediaToken(providerUrl: string, providerUuid: str
 				providerClient.mediaToken = { token: r.body.token, expiresAt: r.body.expiresAt };
 				return true;
 			} else {
-				console.error(`Failed to refresh media token for provider ${providerUrl}: ${r.status}`);
+				devWarn(`Failed to refresh media token for provider ${providerUrl}: ${r.status}`);
 				return false;
 			}
 		})
 		.catch((err) => {
-			console.error(`Error refreshing media token for provider ${providerUrl}:`, err);
+			devWarn(`Error refreshing media token for provider ${providerUrl}:`, err);
 			return false;
 		});
 }

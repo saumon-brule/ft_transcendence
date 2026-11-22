@@ -23,6 +23,7 @@ import { summonAddArtistPopUp } from "./summonAddArtistPopUp";
 import { getProgressionPourcent } from "~/components/ui/Footer/Controller";
 import { MusicTimer } from "~/components/common/MusicTimer/MusicTimer";
 import { t } from "~/i18n/context";
+import { devWarn } from "~/utils/devLog";
 
 function pictureToFile(pic: IPicture, baseName = "cover"): File {
 	const ext = pic.format.split("/")[1]?.replace("jpeg", "jpg") ?? "bin";
@@ -74,11 +75,11 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 	const artistList = artists?.length ? artists : artist ? [artist] : [];
 	const [foundArtists, foundAlbum] = await Promise.all([
 		searchRelatedArtists(artistList, provider).catch((e) => {
-			console.error(e);
+			devWarn(e);
 			return { found: [], rest: artistList };
 		}),
 		searchRelatedAlbum(album, provider).catch((e) => {
-			console.error(e);
+			devWarn(e);
 			return null;
 		}),
 	]);
@@ -182,7 +183,7 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 				onNewMusic?.(Music.fromRawObject(newMusic, provider));
 				props.close();
 			} catch (e) {
-				console.error(e);
+				devWarn(e);
 				failCreation();
 			}
 		};

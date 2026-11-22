@@ -12,6 +12,7 @@ import { summonErrorToast } from "~/components/ui/Toaster";
 import "./AddArtistPopUp.scss";
 import { Artist } from "~/class/Artist";
 import { t } from "~/i18n/context";
+import { devWarn } from "~/utils/devLog";
 
 export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", onNewArtist?: (newArtist: Artist) => void) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
@@ -74,7 +75,7 @@ export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", 
 				onNewArtist?.(Artist.fromRawObject(newArtist, provider));
 				props.close();
 			} catch (e) {
-				console.error(e);
+				devWarn(e);
 				failCreation();
 			}
 		};

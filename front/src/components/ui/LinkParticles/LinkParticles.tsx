@@ -1,6 +1,7 @@
 import { onCleanup, onMount } from "solid-js";
 import { tsParticles, type Container } from "@tsparticles/engine";
 import { loadLinksPreset } from "@tsparticles/preset-links";
+import { devWarn } from "~/utils/devLog";
 
 let particles: Promise<void> | undefined;
 
@@ -60,7 +61,7 @@ export default function LinkParticles() {
 				},
 			});
 		} catch (error) {
-			console.error("Failed to initialize particles:", error);
+			devWarn("Failed to initialize particles:", error);
 		}
 	};
 
