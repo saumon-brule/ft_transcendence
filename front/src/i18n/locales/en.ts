@@ -672,8 +672,8 @@ export default {
 					typeMismatch: "Please enter a valid url",
 				},
 				search: {
-					valueMissing: "Please enter a research",
-					typeMismatch: "Please enter a valid research",
+					valueMissing: "Please enter a search query",
+					typeMismatch: "Please enter a valid search query",
 				},
 				date: {
 					valueMissing: "Please enter a date",
