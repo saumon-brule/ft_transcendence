@@ -7,8 +7,7 @@ import ArtistsLinks from "../ArtistLinks";
 import "./AlbumCard.scss";
 import { Album } from "~/class/Album";
 
-export type AlbumCoverProps = JSX.IntrinsicElements["img"] & { album: Album }
-
+export type AlbumCoverProps = JSX.IntrinsicElements["img"] & { album: Album };
 
 export function AlbumCover(props: AlbumCoverProps) {
 	const mediaToken = useMediaToken(() => props.album.provider.address, () => props.album.provider.uuid);
