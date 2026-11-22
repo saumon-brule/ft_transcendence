@@ -9,7 +9,7 @@ import { getProviderClient } from "~/api/providerClients";
 import { ArtistItemDto, Provider, providerContract } from "@flex/shared";
 import { settleResponse } from "~/api/utils/settleResponse";
 import UploadProgress from "~/components/ui/UploadProgress";
-import { Plus, X } from "lucide-solid";
+import { Pause, Play, Plus, X } from "lucide-solid";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import { Artist } from "~/class/Artist";
 import { ArtistAvatar } from "~/components/ui/ArtistCard";
@@ -20,6 +20,8 @@ import { SelectArtistMenu } from "./SelectArtistMenu";
 import { AlbumCover } from "~/components/ui/AlbumCard";
 import { Music } from "~/class/Music";
 import { summonAddArtistPopUp } from "./summonAddArtistPopUp";
+import { getProgressionPourcent } from "~/components/ui/Footer/Controller";
+import { MusicTimer } from "~/components/common/MusicTimer/MusicTimer";
 
 function pictureToFile(pic: IPicture, baseName = "cover"): File {
 	const ext = pic.format.split("/")[1]?.replace("jpeg", "jpg") ?? "bin";
@@ -186,6 +188,68 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 
 		const isPending = () => musicCreateMutation.isPending || musicUploadAudioMutation.isPending || musicUploadCoverMutation.isPending || musicRemoveMutation.isPending;
 
+		const audioUrl = URL.createObjectURL(musicFile);
+		const audio = new Audio(audioUrl);
+
+		const [playing, setPlaying] = createSignal(false);
+		const [progression, setProgression] = createSignal(0);
+		const [mouseMoveProgression, setMouseMoveProgression] = createSignal<number | null>(null);
+
+		audio.addEventListener("timeupdate", () => setProgression(audio.currentTime));
+		audio.addEventListener("play", () => setPlaying(true));
+		audio.addEventListener("pause", () => setPlaying(false));
+		audio.addEventListener("ended", () => {
+			setPlaying(false);
+			setProgression(0);
+		});
+
+		const displayedProgression = () => (
+			mouseMoveProgression() ?? (progression() / duration)
+		);
+		const displayedProgressionTime = () => {
+			const p = mouseMoveProgression();
+			return p !== null ? p * duration : progression();
+		};
+
+		let progressBarRef!: HTMLDivElement;
+		let wasPlaying = false;
+
+		function handleMouseMove(e: MouseEvent) {
+			e.preventDefault();
+			setMouseMoveProgression(getProgressionPourcent(progressBarRef, e.clientX));
+		}
+
+		function handleMouseUp(e: MouseEvent) {
+			e.preventDefault();
+			document.removeEventListener("mousemove", handleMouseMove);
+			document.removeEventListener("mouseup", handleMouseUp);
+			const p = mouseMoveProgression();
+			if (p !== null && duration) {
+				audio.currentTime = p * duration;
+				setProgression(audio.currentTime);
+				setMouseMoveProgression(null);
+			}
+			if (wasPlaying) void audio.play();
+			wasPlaying = false;
+		}
+
+		function handleMouseDown(e: MouseEvent) {
+			e.preventDefault();
+			wasPlaying = !audio.paused;
+			audio.pause();
+			document.addEventListener("mousemove", handleMouseMove);
+			document.addEventListener("mouseup", handleMouseUp);
+			setMouseMoveProgression(getProgressionPourcent(progressBarRef, e.clientX));
+		}
+
+		onCleanup(() => {
+			audio.pause();
+			audio.src = "";
+			URL.revokeObjectURL(audioUrl);
+			document.removeEventListener("mousemove", handleMouseMove);
+			document.removeEventListener("mouseup", handleMouseUp);
+		});
+
 		return <Form class="upload-music-pop-up" onSubmit={() => { void handleSubmit(); }}>
 			<h2 >Upload new music</h2>
 			<div class="upload-music-info">
@@ -214,6 +278,15 @@ export async function summonUploadMusicPopUp(musicFile: File, provider: Provider
 						</div>}
 					</Show>
 				</div>
+			</div>
+			<div class="upload-music-preview" style={{ "--progression-bar": `${displayedProgression()}` }}>
+				<Button type="button" icon size="sm" onClick={() => (playing() ? audio.pause() : void audio.play())}>
+					{playing() ? <Pause/> : <Play/>}
+				</Button>
+				<div class="progression-bar" ref={progressBarRef} onMouseDown={handleMouseDown}>
+					<div/><button type="button"><span/></button>
+				</div>
+				<MusicTimer class="time" time={displayedProgressionTime()} />
 			</div>
 			<div class="upload-music-music-artists" >
 				<div class="artist">
