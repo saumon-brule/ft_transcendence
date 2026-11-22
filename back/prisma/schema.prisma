@@ -19,9 +19,6 @@ model User {
     emailValidated         Boolean   @default(false)
     intraId                Int?      @unique
     language               String?   @default("en")
-    currentlyListeningUUID String?
-    listeningUntil         DateTime?
-    listeningPrivate       Boolean   @default(false)
     avatarUpdatedAt        DateTime  @default(now())
     apiKeyHash             String?   @unique
     apiOneHourUsage        Int       @default(0)
@@ -36,7 +33,6 @@ model User {
     providerAccessRequests ProviderAccessRequest[]
     playlists              UserPlaylist[]
     ownedPlaylists         Playlist[]
-    currentlyListening     Music?                  @relation(fields: [currentlyListeningUUID], references: [uuid], onDelete: SetNull)
     friendsRequests        FriendRequest[]         @relation("Requester")
     friendsReceive         FriendRequest[]         @relation("Receiver")
 }
@@ -193,16 +189,4 @@ model PlaylistMusic {
     provider Provider @relation(fields: [providerUUID], references: [uuid], onDelete: Cascade)
 
     @@unique([playlistUUID, providerUUID, musicUUID])
-}
-
-model Music {
-    id          Int      @id @default(autoincrement())
-    uuid        String   @unique @default(uuid())
-    title       String
-    artist      String
-    duration    Int
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-
-    currentlyListeningUsers User[]
 }
