@@ -11,17 +11,12 @@ import { useTranslation } from "~/i18n/context";
 import "./ProfileSettings.scss";
 import { OverlayControls } from "~/components/ui/overlays/Overlay";
 import { summonUsernameEditPopUp } from "./editionPopUps/usernamePopUp";
-import MusicBars from "~/components/graphics/icons/MusicBars";
 import { MAX_SIZE, serverContract } from "@flex/shared";
 import { X } from "lucide-solid";
 import ProgressRing from "~/components/ui/feedback/ProgressRing";
 
 type UserMeResponse = ClientInferResponses<typeof serverContract.users.me, 200>;
 type OnChangeEventHandler = JSX.ChangeEventHandlerUnion<HTMLInputElement, Event>;
-
-function toDate(value: Date | string): Date {
-	return value instanceof Date ? value : new Date(value);
-}
 
 export default function ProfileSettings() {
 	const user = useProfile();
@@ -130,9 +125,6 @@ export default function ProfileSettings() {
 					<div class="separator" />
 					<div class="stat">{t("components.profileStats.playlists", { count: String(user()._count.ownedPlaylists) })}</div>
 				</div>
-				<Show when={user().currentlyListening && user().listeningUntil && toDate(user().listeningUntil!) > new Date()}>
-					<div class="listening"><MusicBars />{t("components.profileStats.listening", { title: user().currentlyListening!.title, artist: user().currentlyListening!.artist })}</div>
-				</Show>
 			</div>
 		</div>
 	</main>;

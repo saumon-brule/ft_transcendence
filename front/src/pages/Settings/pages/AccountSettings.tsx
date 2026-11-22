@@ -47,7 +47,7 @@ export default function AccountSettings() {
 
 	const changeLanguage: SelectChangeHandler = (e) => {
 		setIsLanguageChanging(true);
-		const newLanguage = e.currentTarget.value as "en" | "fr";
+		const newLanguage = e.currentTarget.value as "en" | "fr" | "es" | "ja";
 		updateMeMutation.mutate(
 			{ body: { language: newLanguage } },
 			{
@@ -124,6 +124,8 @@ export default function AccountSettings() {
 				<Select disabled={isLanguageChanging()} onChange={changeLanguage}>
 					<option value="en" selected={user().language === "en"}>{t("pages.settings.account.language.english")}</option>
 					<option value="fr" selected={user().language === "fr"}>{t("pages.settings.account.language.french")}</option>
+					<option value="ja" selected={user().language === "ja"}>{t("pages.settings.account.language.japanese")}</option>
+					<option value="es" selected={user().language === "es"}>{t("pages.settings.account.language.spanish")}</option>
 				</Select>
 			</div>
 			<div class="setting-field">

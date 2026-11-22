@@ -54,8 +54,6 @@ export const userSchema = z.object({
 	uuid: z.string().uuid(),
 	username: z.string(),
 	createdAt: z.coerce.date(),
-	currentlyListening: musicSchema.nullable(),
-	listeningUntil: z.coerce.date().nullable(),
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
 	ownedPlaylists: z.array(playlistSchema),
@@ -69,7 +67,7 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>;
 
-const languageEnum = z.enum(["en", "fr"]);
+export const languageEnum = z.enum(["en", "fr", "ja", "es"]);
 
 export const meSchema = z.object({
 	uuid: z.string().uuid(),
@@ -78,10 +76,7 @@ export const meSchema = z.object({
 	intraId: z.number().nullable(),
 	language: languageEnum,
 	hasPassword: z.boolean(),
-	listeningPrivate: z.boolean(),
 	createdAt: z.coerce.date(),
-	currentlyListening: musicSchema.nullable(),
-	listeningUntil: z.coerce.date().nullable(),
 	avatarUpdatedAt: z.coerce.date(),
 	ownedProviders: z.array(providerSchema),
 	connectedProviders: z.array(providerSchema),
@@ -101,7 +96,6 @@ export const updateMeSchema = z.object({
 	username: z.string().min(3).max(32).
 		optional(),
 	language: languageEnum.optional(),
-	listeningPrivate: z.boolean().optional(),
 });
 export type UpdateMeDto = z.infer<typeof updateMeSchema>;
 

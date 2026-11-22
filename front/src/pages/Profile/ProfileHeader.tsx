@@ -1,6 +1,5 @@
 import { Show } from "solid-js";
 import type { User } from "@flex/shared";
-import MusicBars from "~/components/graphics/icons/MusicBars";
 import { env } from "~/env";
 import { auth } from "~/store/auth.store";
 import FriendshipActions from "~/components/ui/elements/FriendshipAction/FriendshipActions";
@@ -23,9 +22,6 @@ export default function ProfileHeader(props: { profile: User }) {
 				<div class="separator" />
 				<div class="stat">{t("components.profileStats.playlists", { count: String(props.profile._count.ownedPlaylists) })}</div>
 			</div>
-			<Show when={props.profile.currentlyListening && props.profile.listeningUntil && toDate(props.profile.listeningUntil) > new Date()}>
-				<div class="listening"><MusicBars />{t("components.profileStats.listening", { title: props.profile.currentlyListening!.title, artist: props.profile.currentlyListening!.artist })}</div>
-			</Show>
 		</div>
 		<Show when={auth.accessToken !== null && auth.jwtPayload.sub !== props.profile.uuid && auth.jwtPayload.sub} keyed>
 			{(meUuid) => <FriendshipActions meUuid={meUuid} targetUuid={props.profile.uuid} />}
