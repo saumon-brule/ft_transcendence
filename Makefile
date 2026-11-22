@@ -1,55 +1,31 @@
-# make provider NAME=1 runs a second provider: project flex-provider-1, settings in provider/.env.1,
-# secrets in provider/secrets.1 (make secrets-provider NAME=1). Without NAME, the default one.
-PROVIDER_PROJECT = flex-provider$(if $(NAME),-$(NAME))
-PROVIDER_COMPOSE = PROVIDER_SECRETS_DIR=secrets$(if $(NAME),.$(NAME)) docker compose -p $(PROVIDER_PROJECT) -f provider/docker-compose.yml $(if $(NAME),--env-file provider/.env.$(NAME))
+# Production stacks (Docker only). Development uses pnpm, see the scripts of package.json and the README.
+#
+#   make secrets-server                  secrets/server/ and .env (from .env.example)
+#   make server | server-down | server-logs | server-reset
+#
+#   make secrets-provider NAME=<name>    secrets/provider-<name>/ and .env.provider-<name> (from .env.provider.example)
+#   make provider NAME=<name>            one provider per name, several can run on the same machine
+#   make provider-down | provider-logs | provider-reset NAME=<name>
 
-define provider_env_check
-@test -z "$(NAME)" || test -f provider/.env.$(NAME) || { echo "provider/.env.$(NAME) is missing: copy provider/.env.example to it and change PROVIDER_PORT, PROVIDER_HTTP_PORT, PROVIDER_URL"; exit 1; }
+PROVIDER_PROJECT = flex-provider-$(NAME)
+PROVIDER_COMPOSE = PROVIDER_NAME=$(NAME) docker compose -p $(PROVIDER_PROJECT) -f docker-compose.provider.yml --env-file .env.provider-$(NAME)
+
+# NAME is required by every provider target: lowercase letters, digits and dashes
+define provider_check
+@test -n "$(NAME)" || { echo "NAME is required: make $@ NAME=<provider name>"; exit 1; }
+@echo "$(NAME)" | grep -Eq '^[a-z0-9][a-z0-9-]*$$' || { echo "NAME must contain only lowercase letters, digits and dashes"; exit 1; }
 endef
 
-init:
-	@mkdir -p /tmp/flex-db
-	@docker compose -f docker-compose.dev.yml up -d --wait
-	@mkdir -p ./back/uploads/avatars
-	@mkdir -p ./back/uploads/cover
-	@cd back && pnpm prisma generate && pnpm prisma migrate deploy && cd ..
-	@cd provider && pnpm prisma generate && pnpm prisma migrate deploy && cd ..
-
-dev: init
-	pnpm run dev
-
-migrate: migrate-back migrate-provider
-
-provider1: init
-	MOCK_DISCOGRAPHY=1 pnpm run dev:provider
-
-provider2: init
-	DOTENV_CONFIG_PATH=.env.provider2 pnpm --dir provider prisma migrate deploy
-	DOTENV_CONFIG_PATH=.env.provider2 pnpm run dev:provider
-
-
-migrate-back:
-	@test -n "$(NAME)" || { echo "usage: make migrate-back NAME=what_you_changed"; exit 1; }
-	@cd back && pnpm prisma migrate dev --name $(NAME)
-
-migrate-provider:
-	@test -n "$(NAME)" || { echo "usage: make migrate-provider NAME=what_you_changed"; exit 1; }
-	@cd provider && pnpm prisma migrate dev --name $(NAME)
-
-reset: reset-back reset-provider
-
-reset-back:
-	@cd back && pnpm prisma migrate reset --force
-
-reset-provider:
-	@cd provider && pnpm prisma migrate reset --force
-
-secrets: secrets-server secrets-provider
+define provider_env_check
+$(provider_check)
+@test -f .env.provider-$(NAME) || { echo ".env.provider-$(NAME) is missing: run make secrets-provider NAME=$(NAME) to create it"; exit 1; }
+endef
 
 secrets-server:
 	@docker/make-secrets.sh server
 
 secrets-provider:
+	$(provider_check)
 	@docker/make-secrets.sh provider $(NAME)
 
 server:
@@ -81,22 +57,10 @@ server-reset:
 	@docker compose down
 	@docker volume rm -f $(SERVER_VOLUMES)
 
-server-seed:
-	@docker compose run --rm back node dist/seed.js $(ARGS)
-
-provider-seed:
-	@case "$(ARGS)" in *--reset*) test "$(CONFIRM)" = "yes" || { echo "--reset wipes all musics, albums and artists. Run: make provider-seed ARGS=--reset CONFIRM=yes"; exit 1; };; esac
-	$(provider_env_check)
-	@$(PROVIDER_COMPOSE) run --rm -v "$(CURDIR)/provider/mock:/app/mock:ro" provider node dist/seed.js $(ARGS)
-
 provider-reset:
-	@test "$(CONFIRM)" = "yes" || { echo "This deletes the database and the media of the provider stack. Run: make provider-reset CONFIRM=yes"; exit 1; }
+	@test "$(CONFIRM)" = "yes" || { echo "This deletes the database and the media of the provider $(NAME). Run: make provider-reset NAME=$(NAME) CONFIRM=yes"; exit 1; }
 	$(provider_env_check)
 	@$(PROVIDER_COMPOSE) down
 	@docker volume rm -f $(PROVIDER_VOLUMES)
 
-genkey:
-	@openssl genrsa -out back/provider.pem 2048
-
-.PHONY: run init provider provider2 migrate migrate-back migrate-provider reset reset-back reset-provider server-reset server-seed provider-seed provider-reset genkey secrets secrets-server secrets-provider server provider server-down provider-down server-logs provider-logs
-
+.PHONY: secrets-server secrets-provider server provider server-down provider-down server-logs provider-logs server-reset provider-reset

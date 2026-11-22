@@ -31,6 +31,6 @@ RUN pnpm --filter @flex/shared run build \
 
 
 FROM nginxinc/nginx-unprivileged:stable-alpine AS runtime
-COPY front/nginx.conf.template /etc/nginx/templates/default.conf.template
+COPY docker/nginx/server.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/front/dist /usr/share/nginx/html
 EXPOSE 80 443

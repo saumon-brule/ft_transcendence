@@ -1,10 +1,10 @@
 /*
  * Search test catalog: no audio, no covers, only rows.
  *
- *   pnpm seed               -> refuses if the catalog already has data
- *   pnpm seed --reset       -> wipes Music / Album / Artist first
- *   pnpm seed --filler=300  -> number of generated artists (default 150, 0 to disable)
- *   pnpm seed --no-audio    -> skip the playable tracks of the mock folder
+ *   pnpm run seed:search               -> refuses if the catalog already has data
+ *   pnpm run seed:search --reset       -> wipes Music / Album / Artist first
+ *   pnpm run seed:search --filler=300  -> number of generated artists (default 150, 0 to disable)
+ *   pnpm run seed:search --no-audio    -> skip the playable tracks of the mock folder
  *
  * Unless --no-audio is given, the mp3 files of the mock folder are imported as well
  * (the only musics with audio). MOCK_DIR and MEDIA_DIR can be set, they default to
@@ -20,8 +20,8 @@ import "dotenv/config";
 import { randomUUID } from "node:crypto";
 import { resolve } from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "./generated/prisma/client";
-import { seedMockMusics } from "./core/prisma/mock-catalog";
+import { PrismaClient } from "../src/generated/prisma/client";
+import { seedMockMusics } from "./mock-catalog";
 
 // title, then featured artists
 type Track = string | [string, ...string[]];

@@ -5,9 +5,21 @@ root=$(cd "$(dirname "$0")/.." && pwd)
 todo=""
 
 case "${1:-}" in
-	server) dir="$root/secrets" ;;
-	provider) dir="$root/provider/secrets${2:+.$2}" ;;
-	*) echo "usage: $0 server|provider [instance]" >&2; exit 1 ;;
+	server)
+		dir="$root/secrets/server"
+		env_file="$root/.env"
+		env_example="$root/.env.example"
+		;;
+	provider)
+		instance=${2:-}
+		case "$instance" in
+			""|-*|*[!a-z0-9-]*) echo "usage: $0 provider <name> (lowercase letters, digits and dashes)" >&2; exit 1 ;;
+		esac
+		dir="$root/secrets/provider-$instance"
+		env_file="$root/.env.provider-$instance"
+		env_example="$root/.env.provider.example"
+		;;
+	*) echo "usage: $0 server | provider <name>" >&2; exit 1 ;;
 esac
 
 mkdir -p "$dir"
@@ -55,11 +67,16 @@ if [ "$1" = server ]; then
 	create api42_client_secret empty
 else
 	create flex_api_key empty
-	if [ -e "$root/secrets/tls.crt" ]; then
-		create server_ca.crt cp "$root/secrets/tls.crt"
+	if [ -e "$root/secrets/server/tls.crt" ]; then
+		create server_ca.crt cp "$root/secrets/server/tls.crt"
 	else
 		create server_ca.crt empty
 	fi
+fi
+
+if [ ! -e "$env_file" ]; then
+	cp "$env_example" "$env_file"
+	echo "created  $(basename "$env_file") (from $(basename "$env_example"), fill it in)"
 fi
 
 if [ -n "$todo" ]; then

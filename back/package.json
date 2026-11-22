@@ -11,9 +11,10 @@
 		"start:dev": "nodemon",
 		"start:debug": "nest start --debug --watch",
 		"start:prod": "node dist/main",
-		"seed": "ts-node --transpile-only src/seed.ts",
-		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\" --fix",
-		"check": "tsc --noEmit && eslint \"{src,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\"",
+		"seed:accounts": "ts-node --transpile-only dev/seed-accounts.ts",
+		"seed:playlists": "ts-node --transpile-only dev/seed-playlists.ts",
+		"lint": "eslint \"{src,dev,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\" --fix",
+		"check": "tsc --noEmit && eslint \"{src,dev,apps,libs,test}/**/*.ts\" --ignore-pattern \"src/generated/prisma/**\"",
 		"mail:preview": "node scripts/preview-mail.mjs --watch"
 	},
 	"dependencies": {

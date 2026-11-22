@@ -6,7 +6,7 @@ map $http_upgrade $connection_upgrade {
 server {
 	listen 80;
 	server_name _;
-	return 301 ${BASE_FRONT_URL}$request_uri;
+	return 301 https://${FRONT_HOST}:${FRONT_PORT}$request_uri;
 }
 
 server {

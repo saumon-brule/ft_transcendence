@@ -1,3 +1,6 @@
+# Development database (pnpm run dev). Production is docker-compose.yml and docker-compose.provider.yml at the root.
+name: flex-dev
+
 services:
   postgres:
     image: paradedb/paradedb:0.26.3-pg16
