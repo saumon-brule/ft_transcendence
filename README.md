@@ -160,8 +160,8 @@ CI builds the three images and starts the server stack (`docker-stack` job) on e
 
 We used AI assistants (such as Claude) as a help, not as a replacement: everything was read, tested and committed by a team member.
 
-- **Tasks:** code review and bug hunting, refactoring code, explaining the stack (NestJS, SolidJS, Prisma, ts-rest), thankless tasks (such as replacing every text of the app by its i18n key or fixing broken css) and most part of the readme.
-- **Parts of the project:** There is no part fully done by AI, but there is neither a specific part of the code where it specificly not used.
+- **Tasks:** code review and bug hunting, refactoring code, explaining the stack (NestJS, SolidJS, Prisma, ts-rest), repetitive tasks (such as replacing every text of the app with its i18n key or fixing broken CSS) and most of this README.
+- **Parts of the project:** no part of the project was written entirely by AI, and no part was kept entirely free of it: it was used as a helper across the whole codebase.
 
 ## Team
 
@@ -176,7 +176,7 @@ We used AI assistants (such as Claude) as a help, not as a replacement: everythi
 
 - **Organization:** one GitHub issue and one branch per task, merged with a pull request that another member reviews.
 - **Tools:** GitHub Issues and Pull Requests, GitHub Actions (lint, type-check and Docker build on every pull request).
-- **Communication:** a Discord server for everyday discussions, and meetings in person at the campus. Weekly (and daily for the lasts days) points have been done by Liam. 
+- **Communication:** a Discord server for everyday discussions, and meetings in person at the campus. Liam ran a weekly check-in meeting (daily during the last days of the project).
 
 ## Technical stack
 
@@ -338,28 +338,28 @@ erDiagram
 | Feature | Description | Who |
 | --- | --- | --- |
 | Authentication (back) | Email and password with email verification and password reset, 42 OAuth (login, link and unlink an account), short-lived access token plus a refresh cookie. | Liam |
-| Authentication (front) | Implement all features of the auth front side, login/register... AuthGuard, providing user profile and lang to the app | Emilien |
+| Authentication (front) | Every authentication screen (login, register, email verification, password reset, ...), the route guards, and loading the user profile and language for the whole app. | Emilien |
 | Providers (back) | Create, edit and delete a provider, regenerate its API key, access requests that are accepted automatically (public provider) or by a manager. | Erwoan |
-| Provider (provider) | Launch a provider, full provider protocole, library managment. | Erwoan |
-| Profile and Providers (front) | Display user profile, create/remove a provider, regenerate it's key. | Liam |
+| Provider (provider) | The provider application: setup, the full provider protocol, catalog management. | Erwoan |
+| Profile and Providers (front) | Display user profiles, create and remove a provider, regenerate its API key. | Liam |
 | Settings (front) | Change the username, email and password, link an intra account, upload an avatar, choose the language and the light or dark theme. | Emilien |
 | Playlist (back) | Create, update, delete, add music, remove music, display on profile, manage private/public. | Vadim |
 | Friends and presence (back) | Send, accept, decline and remove friend requests, see who is online in real time. | Vadim |
 | Chat (back) | Ephemeral chat between online friends. Friend requests and other friend events reach the other user instantly through WebSockets. | Vadim |
 | Friends and chat (front) | Display friends and requests, open a chat to talk between users. | Liam |
-| Music player/footer (front) | Listen a music, controle the volume, manage history, display queue. | Emilien |
+| Music player/footer (front) | Play a song, control the volume, keep the listening history, display the queue. | Emilien |
 | Playlists (front) | Create, rename, make public or private, set a cover, delete; add and remove songs from any provider; follow and unfollow the public playlists of other users. | Erwoan |
 | Sidebar, header | Display the sidebar content, the header search and menu. | Liam |
 | Provider management (front) | Manage members and roles (`MANAGE_CATALOG`, `MANAGE_MEMBERS`, `ADMIN`), create, edit and delete songs, albums and artists with audio and cover upload. | Liam, Emilien |
-| Search (back) | Search users, playlists | Vadim |
-| Search (provider) | Search music, albums, and the all the catalog of all your providers. The catalog can be filtered (song, album, artist, dates), sorted (by column or by provider). Search using bm25 | Erwoan |
-| Search (front) | Search page, get all providers result, filters, sorting. | Liam, Erwoan |
-| Provider/edit provider | View provider musics, albums, artists, edit catalogue, members, permissions. | Liam, Emilien |
+| Search (back) | Search users and playlists. | Vadim |
+| Search (provider) | Search songs, albums and artists across the catalogs of all your providers. Results can be filtered (song, album, artist, dates) and sorted (by column or by provider). Ranked with BM25. | Erwoan |
+| Search (front) | Search page, results from every provider, filters, sorting. | Liam, Erwoan |
+| Provider / edit provider | View the songs, albums and artists of a provider; edit its catalog, members and permissions. | Liam, Emilien |
 | Public API | Personal API key, hourly quota, 9 endpoints on the profile and the playlists, Swagger documentation at `/api/swagger`. | Vadim, Liam |
 | Deployment | Docker images, hardened containers (no capabilities, read-only filesystem), Docker secrets, HTTPS, health checks and CI. | Erwoan |
-| Other front parts | Components, guards, ... | Emilien, Liam |
-| Other back parts | Random routes | Vadim |
-| Other provider parts | Random routes | Erwoan |
+| Other front parts | Shared components, guards, layout. | Emilien, Liam |
+| Other back parts | Remaining server routes. | Vadim |
+| Other provider parts | Remaining provider routes. | Erwoan |
 
 
 ## Modules
@@ -371,7 +371,7 @@ Major = 2 points, Minor = 1 point.
 | Framework for frontend and backend | Major | 2 | **Why:** obvious, nobody wants to write a whole web app by hand, a framework gives structure to three applications. **How:** SolidJS for the front, NestJS for the server and the provider. | Whole team |
 | Users interacting with each other | Major | 2 | **Why:** social is at the center of the app: you join providers through other people, share playlists and follow your friends public ones, so you need to see who is online and talk to them. **How:** chat, profile pages, friends system with presence. | Liam, Vadim |
 | Standard user management and authentication | Major | 2 | **Why:** obvious, every playlist, provider membership and friend is tied to an account. **How:** profile update, avatar with default, friends and online status, profile page. | Emilien, Liam, Vadim |
-| Advanced permissions system | Major | 2 | **Why:** a provider is shared by several people (an artist, a label, a group of friends), so not everybody should be able to edit the catalog or manage the members. **How:** roles and permissions in each provider: manage members and roles, and what a user sees or can do depends on their permissions. | Liam, Emilien, Erwoan |
+| Advanced permissions system | Major | 2 | **Why:** a provider is shared by several people (an artist, a label, a group of friends), so not everybody should be able to edit the catalog or manage the members. **How:** roles and permissions in each provider. *View* the members of a provider, *edit* them (assign and remove roles), *delete* them (revoke their access); create, edit and delete roles (`MANAGE_CATALOG`, `MANAGE_MEMBERS`, `ADMIN`, plus a default role for new members). The pages and actions a user gets depend on their permissions (for example, the edit page and the catalog actions are only shown to members who can manage the catalog). | Liam, Emilien, Erwoan |
 | Public API | Major | 2 | **Why:** lets users and scripts access their profile and playlists outside of the site (bots, imports, other clients). **How:** personal API key (stored hashed, sent as a Bearer token), rate limiting and an hourly quota, Swagger documentation, 9 endpoints (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`). | Vadim, Liam |
 | Custom module: decentralized providers | Major | 2 | **Why:** the core idea of the project, see below. | Whole team |
 | ORM for the database | Minor | 1 | **Why:** obvious, we needed a database anyway (two of them, server and provider), and an ORM with typed queries and migrations is much more practical than raw SQL. **How:** Prisma on both databases, with migrations. | Erwoan, Liam, Vadim |
@@ -412,7 +412,7 @@ A provider has no user accounts and no passwords: it cannot check who a user is 
 
 ### Browser support
 
-The site is used and checked on Firefox and on Chromium-based browsers (Chromium, Chrome). Known difference: the date picker of the search filters looks different in each browser (the filters have a fixed height to keep the same layout).
+The site is used and checked on Firefox and on Chromium-based browsers (Chromium, Chrome, Edge, ...). Known difference: the date picker of the search filters looks different in each browser (the filters have a fixed height to keep the same layout).
 
 ## Individual contributions
 
@@ -425,7 +425,7 @@ The site is used and checked on Firefox and on Chromium-based browsers (Chromium
 ### Liam (lilefebv)
 - Features: authentication on the server (email, 42 OAuth, tokens), profile and providers pages, friends and chat on the front, sidebar and header, provider management (members, roles, catalog), search page, public API.
 - Modules: framework, users interacting, standard user management, advanced permissions, public API, custom providers, ORM, design system, file upload, OAuth, additional browsers.
-- Challenges and solutions: discovering NestJS and SolidJS. Overcome by learning them while building the authentication, and the firsts solid components.
+- Challenges and solutions: discovering NestJS and SolidJS. Overcome by learning them while building the authentication and the first SolidJS components.
 
 ### Emilien (ebini)
 - Features: authentication on the front (login, register, auth guard), settings (profile, 42 account link, avatar, language, theme), music player and footer, provider management (catalog), design system.
@@ -440,7 +440,7 @@ The site is used and checked on Firefox and on Chromium-based browsers (Chromium
 ## Known limitations
 
 - Chat messages are ephemeral on purpose: they are not stored and they are not delivered to offline users.
-- The app is not entirely p2p, we still have central server that manages the account.
+- The app is not fully peer-to-peer: a central server still manages the accounts.
 - Search shows at most the first 100 results of each provider (the infinite scroll stops there).
 
 ## Documentation
