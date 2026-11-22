@@ -16,6 +16,7 @@ import { X } from "lucide-solid";
 import { SelectArtistMenu } from "./SelectArtistMenu";
 import { Album } from "~/class/Album";
 import { t } from "~/i18n/context";
+import { devWarn } from "~/utils/devLog";
 
 export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", onNewAlbum?: (newAlbum: Album) => void) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
@@ -86,7 +87,7 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 				onNewAlbum?.(Album.fromRawObject(newAlbum, provider));
 				props.close();
 			} catch (e) {
-				console.error(e);
+				devWarn(e);
 				failCreation();
 			}
 		};

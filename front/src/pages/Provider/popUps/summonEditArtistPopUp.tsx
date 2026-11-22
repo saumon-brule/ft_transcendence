@@ -14,6 +14,7 @@ import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Undo2, X } from "lucide-solid";
 import "./EditArtistPopUp.scss";
 import { t } from "~/i18n/context";
+import { devWarn } from "~/utils/devLog";
 
 export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist: Artist) => void) {
 	const providerClient = getProviderClient(artist.provider.address, artist.provider.uuid);
@@ -86,7 +87,7 @@ export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist:
 				notifyUpdate();
 				props.close();
 			} catch (e) {
-				console.error(e);
+				devWarn(e);
 				failEdit(t("pages.provider.popUps.artist.editError"));
 			}
 		};

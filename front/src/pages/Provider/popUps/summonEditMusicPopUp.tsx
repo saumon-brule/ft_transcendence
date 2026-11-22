@@ -20,6 +20,7 @@ import { Album } from "~/class/Album";
 import "./EditMusicPopUp.scss";
 import { DEFAULT_COVER } from "~/utils/imageFallback";
 import { t } from "~/i18n/context";
+import { devWarn } from "~/utils/devLog";
 
 export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Music) => void) {
 	const providerClient = getProviderClient(music.provider.address, music.provider.uuid);
@@ -109,7 +110,7 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 				notifyUpdate();
 				props.close();
 			} catch (e) {
-				console.error(e);
+				devWarn(e);
 				failEdit(t("pages.provider.popUps.music.editError"));
 			}
 		};

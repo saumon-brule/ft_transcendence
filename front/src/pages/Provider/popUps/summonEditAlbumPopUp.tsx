@@ -17,6 +17,7 @@ import { Album } from "~/class/Album";
 import { AlbumCover } from "~/components/ui/AlbumCard";
 import "./EditAlbumPopUp.scss";
 import { t } from "~/i18n/context";
+import { devWarn } from "~/utils/devLog";
 
 export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Album) => void) {
 	const providerClient = getProviderClient(album.provider.address, album.provider.uuid);
@@ -98,7 +99,7 @@ export function summonEditAlbumPopUp(album: Album, setNewAlbum?: (newAlbum: Albu
 				notifyUpdate();
 				props.close();
 			} catch (e) {
-				console.error(e);
+				devWarn(e);
 				failEdit(t("pages.provider.popUps.album.editError"));
 			}
 		};
