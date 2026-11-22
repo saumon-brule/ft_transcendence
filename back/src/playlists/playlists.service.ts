@@ -1,7 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../core/prisma/prisma.service";
 import { AppForbiddenException } from "../core/error/forbidden";
-import { Music } from "../generated/prisma/client";
 
 const SEARCH_LIMIT = 25;
 
@@ -180,15 +179,16 @@ export class PlaylistsService {
 	}
 
 	public async overwritePlaylist(
-		uuid:string,
+		uuid: string,
 		musics: { musicUUID: string; providerUUID: string }[],
-		ownerUUID: string) {
+		ownerUUID: string,
+	) {
 		await this.assertPlaylistOwner(uuid, ownerUUID);
-		
+
 		const unique = [
 			...new Map(musics.map((m) => [`${m.providerUUID}:${m.musicUUID}`, m])).values(),
 		];
-		
+
 		const providerUUIDs = [...new Set(unique.map((m) => m.providerUUID))];
 		if (providerUUIDs.length > 0) {
 			const found = await this.prisma.provider.findMany({
@@ -202,7 +202,7 @@ export class PlaylistsService {
 
 		await this.prisma.$transaction([
 			this.prisma.playlistMusic.deleteMany({
-				where: { playlistUUID: uuid }
+				where: { playlistUUID: uuid },
 			}),
 			this.prisma.playlistMusic.createMany({
 				data: unique.map((m) => ({

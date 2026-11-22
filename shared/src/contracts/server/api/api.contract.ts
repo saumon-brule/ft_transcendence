@@ -1,7 +1,7 @@
 import { initContract } from "@ts-rest/core";
 import { meSchema } from "../users/schemas/user.schema";
 import { commonError404Schema, commonError409Schema, commonError429Schema, serverBaseError401Schema } from "../../../errors/error-schemas";
-import { createdPlaylistSchema, createPlaylistBodySchema, MusicBodySchema, overwritePlaylistBodySchema, playlistDetailSchema, playlistListSchema, updatePlaylistNameSchema, updatePlaylistPrivacySchema } from "../playlists/schemas/playlist.schema";
+import { createdPlaylistSchema, createPlaylistBodySchema, MusicBodySchema, overwritePlaylistBodySchema, playlistListSchema, updatePlaylistNameSchema, updatePlaylistPrivacySchema } from "../playlists/schemas/playlist.schema";
 import { uuidParamSchema } from "../../../schemas/common.schema";
 
 const c = initContract();
