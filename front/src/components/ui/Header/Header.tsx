@@ -11,8 +11,10 @@ import "./Header.scss";
 import { hasUnreadMessages } from "~/store/messages.store";
 import { Tab } from "~/pages/Search/Search";
 import { isSidebarOpen, sidebarActions } from "~/store/sidebar.store";
+import { useTranslation } from "~/i18n/context";
 
 export default function Header() {
+	const { t } = useTranslation();
 	const me = useProfile();
 	const navigate = useNavigate();
 
@@ -66,11 +68,11 @@ export default function Header() {
 	return <header id="app-header">
 		<div class="header-content">
 			<div class="header-leading">
-				<a class="header-brand" href="/home" aria-label="Flex home">Flex</a>
+				<a class="header-brand" href="/home" aria-label={t("components.header.homeLabel")}>Flex</a>
 				<button
 					class="sidebar-toggle"
 					type="button"
-					aria-label={isSidebarOpen() ? "Close sidebar" : "Open sidebar"}
+					aria-label={isSidebarOpen() ? t("components.header.closeSidebar") : t("components.header.openSidebar")}
 					aria-expanded={isSidebarOpen()}
 					aria-controls="app-sidebar"
 					onClick={() => sidebarActions.toggle()}
@@ -84,8 +86,8 @@ export default function Header() {
 					<Search class="search-icon" size={18}/>
 					<TextInput
 						type="search"
-						placeholder="Search"
-						aria-label="Search"
+						placeholder={t("components.header.search")}
+						aria-label={t("components.header.search")}
 						value={searchValue()}
 						onInput={(event) => { setSearchValue(event.currentTarget.value); search(); }}
 						ref={searchInput}
@@ -94,7 +96,7 @@ export default function Header() {
 						<button
 							class="search-clear"
 							type="button"
-							aria-label="Erase"
+							aria-label={t("components.header.clearSearch")}
 							onClick={() => {
 								setSearchValue("");
 								searchInput.htmlElement.focus();
@@ -125,25 +127,25 @@ export default function Header() {
 					<div class="profile-dropdown" role="menu">
 						<button type="button" role="menuitem" onClick={() => { navigate(`/user/${me().uuid}`); setIsMenuOpen(false); }}>
 							<User size={17} aria-hidden="true" />
-							<span>Profile</span>
+							<span>{t("components.header.profile")}</span>
 						</button>
 						<button type="button" role="menuitem" onClick={() => { navigate("/friends"); setIsMenuOpen(false); }}>
 							<span class="icon-badge" classList={{ notification: hasFriendNotification() }}>
 								<Users size={17} aria-hidden="true" />
 							</span>
-							<span>Friends</span>
+							<span>{t("components.header.friends")}</span>
 						</button>
 						<button type="button" role="menuitem" onClick={() => { navigate("/settings"); setIsMenuOpen(false); }}>
 							<Settings size={17} aria-hidden="true" />
-							<span>Settings</span>
+							<span>{t("components.header.settings")}</span>
 						</button>
 						<button type="button" role="menuitem" onClick={() => { navigate("/providers"); setIsMenuOpen(false); }}>
 							<Server size={17} aria-hidden="true" />
-							<span>Providers</span>
+							<span>{t("components.header.providers")}</span>
 						</button>
 						<button type="button" role="menuitem" onClick={() => authActions.logout()}>
 							<LogOut size={17} aria-hidden="true" />
-							<span>Logout</span>
+							<span>{t("components.header.logout")}</span>
 						</button>
 					</div>
 				</Show>

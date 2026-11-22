@@ -8,6 +8,7 @@ import TextInput from "~/components/inputs/TextInput";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { summonSuccessToast } from "~/components/ui/Toaster";
 import { validateFromZod } from "~/utils/validateFromZod";
+import { t } from "~/i18n/context";
 
 export const summonEditRolePopUp = (provider: Provider, role: ProviderRole, onClose?: () => void) => summonPopUp((popUpControls) => {
 	const [permissions, setPermissions] = createSignal<Array<ProviderPermission>>([...role.permissions]);
@@ -25,26 +26,26 @@ export const summonEditRolePopUp = (provider: Provider, role: ProviderRole, onCl
 		const success = await providerUpdateRole(provider, role.uuid, nameInput.value.trim(), permissions());
 		setIsPending(false);
 		if (success) {
-			summonSuccessToast("Role updated");
+			summonSuccessToast(t("pages.provider.popUps.role.updated"));
 			popUpControls.close();
 		}
 	}
 
 	return <Form onSubmit={(e) => void handleSubmit(e)}>
-		<h2>Edit role</h2>
+		<h2>{t("pages.provider.popUps.role.editTitle")}</h2>
 		<div class="pop-up-inputs">
-			<TextInput ref={(e) => nameInput = e.htmlElement} value={role.name} placeholder="Role name" type="text" validator={(e) => validateFromZod(createProviderRoleSchema.shape.name, e.value)} required />
+			<TextInput ref={(e) => nameInput = e.htmlElement} value={role.name} placeholder={t("pages.provider.popUps.role.namePlaceholder")} type="text" validator={(e) => validateFromZod(createProviderRoleSchema.shape.name, e.value)} required />
 			<For each={providerPermissions}>
 				{(permission) => <Checkbox
 					checked={permissions().includes(permission)}
 					onChange={(e) => togglePermission(permission, e.currentTarget.checked)}
-					label={permission}
+					label={t(`pages.provider.permissions.${permission}`)}
 				/>}
 			</For>
 		</div>
 		<div class="pop-up-buttons">
-			<Button type="button" onClick={popUpControls.close} variant="text" size="md">Cancel</Button>
-			<Button type="submit" size="md" disabled={isPending()}>Save</Button>
+			<Button type="button" onClick={popUpControls.close} variant="text" size="md">{t("common.cancel")}</Button>
+			<Button type="submit" size="md" disabled={isPending()}>{t("common.save")}</Button>
 		</div>
 	</Form>;
 }, { customClass: "edition-pop-up", onClose });

@@ -8,8 +8,10 @@ import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Pencil, Trash } from "lucide-solid";
 import { providerRemoveArtist } from "~/api/queryHooks/providerManageCatalog";
 import { summonEditArtistPopUp } from "../popUps/summonEditArtistPopUp";
+import { useTranslation } from "~/i18n/context";
 
 export function ManageArtists(props: { search: string }) {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const artistsQuery = useProviderArtistsInfiniteQuery(() => provider, () => props.search);
 	const artists = createMemo(() => {
@@ -18,13 +20,13 @@ export function ManageArtists(props: { search: string }) {
 	});
 
 	return <div id="manage-artists-tab" class="tab-container">
-		<Show when={artists().length} keyed fallback={<div>No artists</div>}><section>
+		<Show when={artists().length} keyed fallback={<div>{t("pages.provider.edit.noArtists")}</div>}><section>
 			<div class="artists-list">
 				<For each={artists()}>{(artist) => <ProviderAristCard artist={artist}/>}</For>
 			</div>
 		</section></Show>
 		<Show when={artistsQuery.hasNextPage}>
-			<Button onClick={() => void artistsQuery.fetchNextPage()} disabled={artistsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">See more</Button>
+			<Button onClick={() => void artistsQuery.fetchNextPage()} disabled={artistsQuery.isFetchingNextPage} variant="text" class="white-variant see-more">{t("pages.search.seeMore")}</Button>
 		</Show>
 	</div>;
 }

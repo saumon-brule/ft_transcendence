@@ -13,6 +13,7 @@ import { Artist } from "~/class/Artist";
 import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { Undo2, X } from "lucide-solid";
 import "./EditArtistPopUp.scss";
+import { t } from "~/i18n/context";
 
 export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist: Artist) => void) {
 	const providerClient = getProviderClient(artist.provider.address, artist.provider.uuid);
@@ -42,8 +43,8 @@ export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist:
 				if (updated) setNewArtist?.(Artist.fromRawObject(updated, artist.provider));
 			};
 			const failEdit = (message: string, status?: number) => {
-				if (status === 413) summonErrorToast(() => "File to large");
-				else if (status === 415) summonErrorToast(() => "File not supported");
+				if (status === 413) summonErrorToast(() => t("pages.provider.popUps.fileTooLarge"));
+				else if (status === 415) summonErrorToast(() => t("pages.provider.popUps.fileNotSupported"));
 				else summonErrorToast(() => message);
 				notifyUpdate();
 			};
@@ -54,7 +55,7 @@ export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist:
 					providerContract.artist.update,
 				);
 				if (updateRes.status !== 200) {
-					failEdit("An error occured during the edit of the artist", updateRes.status);
+					failEdit(t("pages.provider.popUps.artist.editError"), updateRes.status);
 					return;
 				}
 				updated = updateRes.body;
@@ -66,7 +67,7 @@ export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist:
 						providerContract.artist.removeAvatar,
 					);
 					if (removeCoverRes.status !== 204) {
-						failEdit("An error occured during remove of the avatar", removeCoverRes.status);
+						failEdit(t("pages.provider.popUps.avatarRemoveError"), removeCoverRes.status);
 						return;
 					}
 					updated.hasAvatar = false;
@@ -77,7 +78,7 @@ export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist:
 						onUploadProgress: setCoverProgress,
 					}), providerContract.artist.uploadAvatar);
 					if (uploadCoverRes.status !== 204) {
-						failEdit("An error occured during upload of the avatar", uploadCoverRes.status);
+						failEdit(t("pages.provider.popUps.avatarUploadError"), uploadCoverRes.status);
 						return;
 					}
 					updated.hasAvatar = true;
@@ -86,14 +87,14 @@ export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist:
 				props.close();
 			} catch (e) {
 				console.error(e);
-				failEdit("An error occured during the edit of the artist");
+				failEdit(t("pages.provider.popUps.artist.editError"));
 			}
 		};
 
 		const isPending = () => artistUpdateMutation.isPending || artistUploadCoverMutation.isPending || artistRemoveCoverMutation.isPending;
 
 		return <Form class="edit-artist-pop-up" onSubmit={() => { void handleSubmit(); }}>
-			<h2 >Edit artist</h2>
+			<h2 >{t("pages.provider.popUps.artist.editTitle")}</h2>
 			<div class="edit-artist-info">
 				<div class="edit-artist-avatar-box">
 					<input
@@ -114,15 +115,15 @@ export function summonEditArtistPopUp(artist: Artist, setNewArtist?: (newArtist:
 					</Show>
 				</div>
 				<div class="edit-artist-details">
-					<TextInput placeholder="Name" class="edit-artist-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
+					<TextInput placeholder={t("pages.provider.popUps.namePlaceholder")} class="edit-artist-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
 				</div>
 			</div>
 			<Show when={artistUploadCoverMutation.isPending}>
-				<UploadProgress label="Avatar upload" value={coverProgress()}/>
+				<UploadProgress label={t("pages.provider.popUps.avatarUpload")} value={coverProgress()}/>
 			</Show>
 			<div class="edit-artist-pop-up-controls">
-				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
-				<Button disabled={isPending()} type="submit">Edit</Button>
+				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>{t("common.cancel")}</Button>
+				<Button disabled={isPending()} type="submit">{t("common.edit")}</Button>
 			</div>
 		</Form>;
 	});

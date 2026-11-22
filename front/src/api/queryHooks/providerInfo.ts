@@ -6,6 +6,7 @@ import { Music } from "~/class/Music";
 import { Album } from "~/class/Album";
 import { Artist } from "~/class/Artist";
 import { type ALBUM_SORT_FIELDS, type ARTIST_SORT_FIELDS, DEFAULT_PAGINATION_LIMIT, type MUSIC_SORT_FIELDS, Provider, type ProviderDataDto, type SearchSortField, type SortOrder } from "@flex/shared";
+import { t } from "~/i18n/context";
 
 export class ProviderError extends Error {
 	constructor(public readonly code: "FORBIDDEN" | "OFFLINE", message: string) {
@@ -272,7 +273,7 @@ export const everyMusicQuery = async (providerInfo: Provider, artistUuid?: strin
 		if (res.status === 200) {
 			return res.body.musics.map((music) => Music.fromRawObject(music, providerInfo));
 		}
-		summonErrorToast(`Failed to load musics from ${providerInfo.name}`);
+		summonErrorToast(t("toasts.provider.loadMusicsError", { provider: providerInfo.name }));
 	} catch {
 		summonErrorToast(`${providerInfo.name} is unreachable`);
 	}

@@ -8,8 +8,10 @@ import { summonPublicKeyPopUp } from "./editionPopUps/regenerateKeyPopUp";
 import { A } from "@solidjs/router";
 import { env } from "~/env";
 import { useProfile } from "~/components/guards/ProfileGate";
+import { useTranslation } from "~/i18n/context";
 
 export default function ApiSettings() {
+	const { t } = useTranslation();
 	const user = useProfile();
 	const regenerateKeyMutation = client.users.regenerateApiKey.createMutation();
 
@@ -19,7 +21,7 @@ export default function ApiSettings() {
 				summonPublicKeyPopUp(data.body.apiKey);
 			},
 			onError: () => {
-				summonErrorToast("An error occured");
+				summonErrorToast(t("errors.generic"));
 			},
 		});
 	}
@@ -28,12 +30,12 @@ export default function ApiSettings() {
 		<div class="settings-content">
 			<div class="setting-field">
 				<div class="setting-field-title">
-					<h3>Api usage</h3>
-					<Button type="button" variant="link" onClick={regenerateKey}>Regenerate key</Button>
+					<h3>{t("pages.settings.api.title")}</h3>
+					<Button type="button" variant="link" onClick={regenerateKey}>{t("pages.settings.api.regenerateKey")}</Button>
 				</div>
-				<div class="setting-field-value">Api usage {user().apiUsage}</div>
-				<div class="setting-field-value">Hourly usage {user().apiOneHourUsage}/{API_MAX_USAGE_PER_HOUR}</div>
-				<div class="setting-field-value"><A href={`${env.VITE_API_URL}/api/swagger`} target="_blank">Documentation</A></div>
+				<div class="setting-field-value">{t("pages.settings.api.usage", { count: String(user().apiUsage) })}</div>
+				<div class="setting-field-value">{t("pages.settings.api.hourlyUsage", { count: String(user().apiOneHourUsage), max: String(API_MAX_USAGE_PER_HOUR) })}</div>
+				<div class="setting-field-value"><A href={`${env.VITE_API_URL}/api/swagger`} target="_blank">{t("pages.settings.api.documentation")}</A></div>
 			</div>
 		</div>
 	</section>;

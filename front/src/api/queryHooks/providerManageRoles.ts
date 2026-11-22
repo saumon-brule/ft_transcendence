@@ -3,6 +3,7 @@ import { type ClientInferResponses } from "@ts-rest/core";
 import { getProviderClient } from "../providerClients";
 import { queryClient } from "../queryClient";
 import { summonErrorToast } from "~/components/ui/Toaster";
+import { t } from "~/i18n/context";
 
 export type RolesResponse = ClientInferResponses<typeof providerContract.role.list, 200>;
 
@@ -17,11 +18,11 @@ export const providerCreateRole = async (providerData: Provider, name: string, p
 
 	const res = await provider.client.role.create.mutation({ body: { name, permissions } });
 	if (res.status === 409) {
-		summonErrorToast("A role with this name already exists");
+		summonErrorToast(t("toasts.roles.nameConflict"));
 	} else if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status !== 201) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		queryClient.setQueryData<RolesResponse>(provider.keys.role.list(), (old) => old && {
 			...old,
@@ -37,13 +38,13 @@ export const providerUpdateRole = async (providerData: Provider, uuid: string, n
 
 	const res = await provider.client.role.update.mutation({ params: { uuid }, body: { name, permissions } });
 	if (res.status === 409) {
-		summonErrorToast("A role with this name already exists");
+		summonErrorToast(t("toasts.roles.nameConflict"));
 	} else if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status === 404) {
-		summonErrorToast("This role does not exist");
+		summonErrorToast(t("toasts.roles.notFound"));
 	} else if (res.status !== 200) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		queryClient.setQueryData<RolesResponse>(provider.keys.role.list(), (old) => old && {
 			...old,
@@ -59,11 +60,11 @@ export const deleteRole = async (providerData: Provider, uuid: string) => {
 
 	const res = await provider.client.role.remove.mutation({ params: { uuid } });
 	if (res.status === 403) {
-		summonErrorToast("You dont have the permission to do that");
+		summonErrorToast(t("errors.noPermission"));
 	} else if (res.status === 404) {
-		summonErrorToast("This role does not exist");
+		summonErrorToast(t("toasts.roles.notFound"));
 	} else if (res.status !== 204) {
-		summonErrorToast("An error occured");
+		summonErrorToast(t("errors.generic"));
 	} else {
 		queryClient.setQueryData<RolesResponse>(provider.keys.role.list(), (old) => old && {
 			...old,

@@ -10,12 +10,14 @@ import Button from "~/components/inputs/Button";
 import { Play, Shuffle } from "lucide-solid";
 import { history } from "~/store/history.store";
 import { Artist } from "~/class/Artist";
+import { useTranslation } from "~/i18n/context";
 
 export type ProviderArtistHeaderProps = {
 	artist: ProviderArtistQueryBody;
 };
 
 export default function ProviderArtistHeader(props: ProviderArtistHeaderProps) {
+	const { t } = useTranslation();
 	const provider = useProvider();
 	const mediaToken = useMediaToken(() => provider.address, () => provider.uuid);
 	const audioManager = useAudioManagerContext();
@@ -48,18 +50,18 @@ export default function ProviderArtistHeader(props: ProviderArtistHeaderProps) {
 	}
 
 	return <header class="provider-image-header">
-		<img src={getAvatar(props.artist)} alt="Artist picture" onError={imgFallback(DEFAULT_ARTIST)} />
+		<img src={getAvatar(props.artist)} alt={t("common.artistPicture")} onError={imgFallback(DEFAULT_ARTIST)} />
 		<div class="header-info">
 			<h2>{props.artist.name}</h2>
 			<div class="stats">
-				<div class="stat">{props.artist.musicCount} tracks</div>
+				<div class="stat">{t("pages.provider.stats.tracks", { count: String(props.artist.musicCount) })}</div>
 				<div class="separator" />
-				<div class="stat">{props.artist.albumCount} albums</div>
+				<div class="stat">{t("pages.provider.stats.albums", { count: String(props.artist.albumCount) })}</div>
 			</div>
 			<Show when={props.artist.biography}>
 				<p class="bio">{props.artist.biography}</p>
 			</Show>
-			<p>From <A href={`/provider/${provider.uuid}`}>{provider.name}</A></p>
+			<p>{t("common.from")} <A href={`/provider/${provider.uuid}`}>{provider.name}</A></p>
 		</div>
 		<div class="header-controls">
 			<Button icon disabled={props.artist.musicCount === 0 || loading()} onClick={() => void playArtist()}><Play /></Button>

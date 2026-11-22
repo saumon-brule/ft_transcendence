@@ -133,11 +133,11 @@ export default function AccountSettings() {
 				<div class="setting-field-value">
 					<div class="connexion">
 						<div>
-							<Logo42 /><span class="connexion-name">42's Intra</span>
+							<Logo42 /><span class="connexion-name">{t("pages.settings.account.connexions.intra")}</span>
 						</div>
 						{user().intraId === null
-							? <IntraButton unstyled size="sm" linkType="link">link</IntraButton>
-							: <Button variant="danger" disabled={unlinkIntraMutation.isPending} class="unlink-intra-button" size="sm" onClick={unlinkIntra}>unlink</Button>}
+							? <IntraButton unstyled size="sm" linkType="link">{t("pages.settings.account.connexions.link")}</IntraButton>
+							: <Button variant="danger" disabled={unlinkIntraMutation.isPending} class="unlink-intra-button" size="sm" onClick={unlinkIntra}>{t("pages.settings.account.connexions.unlink")}</Button>}
 					</div>
 				</div>
 			</div>

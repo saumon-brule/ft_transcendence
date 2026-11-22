@@ -10,6 +10,7 @@ import { Music } from "~/class/Music";
 import { PlaylistContext } from "./UnavailableTrackRow";
 import { Menu } from "../Menu/Menu";
 import Button from "~/components/inputs/Button";
+import { useTranslation } from "~/i18n/context";
 
 export function MusicActionMenu(props: { music: Music; playlist?: PlaylistContext }) {
 	return <Menu
@@ -22,6 +23,7 @@ export function MusicActionMenu(props: { music: Music; playlist?: PlaylistContex
 
 function MusicActionMenuContent(props: { music: Music; playlist?: PlaylistContext; onClose: () => void }) {
 	type MusicActionMenus = "main" | "playlist";
+	const { t } = useTranslation();
 	const audioManager = useAudioManagerContext();
 	const [currentMenu, setCurrentMenu] = createSignal<MusicActionMenus>("main");
 	const me = useProfile();
@@ -61,22 +63,22 @@ function MusicActionMenuContent(props: { music: Music; playlist?: PlaylistContex
 			<>
 				<button type="button" role="menuitem" onClick={() => void playNext(props.music)}>
 					<ListStart size={15} aria-hidden="true" />
-					<span>Écouter après</span>
+					<span>{t("components.musicActionMenu.playNext")}</span>
 				</button>
 				<button type="button" role="menuitem" onClick={() => void addToQueue(props.music)}>
 					<ListEnd size={15} aria-hidden="true" />
-					<span>Ajouter à la file d'attente</span>
+					<span>{t("components.musicActionMenu.addToQueue")}</span>
 				</button>
 				<Show when={props.playlist && props.playlist.isOwner === true} keyed>
 					<button class="red-button" type="button" role="menuitem" onClick={() => removeMusicFromPlaylist()}>
 						<Trash size={15} aria-hidden="true" />
-						<span>Retirer de la playlist</span>
+						<span>{t("components.musicActionMenu.removeFromPlaylist")}</span>
 					</button>
 				</Show>
 				<Show when={!(props.playlist && props.playlist.isOwner === true)}>
 					<button type="button" role="menuitem" onClick={() => setCurrentMenu("playlist")}>
 						<EighthNote size={15} aria-hidden="true" />
-						<span>Ajouter à une playlist</span>
+						<span>{t("components.musicActionMenu.addToPlaylist")}</span>
 						<ChevronRight class="right" size={17} aria-hidden="true" />
 					</button>
 				</Show>
@@ -86,17 +88,17 @@ function MusicActionMenuContent(props: { music: Music; playlist?: PlaylistContex
 			<>
 				<button type="button" role="menuitem" onClick={() => setCurrentMenu("main")}>
 					<ChevronLeft size={15} aria-hidden="true" />
-					<span>Back</span>
+					<span>{t("common.back")}</span>
 				</button>
 				<span class="separator"/>
 				<Form class="playlist-form search-form" onSubmit={(e) => {
 					e.preventDefault();
 				}}>
 					<Search class="search-icon" size={15}/>
-					<TextInput value={searchQuery()} placeholder="Search playlist" type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
+					<TextInput value={searchQuery()} placeholder={t("components.musicActionMenu.searchPlaylist")} type="text" onInput={(e) => setSearchQuery(e.currentTarget.value)} />
 				</Form>
 				<For each={me().ownedPlaylists.filter((p) => p.name.toLowerCase().includes(searchQuery().toLowerCase())).slice(0, 5)}>{(playlist) => <button type="button" role="menuitem" onClick={() => addToPlaylist(playlist.uuid)}>
-					<img src={playlistCoverUrl(playlist.uuid)} alt="Playlist cover" />
+					<img src={playlistCoverUrl(playlist.uuid)} alt={t("common.playlistCover")} />
 					<span>{playlist.name}</span>
 				</button>
 				}</For>

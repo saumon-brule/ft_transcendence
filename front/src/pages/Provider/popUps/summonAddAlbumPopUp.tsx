@@ -15,6 +15,7 @@ import { ArtistAvatar } from "~/components/ui/ArtistCard";
 import { X } from "lucide-solid";
 import { SelectArtistMenu } from "./SelectArtistMenu";
 import { Album } from "~/class/Album";
+import { t } from "~/i18n/context";
 
 export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", onNewAlbum?: (newAlbum: Album) => void) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
@@ -49,9 +50,9 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 		const handleSubmit = async () => {
 			let createdUuid: string | null = null;
 			const failCreation = (status?: number) => {
-				if (status === 413) summonErrorToast(() => "File to large");
-				else if (status === 415) summonErrorToast(() => "File not supported");
-				else summonErrorToast(() => "An error occured during creation of the album");
+				if (status === 413) summonErrorToast(() => t("pages.provider.popUps.fileTooLarge"));
+				else if (status === 415) summonErrorToast(() => t("pages.provider.popUps.fileNotSupported"));
+				else summonErrorToast(() => t("pages.provider.popUps.album.createError"));
 				if (createdUuid) void albumRemoveMutation.mutate({ params: { uuid: createdUuid } });
 			};
 
@@ -93,7 +94,7 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 		const isPending = () => albumCreateMutation.isPending || albumUploadCoverMutation.isPending || albumRemoveMutation.isPending;
 
 		return <Form class="create-album-pop-up" onSubmit={() => { void handleSubmit(); }}>
-			<h2 >Create new album</h2>
+			<h2 >{t("pages.provider.popUps.album.addTitle")}</h2>
 			<div class="create-album-info">
 				<div class="create-album-cover-box">
 					<input
@@ -106,7 +107,7 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 					<img src={coverPreviewUrl() ?? DEFAULT_ALBUM} onClick={() => fileInputRef.click()}/>
 				</div>
 				<div class="create-album-details">
-					<TextInput placeholder="Name" class="create-album-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
+					<TextInput placeholder={t("pages.provider.popUps.namePlaceholder")} class="create-album-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
 				</div>
 			</div>
 			<div class="create-album-artists" >
@@ -124,11 +125,11 @@ export function summonAddAlbumPopUp(provider: Provider, nameHint: string = "", o
 				</div>
 			</div>
 			<Show when={albumUploadCoverMutation.isPending}>
-				<UploadProgress label="Cover upload" value={coverProgress()}/>
+				<UploadProgress label={t("pages.provider.popUps.coverUpload")} value={coverProgress()}/>
 			</Show>
 			<div class="create-album-pop-up-controls">
-				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
-				<Button disabled={isPending()} type="submit">Upload</Button>
+				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>{t("common.cancel")}</Button>
+				<Button disabled={isPending()} type="submit">{t("pages.provider.popUps.upload")}</Button>
 			</div>
 		</Form>;
 	});

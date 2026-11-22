@@ -6,6 +6,7 @@ import Form from "~/components/inputs/Form/Form";
 import TextInput from "~/components/inputs/TextInput";
 import { summonPopUp } from "~/components/ui/Overlay";
 import { validateFromZod } from "~/utils/validateFromZod";
+import { t } from "~/i18n/context";
 
 export const summonRenamePlaylistPopUp = (playlist: { uuid: string; name: string }) => summonPopUp((popUpControls) => {
 	const renamePlaylist = useRenamePlaylistMutation();
@@ -33,13 +34,13 @@ export const summonRenamePlaylistPopUp = (playlist: { uuid: string; name: string
 	});
 
 	return <Form onSubmit={handleSubmit}>
-		<h2>Rename playlist</h2>
+		<h2>{t("pages.playlist.renamePopUp.title")}</h2>
 		<div class="pop-up-inputs">
-			<TextInput ref={(e) => nameInput = e.htmlElement} name="playlistName" value={playlist.name} placeholder="My playlist" type="text" validator={(e) => validateFromZod(createPlaylistBodySchema.shape.name, e.value)} required />
+			<TextInput ref={(e) => nameInput = e.htmlElement} name="playlistName" value={playlist.name} placeholder={t("pages.playlist.namePlaceholder")} type="text" validator={(e) => validateFromZod(createPlaylistBodySchema.shape.name, e.value)} required />
 		</div>
 		<div class="pop-up-buttons">
-			<Button type="button" onClick={popUpControls.close} variant="text" size="md">Cancel</Button>
-			<Button type="submit" size="md" disabled={renamePlaylist.isPending}>Save</Button>
+			<Button type="button" onClick={popUpControls.close} variant="text" size="md">{t("common.cancel")}</Button>
+			<Button type="submit" size="md" disabled={renamePlaylist.isPending}>{t("common.save")}</Button>
 		</div>
 	</Form>;
 }, { customClass: "provider-pop-up" });

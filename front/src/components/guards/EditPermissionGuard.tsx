@@ -4,6 +4,7 @@ import { useProviderInfoInfoQuery } from "~/api/queryHooks/providerAccess";
 import { useProvider } from "./ProviderInfoGuard";
 import LoadingSplash from "~/pages/Loading/LoadingSplash";
 import Button from "~/components/inputs/Button";
+import { useTranslation } from "~/i18n/context";
 
 const AllowedContext = createContext<Exclude<ReturnType<typeof useProviderInfoInfoQuery>["data"], undefined>["body"]>();
 
@@ -14,6 +15,7 @@ export function useProviderInfoInfo() {
 }
 
 export default function EditPermissionGuard(props: RouteSectionProps) {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const provider = useProvider();
 	const providerInfoInfoQuery = useProviderInfoInfoQuery(() => provider);
@@ -27,8 +29,8 @@ export default function EditPermissionGuard(props: RouteSectionProps) {
 		keyed
 		fallback={<Show when={providerInfoInfoQuery.isError} fallback={<LoadingSplash/>}>
 			<div class="page">
-				<p>Could not reach this provider.</p>
-				<Button onClick={() => void providerInfoInfoQuery.refetch()}>Retry</Button>
+				<p>{t("components.editPermissionGuard.unreachable")}</p>
+				<Button onClick={() => void providerInfoInfoQuery.refetch()}>{t("errors.retry")}</Button>
 			</div>
 		</Show>}
 	>

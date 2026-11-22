@@ -6,6 +6,7 @@ import { useAccessRequestQuery, useJoinProvider } from "~/api/queryHooks/provide
 import { useRemoveMusicFromPlaylistMutation } from "~/api/queryHooks/playlist";
 import "./UnavailableTrackRow.scss";
 import { Music, UnavailableMusic } from "~/class/Music";
+import { useTranslation } from "~/i18n/context";
 
 export type PlaylistContext = {
 	uuid: string;
@@ -19,13 +20,14 @@ type UnavailableTrackRowProps = {
 };
 
 function RestrictedActions(props: { track: Music }) {
+	const { t } = useTranslation();
 	const request = useAccessRequestQuery(() => props.track.provider);
 	const join = useJoinProvider();
 	const pending = () => request.data === "PENDING" || (join.isSuccess && join.data === "PENDING");
 
 	return <Show
 		when={!pending()}
-		fallback={<span class="track-state-note">Request pending</span>}
+		fallback={<span class="track-state-note">{t("components.unavailableTrack.requestPending")}</span>}
 	>
 		<Button
 			size="sm"
@@ -33,13 +35,14 @@ function RestrictedActions(props: { track: Music }) {
 			onClick={() => join.mutate(props.track.provider)}
 		>
 			{request.data === "REJECTED"
-				? "Request again"
-				: "Request access"}
+				? t("components.unavailableTrack.requestAgain")
+				: t("components.unavailableTrack.requestAccess")}
 		</Button>
 	</Show>;
 }
 
 function MissingActions(props: { music: Music; playlist?: PlaylistContext }) {
+	const { t } = useTranslation();
 	const remove = useRemoveMusicFromPlaylistMutation();
 
 	return <Show when={props.playlist?.isOwner}>
@@ -52,7 +55,7 @@ function MissingActions(props: { music: Music; playlist?: PlaylistContext }) {
 				body: { musicUUID: props.music.uuid, providerUUID: props.music.provider.uuid },
 			})}
 		>
-			Remove
+			{t("common.remove")}
 		</Button>
 	</Show>;
 }
@@ -65,18 +68,19 @@ const ICONS = {
 } as const;
 
 export default function UnavailableMusicRow(props: UnavailableTrackRowProps) {
+	const { t } = useTranslation();
 	const Icon = () => ICONS[props.music.state];
 	const title = () => ({
-		loading: "Loading…",
-		offline: "Unavailable track",
-		restricted: "Restricted track",
-		missing: "Track no longer exists",
+		loading: t("common.loading"),
+		offline: t("components.unavailableTrack.offlineTitle"),
+		restricted: t("components.unavailableTrack.restrictedTitle"),
+		missing: t("components.unavailableTrack.missingTitle"),
 	})[props.music.state];
 	const description = () => ({
 		loading: props.music.provider.name,
-		offline: `${props.music.provider.name} is offline`,
-		restricted: `You are not a member of ${props.music.provider.name}`,
-		missing: `It was removed from ${props.music.provider.name}`,
+		offline: t("components.unavailableTrack.offlineDescription", { provider: props.music.provider.name }),
+		restricted: t("components.unavailableTrack.restrictedDescription", { provider: props.music.provider.name }),
+		missing: t("components.unavailableTrack.missingDescription", { provider: props.music.provider.name }),
 	})[props.music.state];
 
 	return <tr class={`track-state track-state--${props.music.state}`}>

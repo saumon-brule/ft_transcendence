@@ -19,6 +19,7 @@ import MusicCover from "~/components/ui/MusicCover";
 import { Album } from "~/class/Album";
 import "./EditMusicPopUp.scss";
 import { DEFAULT_COVER } from "~/utils/imageFallback";
+import { t } from "~/i18n/context";
 
 export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Music) => void) {
 	const providerClient = getProviderClient(music.provider.address, music.provider.uuid);
@@ -59,8 +60,8 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 				if (updated) setNewMusic?.(Music.fromRawObject(updated, music.provider));
 			};
 			const failEdit = (message: string, status?: number) => {
-				if (status === 413) summonErrorToast(() => "File to large");
-				else if (status === 415) summonErrorToast(() => "File not supported");
+				if (status === 413) summonErrorToast(() => t("pages.provider.popUps.fileTooLarge"));
+				else if (status === 415) summonErrorToast(() => t("pages.provider.popUps.fileNotSupported"));
 				else summonErrorToast(() => message);
 				notifyUpdate();
 			};
@@ -77,7 +78,7 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 						publishedAt: curPublishedDate === music.publishedAt ? undefined : curPublishedDate,
 					} }), providerContract.music.update);
 				if (updateRes.status !== 200) {
-					failEdit("An error occured during the edit of the music", updateRes.status);
+					failEdit(t("pages.provider.popUps.music.editError"), updateRes.status);
 					return;
 				}
 				updated = updateRes.body;
@@ -89,7 +90,7 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 						providerContract.music.removeCover,
 					);
 					if (removeCoverRes.status !== 204) {
-						failEdit("An error occured during remove of the cover", removeCoverRes.status);
+						failEdit(t("pages.provider.popUps.coverRemoveError"), removeCoverRes.status);
 						return;
 					}
 					updated.hasCover = false;
@@ -100,7 +101,7 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 						onUploadProgress: setCoverProgress,
 					}), providerContract.music.uploadCover);
 					if (uploadCoverRes.status !== 204) {
-						failEdit("An error occured during upload of the cover", uploadCoverRes.status);
+						failEdit(t("pages.provider.popUps.coverUploadError"), uploadCoverRes.status);
 						return;
 					}
 					updated.hasCover = true;
@@ -109,14 +110,14 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 				props.close();
 			} catch (e) {
 				console.error(e);
-				failEdit("An error occured during the edit of the music");
+				failEdit(t("pages.provider.popUps.music.editError"));
 			}
 		};
 
 		const isPending = () => musicUpdateMutation.isPending || musicUploadCoverMutation.isPending || musicRemoveCoverMutation.isPending;
 
 		return <Form class="edit-music-pop-up" onSubmit={() => { void handleSubmit(); }}>
-			<h2 >Edit music</h2>
+			<h2 >{t("pages.provider.popUps.music.editTitle")}</h2>
 			<div class="edit-music-info">
 				<div class="edit-music-cover-box">
 					<input
@@ -137,7 +138,7 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 					</Show>
 				</div>
 				<div class="edit-music-details">
-					<TextInput placeholder="Name" class="edit-music-music-title" onChange={(a) => setTitle(a.currentTarget.value)} value={title()} />
+					<TextInput placeholder={t("pages.provider.popUps.namePlaceholder")} class="edit-music-music-title" onChange={(a) => setTitle(a.currentTarget.value)} value={title()} />
 					<TextInput type="date" size="sm" onInput={(e) => setPublishedDate(e.currentTarget.value ? new Date(e.currentTarget.value) : null)}/>
 					<Show when={album()} keyed fallback={<div class="edit-music-album no-album"><SelectAlbumMenu provider={music.provider} setAlbum={setAlbum}/></div>}>
 						{(album) => <div class="edit-music-album has-album">
@@ -167,11 +168,11 @@ export function summonEditMusicPopUp(music: Music, setNewMusic?: (newMusic: Musi
 				</div>
 			</div>
 			<Show when={musicUploadCoverMutation.isPending}>
-				<UploadProgress label="Cover upload" value={coverProgress()}/>
+				<UploadProgress label={t("pages.provider.popUps.coverUpload")} value={coverProgress()}/>
 			</Show>
 			<div class="edit-music-pop-up-controls">
-				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
-				<Button disabled={isPending()} type="submit">Edit</Button>
+				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>{t("common.cancel")}</Button>
+				<Button disabled={isPending()} type="submit">{t("common.edit")}</Button>
 			</div>
 		</Form>;
 	});

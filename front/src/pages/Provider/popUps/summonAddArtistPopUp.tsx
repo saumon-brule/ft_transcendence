@@ -11,6 +11,7 @@ import UploadProgress from "~/components/ui/UploadProgress";
 import { summonErrorToast } from "~/components/ui/Toaster";
 import "./AddArtistPopUp.scss";
 import { Artist } from "~/class/Artist";
+import { t } from "~/i18n/context";
 
 export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", onNewArtist?: (newArtist: Artist) => void) {
 	const providerClient = getProviderClient(provider.address, provider.uuid);
@@ -37,9 +38,9 @@ export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", 
 		const handleSubmit = async () => {
 			let createdUuid: string | null = null;
 			const failCreation = (status?: number) => {
-				if (status === 413) summonErrorToast(() => "File to large");
-				else if (status === 415) summonErrorToast(() => "File not supported");
-				else summonErrorToast(() => "An error occured during creation of the artist");
+				if (status === 413) summonErrorToast(() => t("pages.provider.popUps.fileTooLarge"));
+				else if (status === 415) summonErrorToast(() => t("pages.provider.popUps.fileNotSupported"));
+				else summonErrorToast(() => t("pages.provider.popUps.artist.createError"));
 				if (createdUuid) void artistRemoveMutation.mutate({ params: { uuid: createdUuid } });
 			};
 
@@ -81,7 +82,7 @@ export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", 
 		const isPending = () => artistCreateMutation.isPending || artistUploadAvatarMutation.isPending || artistRemoveMutation.isPending;
 
 		return <Form class="create-artist-pop-up" onSubmit={() => { void handleSubmit(); }}>
-			<h2 >Create new artist</h2>
+			<h2 >{t("pages.provider.popUps.artist.addTitle")}</h2>
 			<div class="create-artist-info">
 				<div class="create-artist-avatar-box">
 					<input
@@ -94,15 +95,15 @@ export function summonAddArtistPopUp(provider: Provider, nameHint: string = "", 
 					<img src={avatarPreviewUrl() ?? DEFAULT_ARTIST} onClick={() => fileInputRef.click()}/>
 				</div>
 				<div class="create-artist-details">
-					<TextInput placeholder="Name" class="create-artist-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
+					<TextInput placeholder={t("pages.provider.popUps.namePlaceholder")} class="create-artist-artist-name" onChange={(a) => setName(a.currentTarget.value)} value={name()} />
 				</div>
 			</div>
 			<Show when={artistUploadAvatarMutation.isPending}>
-				<UploadProgress label="Avatar upload" value={avatarProgress()}/>
+				<UploadProgress label={t("pages.provider.popUps.avatarUpload")} value={avatarProgress()}/>
 			</Show>
 			<div class="create-artist-pop-up-controls">
-				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>Cancel</Button>
-				<Button disabled={isPending()} type="submit">Upload</Button>
+				<Button disabled={isPending()} type="button" variant="ghost" onClick={props.close}>{t("common.cancel")}</Button>
+				<Button disabled={isPending()} type="submit">{t("pages.provider.popUps.upload")}</Button>
 			</div>
 		</Form>;
 	});

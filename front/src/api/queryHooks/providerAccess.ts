@@ -3,6 +3,7 @@ import { client } from "../client";
 import { getProviderClient } from "../providerClients";
 import { summonErrorToast, summonSuccessToast } from "~/components/ui/Toaster";
 import { Provider } from "@flex/shared";
+import { t } from "~/i18n/context";
 
 export type JoinStatus = "PENDING" | "APPROVED" | "REJECTED";
 
@@ -48,10 +49,10 @@ export const useLeaveProviderMutation = (provider: () => Provider) => {
 
 	return getProviderClient(provider().address, provider().uuid).client.member.leave.createMutation({
 		onSuccess: async () => {
-			summonSuccessToast("Provider leaved");
+			summonSuccessToast(t("toasts.provider.left"));
 			await queryClient.invalidateQueries({ queryKey: ["provider", provider().uuid] });
 		},
-		onError: () => { summonErrorToast("An error occured"); },
+		onError: () => { summonErrorToast(t("errors.generic")); },
 	});
 };
 
@@ -62,7 +63,7 @@ export const useProviderInfoInfoQuery = (provider: () => Provider) => {
 		{},
 		{
 			retry: (failureCount, error) => error instanceof TypeError && failureCount < 3,
-			onError: () => { summonErrorToast("An error occured"); },
+			onError: () => { summonErrorToast(t("errors.generic")); },
 		},
 	);
 };

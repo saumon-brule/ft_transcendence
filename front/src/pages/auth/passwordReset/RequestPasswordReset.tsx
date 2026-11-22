@@ -64,7 +64,7 @@ export default function RequestPasswordReset() {
 				</Switch>}
 			</Show>
 			<p class="back">
-				<A href="/login">Back to login</A>
+				<A href="/login">{t("pages.requestPasswordReset.backToLogin")}</A>
 			</p>
 		</div>
 	</Form>;

@@ -27,7 +27,7 @@ export default function ProfileSettings() {
 	const user = useProfile();
 	const updatePictureMutation = client.users.uploadAvatar.createMutation();
 	const deletePictureMutation = client.users.deleteAvatar.createMutation();
-	const { t } = useTranslation();
+	const { t, locale } = useTranslation();
 	// const [listeningPrivate, setListeningPrivate] = createSignal(false);
 	// const [draft, setDraft] = createSignal<ReturnType<typeof serverProfile> | undefined>(undefined);
 
@@ -102,7 +102,7 @@ export default function ProfileSettings() {
 				<div class="profile-picture" style={{ "background-image": `url(${user().avatarUrl}` }}>
 					<Show when={updatePictureMutation.isPending} fallback={(
 						<label for="avatar-upload">
-							<span>Change</span>
+							<span>{t("pages.settings.profile.changePicture")}</span>
 						</label>
 					)}>
 						<ProgressRing value={imageProgress()}/>
@@ -124,14 +124,14 @@ export default function ProfileSettings() {
 					</Button>
 				</div>
 				<div class="user-stats">
-					<div class="stat">Member since {user().createdAt.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</div>
+					<div class="stat">{t("components.profileStats.memberSince", { date: user().createdAt.toLocaleDateString(locale(), { month: "long", year: "numeric" }) })}</div>
 					<div class="separator" />
-					<div class="stat">{user()._count.ownedProviders} owned providers</div>
+					<div class="stat">{t("components.profileStats.ownedProviders", { count: String(user()._count.ownedProviders) })}</div>
 					<div class="separator" />
-					<div class="stat">{user()._count.ownedPlaylists} playlists</div>
+					<div class="stat">{t("components.profileStats.playlists", { count: String(user()._count.ownedPlaylists) })}</div>
 				</div>
 				<Show when={user().currentlyListening && user().listeningUntil && toDate(user().listeningUntil!) > new Date()}>
-					<div class="listening"><MusicBars />Listening to « {user().currentlyListening!.title} » - {user().currentlyListening!.artist}</div>
+					<div class="listening"><MusicBars />{t("components.profileStats.listening", { title: user().currentlyListening!.title, artist: user().currentlyListening!.artist })}</div>
 				</Show>
 			</div>
 		</div>

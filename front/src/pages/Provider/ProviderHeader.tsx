@@ -8,6 +8,7 @@ import { summonPopUp } from "~/components/ui/Overlay";
 // import { summonEditProviderPopUp } from "../Providers/popUps/editProviderPopUp";
 import { useNavigate } from "@solidjs/router";
 import { useProvider } from "~/components/guards/ProviderInfoGuard";
+import { t as globalT, useTranslation } from "~/i18n/context";
 
 type ProviderHeaderProps = {
 	provider: ProviderDataDto | undefined;
@@ -16,13 +17,14 @@ type ProviderHeaderProps = {
 
 function summonLeaveProviderPopUpConfirmation(leaveMutation: ReturnType<typeof useLeaveProviderMutation>, provider: Provider) {
 	return summonPopUp((controls) => <div>
-		<h3>Do you really want to leave <b>{provider.name}</b></h3>
-		<Button variant="ghost" onClick={controls.close}>cancel</Button>
-		<Button variant="danger" onClick={() => leaveMutation.mutate({})}>leave</Button>
+		<h3>{globalT("pages.provider.leave.confirm.begin")}<b>{provider.name}</b>{globalT("pages.provider.leave.confirm.end")}</h3>
+		<Button variant="ghost" onClick={controls.close}>{globalT("common.cancel")}</Button>
+		<Button variant="danger" onClick={() => leaveMutation.mutate({})}>{globalT("pages.provider.leave.confirmButton")}</Button>
 	</div>, { customClass: "leave-probider-confirm-pop-up" });
 }
 
 export default function ProviderHeader(props: ProviderHeaderProps) {
+	const { t } = useTranslation();
 	const providerBack = useProvider();
 	const info = useProviderInfoInfoQuery(() => providerBack);
 	const requestQuery = useAccessRequestQuery(() => providerBack);
@@ -39,24 +41,24 @@ export default function ProviderHeader(props: ProviderHeaderProps) {
 			</div>
 			<Show when={props.provider}>{(provider) => <>
 				<div class="header-info-items">
-					<span class="stat">{provider().music.total} musics</span>
+					<span class="stat">{t("pages.provider.stats.musics", { count: String(provider().music.total) })}</span>
 					<div class="separator"/>
-					<span class="stat">{provider().artist.total} artists</span>
+					<span class="stat">{t("pages.provider.stats.artists", { count: String(provider().artist.total) })}</span>
 					<div class="separator"/>
-					<span class="stat">{provider().album.total} albums</span>
+					<span class="stat">{t("pages.provider.stats.albums", { count: String(provider().album.total) })}</span>
 				</div>
 			</>}</Show>
 		</div>
 		<div class="action-buttons">
 			<Show when={props.status === "success" && (info.data?.body.member.isOwner === true || info.data?.body.member.permissions.length)}>
-				<Button onClick={() => navigate(`/provider/${providerBack.uuid}/edit`)}><Pencil/>Edit</Button>
+				<Button onClick={() => navigate(`/provider/${providerBack.uuid}/edit`)}><Pencil/>{t("common.edit")}</Button>
 			</Show>
 			<Show when={props.status === "success" && info.data?.body.member.isOwner === false}>
-				<Button disabled={leaveMutation.isPending || requestQuery.isLoading} variant="danger" onClick={() => summonLeaveProviderPopUpConfirmation(leaveMutation, providerBack)} ><DoorOpen/>Leave Provider</Button>
+				<Button disabled={leaveMutation.isPending || requestQuery.isLoading} variant="danger" onClick={() => summonLeaveProviderPopUpConfirmation(leaveMutation, providerBack)} ><DoorOpen/>{t("pages.provider.leave.button")}</Button>
 			</Show>
 			<Show when={props.status === "forbidden" && info.data?.body}>
 				<Button disabled={pending() || joinMutation.isPending || requestQuery.isLoading} onClick={() => joinMutation.mutate(providerBack)}>
-					{pending() ? "Pending request" : info.data?.body.visibility === "PUBLIC" ? "Join provider" : "Request access"}
+					{pending() ? t("components.unavailableTrack.requestPending") : info.data?.body.visibility === "PUBLIC" ? t("pages.provider.join") : t("components.unavailableTrack.requestAccess")}
 				</Button>
 			</Show>
 		</div>
