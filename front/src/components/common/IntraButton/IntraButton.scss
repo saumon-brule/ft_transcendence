@@ -23,7 +23,7 @@
 		pointer-events: none;
 	}
 
-	&:is(:hover, :focus-visible) {
+	&:is(:hover, :focus-visible, :active) {
 		background-color: var(--login-intra-hover);
 	}
 }

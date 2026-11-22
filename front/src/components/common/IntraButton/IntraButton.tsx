@@ -64,6 +64,7 @@ export default function IntraButton(props: IntraButtonProps) {
 		} else {
 			summonErrorToast(() => t("errors.unknownFallback"));
 		}
+		cleanup();
 	}
 
 	return <Button
