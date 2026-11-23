@@ -611,6 +611,8 @@ export default {
 			join: "プロバイダーに参加",
 			forbidden: "このプロバイダーへのアクセス権がありません",
 			edit: {
+				setPublic: "公開にする",
+				setPrivate: "非公開にする",
 				addMusic: "曲を追加",
 				addAlbum: "アルバムを追加",
 				addArtist: "アーティストを追加",

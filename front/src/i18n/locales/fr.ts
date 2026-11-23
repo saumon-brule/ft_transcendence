@@ -615,6 +615,8 @@ export default {
 			unknownAlbum: "Album inconnu",
 			unknownArtist: "Artiste inconnu",
 			edit: {
+				setPublic: "Rendre public",
+				setPrivate: "Rendre privé",
 				addMusic: "Ajouter une musique",
 				addAlbum: "Ajouter un album",
 				addArtist: "Ajouter un artiste",
