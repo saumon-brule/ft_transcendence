@@ -57,7 +57,7 @@ Everything sensitive is a [Docker secret](https://docs.docker.com/compose/how-to
 | --- | --- |
 | `postgres_password`, `jwt_secret`, `jwt_refresh_secret` | random, generated |
 | `provider.pem` | RSA key signing the provider tokens, generated |
-| `tls.crt`, `tls.key` | certificate and key of nginx: self-signed when generated, **replace them with a real certificate** in production (`DOMAIN=example.com make secrets-server` adds a name to the self-signed one) |
+| `tls.crt`, `tls.key` | certificate and key of nginx: self-signed when generated, **replace them with a real certificate** in production (the self-signed one covers `localhost` and the host set in `FRONT_HOST` (server) or `PROVIDER_HOST` (provider) of the env file, IP or name; after changing it, delete `tls.crt` and `tls.key` and run the secrets command again) |
 | `smtp_pass`, `api42_client_secret` | to fill in by hand |
 
 Existing files are never overwritten. Nothing is seeded in production: the database starts empty and the first account is created from the site.

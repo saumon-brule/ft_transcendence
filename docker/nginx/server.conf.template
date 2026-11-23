@@ -13,6 +13,9 @@ server {
 	listen 443 ssl;
 	server_name _;
 
+	# Plain HTTP sent to the HTTPS port: redirect to HTTPS instead of the 400 error.
+	error_page 497 =301 https://${FRONT_HOST}:${FRONT_PORT}$request_uri;
+
 	ssl_certificate /run/secrets/tls_cert;
 	ssl_certificate_key /run/secrets/tls_key;
 	ssl_protocols TLSv1.2 TLSv1.3;
