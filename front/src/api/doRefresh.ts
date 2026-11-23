@@ -2,8 +2,6 @@ import { authContract } from "@flex/shared";
 import { initClient } from "@ts-rest/core";
 import { env } from "~/env";
 import { client } from "./client";
-import { jwtDecode } from "jwt-decode";
-import { auth } from "~/store/auth.store";
 
 const refreshClient = initClient(authContract, {
 	baseUrl: env.VITE_API_URL,
@@ -21,8 +19,6 @@ let refreshPromise: Promise<string | null> | null = null;
 
 export async function doRefresh(): Promise<string | null> {
 	refreshPromise ??= navigator.locks.request("server-refresh", async () => {
-		const current = auth.accessToken;
-		if (current && jwtDecode<{ exp: number }>(current).exp * 1000 - Date.now() > 60_000) return current;
 		let r;
 		try {
 			r = await refreshClient.refresh();
