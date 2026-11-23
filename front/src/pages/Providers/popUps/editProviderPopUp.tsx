@@ -39,6 +39,8 @@ export const summonEditProviderPopUp = (provider: Provider, onClose?: () => void
 							},
 						},
 					);
+					void queryClient.invalidateQueries({ queryKey: queryKeys.providers.search() });
+					void queryClient.invalidateQueries({ queryKey: queryKeys.providers.get([provider.uuid]) });
 					summonSuccessToast(() => t("pages.providers.editPopUp.success"));
 					popUpControls.close();
 				},
