@@ -28,6 +28,8 @@ export const summonDeleteProviderPopUp = (providerUUID: string, onClose?: () => 
 							},
 						},
 					);
+					void queryClient.invalidateQueries({ queryKey: queryKeys.providers.search() });
+					queryClient.removeQueries({ queryKey: queryKeys.providers.get([providerUUID]) });
 					summonSuccessToast(() => t("pages.providers.deletePopUp.success"));
 					popUpControls.close();
 				},
