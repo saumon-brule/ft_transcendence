@@ -611,6 +611,8 @@ export default {
 			join: "Unirse al proveedor",
 			forbidden: "No tienes acceso a este proveedor",
 			edit: {
+				setPublic: "Hacer público",
+				setPrivate: "Hacer privado",
 				addMusic: "Añadir canción",
 				addAlbum: "Añadir álbum",
 				addArtist: "Añadir artista",

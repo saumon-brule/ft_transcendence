@@ -611,6 +611,8 @@ export default {
 			join: "Join provider",
 			forbidden: "You don't have access to this provider",
 			edit: {
+				setPublic: "Set public",
+				setPrivate: "Set private",
 				addMusic: "Add music",
 				addAlbum: "Add album",
 				addArtist: "Add artist",
