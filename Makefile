@@ -40,6 +40,7 @@ server:
 
 provider:
 	$(provider_env_check)
+	@docker/fetch-server-ca.sh $(NAME)
 	@$(PROVIDER_COMPOSE) up -d --build --wait
 
 server-standalone:
@@ -47,6 +48,7 @@ server-standalone:
 
 provider-standalone:
 	$(provider_env_check)
+	@docker/fetch-server-ca.sh $(NAME)
 	@$(PROVIDER_COMPOSE_STANDALONE) up -d --build --wait
 
 server-down:
