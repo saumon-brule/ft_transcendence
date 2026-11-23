@@ -5,7 +5,10 @@ import { languageEnum } from "../../users/schemas/user.schema";
 export const registerSchema = z.object({
 	email: z.string().email(),
 	password: PasswordSchema,
-	username: z.string().min(3).max(32),
+	username: z.string().
+		trim().
+		min(3).
+		max(32),
 	language: languageEnum.optional(),
 });
 
